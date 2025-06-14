@@ -1096,7 +1096,7 @@ const Landing: React.FC = () => {
 
             {/* About Section */}
             <div ref={ourStoryRef}>
-                <About language={currentLanguage}/>
+                <About language={currentLanguage} />
             </div>
 
             {/* Demo Section */}
@@ -1113,10 +1113,10 @@ const Landing: React.FC = () => {
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 py-20">
                 <div className="container mx-auto px-4 text-center">
                     <h2 className="text-4xl font-bold text-white mb-8">
-                        Ready to Change Your Institution?
+                        {translations[currentLanguage].cta.title}
                     </h2>
                     <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                        Experience a fresh, user-friendly platform that is specifically designed for educational institutions. Streamline your operations and enhance collaboration within your organization.
+                        {translations[currentLanguage].cta.subtitle}
                     </p>
                     <button
                         type="button"
@@ -1127,7 +1127,7 @@ const Landing: React.FC = () => {
                         }}
                         className="bg-white text-blue-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-0"
                     >
-                        View Plans
+                        {translations[currentLanguage].cta.button}
                     </button>
                 </div>
             </div>
@@ -1137,10 +1137,10 @@ const Landing: React.FC = () => {
                 <div className="container mx-auto px-4">
                     <div className="max-w-3xl mx-auto text-center">
                         <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                            Get the Latest from Telmeez
+                            {translations[currentLanguage].newsletter.title}
                         </h2>
                         <p className="text-gray-600 mb-8">
-                            Subscribe to our newsletter and get the latest news, features, and education insights.
+                            {translations[currentLanguage].newsletter.subtitle}
                         </p>
 
                         <form onSubmit={handleNewsletterSubmit} className="max-w-md mx-auto">
@@ -1149,24 +1149,24 @@ const Landing: React.FC = () => {
                                     type="email"
                                     value={subscribeEmail}
                                     onChange={(e) => setSubscribeEmail(e.target.value)}
-                                    placeholder="Enter your email"
+                                    placeholder={translations[currentLanguage].newsletter.email_placeholder}
                                     className="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                                 />
                                 <button
                                     type="submit"
-                                    className={`px-6 py-3 rounded-lg font-medium text-white transition-colors duration-300 focus:outline-none bg-blue-600 hover:bg-blue-700`}
+                                    className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    Subscribe
+                                    {translations[currentLanguage].newsletter.subscribe_button}
                                 </button>
                             </div>
 
                             <p className="mt-4 text-sm text-gray-500">
-                                We value your privacy. <button
+                                {translations[currentLanguage].newsletter.privacy_message} <button
                                     onClick={() => setIsUnsubscribeModalOpen(true)}
                                     className="font-medium text-indigo-600 hover:text-indigo-500 hover:underline focus:outline-none focus:underline transition-colors duration-200 border-0 bg-transparent p-0"
                                 >
-                                    Unsubscribe
-                                </button> anytime.
+                                    {translations[currentLanguage].newsletter.unsubscribe_button}
+                                </button> {translations[currentLanguage].newsletter.unsubscribe_anytime}
                             </p>
                         </form>
                     </div>

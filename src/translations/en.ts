@@ -302,5 +302,19 @@ export const en = {
             }
         },
         coming_soon: "Interactive demo coming soon"
+    },
+    cta: {
+        title: "Ready to Change Your Institution?",
+        subtitle: "Experience a fresh, user-friendly platform that is specifically designed for educational institutions. Streamline your operations and enhance collaboration within your organization.",
+        button: "View Plans"
+    },
+    newsletter: {
+        title: "Get the Latest from Telmeez",
+        subtitle: "Subscribe to our newsletter and get the latest news, features, and education insights.",
+        email_placeholder: "Enter your email",
+        subscribe_button: "Subscribe",
+        unsubscribe_button: "Unsubscribe",
+        privacy_message: "We value your privacy. You can",
+        unsubscribe_anytime: "anytime."
     }
 }; 

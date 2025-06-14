@@ -302,5 +302,19 @@ export const fr = {
             }
         },
         coming_soon: "Démo interactive bientôt disponible"
+    },
+    cta: {
+        title: "Prêt à Transformer Votre Institution ?",
+        subtitle: "Découvrez une plateforme moderne et conviviale spécialement conçue pour les institutions éducatives. Simplifiez vos opérations et améliorez la collaboration au sein de votre organisation.",
+        button: "Voir les Plans"
+    },
+    newsletter: {
+        title: "Restez Informé avec Telmeez",
+        subtitle: "Abonnez-vous à notre newsletter et recevez les dernières nouvelles, fonctionnalités et insights sur l'éducation.",
+        email_placeholder: "Entrez votre email",
+        subscribe_button: "S'abonner",
+        unsubscribe_button: "Se désabonner",
+        privacy_message: "Nous respectons votre vie privée. Vous pouvez vous",
+        unsubscribe_anytime: "à tout moment."
     }
 };
