@@ -1096,7 +1096,7 @@ const Landing: React.FC = () => {
 
             {/* About Section */}
             <div ref={ourStoryRef}>
-                <About />
+                <About language={currentLanguage}/>
             </div>
 
             {/* Demo Section */}

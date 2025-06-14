@@ -227,5 +227,33 @@ export const fr = {
                 ]
             }
         }
+    },
+    about: {
+        our_story: {
+            title: "Notre Histoire",
+            description: "Fondée en 2025, Telmeez est née d'une vision de révolutionner la gestion de l'éducation grâce à la technologie. Notre histoire a commencé lorsque des éducateurs et des technologues partageant les mêmes idées se sont réunis pour résoudre les problèmes des institutions éducatives d'aujourd'hui."
+        },
+        mission: {
+            title: "Notre Mission",
+            description: "Permettre aux institutions éducatives d'utiliser des solutions technologiques innovantes pour améliorer les expériences d'apprentissage et automatiser les processus administratifs."
+        },
+        vision: {
+            title: "Notre Vision",
+            description: "Nous nous voyons devenir un leader mondial dans la technologie éducative, transformant l'approche des institutions en matière de gestion et de prestation de l'éducation."
+        },
+        values: {
+            title: "Nos Valeurs",
+            description: "L'innovation, l'intégrité et l'impact inspirent tout ce que nous faisons. L'excellence et l'amélioration constante sont ce à quoi nous nous consacrons."
+        },
+        press: {
+            title: "Presse & Médias",
+            description: "Restez informé de nos dernières nouvelles, communiqués de presse et couverture médiatique.",
+            latest_news: {
+                title: "Telmeez Annonce le Lancement Officiel",
+                date: "Bientôt Disponible",
+                source: "Fondateur et PDG de Telmeez",
+                description: "Plateforme révolutionnaire de gestion éducative sur le point d'être lancée, prête à changer la façon dont les institutions abordent la gestion des processus administratifs et améliorent les résultats d'apprentissage."
+            }
+        }
     }
 };

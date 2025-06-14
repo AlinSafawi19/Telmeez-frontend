@@ -227,5 +227,33 @@ export const en = {
                 ]
             }
         }
+    },
+    about: {
+        our_story: {
+            title: "Our Story",
+            description: "Founded in 2025, Telmeez emerged from a vision to revolutionize education management through the strength of technology. Our tale began when like-minded educators and technologists came together to address the issues of today's educational institutions."
+        },
+        mission: {
+            title: "Our Mission",
+            description: "Enabling education institutions with innovative technology solutions to enhance learning experiences and automate administrative processes."
+        },
+        vision: {
+            title: "Our Vision",
+            description: "We see ourselves becoming a global leader in education technology, transforming institutions' approach to managing and delivering education."
+        },
+        values: {
+            title: "Our Values",
+            description: "Innovation, integrity, and impact inspire all that we do. Excellence and constant improvement are what we're dedicated to."
+        },
+        press: {
+            title: "Press & Media",
+            description: "Stay updated with our latest news, press releases, and media coverage.",
+            latest_news: {
+                title: "Telmeez Announces Official Launch",
+                date: "Coming Soon",
+                source: "Telmeez Founder & CEO",
+                description: "Revolutionary educational management platform set to launch soon, poised to change how institutions approach administrative process management and enhance learning outcomes."
+            }
+        }
     }
 }; 
