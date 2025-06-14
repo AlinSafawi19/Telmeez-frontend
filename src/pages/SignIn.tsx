@@ -38,7 +38,7 @@ const SignIn: React.FC = () => {
                     />
                     <button
                         onClick={() => navigate('/')}
-                        className="p-2 text-gray-600 hover:text-indigo-600 transition-colors mb-4"
+                        className="p-2 text-gray-600 hover:text-indigo-600 transition-colors mb-4 focus:outline-none"
                         aria-label="Back to home"
                     >
                         <FaHome className="w-6 h-6" />
