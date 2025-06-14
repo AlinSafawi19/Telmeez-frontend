@@ -130,12 +130,6 @@ const Landing: React.FC = () => {
                     ourStorySection?.scrollIntoView({ behavior: 'smooth' });
                     setTimeout(() => setIsScrolling(false), 1000);
                     break;
-                case 'Demo':
-                    handleSmoothScroll(demoSectionRef);
-                    break;
-                case 'FAQ':
-                    handleSmoothScroll(faqSectionRef);
-                    break;
                 case 'Press':
                     const aboutSection = document.getElementById(featureName.toLowerCase().replace(' ', '-'));
                     setIsScrolling(true);
@@ -150,7 +144,9 @@ const Landing: React.FC = () => {
     const handlePricingDropdownItemClick = (e: React.MouseEvent, planLabel: string) => {
         e.preventDefault();
         setSelectedPricingPlan(planLabel);
+        setIsScrolling(true);
         pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => setIsScrolling(false), 1000);
         setActiveDropdown(null);
     };
 
@@ -252,13 +248,16 @@ const Landing: React.FC = () => {
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                            <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="transition-transform hover:scale-105">
+                            <a href="#" onClick={(e) => {
+                                e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); setIsScrolling(true);
+                                setTimeout(() => setIsScrolling(false), 1000);
+                            }} className="transition-transform hover:scale-105">
                                 <img src={logo} alt="Telmeez Logo" className="h-20 w-20" />
                             </a>
                         </div>
                         <nav className="hidden md:flex space-x-8">
-                            <a href="#" onClick={(e) => { 
-                                e.preventDefault(); 
+                            <a href="#" onClick={(e) => {
+                                e.preventDefault();
                                 setIsScrolling(true);
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                                 setTimeout(() => setIsScrolling(false), 1000);
@@ -332,6 +331,14 @@ const Landing: React.FC = () => {
                                             <p className="text-sm text-gray-600">{item.description}</p>
                                             <p className="text-xs text-gray-500 mt-1">{item.details}</p>
                                             <p className="text-xs text-green-600 mt-1">{item.savings}</p>
+                                            {item.label === 'Starter' && (
+                                                <div className="mt-2">
+                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                        <span className="mr-1">✨</span>
+                                                        Free Trial
+                                                    </span>
+                                                </div>
+                                            )}
                                         </a>
                                     ))}
                                 </div>
@@ -399,6 +406,8 @@ const Landing: React.FC = () => {
                                                 } else if (item.label === 'FAQ') {
                                                     faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
                                                 }
+                                                setIsScrolling(true);
+                                                setTimeout(() => setIsScrolling(false), 1000);
                                                 setActiveDropdown(null);
                                             }}
                                             className="block px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200"
@@ -511,14 +520,22 @@ const Landing: React.FC = () => {
                         <div className={`flex justify-center space-x-6 ${isVisible ? 'animate-fadeInUp delay-300' : 'opacity-0'}`}>
                             <button
                                 type="button"
-                                onClick={() => pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                                onClick={() => {
+                                    pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                    setIsScrolling(true);
+                                    setTimeout(() => setIsScrolling(false), 1000);
+                                }}
                                 className="bg-blue-600 text-white px-10 py-4 rounded-lg text-xl font-semibold hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-0"
                             >
                                 Get Started
                             </button>
                             <button
                                 type="button"
-                                onClick={() => document.getElementById('features-section')?.scrollIntoView({ behavior: 'smooth' })}
+                                onClick={() => {
+                                    document.getElementById('features-section')?.scrollIntoView({ behavior: 'smooth' });
+                                    setIsScrolling(true);
+                                    setTimeout(() => setIsScrolling(false), 1000);
+                                }}
                                 className="bg-white text-blue-600 px-10 py-4 rounded-lg text-xl font-semibold hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-blue-600 focus:outline-none focus:ring-0"
                             >
                                 Learn More
@@ -1023,7 +1040,11 @@ const Landing: React.FC = () => {
                     </p>
                     <button
                         type="button"
-                        onClick={() => pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                        onClick={() => {
+                            pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                            setIsScrolling(true);
+                            setTimeout(() => setIsScrolling(false), 1000);
+                        }}
                         className="bg-white text-blue-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-0"
                     >
                         View Plans
@@ -1101,7 +1122,10 @@ const Landing: React.FC = () => {
                 <div className="container mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
                         <div>
-                            <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="inline-block transition-transform hover:scale-105">
+                            <a href="#" onClick={(e) => {
+                                e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); setIsScrolling(true);
+                                setTimeout(() => setIsScrolling(false), 1000);
+                            }} className="inline-block transition-transform hover:scale-105">
                                 <img src={logo2} alt="Telmeez Logo" className="h-16 w-16 mb-4" />
                             </a>
                             <p className="text-gray-400">
@@ -1111,22 +1135,31 @@ const Landing: React.FC = () => {
                         <div>
                             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
                             <ul className="space-y-2">
-                                <li><a href="#our-story" onClick={(e) => { e.preventDefault(); ourStoryRef.current?.scrollIntoView({ behavior: 'smooth' }); }} className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
-                                <li><a href="#student-management" onClick={(e) => { e.preventDefault(); studentManagementRef.current?.scrollIntoView({ behavior: 'smooth' }); }} className="text-gray-400 hover:text-white transition-colors">Features</a></li>
-                                <li><a href="#pricing" onClick={(e) => { e.preventDefault(); pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' }); }} className="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
+                                <li><a href="#our-story" onClick={(e) => {
+                                    e.preventDefault(); ourStoryRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
+                                    setTimeout(() => setIsScrolling(false), 1000);
+                                }} className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                                <li><a href="#student-management" onClick={(e) => {
+                                    e.preventDefault(); studentManagementRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
+                                    setTimeout(() => setIsScrolling(false), 1000);
+                                }} className="text-gray-400 hover:text-white transition-colors">Features</a></li>
+                                <li><a href="#pricing" onClick={(e) => {
+                                    e.preventDefault(); pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
+                                    setTimeout(() => setIsScrolling(false), 1000);
+                                }} className="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="text-lg font-semibold mb-4">Resources</h3>
                             <ul className="space-y-2">
-                                <li><a href="#demo" onClick={(e) => { 
-                                    e.preventDefault(); 
+                                <li><a href="#demo" onClick={(e) => {
+                                    e.preventDefault();
                                     setIsScrolling(true);
                                     demoSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
                                     setTimeout(() => setIsScrolling(false), 1000);
                                 }} className="text-gray-400 hover:text-white transition-colors">Demo</a></li>
-                                <li><a href="#" onClick={(e) => { 
-                                    e.preventDefault(); 
+                                <li><a href="#" onClick={(e) => {
+                                    e.preventDefault();
                                     setIsScrolling(true);
                                     faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
                                     setTimeout(() => setIsScrolling(false), 1000);
@@ -2327,8 +2360,8 @@ const Landing: React.FC = () => {
             <button
                 onClick={handleBackToTop}
                 className={`fixed bottom-8 right-8 p-3 rounded-full bg-blue-600 text-white shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${showBackToTop
-                        ? 'opacity-100 translate-y-0'
-                        : 'opacity-0 translate-y-16 pointer-events-none'
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-16 pointer-events-none'
                     }`}
                 aria-label="Back to top"
             >
