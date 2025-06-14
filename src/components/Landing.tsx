@@ -555,7 +555,7 @@ const Landing: React.FC = () => {
                                 onClick={() => {
                                     document.getElementById('features-section')?.scrollIntoView({ behavior: 'smooth' });
                                     setIsScrolling(true);
-                                    setTimeout(() => setIsScrolling(false), 1000);
+                                    setTimeout(() => setIsScrolling(false), 300);
                                 }}
                                 className="bg-white text-blue-600 px-10 py-4 rounded-lg text-xl font-semibold hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-blue-600 focus:outline-none focus:ring-0"
                             >
@@ -1232,1138 +1232,1264 @@ const Landing: React.FC = () => {
             </footer>
 
             {/* Student Profiles Modal */}
-            {isStudentProfilesModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                        <div className="p-8">
-                            <div className="flex justify-between items-start mb-6">
-                                <h3 className="text-2xl font-bold text-gray-900">Student Profiles</h3>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsStudentProfilesModalOpen(false)}
-                                    className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                    aria-label="Close modal"
-                                >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
+            <AnimatePresence>
+                {isStudentProfilesModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                        >
+                            <div className="p-8">
+                                <div className="flex justify-between items-start mb-6">
+                                    <h3 className="text-2xl font-bold text-gray-900">Student Profiles</h3>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsStudentProfilesModalOpen(false)}
+                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
+                                        aria-label="Close modal"
+                                    >
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
 
-                            <div className="space-y-8">
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Comprehensive Student Information</h4>
-                                    <p className="text-gray-600 mb-4">
-                                        Our student profile system provides a centralized location for all student-related information, making it easy to access and manage student data efficiently.
-                                    </p>
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Personal Information</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• Basic details (name, DOB, gender)</li>
-                                                <li>• Contact information</li>
-                                                <li>• Emergency contacts</li>
-                                                <li>• Medical information</li>
+                                <div className="space-y-8">
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Comprehensive Student Information</h4>
+                                        <p className="text-gray-600 mb-4">
+                                            Our student profile system provides a centralized location for all student-related information, making it easy to access and manage student data efficiently.
+                                        </p>
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Personal Information</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• Basic details (name, DOB, gender)</li>
+                                                    <li>• Contact information</li>
+                                                    <li>• Emergency contacts</li>
+                                                    <li>• Medical information</li>
+                                                </ul>
+                                            </div>
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Academic Information</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• Enrollment history</li>
+                                                    <li>• Course registrations</li>
+                                                    <li>• Academic performance</li>
+                                                    <li>• Attendance records</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
+                                        <div className="grid md:grid-cols-3 gap-4">
+                                            <div className="bg-blue-50 p-4 rounded-lg">
+                                                <div className="text-blue-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Customizable Fields</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Add custom fields to capture institution-specific information
+                                                </p>
+                                            </div>
+                                            <div className="bg-green-50 p-4 rounded-lg">
+                                                <div className="text-green-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Data Security</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Advanced encryption and access controls for sensitive information
+                                                </p>
+                                            </div>
+                                            <div className="bg-purple-50 p-4 rounded-lg">
+                                                <div className="text-purple-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Document Management</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Upload and manage important student documents securely
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
+                                        <div className="bg-gray-50 p-6 rounded-lg">
+                                            <ul className="space-y-4">
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Streamlined student information management and retrieval</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Improved communication between staff and parents</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Enhanced data accuracy and reduced administrative workload</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Comprehensive student history tracking and reporting</span>
+                                                </li>
                                             </ul>
                                         </div>
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Academic Information</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• Enrollment history</li>
-                                                <li>• Course registrations</li>
-                                                <li>• Academic performance</li>
-                                                <li>• Attendance records</li>
-                                            </ul>
-                                        </div>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
-                                    <div className="grid md:grid-cols-3 gap-4">
-                                        <div className="bg-blue-50 p-4 rounded-lg">
-                                            <div className="text-blue-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Customizable Fields</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Add custom fields to capture institution-specific information
-                                            </p>
-                                        </div>
-                                        <div className="bg-green-50 p-4 rounded-lg">
-                                            <div className="text-green-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Data Security</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Advanced encryption and access controls for sensitive information
-                                            </p>
-                                        </div>
-                                        <div className="bg-purple-50 p-4 rounded-lg">
-                                            <div className="text-purple-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Document Management</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Upload and manage important student documents securely
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
-                                    <div className="bg-gray-50 p-6 rounded-lg">
-                                        <ul className="space-y-4">
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Streamlined student information management and retrieval</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Improved communication between staff and parents</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Enhanced data accuracy and reduced administrative workload</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Comprehensive student history tracking and reporting</span>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                <div className="mt-8 flex justify-end">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsStudentProfilesModalOpen(false)}
+                                        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                    >
+                                        Close
+                                    </button>
                                 </div>
                             </div>
-
-                            <div className="mt-8 flex justify-end">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsStudentProfilesModalOpen(false)}
-                                    className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                >
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Enrollment Management Modal */}
-            {isEnrollmentModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                        <div className="p-8">
-                            <div className="flex justify-between items-start mb-6">
-                                <h3 className="text-2xl font-bold text-gray-900">Enrollment Management</h3>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsEnrollmentModalOpen(false)}
-                                    className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                    aria-label="Close modal"
-                                >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
+            <AnimatePresence>
+                {isEnrollmentModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                        >
+                            <div className="p-8">
+                                <div className="flex justify-between items-start mb-6">
+                                    <h3 className="text-2xl font-bold text-gray-900">Enrollment Management</h3>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsEnrollmentModalOpen(false)}
+                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
+                                        aria-label="Close modal"
+                                    >
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
 
-                            <div className="space-y-8">
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Streamlined Enrollment Process</h4>
-                                    <p className="text-gray-600 mb-4">
-                                        Our enrollment management system simplifies the entire process from application to registration, making it efficient for both administrators and applicants.
-                                    </p>
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Application Process</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• Online application forms</li>
-                                                <li>• Document upload system</li>
-                                                <li>• Application status tracking</li>
-                                                <li>• Automated notifications</li>
+                                <div className="space-y-8">
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Streamlined Enrollment Process</h4>
+                                        <p className="text-gray-600 mb-4">
+                                            Our enrollment management system simplifies the entire process from application to registration, making it efficient for both administrators and applicants.
+                                        </p>
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Application Process</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• Online application forms</li>
+                                                    <li>• Document upload system</li>
+                                                    <li>• Application status tracking</li>
+                                                    <li>• Automated notifications</li>
+                                                </ul>
+                                            </div>
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Registration Features</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• Course selection</li>
+                                                    <li>• Schedule management</li>
+                                                    <li>• Fee payment integration</li>
+                                                    <li>• Student ID generation</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
+                                        <div className="grid md:grid-cols-3 gap-4">
+                                            <div className="bg-purple-50 p-4 rounded-lg">
+                                                <div className="text-purple-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Automated Workflows</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Streamline enrollment with customizable approval processes
+                                                </p>
+                                            </div>
+                                            <div className="bg-blue-50 p-4 rounded-lg">
+                                                <div className="text-blue-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Real-time Processing</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Instant updates and status changes for all stakeholders
+                                                </p>
+                                            </div>
+                                            <div className="bg-green-50 p-4 rounded-lg">
+                                                <div className="text-green-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Document Management</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Secure storage and verification of enrollment documents
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
+                                        <div className="bg-gray-50 p-6 rounded-lg">
+                                            <ul className="space-y-4">
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Reduced administrative workload and processing time</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Improved applicant experience with self-service options</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Enhanced data accuracy and compliance</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Comprehensive reporting and analytics</span>
+                                                </li>
                                             </ul>
                                         </div>
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Registration Features</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• Course selection</li>
-                                                <li>• Schedule management</li>
-                                                <li>• Fee payment integration</li>
-                                                <li>• Student ID generation</li>
-                                            </ul>
-                                        </div>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
-                                    <div className="grid md:grid-cols-3 gap-4">
-                                        <div className="bg-purple-50 p-4 rounded-lg">
-                                            <div className="text-purple-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Automated Workflows</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Streamline enrollment with customizable approval processes
-                                            </p>
-                                        </div>
-                                        <div className="bg-blue-50 p-4 rounded-lg">
-                                            <div className="text-blue-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Real-time Processing</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Instant updates and status changes for all stakeholders
-                                            </p>
-                                        </div>
-                                        <div className="bg-green-50 p-4 rounded-lg">
-                                            <div className="text-green-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Document Management</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Secure storage and verification of enrollment documents
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
-                                    <div className="bg-gray-50 p-6 rounded-lg">
-                                        <ul className="space-y-4">
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Reduced administrative workload and processing time</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Improved applicant experience with self-service options</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Enhanced data accuracy and compliance</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Comprehensive reporting and analytics</span>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                <div className="mt-8 flex justify-end">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsEnrollmentModalOpen(false)}
+                                        className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+                                    >
+                                        Close
+                                    </button>
                                 </div>
                             </div>
-
-                            <div className="mt-8 flex justify-end">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsEnrollmentModalOpen(false)}
-                                    className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
-                                >
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Digital Attendance Modal */}
-            {isAttendanceModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                        <div className="p-8">
-                            <div className="flex justify-between items-start mb-6">
-                                <h3 className="text-2xl font-bold text-gray-900">Digital Attendance System</h3>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsAttendanceModalOpen(false)}
-                                    className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                    aria-label="Close modal"
-                                >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
+            <AnimatePresence>
+                {isAttendanceModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                        >
+                            <div className="p-8">
+                                <div className="flex justify-between items-start mb-6">
+                                    <h3 className="text-2xl font-bold text-gray-900">Digital Attendance System</h3>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsAttendanceModalOpen(false)}
+                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
+                                        aria-label="Close modal"
+                                    >
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
 
-                            <div className="space-y-8">
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Smart Attendance Tracking</h4>
-                                    <p className="text-gray-600 mb-4">
-                                        Our digital attendance system revolutionizes how schools track and manage student attendance, making it more efficient and accurate than traditional methods.
-                                    </p>
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Attendance Methods</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• QR code scanning</li>
-                                                <li>• Biometric verification</li>
-                                                <li>• Mobile app check-in</li>
-                                                <li>• Web portal access</li>
+                                <div className="space-y-8">
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Smart Attendance Tracking</h4>
+                                        <p className="text-gray-600 mb-4">
+                                            Our digital attendance system revolutionizes how schools track and manage student attendance, making it more efficient and accurate than traditional methods.
+                                        </p>
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Attendance Methods</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• QR code scanning</li>
+                                                    <li>• Biometric verification</li>
+                                                    <li>• Mobile app check-in</li>
+                                                    <li>• Web portal access</li>
+                                                </ul>
+                                            </div>
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Real-time Features</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• Instant attendance updates</li>
+                                                    <li>• Automated notifications</li>
+                                                    <li>• Absence tracking</li>
+                                                    <li>• Late arrival monitoring</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
+                                        <div className="grid md:grid-cols-3 gap-4">
+                                            <div className="bg-blue-50 p-4 rounded-lg">
+                                                <div className="text-blue-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Quick Check-in</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Fast and efficient attendance marking with multiple verification methods
+                                                </p>
+                                            </div>
+                                            <div className="bg-green-50 p-4 rounded-lg">
+                                                <div className="text-green-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Automated Reports</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Generate comprehensive attendance reports and analytics
+                                                </p>
+                                            </div>
+                                            <div className="bg-purple-50 p-4 rounded-lg">
+                                                <div className="text-purple-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Smart Alerts</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Instant notifications for absences and attendance patterns
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
+                                        <div className="bg-gray-50 p-6 rounded-lg">
+                                            <ul className="space-y-4">
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Eliminates manual attendance taking and reduces errors</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Saves time for teachers and administrators</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Provides real-time attendance data and insights</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Enhances communication with parents and guardians</span>
+                                                </li>
                                             </ul>
                                         </div>
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Real-time Features</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• Instant attendance updates</li>
-                                                <li>• Automated notifications</li>
-                                                <li>• Absence tracking</li>
-                                                <li>• Late arrival monitoring</li>
-                                            </ul>
-                                        </div>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
-                                    <div className="grid md:grid-cols-3 gap-4">
-                                        <div className="bg-blue-50 p-4 rounded-lg">
-                                            <div className="text-blue-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Quick Check-in</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Fast and efficient attendance marking with multiple verification methods
-                                            </p>
-                                        </div>
-                                        <div className="bg-green-50 p-4 rounded-lg">
-                                            <div className="text-green-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Automated Reports</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Generate comprehensive attendance reports and analytics
-                                            </p>
-                                        </div>
-                                        <div className="bg-purple-50 p-4 rounded-lg">
-                                            <div className="text-purple-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Smart Alerts</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Instant notifications for absences and attendance patterns
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
-                                    <div className="bg-gray-50 p-6 rounded-lg">
-                                        <ul className="space-y-4">
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Eliminates manual attendance taking and reduces errors</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Saves time for teachers and administrators</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Provides real-time attendance data and insights</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Enhances communication with parents and guardians</span>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                <div className="mt-8 flex justify-end">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsAttendanceModalOpen(false)}
+                                        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                    >
+                                        Close
+                                    </button>
                                 </div>
                             </div>
-
-                            <div className="mt-8 flex justify-end">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsAttendanceModalOpen(false)}
-                                    className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                >
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Automated Reports Modal */}
-            {isReportsModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                        <div className="p-8">
-                            <div className="flex justify-between items-start mb-6">
-                                <h3 className="text-2xl font-bold text-gray-900">Automated Reports & Analytics</h3>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsReportsModalOpen(false)}
-                                    className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                    aria-label="Close modal"
-                                >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
+            <AnimatePresence>
+                {isReportsModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                        >
+                            <div className="p-8">
+                                <div className="flex justify-between items-start mb-6">
+                                    <h3 className="text-2xl font-bold text-gray-900">Automated Reports & Analytics</h3>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsReportsModalOpen(false)}
+                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
+                                        aria-label="Close modal"
+                                    >
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
 
-                            <div className="space-y-8">
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Comprehensive Reporting System</h4>
-                                    <p className="text-gray-600 mb-4">
-                                        Our automated reporting system provides detailed insights and analytics to help schools make data-driven decisions and track student progress effectively.
-                                    </p>
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Report Types</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• Academic performance reports</li>
-                                                <li>• Attendance analytics</li>
-                                                <li>• Financial statements</li>
-                                                <li>• Custom report generation</li>
+                                <div className="space-y-8">
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Comprehensive Reporting System</h4>
+                                        <p className="text-gray-600 mb-4">
+                                            Our automated reporting system provides detailed insights and analytics to help schools make data-driven decisions and track student progress effectively.
+                                        </p>
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Report Types</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• Academic performance reports</li>
+                                                    <li>• Attendance analytics</li>
+                                                    <li>• Financial statements</li>
+                                                    <li>• Custom report generation</li>
+                                                </ul>
+                                            </div>
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Analytics Features</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• Trend analysis</li>
+                                                    <li>• Comparative studies</li>
+                                                    <li>• Predictive insights</li>
+                                                    <li>• Performance metrics</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
+                                        <div className="grid md:grid-cols-3 gap-4">
+                                            <div className="bg-green-50 p-4 rounded-lg">
+                                                <div className="text-green-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Data Visualization</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Interactive charts and graphs for better data understanding
+                                                </p>
+                                            </div>
+                                            <div className="bg-blue-50 p-4 rounded-lg">
+                                                <div className="text-blue-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Real-time Updates</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Instant report generation with live data integration
+                                                </p>
+                                            </div>
+                                            <div className="bg-purple-50 p-4 rounded-lg">
+                                                <div className="text-purple-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Automated Scheduling</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Scheduled report generation and distribution
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
+                                        <div className="bg-gray-50 p-6 rounded-lg">
+                                            <ul className="space-y-4">
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Saves time with automated report generation</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Provides actionable insights for decision-making</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Enhances transparency and accountability</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Supports data-driven educational strategies</span>
+                                                </li>
                                             </ul>
                                         </div>
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Analytics Features</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• Trend analysis</li>
-                                                <li>• Comparative studies</li>
-                                                <li>• Predictive insights</li>
-                                                <li>• Performance metrics</li>
-                                            </ul>
-                                        </div>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
-                                    <div className="grid md:grid-cols-3 gap-4">
-                                        <div className="bg-green-50 p-4 rounded-lg">
-                                            <div className="text-green-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Data Visualization</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Interactive charts and graphs for better data understanding
-                                            </p>
-                                        </div>
-                                        <div className="bg-blue-50 p-4 rounded-lg">
-                                            <div className="text-blue-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Real-time Updates</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Instant report generation with live data integration
-                                            </p>
-                                        </div>
-                                        <div className="bg-purple-50 p-4 rounded-lg">
-                                            <div className="text-purple-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Automated Scheduling</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Scheduled report generation and distribution
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
-                                    <div className="bg-gray-50 p-6 rounded-lg">
-                                        <ul className="space-y-4">
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Saves time with automated report generation</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Provides actionable insights for decision-making</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Enhances transparency and accountability</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Supports data-driven educational strategies</span>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                <div className="mt-8 flex justify-end">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsReportsModalOpen(false)}
+                                        className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                                    >
+                                        Close
+                                    </button>
                                 </div>
                             </div>
-
-                            <div className="mt-8 flex justify-end">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsReportsModalOpen(false)}
-                                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                                >
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Grade Entry Modal */}
-            {isGradeEntryModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                        <div className="p-8">
-                            <div className="flex justify-between items-start mb-6">
-                                <h3 className="text-2xl font-bold text-gray-900">Grade Entry & Management</h3>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsGradeEntryModalOpen(false)}
-                                    className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                    aria-label="Close modal"
-                                >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
+            <AnimatePresence>
+                {isGradeEntryModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                        >
+                            <div className="p-8">
+                                <div className="flex justify-between items-start mb-6">
+                                    <h3 className="text-2xl font-bold text-gray-900">Grade Entry & Management</h3>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsGradeEntryModalOpen(false)}
+                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
+                                        aria-label="Close modal"
+                                    >
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
 
-                            <div className="space-y-8">
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Efficient Grade Management</h4>
-                                    <p className="text-gray-600 mb-4">
-                                        Our grade entry system streamlines the process of recording, calculating, and managing student grades, making it easier for teachers to focus on teaching.
-                                    </p>
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Grade Entry Features</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• Bulk grade entry</li>
-                                                <li>• Custom grading scales</li>
-                                                <li>• Weighted assignments</li>
-                                                <li>• Grade calculation tools</li>
+                                <div className="space-y-8">
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Efficient Grade Management</h4>
+                                        <p className="text-gray-600 mb-4">
+                                            Our grade entry system streamlines the process of recording, calculating, and managing student grades, making it easier for teachers to focus on teaching.
+                                        </p>
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Grade Entry Features</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• Bulk grade entry</li>
+                                                    <li>• Custom grading scales</li>
+                                                    <li>• Weighted assignments</li>
+                                                    <li>• Grade calculation tools</li>
+                                                </ul>
+                                            </div>
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Management Tools</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• Grade history tracking</li>
+                                                    <li>• Grade modification logs</li>
+                                                    <li>• Parent portal access</li>
+                                                    <li>• Progress monitoring</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
+                                        <div className="grid md:grid-cols-3 gap-4">
+                                            <div className="bg-indigo-50 p-4 rounded-lg">
+                                                <div className="text-indigo-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Flexible Entry</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Multiple ways to enter and manage grades efficiently
+                                                </p>
+                                            </div>
+                                            <div className="bg-blue-50 p-4 rounded-lg">
+                                                <div className="text-blue-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Auto Calculation</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Automatic grade calculations with customizable formulas
+                                                </p>
+                                            </div>
+                                            <div className="bg-purple-50 p-4 rounded-lg">
+                                                <div className="text-purple-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Progress Tracking</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Monitor student progress and identify areas for improvement
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
+                                        <div className="bg-gray-50 p-6 rounded-lg">
+                                            <ul className="space-y-4">
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Reduces time spent on grade management</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Minimizes calculation errors</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Improves communication with parents</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Provides comprehensive grade history</span>
+                                                </li>
                                             </ul>
                                         </div>
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Management Tools</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• Grade history tracking</li>
-                                                <li>• Grade modification logs</li>
-                                                <li>• Parent portal access</li>
-                                                <li>• Progress monitoring</li>
-                                            </ul>
-                                        </div>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
-                                    <div className="grid md:grid-cols-3 gap-4">
-                                        <div className="bg-indigo-50 p-4 rounded-lg">
-                                            <div className="text-indigo-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Flexible Entry</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Multiple ways to enter and manage grades efficiently
-                                            </p>
-                                        </div>
-                                        <div className="bg-blue-50 p-4 rounded-lg">
-                                            <div className="text-blue-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Auto Calculation</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Automatic grade calculations with customizable formulas
-                                            </p>
-                                        </div>
-                                        <div className="bg-purple-50 p-4 rounded-lg">
-                                            <div className="text-purple-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Progress Tracking</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Monitor student progress and identify areas for improvement
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
-                                    <div className="bg-gray-50 p-6 rounded-lg">
-                                        <ul className="space-y-4">
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Reduces time spent on grade management</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Minimizes calculation errors</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Improves communication with parents</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Provides comprehensive grade history</span>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                <div className="mt-8 flex justify-end">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsGradeEntryModalOpen(false)}
+                                        className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                    >
+                                        Close
+                                    </button>
                                 </div>
                             </div>
-
-                            <div className="mt-8 flex justify-end">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsGradeEntryModalOpen(false)}
-                                    className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                >
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Progress Tracking Modal */}
-            {isProgressTrackingModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                        <div className="p-8">
-                            <div className="flex justify-between items-start mb-6">
-                                <h3 className="text-2xl font-bold text-gray-900">Progress Tracking & Analytics</h3>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsProgressTrackingModalOpen(false)}
-                                    className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                    aria-label="Close modal"
-                                >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
+            <AnimatePresence>
+                {isProgressTrackingModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                        >
+                            <div className="p-8">
+                                <div className="flex justify-between items-start mb-6">
+                                    <h3 className="text-2xl font-bold text-gray-900">Progress Tracking & Analytics</h3>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsProgressTrackingModalOpen(false)}
+                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
+                                        aria-label="Close modal"
+                                    >
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
 
-                            <div className="space-y-8">
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Comprehensive Progress Monitoring</h4>
-                                    <p className="text-gray-600 mb-4">
-                                        Our progress tracking system provides detailed insights into student performance, helping educators identify strengths, weaknesses, and areas for improvement.
-                                    </p>
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Tracking Metrics</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• Academic performance trends</li>
-                                                <li>• Attendance patterns</li>
-                                                <li>• Assignment completion rates</li>
-                                                <li>• Skill development progress</li>
+                                <div className="space-y-8">
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Comprehensive Progress Monitoring</h4>
+                                        <p className="text-gray-600 mb-4">
+                                            Our progress tracking system provides detailed insights into student performance, helping educators identify strengths, weaknesses, and areas for improvement.
+                                        </p>
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Tracking Metrics</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• Academic performance trends</li>
+                                                    <li>• Attendance patterns</li>
+                                                    <li>• Assignment completion rates</li>
+                                                    <li>• Skill development progress</li>
+                                                </ul>
+                                            </div>
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Analytics Tools</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• Performance dashboards</li>
+                                                    <li>• Comparative analysis</li>
+                                                    <li>• Predictive insights</li>
+                                                    <li>• Custom reporting</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
+                                        <div className="grid md:grid-cols-3 gap-4">
+                                            <div className="bg-yellow-50 p-4 rounded-lg">
+                                                <div className="text-yellow-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Performance Analytics</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Detailed analysis of student performance across subjects
+                                                </p>
+                                            </div>
+                                            <div className="bg-blue-50 p-4 rounded-lg">
+                                                <div className="text-blue-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Trend Analysis</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Track progress over time with visual trend indicators
+                                                </p>
+                                            </div>
+                                            <div className="bg-purple-50 p-4 rounded-lg">
+                                                <div className="text-purple-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Early Warning System</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Identify at-risk students and intervene proactively
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
+                                        <div className="bg-gray-50 p-6 rounded-lg">
+                                            <ul className="space-y-4">
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Enables data-driven teaching strategies</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Facilitates personalized learning plans</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Improves student engagement and outcomes</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Enhances parent-teacher communication</span>
+                                                </li>
                                             </ul>
                                         </div>
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Analytics Tools</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• Performance dashboards</li>
-                                                <li>• Comparative analysis</li>
-                                                <li>• Predictive insights</li>
-                                                <li>• Custom reporting</li>
-                                            </ul>
-                                        </div>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
-                                    <div className="grid md:grid-cols-3 gap-4">
-                                        <div className="bg-yellow-50 p-4 rounded-lg">
-                                            <div className="text-yellow-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Performance Analytics</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Detailed analysis of student performance across subjects
-                                            </p>
-                                        </div>
-                                        <div className="bg-blue-50 p-4 rounded-lg">
-                                            <div className="text-blue-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Trend Analysis</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Track progress over time with visual trend indicators
-                                            </p>
-                                        </div>
-                                        <div className="bg-purple-50 p-4 rounded-lg">
-                                            <div className="text-purple-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Early Warning System</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Identify at-risk students and intervene proactively
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
-                                    <div className="bg-gray-50 p-6 rounded-lg">
-                                        <ul className="space-y-4">
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Enables data-driven teaching strategies</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Facilitates personalized learning plans</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Improves student engagement and outcomes</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Enhances parent-teacher communication</span>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                <div className="mt-8 flex justify-end">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsProgressTrackingModalOpen(false)}
+                                        className="bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+                                    >
+                                        Close
+                                    </button>
                                 </div>
                             </div>
-
-                            <div className="mt-8 flex justify-end">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsProgressTrackingModalOpen(false)}
-                                    className="bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
-                                >
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Messaging System Modal */}
-            {isMessagingSystemModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                        <div className="p-8">
-                            <div className="flex justify-between items-start mb-6">
-                                <h3 className="text-2xl font-bold text-gray-900">Messaging System</h3>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsMessagingSystemModalOpen(false)}
-                                    className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                    aria-label="Close modal"
-                                >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
+            <AnimatePresence>
+                {isMessagingSystemModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                        >
+                            <div className="p-8">
+                                <div className="flex justify-between items-start mb-6">
+                                    <h3 className="text-2xl font-bold text-gray-900">Messaging System</h3>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsMessagingSystemModalOpen(false)}
+                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
+                                        aria-label="Close modal"
+                                    >
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
 
-                            <div className="space-y-8">
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Real-time Messaging</h4>
-                                    <p className="text-gray-600 mb-4">
-                                        Our messaging system allows for real-time communication between teachers, students, and parents.
-                                    </p>
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Features</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• Real-time chat</li>
-                                                <li>• File sharing</li>
-                                                <li>• Group conversations</li>
+                                <div className="space-y-8">
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Real-time Messaging</h4>
+                                        <p className="text-gray-600 mb-4">
+                                            Our messaging system allows for real-time communication between teachers, students, and parents.
+                                        </p>
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Features</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• Real-time chat</li>
+                                                    <li>• File sharing</li>
+                                                    <li>• Group conversations</li>
+                                                </ul>
+                                            </div>
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Benefits</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• Improved communication</li>
+                                                    <li>• Increased collaboration</li>
+                                                    <li>• Enhanced parent-teacher communication</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
+                                        <div className="grid md:grid-cols-3 gap-4">
+                                            <div className="bg-blue-50 p-4 rounded-lg">
+                                                <div className="text-blue-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Real-time Chat</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Fast and efficient real-time messaging
+                                                </p>
+                                            </div>
+                                            <div className="bg-green-50 p-4 rounded-lg">
+                                                <div className="text-green-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">File Sharing</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Secure and efficient file sharing
+                                                </p>
+                                            </div>
+                                            <div className="bg-purple-50 p-4 rounded-lg">
+                                                <div className="text-purple-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Group Conversations</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Organize conversations with customizable group settings
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
+                                        <div className="bg-gray-50 p-6 rounded-lg">
+                                            <ul className="space-y-4">
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Enhanced communication and collaboration</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Increased parent-teacher interaction</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Improved student engagement and outcomes</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Reduced administrative workload</span>
+                                                </li>
                                             </ul>
                                         </div>
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Benefits</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• Improved communication</li>
-                                                <li>• Increased collaboration</li>
-                                                <li>• Enhanced parent-teacher communication</li>
-                                            </ul>
-                                        </div>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
-                                    <div className="grid md:grid-cols-3 gap-4">
-                                        <div className="bg-blue-50 p-4 rounded-lg">
-                                            <div className="text-blue-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Real-time Chat</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Fast and efficient real-time messaging
-                                            </p>
-                                        </div>
-                                        <div className="bg-green-50 p-4 rounded-lg">
-                                            <div className="text-green-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">File Sharing</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Secure and efficient file sharing
-                                            </p>
-                                        </div>
-                                        <div className="bg-purple-50 p-4 rounded-lg">
-                                            <div className="text-purple-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Group Conversations</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Organize conversations with customizable group settings
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
-                                    <div className="bg-gray-50 p-6 rounded-lg">
-                                        <ul className="space-y-4">
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Enhanced communication and collaboration</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Increased parent-teacher interaction</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Improved student engagement and outcomes</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Reduced administrative workload</span>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                <div className="mt-8 flex justify-end">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsMessagingSystemModalOpen(false)}
+                                        className="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+                                    >
+                                        Close
+                                    </button>
                                 </div>
                             </div>
-
-                            <div className="mt-8 flex justify-end">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsMessagingSystemModalOpen(false)}
-                                    className="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
-                                >
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Announcements Modal */}
-            {isAnnouncementsModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                        <div className="p-8">
-                            <div className="flex justify-between items-start mb-6">
-                                <h3 className="text-2xl font-bold text-gray-900">Announcements System</h3>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsAnnouncementsModalOpen(false)}
-                                    className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                    aria-label="Close modal"
-                                >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
+            <AnimatePresence>
+                {isAnnouncementsModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                        >
+                            <div className="p-8">
+                                <div className="flex justify-between items-start mb-6">
+                                    <h3 className="text-2xl font-bold text-gray-900">Announcements System</h3>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsAnnouncementsModalOpen(false)}
+                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
+                                        aria-label="Close modal"
+                                    >
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
 
-                            <div className="space-y-8">
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">School-wide Announcements</h4>
-                                    <p className="text-gray-600 mb-4">
-                                        Our announcements system enables efficient communication of important updates and information to the entire school community.
-                                    </p>
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Features</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• Targeted broadcasts</li>
-                                                <li>• Scheduled announcements</li>
-                                                <li>• Priority notifications</li>
+                                <div className="space-y-8">
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">School-wide Announcements</h4>
+                                        <p className="text-gray-600 mb-4">
+                                            Our announcements system enables efficient communication of important updates and information to the entire school community.
+                                        </p>
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Features</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• Targeted broadcasts</li>
+                                                    <li>• Scheduled announcements</li>
+                                                    <li>• Priority notifications</li>
+                                                </ul>
+                                            </div>
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h5 className="font-semibold text-gray-900 mb-2">Benefits</h5>
+                                                <ul className="space-y-2 text-gray-600">
+                                                    <li>• Improved information flow</li>
+                                                    <li>• Better community engagement</li>
+                                                    <li>• Enhanced communication</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
+                                        <div className="grid md:grid-cols-3 gap-4">
+                                            <div className="bg-orange-50 p-4 rounded-lg">
+                                                <div className="text-orange-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Targeted Broadcasts</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Send announcements to specific groups or the entire school
+                                                </p>
+                                            </div>
+                                            <div className="bg-yellow-50 p-4 rounded-lg">
+                                                <div className="text-yellow-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Scheduled Announcements</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Plan and schedule announcements in advance
+                                                </p>
+                                            </div>
+                                            <div className="bg-red-50 p-4 rounded-lg">
+                                                <div className="text-red-600 mb-2">
+                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                                    </svg>
+                                                </div>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Priority Notifications</h5>
+                                                <p className="text-gray-600 text-sm">
+                                                    Highlight urgent announcements with priority status
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
+                                        <div className="bg-gray-50 p-6 rounded-lg">
+                                            <ul className="space-y-4">
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Streamlined communication across the school community</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Improved information delivery and accessibility</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Enhanced parent and student engagement</span>
+                                                </li>
+                                                <li className="flex items-start">
+                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-600">Reduced administrative workload for communication tasks</span>
+                                                </li>
                                             </ul>
                                         </div>
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">Benefits</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                <li>• Improved information flow</li>
-                                                <li>• Better community engagement</li>
-                                                <li>• Enhanced communication</li>
-                                            </ul>
-                                        </div>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
-                                    <div className="grid md:grid-cols-3 gap-4">
-                                        <div className="bg-orange-50 p-4 rounded-lg">
-                                            <div className="text-orange-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Targeted Broadcasts</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Send announcements to specific groups or the entire school
-                                            </p>
-                                        </div>
-                                        <div className="bg-yellow-50 p-4 rounded-lg">
-                                            <div className="text-yellow-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Scheduled Announcements</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Plan and schedule announcements in advance
-                                            </p>
-                                        </div>
-                                        <div className="bg-red-50 p-4 rounded-lg">
-                                            <div className="text-red-600 mb-2">
-                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                                </svg>
-                                            </div>
-                                            <h5 className="font-semibold text-gray-900 mb-2">Priority Notifications</h5>
-                                            <p className="text-gray-600 text-sm">
-                                                Highlight urgent announcements with priority status
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
-                                    <div className="bg-gray-50 p-6 rounded-lg">
-                                        <ul className="space-y-4">
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Streamlined communication across the school community</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Improved information delivery and accessibility</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Enhanced parent and student engagement</span>
-                                            </li>
-                                            <li className="flex items-start">
-                                                <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-600">Reduced administrative workload for communication tasks</span>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                <div className="mt-8 flex justify-end">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsAnnouncementsModalOpen(false)}
+                                        className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                                    >
+                                        Close
+                                    </button>
                                 </div>
                             </div>
-
-                            <div className="mt-8 flex justify-end">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsAnnouncementsModalOpen(false)}
-                                    className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-                                >
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Add Unsubscribe Modal */}
-            {isUnsubscribeModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-semibold text-gray-900">Unsubscribe from Newsletter</h3>
-                            <button
-                                type="button"
-                                onClick={() => setIsUnsubscribeModalOpen(false)}
-                                className="text-gray-400 hover:text-gray-500 focus:outline-none"
-                                aria-label="Close unsubscribe modal"
-                            >
-                                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        <form onSubmit={handleUnsubscribe}>
-                            <div className="mb-4">
-                                <label htmlFor="unsubscribe-email" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Enter your email address to unsubscribe
-                                </label>
-                                <input
-                                    type="email"
-                                    id="unsubscribe-email"
-                                    value={unsubscribeEmail}
-                                    onChange={(e) => setUnsubscribeEmail(e.target.value)}
-                                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
-                                    disabled={isLoading}
-                                />
-                            </div>
-
-                            {unsubscribeStatus !== 'idle' && (
-                                <div className={`mb-4 p-3 rounded-lg ${unsubscribeStatus === 'success'
-                                    ? 'bg-green-100 text-green-700'
-                                    : 'bg-red-100 text-red-700'
-                                    }`}>
-                                    {unsubscribeMessage}
-                                </div>
-                            )}
-
-                            <div className="flex justify-end space-x-4">
+            <AnimatePresence>
+                {isUnsubscribeModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="bg-white rounded-lg p-8 max-w-md w-full mx-4"
+                        >
+                            <div className="flex justify-between items-center mb-6">
+                                <h3 className="text-xl font-semibold text-gray-900">Unsubscribe from Newsletter</h3>
                                 <button
                                     type="button"
                                     onClick={() => setIsUnsubscribeModalOpen(false)}
-                                    className="px-4 py-2 focus:outline-none text-gray-700 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    disabled={isLoading}
+                                    className="text-gray-400 hover:text-gray-500 focus:outline-none"
+                                    aria-label="Close unsubscribe modal"
                                 >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="px-4 py-2 focus:outline-none bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    disabled={isLoading}
-                                >
-                                    {isLoading ? (
-                                        <span className="flex items-center justify-center">
-                                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                            </svg>
-                                            Processing...
-                                        </span>
-                                    ) : (
-                                        'Unsubscribe'
-                                    )}
+                                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
                                 </button>
                             </div>
-                        </form>
-                    </div>
-                </div>
-            )}
+
+                            <form onSubmit={handleUnsubscribe}>
+                                <div className="mb-4">
+                                    <label htmlFor="unsubscribe-email" className="block text-sm font-medium text-gray-700 mb-2">
+                                        Enter your email address to unsubscribe
+                                    </label>
+                                    <input
+                                        type="email"
+                                        id="unsubscribe-email"
+                                        value={unsubscribeEmail}
+                                        onChange={(e) => setUnsubscribeEmail(e.target.value)}
+                                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                                        disabled={isLoading}
+                                    />
+                                </div>
+
+                                {unsubscribeStatus !== 'idle' && (
+                                    <div className={`mb-4 p-3 rounded-lg ${unsubscribeStatus === 'success'
+                                        ? 'bg-green-100 text-green-700'
+                                        : 'bg-red-100 text-red-700'
+                                        }`}>
+                                        {unsubscribeMessage}
+                                    </div>
+                                )}
+
+                                <div className="flex justify-end space-x-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsUnsubscribeModalOpen(false)}
+                                        className="px-4 py-2 focus:outline-none text-gray-700 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        disabled={isLoading}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="px-4 py-2 focus:outline-none bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? (
+                                            <span className="flex items-center justify-center">
+                                                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                                Processing...
+                                            </span>
+                                        ) : (
+                                            'Unsubscribe'
+                                        )}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Add loading overlay for smooth scrolling */}
             {isScrolling && (

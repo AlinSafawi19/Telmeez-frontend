@@ -68,31 +68,12 @@ const PricingPlans: React.FC<PricingPlansProps> = ({ initialSelectedPlan = null,
         const recommendedPlan = plans.find(plan => plan.recommended);
         return recommendedPlan ? recommendedPlan.name : null;
     });
-    const [showReferralModal, setShowReferralModal] = useState(false);
-    const [referralLink, setReferralLink] = useState('');
-    const [copySuccess, setCopySuccess] = useState(false);
 
     useEffect(() => {
         if (initialSelectedPlan) {
             setSelectedPlan(initialSelectedPlan);
         }
     }, [initialSelectedPlan]);
-
-    useEffect(() => {
-        // Generate a unique referral code (you might want to get this from your backend)
-        const referralCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-        setReferralLink(`${window.location.origin}/signup?ref=${referralCode}`);
-    }, []);
-
-    const handleCopyLink = async () => {
-        try {
-            await navigator.clipboard.writeText(referralLink);
-            setCopySuccess(true);
-            setTimeout(() => setCopySuccess(false), 2000);
-        } catch (err) {
-            console.error('Failed to copy text: ', err);
-        }
-    };
 
     const handlePlanSelect = (planName: string) => {
         setSelectedPlan(planName);
@@ -233,89 +214,6 @@ const PricingPlans: React.FC<PricingPlansProps> = ({ initialSelectedPlan = null,
                         </div>
                     ))}
                 </div>
-
-                {/* New Referral Rewards Section */}
-                <div className="mt-16 max-w-4xl mx-auto bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 shadow-lg">
-                    <div className="text-center mb-8">
-                        <h3 className="text-2xl font-bold text-gray-900 mb-3">Refer & Earn Rewards</h3>
-                        <p className="text-gray-600">Share Telmeez with your network and get rewarded!</p>
-                    </div>
-                    <div className="grid md:grid-cols-3 gap-6">
-                        <div className="bg-white p-6 rounded-xl shadow-sm">
-                            <div className="text-blue-600 text-4xl mb-3">🎁</div>
-                            <h4 className="font-semibold text-lg mb-2">Get 1 Month Free</h4>
-                            <p className="text-gray-600 text-sm">When your referral subscribes to any plan</p>
-                        </div>
-                        <div className="bg-white p-6 rounded-xl shadow-sm">
-                            <div className="text-blue-600 text-4xl mb-3">💎</div>
-                            <h4 className="font-semibold text-lg mb-2">Extra User Seats</h4>
-                            <p className="text-gray-600 text-sm">Get 2 parent seats and 5 student seats</p>
-                        </div>
-                        <div className="bg-white p-6 rounded-xl shadow-sm">
-                            <div className="text-blue-600 text-4xl mb-3">🌟</div>
-                            <h4 className="font-semibold text-lg mb-2">Special Discounts</h4>
-                            <p className="text-gray-600 text-sm">Earn up to 20% off on your next billing cycle</p>
-                        </div>
-                    </div>
-                    <div className="mt-8 text-center">
-                        <button
-                            onClick={() => setShowReferralModal(true)}
-                            className="inline-flex items-center px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                        >
-                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                            </svg>
-                            Get Your Referral Link
-                        </button>
-                    </div>
-                </div>
-
-                {/* Referral Modal */}
-                {showReferralModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="bg-white rounded-xl p-8 max-w-md w-full mx-4">
-                            <div className="flex justify-between items-center mb-6">
-                                <h3 className="text-xl font-bold text-gray-900">Your Referral Link</h3>
-                                <button
-                                    onClick={() => setShowReferralModal(false)}
-                                    className="text-gray-400 hover:text-gray-500"
-                                    aria-label="Close modal"
-                                >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <div className="mb-6">
-                                <p className="text-gray-600 mb-4">Share this link with your network and earn rewards when they sign up!</p>
-                                <div className="flex items-center space-x-2">
-                                    <input
-                                        type="text"
-                                        value={referralLink}
-                                        readOnly
-                                        aria-label="Referral link"
-                                        placeholder="Your referral link"
-                                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    />
-                                    <button
-                                        onClick={handleCopyLink}
-                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                    >
-                                        {copySuccess ? 'Copied!' : 'Copy'}
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="bg-blue-50 rounded-lg p-4">
-                                <h4 className="font-semibold text-blue-900 mb-2">How it works:</h4>
-                                <ol className="list-decimal list-inside text-blue-800 space-y-2">
-                                    <li>Share your unique referral link</li>
-                                    <li>When someone signs up using your link</li>
-                                    <li>You both get the rewards automatically</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
     );
