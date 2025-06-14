@@ -709,7 +709,7 @@ const Landing: React.FC = () => {
                                         className="text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
                                         {t.features.learn_more}
-                                        <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
@@ -754,7 +754,7 @@ const Landing: React.FC = () => {
                                         className="text-purple-600 font-semibold hover:text-purple-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
                                         {t.features.learn_more}
-                                        <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
@@ -817,7 +817,7 @@ const Landing: React.FC = () => {
                                         className="text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
                                         {t.features.learn_more}
-                                        <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
@@ -862,7 +862,7 @@ const Landing: React.FC = () => {
                                         className="text-green-600 font-semibold hover:text-green-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
                                         {t.features.learn_more}
-                                        <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
@@ -925,7 +925,7 @@ const Landing: React.FC = () => {
                                         className="text-indigo-600 font-semibold hover:text-indigo-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
                                         {t.features.learn_more}
-                                        <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
@@ -969,8 +969,8 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsProgressTrackingModalOpen(true)}
                                         className="text-yellow-600 font-semibold hover:text-yellow-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
-                                        Learn More
-                                        <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        {t.features.learn_more}
+                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
@@ -1033,7 +1033,7 @@ const Landing: React.FC = () => {
                                         className="text-pink-600 font-semibold hover:text-pink-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
                                         {t.features.learn_more}
-                                        <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
@@ -1078,7 +1078,7 @@ const Landing: React.FC = () => {
                                         className="text-orange-600 font-semibold hover:text-orange-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
                                         {t.features.learn_more}
-                                        <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
