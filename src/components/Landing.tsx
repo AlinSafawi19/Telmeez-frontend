@@ -62,13 +62,14 @@ const Landing: React.FC = () => {
     ];
 
     const handleLanguageChange = (langCode: Language) => {
-        setCurrentLanguage(langCode);
+        setIsScrolling(true);
         // Here you would typically also update the document direction for RTL languages
         if (langCode === 'ar') {
             document.documentElement.dir = 'rtl';
         } else {
             document.documentElement.dir = 'ltr';
         }
+        setTimeout(() => { setIsScrolling(false); setCurrentLanguage(langCode); }, 500);
     };
 
     useEffect(() => {
