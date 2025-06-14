@@ -1,4 +1,10 @@
 export const fr = {
+    hero: {
+        title: "Renforcer les Institutions Éducatives",
+        subtitle: "Une plateforme tout-en-un conçue pour les écoles, les collèges et les institutions éducatives. Simplifiez vos opérations et votre communication au sein de votre organisation.",
+        getStarted: "Commencer",
+        learnMore: "En Savoir Plus"
+    },
     faq: {
         title: "Questions Fréquemment Posées",
         subtitle: "Trouvez des réponses aux questions courantes sur Telmeez et nos services.",

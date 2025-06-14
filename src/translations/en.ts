@@ -1,4 +1,10 @@
 export const en = {
+    hero: {
+        title: "Empowering Educational Institutions",
+        subtitle: "A one-stop platform designed to cater to schools, colleges, and educational institutions. Streamline your operations and communication within your organization.",
+        getStarted: "Get Started",
+        learnMore: "Learn More"
+    },
     faq: {
         title: "Frequently Asked Questions",
         subtitle: "Find answers to commonly asked questions about Telmeez and our services.",

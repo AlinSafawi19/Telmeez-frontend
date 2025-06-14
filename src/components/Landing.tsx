@@ -8,6 +8,7 @@ import About from './About';
 import Demo from './Demo';
 import FAQ from './FAQ';
 import type { Language } from '../translations';
+import { translations } from '../translations';
 
 const Landing: React.FC = () => {
     const navigate = useNavigate();
@@ -41,6 +42,7 @@ const Landing: React.FC = () => {
     const [showBackToTop, setShowBackToTop] = useState(false);
     const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
     const languageDropdownRef = useRef<HTMLDivElement>(null);
+    const t = translations[currentLanguage];
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -462,7 +464,6 @@ const Landing: React.FC = () => {
                                             className={`flex items-center w-full text-left px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none ${currentLanguage === lang.code ? 'bg-blue-50 text-blue-600' : 'bg-transparent'}`}
                                             role="menuitem"
                                         >
-                                            <span className="uppercase font-medium mr-2">{lang.code}</span>
                                             <span>{lang.label}</span>
                                             {currentLanguage === lang.code && (
                                                 <svg className="w-4 h-4 ml-auto text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -585,12 +586,12 @@ const Landing: React.FC = () => {
                 <div className="container mx-auto px-4">
                     <div className="text-center max-w-4xl mx-auto">
                         <h1 className={`text-7xl font-bold text-gray-900 mb-8 leading-tight ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
-                            Empowering Educational Institutions
+                            {t.hero.title}
                         </h1>
                         <p className={`text-2xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed ${isVisible ? 'animate-fadeInUp delay-200' : 'opacity-0'}`}>
-                            A one-stop platform designed to cater to schools, colleges, and educational institutions. Streamline your operations and communication within your organization.
+                            {t.hero.subtitle}
                         </p>
-                        <div className={`flex justify-center space-x-6 ${isVisible ? 'animate-fadeInUp delay-300' : 'opacity-0'}`}>
+                        <div className={`flex justify-center space-x-6 rtl:space-x-reverse ${isVisible ? 'animate-fadeInUp delay-300' : 'opacity-0'}`}>
                             <button
                                 type="button"
                                 onClick={() => {
@@ -600,7 +601,7 @@ const Landing: React.FC = () => {
                                 }}
                                 className="bg-blue-600 text-white px-10 py-4 rounded-lg text-xl font-semibold hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-0"
                             >
-                                Get Started
+                                {t.hero.getStarted}
                             </button>
                             <button
                                 type="button"
@@ -611,7 +612,7 @@ const Landing: React.FC = () => {
                                 }}
                                 className="bg-white text-blue-600 px-10 py-4 rounded-lg text-xl font-semibold hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-blue-600 focus:outline-none focus:ring-0"
                             >
-                                Learn More
+                                {t.hero.learnMore}
                             </button>
                         </div>
                     </div>
@@ -1264,9 +1265,6 @@ const Landing: React.FC = () => {
                                             : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                                             }`}
                                     >
-                                        <span className="text-base uppercase text-sm">
-                                            {lang.code}
-                                        </span>
                                         <span className="text-sm font-medium">{lang.label}</span>
                                     </button>
                                 ))}
