@@ -179,46 +179,46 @@ const Landing: React.FC = () => {
 
     const dropdownItems = {
         features: [
-            { label: 'Student Management', href: '#student-management' },
-            { label: 'Attendance System', href: '#attendance-system' },
-            { label: 'Grade Management', href: '#grade-management' },
-            { label: 'Communication Tools', href: '#communication-tools' }
+            { label: t.header.features.student_management, href: '#student-management' },
+            { label: t.header.features.attendance_system, href: '#attendance-system' },
+            { label: t.header.features.grade_management, href: '#grade-management' },
+            { label: t.header.features.communication_tools, href: '#communication-tools' }
         ],
         resources: [
-            { label: 'Demo', href: '#' },
-            { label: 'FAQ', href: '#' }
+            { label: t.header.resources.demo, href: '#' },
+            { label: t.header.resources.faq, href: '#' }
         ],
         about: [
-            { label: 'Our Story', href: '#' },
-            { label: 'Press', href: '#' }
+            { label: t.header.about.our_story, href: '#' },
+            { label: t.header.about.press, href: '#' }
         ],
         pricing: [
             {
-                label: 'Starter',
+                label: t.header.pricing.starter,
                 href: '#',
                 monthlyPrice: '$49',
                 annualPrice: '$470',
-                description: 'Perfect for tutoring centers and small schools',
-                details: '3 Admin Accounts, 25 Teacher Accounts, 250 Student Accounts',
-                savings: 'Save 20% annually'
+                description: t.header.pricing.starter_desc,
+                details: t.header.pricing.starter_details,
+                savings: t.header.pricing.savings
             },
             {
-                label: 'Standard',
+                label: t.header.pricing.standard,
                 href: '#',
                 monthlyPrice: '$99',
                 annualPrice: '$950',
-                description: 'Perfect for growing educational institutions',
-                details: '10 Admin Accounts, 150 Teacher Accounts, 1,500 Student Accounts',
-                savings: 'Save 20% annually'
+                description: t.header.pricing.standard_desc,
+                details: t.header.pricing.standard_details,
+                savings: t.header.pricing.savings
             },
             {
-                label: 'Enterprise',
+                label: t.header.pricing.enterprise,
                 href: '#',
                 monthlyPrice: '$299',
                 annualPrice: '$2,870',
-                description: 'For institutions big in size and high in demands',
-                details: 'Unlimited Admin, Teacher, and Student Accounts',
-                savings: 'Save 20% annually'
+                description: t.header.pricing.enterprise_desc,
+                details: t.header.pricing.enterprise_details,
+                savings: t.header.pricing.savings
             }
         ]
     };
@@ -270,13 +270,13 @@ const Landing: React.FC = () => {
                                 <img src={logo} alt="Telmeez Logo" className="h-20 w-20" />
                             </a>
                         </div>
-                        <nav className="hidden md:flex space-x-8">
+                        <nav className={`hidden md:flex ${currentLanguage === 'ar' ? 'space-x-reverse space-x-8' : 'space-x-8'}`}>
                             <a href="#" onClick={(e) => {
                                 e.preventDefault();
                                 setIsScrolling(true);
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                                 setTimeout(() => setIsScrolling(false), 1000);
-                            }} className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium">Home</a>
+                            }} className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium">{t.header.home}</a>
                             <div
                                 className="relative group"
                                 onMouseEnter={() => handleDropdownEnter('features')}
@@ -287,13 +287,13 @@ const Landing: React.FC = () => {
                                     onClick={(e) => handleDropdownClick(e, 'features')}
                                     className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium flex items-center"
                                 >
-                                    Features
+                                    {t.header.features.features}
                                     <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </a>
                                 <div
-                                    className={`absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'features' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
+                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-72 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'features' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
                                     onMouseEnter={() => handleDropdownEnter('features')}
                                     onMouseLeave={handleDropdownLeave}
                                 >
@@ -319,13 +319,13 @@ const Landing: React.FC = () => {
                                     onClick={(e) => handleDropdownClick(e, 'pricing')}
                                     className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium flex items-center"
                                 >
-                                    Pricing
+                                    {t.header.pricing.pricing}
                                     <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </a>
                                 <div
-                                    className={`absolute left-0 mt-2 w-72 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'pricing' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
+                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-72 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'pricing' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
                                     onMouseEnter={() => handleDropdownEnter('pricing')}
                                     onMouseLeave={handleDropdownLeave}
                                 >
@@ -339,18 +339,18 @@ const Landing: React.FC = () => {
                                             <div className="flex justify-between items-center mb-1">
                                                 <span className="font-semibold text-gray-900">{item.label}</span>
                                                 <div className="text-right">
-                                                    <div className="text-blue-600 font-bold">{item.monthlyPrice}/mo</div>
-                                                    <div className="text-sm text-gray-600">{item.annualPrice}/yr</div>
+                                                    <div className="text-blue-600 font-bold">{item.monthlyPrice}{t.header.pricing.permonth}</div>
+                                                    <div className="text-sm text-gray-600">{item.annualPrice}{t.header.pricing.peryear}</div>
                                                 </div>
                                             </div>
                                             <p className="text-sm text-gray-600">{item.description}</p>
                                             <p className="text-xs text-gray-500 mt-1">{item.details}</p>
                                             <p className="text-xs text-green-600 mt-1">{item.savings}</p>
-                                            {item.label === 'Starter' && (
+                                            {item.label === t.header.pricing.starter && (
                                                 <div className="mt-2">
                                                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                         <span className="mr-1">✨</span>
-                                                        Free Trial
+                                                        {t.header.pricing.free_trial}
                                                     </span>
                                                 </div>
                                             )}
@@ -368,13 +368,13 @@ const Landing: React.FC = () => {
                                     onClick={(e) => handleDropdownClick(e, 'about')}
                                     className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium flex items-center"
                                 >
-                                    About
+                                    {t.header.about.about}
                                     <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </a>
                                 <div
-                                    className={`absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'about' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
+                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-48 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'about' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
                                     onMouseEnter={() => handleDropdownEnter('about')}
                                     onMouseLeave={handleDropdownLeave}
                                 >
@@ -400,13 +400,13 @@ const Landing: React.FC = () => {
                                     onClick={(e) => handleDropdownClick(e, 'resources')}
                                     className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium flex items-center"
                                 >
-                                    Resources
+                                    {t.header.resources.resources}
                                     <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </a>
                                 <div
-                                    className={`absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'resources' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
+                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-48 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'resources' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
                                     onMouseEnter={() => handleDropdownEnter('resources')}
                                     onMouseLeave={handleDropdownLeave}
                                 >
@@ -433,7 +433,7 @@ const Landing: React.FC = () => {
                                 </div>
                             </div>
                         </nav>
-                        <div className="flex items-center space-x-4">
+                        <div className={`flex items-center ${currentLanguage === 'ar' ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                             <div className="relative group">
                                 <button
                                     className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium focus:outline-none"
@@ -442,13 +442,15 @@ const Landing: React.FC = () => {
                                     aria-haspopup="true"
                                     aria-label="Select language"
                                 >
-                                    <span className="uppercase font-medium">{currentLanguage}</span>
+                                    <span className="uppercase font-medium">
+                                        {languages.find(lang => lang.code === currentLanguage)?.label}
+                                    </span>
                                     <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </button>
                                 <div
-                                    className={`absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'language' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
+                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-40 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'language' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
                                     role="menu"
                                     aria-orientation="vertical"
                                     aria-labelledby="language-menu"
@@ -478,7 +480,7 @@ const Landing: React.FC = () => {
                                 onClick={() => navigate('/signin')}
                                 className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300 font-medium focus:outline-none"
                             >
-                                Sign In
+                                {t.header.signin}
                             </button>
                             <button
                                 type="button"

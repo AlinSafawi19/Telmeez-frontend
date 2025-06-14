@@ -1,4 +1,41 @@
 export const fr = {
+    header: {
+        home: "Accueil",
+        features: {
+            features: "Fonctionnalités",
+            student_management: "Gestion des Étudiants",
+            attendance_system: "Système de Présence",
+            grade_management: "Gestion des Notes",
+            communication_tools: "Outils de Communication"
+        },
+        pricing: {
+            pricing: "Tarification",
+            starter: "Débutant",
+            starter_desc: "Parfait pour les centres de tutorat et les petites écoles",
+            starter_details: "3 Comptes Admin, 25 Comptes Enseignants, 250 Comptes Étudiants",
+            savings: "Économisez 20% par an",
+            standard: "Standard",
+            standard_desc: "Parfait pour les institutions éducatives en croissance",
+            standard_details: "10 Comptes Admin, 150 Comptes Enseignants, 1,500 Comptes Étudiants",
+            enterprise: "Entreprise",
+            enterprise_desc: "Pour les institutions de grande taille et à forte demande",
+            enterprise_details: "Comptes Admin, Enseignants et Étudiants illimités",
+            free_trial: "Essai Gratuit",
+            permonth: "/mois",
+            peryear: "/an"
+        },
+        about: {
+            about: "À Propos",
+            our_story: "Notre Histoire",
+            press: "Presse"
+        },
+        resources: {
+            resources: "Ressources",
+            demo: "Démo",
+            faq: "FAQ"
+        },
+        signin: "Se Connecter"
+    },
     hero: {
         title: "Renforcer les Institutions Éducatives",
         subtitle: "Une plateforme tout-en-un conçue pour les écoles, les collèges et les institutions éducatives. Simplifiez vos opérations et votre communication au sein de votre organisation.",

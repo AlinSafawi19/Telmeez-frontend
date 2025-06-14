@@ -1,4 +1,41 @@
 export const ar = {
+    header: {
+        home: "الرئيسية",
+        features: {
+            features: "الميزات",
+            student_management: "إدارة الطلاب",
+            attendance_system: "نظام الحضور",
+            grade_management: "إدارة الدرجات",
+            communication_tools: "أدوات التواصل"
+        },
+        pricing: {
+            pricing: "الأسعار",
+            starter: "البداية",
+            starter_desc: "مثالي لمراكز الدروس الخصوصية والمدارس الصغيرة",
+            starter_details: "3 حسابات مشرف، 25 حساب معلم، 250 حساب طالب",
+            savings: "وفر 20% سنوياً",
+            standard: "القياسي",
+            standard_desc: "مثالي للمؤسسات التعليمية النامية",
+            standard_details: "10 حسابات مشرف، 150 حساب معلم، 1,500 حساب طالب",
+            enterprise: "المؤسسات",
+            enterprise_desc: "للمؤسسات الكبيرة في الحجم والطلبات",
+            enterprise_details: "حسابات غير محدودة للمشرفين والمعلمين والطلاب",
+            free_trial: "تجربة مجانية",
+            permonth: "/شهرياً",
+            peryear: "/سنوياً"
+        },
+        about: {
+            about: "من نحن",
+            our_story: "قصتنا",
+            press: "الصحافة"
+        },
+        resources: {
+            resources: "الموارد",
+            demo: "تجريبي",
+            faq: "الأسئلة الشائعة"
+        },
+        signin: "تسجيل الدخول"
+    },
     hero: {
         title: "تمكين المؤسسات التعليمية",
         subtitle: "منصة شاملة مصممة لخدمة المدارس والكليات والمؤسسات التعليمية. تبسيط عملياتك وتواصلك داخل مؤسستك.",

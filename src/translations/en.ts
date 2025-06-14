@@ -1,4 +1,41 @@
 export const en = {
+    header: {
+        home: "Home",
+        features: {
+            features: "Features",
+            student_management: "Student Management",
+            attendance_system: "Attendance System",
+            grade_management: "Grade Management",
+            communication_tools: "Communication Tools"
+        },
+        pricing: {
+            pricing: "Pricing",
+            starter: "Starter",
+            starter_desc: "Perfect for tutoring centers and small schools",
+            starter_details: "3 Admin Accounts, 25 Teacher Accounts, 250 Student Accounts",
+            savings: "Save 20% annually",
+            standard: "Standard",
+            standard_desc: "Perfect for growing educational institutions",
+            standard_details: "10 Admin Accounts, 150 Teacher Accounts, 1,500 Student Accounts",
+            enterprise: "Enterprise",
+            enterprise_desc: "For institutions big in size and high in demands",
+            enterprise_details: "Unlimited Admin, Teacher, and Student Accounts",
+            free_trial: "Free Trial",
+            permonth: "/mo",
+            peryear: "/yr"
+        },
+        about: {
+            about: "About",
+            our_story: "Our Story",
+            press: "Press"
+        },
+        resources: {
+            resources: "Resources",
+            demo: "Demo",
+            faq: "FAQ"
+        },
+        signin: "Sign In"
+    },
     hero: {
         title: "Empowering Educational Institutions",
         subtitle: "A one-stop platform designed to cater to schools, colleges, and educational institutions. Streamline your operations and communication within your organization.",
