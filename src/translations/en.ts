@@ -109,7 +109,52 @@ export const en = {
                 description: "Streamline the enrollment process with electronic forms, document uploading, and automated workflows.",
                 tick1: "Digital Form Processing",
                 tick2: "Document Management",
-                tick3: "Automated Workflows"
+                tick3: "Automated Workflows",
+                modal: {
+                    title: "Enrollment Management",
+                    close: "Close",
+                    information: {
+                        title: "Enrollment Process Details",
+                        description: "Our enrollment management system streamlines the entire student registration process, making it efficient and user-friendly for both administrators and applicants.",
+                        process_steps: {
+                            title: "Enrollment Process Steps",
+                            items: [
+                                "Online Application Submission",
+                                "Document Verification",
+                                "Payment Processing",
+                                "Course Selection"
+                            ]
+                        },
+                        features: {
+                            title: "Key Features",
+                            online_application: {
+                                title: "Online Application",
+                                description: "User-friendly forms for easy student registration"
+                            },
+                            document_verification: {
+                                title: "Document Verification",
+                                description: "Secure document upload and verification system"
+                            },
+                            payment_processing: {
+                                title: "Payment Processing",
+                                description: "Integrated payment system for tuition and fees"
+                            },
+                            course_selection: {
+                                title: "Course Selection",
+                                description: "Interactive course selection and scheduling"
+                            }
+                        },
+                        benefits: {
+                            title: "Benefits",
+                            items: [
+                                "Reduced administrative workload",
+                                "Faster enrollment processing",
+                                "Improved accuracy in data entry",
+                                "Enhanced student experience"
+                            ]
+                        }
+                    }
+                }
             },
             student_profiles: {
                 student_profiles: "Student Profiles",

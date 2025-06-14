@@ -109,7 +109,52 @@ export const fr = {
                 description: "Rationalisez le processus d'inscription avec des formulaires électroniques, le téléchargement de documents et des flux de travail automatisés.",
                 tick1: "Traitement des Formulaires Numériques",
                 tick2: "Gestion des Documents",
-                tick3: "Flux de Travail Automatisés"
+                tick3: "Flux de Travail Automatisés",
+                modal: {
+                    title: "Gestion des Inscriptions",
+                    close: "Fermer",
+                    information: {
+                        title: "Détails du Processus d'Inscription",
+                        description: "Notre système de gestion des inscriptions rationalise l'ensemble du processus d'inscription des étudiants, le rendant efficace et convivial pour les administrateurs et les candidats.",
+                        process_steps: {
+                            title: "Étapes du Processus d'Inscription",
+                            items: [
+                                "Soumission de la Demande en Ligne",
+                                "Vérification des Documents",
+                                "Traitement des Paiements",
+                                "Sélection des Cours"
+                            ]
+                        },
+                        features: {
+                            title: "Fonctionnalités Clés",
+                            online_application: {
+                                title: "Demande en Ligne",
+                                description: "Formulaires conviviaux pour une inscription facile des étudiants"
+                            },
+                            document_verification: {
+                                title: "Vérification des Documents",
+                                description: "Système sécurisé de téléchargement et de vérification des documents"
+                            },
+                            payment_processing: {
+                                title: "Traitement des Paiements",
+                                description: "Système de paiement intégré pour les frais de scolarité"
+                            },
+                            course_selection: {
+                                title: "Sélection des Cours",
+                                description: "Sélection et planification interactives des cours"
+                            }
+                        },
+                        benefits: {
+                            title: "Avantages",
+                            items: [
+                                "Réduction de la charge administrative",
+                                "Traitement plus rapide des inscriptions",
+                                "Amélioration de la précision de la saisie des données",
+                                "Expérience étudiante améliorée"
+                            ]
+                        }
+                    }
+                }
             },
             student_profiles: {
                 student_profiles: "Profils des Étudiants",

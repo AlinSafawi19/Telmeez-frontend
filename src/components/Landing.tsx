@@ -1431,7 +1431,9 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">Enrollment Management</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">
+                                        {t.features.student_management.enrollment_management.modal.title}
+                                    </h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsEnrollmentModalOpen(false)}
@@ -1446,34 +1448,41 @@ const Landing: React.FC = () => {
 
                                 <div className="space-y-8">
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Streamlined Enrollment Process</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">
+                                            {t.features.student_management.enrollment_management.modal.information.title}
+                                        </h4>
                                         <p className="text-gray-600 mb-4">
-                                            Our enrollment management solution simplifies the entire process from application to registration, making it efficient for both administrators and applicants.
+                                            {t.features.student_management.enrollment_management.modal.information.description}
                                         </p>
                                         <div className="grid md:grid-cols-2 gap-4">
                                             <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Application Process</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">
+                                                    {t.features.student_management.enrollment_management.modal.information.process_steps.title}
+                                                </h5>
                                                 <ul className="space-y-2 text-gray-600">
-                                                    <li>• Online application forms</li>
-                                                    <li>• Document verification system</li>
-                                                    <li>• Application status tracking</li>
-                                                    <li>• Automated reminders</li>
+                                                    {t.features.student_management.enrollment_management.modal.information.process_steps.items.map((item, index) => (
+                                                        <li key={index}>• {item}</li>
+                                                    ))}
                                                 </ul>
                                             </div>
                                             <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Registration Features</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">
+                                                    {t.features.student_management.enrollment_management.modal.information.features.title}
+                                                </h5>
                                                 <ul className="space-y-2 text-gray-600">
-                                                    <li>• Profile management</li>
-                                                    <li>• Uploading documents</li>
-                                                    <li>• Payment processing</li>
-                                                    <li>• Generation of ID card</li>
+                                                    <li>• {t.features.student_management.enrollment_management.modal.information.features.online_application.title}</li>
+                                                    <li>• {t.features.student_management.enrollment_management.modal.information.features.document_verification.title}</li>
+                                                    <li>• {t.features.student_management.enrollment_management.modal.information.features.payment_processing.title}</li>
+                                                    <li>• {t.features.student_management.enrollment_management.modal.information.features.course_selection.title}</li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">
+                                            {t.features.student_management.enrollment_management.modal.information.features.title}
+                                        </h4>
                                         <div className="grid md:grid-cols-3 gap-4">
                                             <div className="bg-purple-50 p-4 rounded-lg">
                                                 <div className="text-purple-600 mb-2">
@@ -1481,9 +1490,11 @@ const Landing: React.FC = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                     </svg>
                                                 </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Automated Workflows</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">
+                                                    {t.features.student_management.enrollment_management.modal.information.features.online_application.title}
+                                                </h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Streamline enrollment with customized approval flows
+                                                    {t.features.student_management.enrollment_management.modal.information.features.online_application.description}
                                                 </p>
                                             </div>
                                             <div className="bg-blue-50 p-4 rounded-lg">
@@ -1492,9 +1503,11 @@ const Landing: React.FC = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                     </svg>
                                                 </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Real-time Processing</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">
+                                                    {t.features.student_management.enrollment_management.modal.information.features.document_verification.title}
+                                                </h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Instant updating and status changes for all concerned
+                                                    {t.features.student_management.enrollment_management.modal.information.features.document_verification.description}
                                                 </p>
                                             </div>
                                             <div className="bg-green-50 p-4 rounded-lg">
@@ -1503,42 +1516,30 @@ const Landing: React.FC = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                                     </svg>
                                                 </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Document Management</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">
+                                                    {t.features.student_management.enrollment_management.modal.information.features.payment_processing.title}
+                                                </h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Secure storage and verification of documents for enrollment
+                                                    {t.features.student_management.enrollment_management.modal.information.features.payment_processing.description}
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">
+                                            {t.features.student_management.enrollment_management.modal.information.benefits.title}
+                                        </h4>
                                         <div className="bg-gray-50 p-6 rounded-lg">
                                             <ul className="space-y-4">
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Reduced administrative weight and processing duration</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Improved applicant experience through self-service</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Enhanced data accuracy and compliance</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Complete reporting and analytics</span>
-                                                </li>
+                                                {t.features.student_management.enrollment_management.modal.information.benefits.items.map((item, index) => (
+                                                    <li key={index} className="flex items-start">
+                                                        <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                        <span className="text-gray-600">{item}</span>
+                                                    </li>
+                                                ))}
                                             </ul>
                                         </div>
                                     </div>
@@ -1550,7 +1551,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsEnrollmentModalOpen(false)}
                                         className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
                                     >
-                                        Close
+                                        {t.features.student_management.enrollment_management.modal.close}
                                     </button>
                                 </div>
                             </div>
