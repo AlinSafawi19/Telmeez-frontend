@@ -157,6 +157,25 @@ export const fr = {
                 tick3: "Analyse des Tendances"
             }
         },
+        communication_tools: {
+            communication_tools: "Outils de Communication",
+            title: "Plateforme de Communication Améliorée",
+            subtitle: "Connectez-vous avec les étudiants, les parents et le personnel grâce à nos outils de communication intégrés.",
+            messaging: {
+                messaging: "Système de Messagerie",
+                description: "Plateforme de messagerie sécurisée et efficace pour une communication fluide entre toutes les parties prenantes.",
+                tick1: "Messagerie en Temps Réel",
+                tick2: "Conversations de Groupe",
+                tick3: "Partage de Fichiers"
+            },
+            notifications: {
+                notifications: "Notifications Intelligentes",
+                description: "Restez informé avec des notifications et alertes personnalisables pour les mises à jour importantes.",
+                tick1: "Alertes Personnalisables",
+                tick2: "Notifications Prioritaires",
+                tick3: "Historique des Notifications"
+            }
+        },
         learn_more: "En Savoir Plus"
     }
 };

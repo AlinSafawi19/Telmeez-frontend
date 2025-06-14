@@ -987,10 +987,10 @@ const Landing: React.FC = () => {
                 <div className="container mx-auto px-4 relative">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-16">
-                            <span className="inline-block px-4 py-2 rounded-full bg-pink-100 text-pink-600 text-sm font-semibold mb-4 animate-fadeInUp">Communication Tools</span>
-                            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">Integrated Communication Platform</h2>
+                            <span className="inline-block px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm font-semibold mb-4 animate-fadeInUp">{t.features.communication_tools.communication_tools}</span>
+                            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">{t.features.communication_tools.title}</h2>
                             <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fadeInUp delay-200">
-                                Stay connected with students, parents, and staff using our integrated communication platform.
+                                {t.features.communication_tools.subtitle}
                             </p>
                         </div>
                         <div className="grid md:grid-cols-2 gap-8">
@@ -1001,29 +1001,29 @@ const Landing: React.FC = () => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                         </svg>
                                     </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">Messaging System</h3>
+                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.communication_tools.messaging.messaging}</h3>
                                 </div>
                                 <p className="text-gray-600 mb-6">
-                                    Real-time messaging between teachers, students, and parents with attachments and support for group conversation.
+                                    {t.features.communication_tools.messaging.description}
                                 </p>
                                 <ul className="space-y-3">
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Real-time Chat
+                                        {t.features.communication_tools.messaging.tick1}
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        File Sharing
+                                        {t.features.communication_tools.messaging.tick2}
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Group Conversations
+                                        {t.features.communication_tools.messaging.tick3}
                                     </li>
                                 </ul>
                                 <div className="mt-6 pt-6 border-t border-gray-100">
@@ -1032,7 +1032,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsMessagingSystemModalOpen(true)}
                                         className="text-pink-600 font-semibold hover:text-pink-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
-                                        Learn More
+                                        {t.features.learn_more}
                                         <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
@@ -1046,29 +1046,29 @@ const Landing: React.FC = () => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
                                         </svg>
                                     </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">Announcements</h3>
+                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.communication_tools.notifications.notifications}</h3>
                                 </div>
                                 <p className="text-gray-600 mb-6">
-                                    Share important announcements and updates to the entire school community through targeted broadcasts.
+                                    {t.features.communication_tools.notifications.description}
                                 </p>
                                 <ul className="space-y-3">
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Targeted Broadcasting
+                                        {t.features.communication_tools.notifications.tick1}
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Scheduled Announcements
+                                        {t.features.communication_tools.notifications.tick2}
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Rich Media Support
+                                        {t.features.communication_tools.notifications.tick3}
                                     </li>
                                 </ul>
                                 <div className="mt-6 pt-6 border-t border-gray-100">
@@ -1077,7 +1077,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsAnnouncementsModalOpen(true)}
                                         className="text-orange-600 font-semibold hover:text-orange-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
-                                        Learn More
+                                        {t.features.learn_more}
                                         <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>

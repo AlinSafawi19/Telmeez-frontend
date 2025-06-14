@@ -155,6 +155,25 @@ export const en = {
                 tick1: "Visual Analytics",
                 tick2: "Performance Reports",
                 tick3: "Trend Analysis"
+            },
+        },
+        communication_tools: {
+            communication_tools: "Communication Tools",
+            title: "Enhanced Communication Platform",
+            subtitle: "Connect with students, parents, and staff through our integrated communication tools.",
+            messaging: {
+                messaging: "Messaging System",
+                description: "Secure and efficient messaging platform for seamless communication between all stakeholders.",
+                tick1: "Real-time Messaging",
+                tick2: "Group Conversations",
+                tick3: "File Sharing"
+            },
+            notifications: {
+                notifications: "Smart Notifications",
+                description: "Stay informed with customizable notifications and alerts for important updates.",
+                tick1: "Customizable Alerts",
+                tick2: "Priority Notifications",
+                tick3: "Notification History"
             }
         },
         learn_more: "Learn More"
