@@ -33,15 +33,9 @@ const Landing: React.FC = () => {
     const demoSectionRef = useRef<HTMLDivElement>(null);
     const faqSectionRef = useRef<HTMLDivElement>(null);
     // Add newsletter form states
-    const [email, setEmail] = useState('');
-    const [isSubscribing, setIsSubscribing] = useState(false);
-    const [subscriptionStatus, setSubscriptionStatus] = useState<'idle' | 'success' | 'error'>('idle');
-    const [subscriptionMessage, setSubscriptionMessage] = useState('');
+    const [subscribeEmail, setSubscribeEmail] = useState('');
     const [isUnsubscribeModalOpen, setIsUnsubscribeModalOpen] = useState(false);
     const [unsubscribeEmail, setUnsubscribeEmail] = useState('');
-    const [unsubscribeStatus, setUnsubscribeStatus] = useState<'idle' | 'success' | 'error'>('idle');
-    const [unsubscribeMessage, setUnsubscribeMessage] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
     const [isScrolling, setIsScrolling] = useState(false);
     const [showBackToTop, setShowBackToTop] = useState(false);
 
@@ -200,45 +194,33 @@ const Landing: React.FC = () => {
     // Update the newsletter subscription handler
     const handleNewsletterSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsLoading(true);
-        setSubscriptionStatus('idle');
 
         try {
             // Here you would typically make an API call to your backend
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            setSubscriptionStatus('success');
-            setSubscriptionMessage('Thank you for subscribing! We\'ll keep you updated with the latest news.');
-            setEmail('');
+            setSubscribeEmail('');
         } catch (error) {
-            setSubscriptionStatus('error');
-            setSubscriptionMessage('Something went wrong. Please try again later.');
         } finally {
-            setIsLoading(false);
         }
     };
 
     // Update the unsubscribe handler
     const handleUnsubscribe = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsLoading(true);
-        setUnsubscribeStatus('idle');
+        if (!unsubscribeEmail) return; // Don't proceed if email is empty
+
 
         try {
             // Here you would typically make an API call to your backend
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            setUnsubscribeStatus('success');
-            setUnsubscribeMessage('You have been successfully unsubscribed from our newsletter.');
             setUnsubscribeEmail('');
             setTimeout(() => {
                 setIsUnsubscribeModalOpen(false);
             }, 2000);
         } catch (error) {
-            setUnsubscribeStatus('error');
-            setUnsubscribeMessage('Something went wrong. Please try again later.');
         } finally {
-            setIsLoading(false);
         }
     };
 
@@ -441,7 +423,7 @@ const Landing: React.FC = () => {
                     {/* Mobile Menu */}
                     <AnimatePresence>
                         {isMobileMenuOpen && (
-                            <motion.div 
+                            <motion.div
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
@@ -1088,42 +1070,18 @@ const Landing: React.FC = () => {
                             <div className="flex flex-col sm:flex-row gap-4">
                                 <input
                                     type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    value={subscribeEmail}
+                                    onChange={(e) => setSubscribeEmail(e.target.value)}
                                     placeholder="Enter your email"
                                     className="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
-                                    disabled={isLoading}
                                 />
                                 <button
                                     type="submit"
-                                    disabled={isLoading}
-                                    className={`px-6 py-3 rounded-lg font-medium text-white transition-colors duration-300 focus:outline-none ${isLoading
-                                        ? 'bg-blue-400 cursor-not-allowed'
-                                        : 'bg-blue-600 hover:bg-blue-700'
-                                        }`}
+                                    className={`px-6 py-3 rounded-lg font-medium text-white transition-colors duration-300 focus:outline-none bg-blue-600 hover:bg-blue-700`}
                                 >
-                                    {isLoading ? (
-                                        <span className="flex items-center justify-center">
-                                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                            </svg>
-                                            Subscribing...
-                                        </span>
-                                    ) : (
-                                        'Subscribe'
-                                    )}
+                                    Subscribe
                                 </button>
                             </div>
-
-                            {subscriptionStatus !== 'idle' && (
-                                <div className={`mt-4 p-3 rounded-lg ${subscriptionStatus === 'success'
-                                    ? 'bg-green-100 text-green-700'
-                                    : 'bg-red-100 text-red-700'
-                                    }`}>
-                                    {subscriptionMessage}
-                                </div>
-                            )}
 
                             <p className="mt-4 text-sm text-gray-500">
                                 We respect your privacy. <button
@@ -2445,44 +2403,22 @@ const Landing: React.FC = () => {
                                         value={unsubscribeEmail}
                                         onChange={(e) => setUnsubscribeEmail(e.target.value)}
                                         className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
-                                        disabled={isLoading}
                                     />
                                 </div>
-
-                                {unsubscribeStatus !== 'idle' && (
-                                    <div className={`mb-4 p-3 rounded-lg ${unsubscribeStatus === 'success'
-                                        ? 'bg-green-100 text-green-700'
-                                        : 'bg-red-100 text-red-700'
-                                        }`}>
-                                        {unsubscribeMessage}
-                                    </div>
-                                )}
 
                                 <div className="flex justify-end space-x-4">
                                     <button
                                         type="button"
                                         onClick={() => setIsUnsubscribeModalOpen(false)}
                                         className="px-4 py-2 focus:outline-none text-gray-700 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
-                                        disabled={isLoading}
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
                                         className="px-4 py-2 focus:outline-none bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                                        disabled={isLoading}
                                     >
-                                        {isLoading ? (
-                                            <span className="flex items-center justify-center">
-                                                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                                </svg>
-                                                Processing...
-                                            </span>
-                                        ) : (
-                                            'Unsubscribe'
-                                        )}
+                                        Unsubscribe
                                     </button>
                                 </div>
                             </form>
