@@ -1185,45 +1185,45 @@ const Landing: React.FC = () => {
                                 <img src={logo2} alt="Telmeez Logo" className="h-16 w-16 mb-4" />
                             </a>
                             <p className="text-gray-400">
-                                Empowering educational institutions through creative solutions.
+                                {translations[currentLanguage].footer.text}
                             </p>
                         </div>
                         <div>
-                            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+                            <h3 className="text-lg font-semibold mb-4">{translations[currentLanguage].footer.quick_links.quick_links}</h3>
                             <ul className="space-y-2">
                                 <li><a href="#our-story" onClick={(e) => {
                                     e.preventDefault(); ourStoryRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
                                     setTimeout(() => setIsScrolling(false), 1000);
-                                }} className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                                }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.about_us}</a></li>
                                 <li><a href="#student-management" onClick={(e) => {
                                     e.preventDefault(); studentManagementRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
                                     setTimeout(() => setIsScrolling(false), 1000);
-                                }} className="text-gray-400 hover:text-white transition-colors">Features</a></li>
+                                }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.features}</a></li>
                                 <li><a href="#pricing" onClick={(e) => {
                                     e.preventDefault(); pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
                                     setTimeout(() => setIsScrolling(false), 1000);
-                                }} className="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
+                                }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.pricing}</a></li>
                             </ul>
                         </div>
                         <div>
-                            <h3 className="text-lg font-semibold mb-4">Resources</h3>
+                            <h3 className="text-lg font-semibold mb-4">{translations[currentLanguage].footer.resources.resources}</h3>
                             <ul className="space-y-2">
                                 <li><a href="#demo" onClick={(e) => {
                                     e.preventDefault();
                                     setIsScrolling(true);
                                     demoSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
                                     setTimeout(() => setIsScrolling(false), 1000);
-                                }} className="text-gray-400 hover:text-white transition-colors">Demo</a></li>
+                                }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.resources.demo}</a></li>
                                 <li><a href="#" onClick={(e) => {
                                     e.preventDefault();
                                     setIsScrolling(true);
                                     faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
                                     setTimeout(() => setIsScrolling(false), 1000);
-                                }} className="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                                }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.resources.faq}</a></li>
                             </ul>
                         </div>
                         <div>
-                            <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
+                            <h3 className="text-lg font-semibold mb-4">{translations[currentLanguage].footer.contact_us.contact_us}</h3>
                             <ul className="space-y-2">
                                 <li className="flex items-center space-x-2">
                                     <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1240,7 +1240,7 @@ const Landing: React.FC = () => {
                             </ul>
                         </div>
                         <div>
-                            <h3 className="text-lg font-semibold mb-4">Connect With Us</h3>
+                            <h3 className="text-lg font-semibold mb-4">{translations[currentLanguage].footer.social}</h3>
                             <div className="flex space-x-4">
                                 <a href="#" className="text-gray-400 hover:text-white transition-colors transform hover:scale-110" aria-label="Facebook">
                                     <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -1260,7 +1260,7 @@ const Landing: React.FC = () => {
                             </div>
                         </div>
                         <div>
-                            <h3 className="text-lg font-semibold mb-4">Language</h3>
+                            <h3 className="text-lg font-semibold mb-4">{translations[currentLanguage].footer.language}</h3>
                             <div className="grid grid-cols-3 gap-3">
                                 {languages.map((lang) => (
                                     <button
@@ -1278,7 +1278,7 @@ const Landing: React.FC = () => {
                         </div>
                     </div>
                     <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-                        <p>&copy; {new Date().getFullYear()} Telmeez. All rights reserved.</p>
+                        <p>&copy; {new Date().getFullYear()} {translations[currentLanguage].footer.copyright}</p>
                     </div>
                 </div>
             </footer>

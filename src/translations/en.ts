@@ -316,5 +316,25 @@ export const en = {
         unsubscribe_button: "Unsubscribe",
         privacy_message: "We value your privacy. You can",
         unsubscribe_anytime: "anytime."
+    },
+    footer: {
+        text: "Empowering educational institutions through creative solutions.",
+        quick_links: {
+            quick_links: "Quick Links",
+            about_us: "About Us",
+            features: "Features",
+            pricing: "Pricing"
+        },
+        resources: {
+            resources: "Resources",
+            demo: "Demo",
+            faq: "FAQ"
+        },
+        contact_us: {
+            contact_us: "Contact Us"
+        },
+        social: "Connect With Us",
+        language: "Language",
+        copyright: "Telmeez. All rights reserved"
     }
 }; 

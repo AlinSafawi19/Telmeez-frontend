@@ -316,5 +316,25 @@ export const fr = {
         unsubscribe_button: "Se désabonner",
         privacy_message: "Nous respectons votre vie privée. Vous pouvez vous",
         unsubscribe_anytime: "à tout moment."
+    },
+    footer: {
+        text: "Renforcer les institutions éducatives grâce à des solutions innovantes.",
+        quick_links: {
+            quick_links: "Liens Rapides",
+            about_us: "À Propos",
+            features: "Fonctionnalités",
+            pricing: "Tarification"
+        },
+        resources: {
+            resources: "Ressources",
+            demo: "Démo",
+            faq: "FAQ"
+        },
+        contact_us: {
+            contact_us: "Contactez-nous"
+        },
+        social: "Connectez-vous avec nous",
+        language: "Langue",
+        copyright: "Telmeez. Tous droits réservés"
     }
 };

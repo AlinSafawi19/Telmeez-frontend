@@ -316,5 +316,25 @@ export const ar = {
         unsubscribe_button: "إلغاء الاشتراك",
         privacy_message: "نحن نحترم خصوصيتك. يمكنك",
         unsubscribe_anytime: "في أي وقت."
+    },
+    footer: {
+        text: "تمكين المؤسسات التعليمية من خلال حلول مبتكرة.",
+        quick_links: {
+            quick_links: "روابط سريعة",
+            about_us: "من نحن",
+            features: "الميزات",
+            pricing: "الأسعار"
+        },
+        resources: {
+            resources: "الموارد",
+            demo: "تجريبي",
+            faq: "الأسئلة الشائعة"
+        },
+        contact_us: {
+            contact_us: "اتصل بنا"
+        },
+        social: "تواصل معنا",
+        language: "اللغة",
+        copyright: "تلميز. جميع الحقوق محفوظة"
     }
 }; 
