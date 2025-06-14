@@ -116,7 +116,57 @@ export const fr = {
                 description: "Créez et maintenez des profils d'étudiants détaillés avec des informations personnelles, l'historique académique et les coordonnées.",
                 tick1: "Gestion des Informations Personnelles",
                 tick2: "Suivi de l'Historique Académique",
-                tick3: "Gestion des Coordonnées"
+                tick3: "Gestion des Coordonnées",
+                modal: {
+                    title: "Profils des Étudiants",
+                    close: "Fermer",
+                    information: {
+                        title: "Informations Détaillées de l'Étudiant",
+                        description: "Notre module de profil étudiant est un point d'accès unique pour chaque information sur l'étudiant, facilitant l'accès facile et une gestion efficace des informations sur les étudiants.",
+                        personal_details: {
+                            title: "Informations Personnelles",
+                            items: [
+                                "Informations générales (nom, date de naissance, genre, etc.)",
+                                "Coordonnées",
+                                "Contacts d'urgence",
+                                "Informations médicales"
+                            ]
+                        },
+                        academic_details: {
+                            title: "Informations Académiques",
+                            items: [
+                                "Historique des inscriptions",
+                                "Historique et suivi des paiements",
+                                "Statut académique",
+                                "Historique de présence"
+                            ]
+                        }
+                    },
+                    features: {
+                        title: "Fonctionnalités Essentielles",
+                        parent_access: {
+                            title: "Accès Parents et Tuteurs",
+                            description: "Permettre aux tuteurs de voir les dossiers académiques, la présence et de communiquer avec les éducateurs"
+                        },
+                        grades_schedules: {
+                            title: "Notes et Emplois du Temps",
+                            description: "Les étudiants peuvent consulter les notes d'examen, la répartition des matières, les échéances à venir et un emploi du temps hebdomadaire."
+                        },
+                        document_management: {
+                            title: "Gestion des Documents",
+                            description: "Téléchargez et gérez en toute sécurité les documents importants des étudiants"
+                        }
+                    },
+                    benefits: {
+                        title: "Avantages",
+                        items: [
+                            "Gestion efficace des informations des étudiants et leur récupération",
+                            "Amélioration de la communication entre enseignants, étudiants et parents",
+                            "Données plus précises et moins d'administration",
+                            "Suivi et reporting intelligent de l'historique des étudiants"
+                        ]
+                    }
+                }
             }
         },
         attendance_system: {

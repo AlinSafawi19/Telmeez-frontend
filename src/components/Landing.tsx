@@ -1302,7 +1302,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">Student Profiles</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.student_management.student_profiles.modal.title}</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsStudentProfilesModalOpen(false)}
@@ -1317,34 +1317,32 @@ const Landing: React.FC = () => {
 
                                 <div className="space-y-8">
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Information of the Student in Detail</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{translations[currentLanguage].features.student_management.student_profiles.modal.information.title}</h4>
                                         <p className="text-gray-600 mb-4">
-                                            Our student profile module is a one-stop access point for every piece of student information, and it facilitates easy access and an effective management of information on students.
+                                            {translations[currentLanguage].features.student_management.student_profiles.modal.information.description}
                                         </p>
                                         <div className="grid md:grid-cols-2 gap-4">
                                             <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Personal Details</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">{translations[currentLanguage].features.student_management.student_profiles.modal.information.personal_details.title}</h5>
                                                 <ul className="space-y-2 text-gray-600">
-                                                    <li>• General details (name, birth date, gender, etc..)</li>
-                                                    <li>• Contact details</li>
-                                                    <li>• Emergency contacts</li>
-                                                    <li>• Medical information</li>
+                                                    {translations[currentLanguage].features.student_management.student_profiles.modal.information.personal_details.items.map((item, index) => (
+                                                        <li key={index}>• {item}</li>
+                                                    ))}
                                                 </ul>
                                             </div>
                                             <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Academic Details</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">{translations[currentLanguage].features.student_management.student_profiles.modal.information.academic_details.title}</h5>
                                                 <ul className="space-y-2 text-gray-600">
-                                                    <li>• Enrollment history</li>
-                                                    <li>• Payment history and tracking</li>
-                                                    <li>• Academic standing</li>
-                                                    <li>• Attendance history</li>
+                                                    {translations[currentLanguage].features.student_management.student_profiles.modal.information.academic_details.items.map((item, index) => (
+                                                        <li key={index}>• {item}</li>
+                                                    ))}
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Vital Features</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{translations[currentLanguage].features.student_management.student_profiles.modal.features.title}</h4>
                                         <div className="grid md:grid-cols-3 gap-4">
                                             <div className="bg-blue-50 p-4 rounded-lg">
                                                 <div className="text-blue-600 mb-2">
@@ -1352,9 +1350,9 @@ const Landing: React.FC = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a4 4 0 00-8 0v2m10 0v10a2 2 0 01-2 2H7a2 2 0 01-2-2V9m12 0H5" />
                                                     </svg>
                                                 </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Parent & Guardian Access</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">{translations[currentLanguage].features.student_management.student_profiles.modal.features.parent_access.title}</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Allow guardians to see academic records, attendance, and communicate with educators
+                                                    {translations[currentLanguage].features.student_management.student_profiles.modal.features.parent_access.description}
                                                 </p>
                                             </div>
                                             <div className="bg-green-50 p-4 rounded-lg">
@@ -1363,9 +1361,9 @@ const Landing: React.FC = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-6h6v6h4l-7 7-7-7h4zM4 4h16v2H4z" />
                                                     </svg>
                                                 </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Grades & Schedules</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">{translations[currentLanguage].features.student_management.student_profiles.modal.features.grades_schedules.title}</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Students can view examination marks, subject split, upcoming deadlines, and a weekly class schedule.
+                                                    {translations[currentLanguage].features.student_management.student_profiles.modal.features.grades_schedules.description}
                                                 </p>
                                             </div>
                                             <div className="bg-purple-50 p-4 rounded-lg">
@@ -1374,43 +1372,26 @@ const Landing: React.FC = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                                                     </svg>
                                                 </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Document Management</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">{translations[currentLanguage].features.student_management.student_profiles.modal.features.document_management.title}</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Securely upload and manage important student documents
+                                                    {translations[currentLanguage].features.student_management.student_profiles.modal.features.document_management.description}
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{translations[currentLanguage].features.student_management.student_profiles.modal.benefits.title}</h4>
                                         <div className="bg-gray-50 p-6 rounded-lg">
                                             <ul className="space-y-4">
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Efficient management of student information and retrieval</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Improved teacher-student-parent communication</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">More accurate data and less administration</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Intelligent tracking and reporting of student history
-                                                        Tight</span>
-                                                </li>
+                                                {translations[currentLanguage].features.student_management.student_profiles.modal.benefits.items.map((item, index) => (
+                                                    <li key={index} className="flex items-start">
+                                                        <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                        <span className="text-gray-600">{item}</span>
+                                                    </li>
+                                                ))}
                                             </ul>
                                         </div>
                                     </div>
@@ -1422,7 +1403,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsStudentProfilesModalOpen(false)}
                                         className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     >
-                                        Close
+                                        {translations[currentLanguage].features.student_management.student_profiles.modal.close}
                                     </button>
                                 </div>
                             </div>

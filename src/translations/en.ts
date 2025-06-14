@@ -116,7 +116,57 @@ export const en = {
                 description: "Create and maintain detailed student profiles with personal information, academic history, and contact details.",
                 tick1: "Personal Information Management",
                 tick2: "Academic History Tracking",
-                tick3: "Contact Details Management"
+                tick3: "Contact Details Management",
+                modal: {
+                    title: "Student Profiles",
+                    close: "Close",
+                    information: {
+                        title: "Information of the Student in Detail",
+                        description: "Our student profile module is a one-stop access point for every piece of student information, and it facilitates easy access and an effective management of information on students.",
+                        personal_details: {
+                            title: "Personal Details",
+                            items: [
+                                "General details (name, birth date, gender, etc..)",
+                                "Contact details",
+                                "Emergency contacts",
+                                "Medical information"
+                            ]
+                        },
+                        academic_details: {
+                            title: "Academic Details",
+                            items: [
+                                "Enrollment history",
+                                "Payment history and tracking",
+                                "Academic standing",
+                                "Attendance history"
+                            ]
+                        }
+                    },
+                    features: {
+                        title: "Vital Features",
+                        parent_access: {
+                            title: "Parent & Guardian Access",
+                            description: "Allow guardians to see academic records, attendance, and communicate with educators"
+                        },
+                        grades_schedules: {
+                            title: "Grades & Schedules",
+                            description: "Students can view examination marks, subject split, upcoming deadlines, and a weekly class schedule."
+                        },
+                        document_management: {
+                            title: "Document Management",
+                            description: "Securely upload and manage important student documents"
+                        }
+                    },
+                    benefits: {
+                        title: "Benefits",
+                        items: [
+                            "Efficient management of student information and retrieval",
+                            "Improved teacher-student-parent communication",
+                            "More accurate data and less administration",
+                            "Intelligent tracking and reporting of student history"
+                        ]
+                    }
+                }
             }
         },
         attendance_system: {
