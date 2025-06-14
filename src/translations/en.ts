@@ -1,6 +1,17 @@
 export const en = {
     header: {
         home: "Home",
+        why_us: {
+            why_us: "Why Institutions Choose ",
+            company_name: "Telmeez",
+            question_mark: "?",
+            role_based: "Role-Based Access",
+            role_based_desc: "Administrator, staff, parent, and student dashboards with role-based secure access.",
+            advanced_security: "Advanced Security",
+            advanced_security_desc: "Enterprise-grade security with password encryption, token-based sessions, and account protection.",
+            seamless_comm: "Seamless Communication",
+            seamless_comm_desc: "Engage administrators, staff, parents, and students on our integrated platform."
+        },
         features: {
             features: "Features",
             student_management: "Student Management",
@@ -87,5 +98,46 @@ export const en = {
                 answer: "Yes, we use enterprise-grade security measures like encryption of data, secure servers, and regular security audits."
             }
         ]
+    },
+    features: {
+        student_management: {
+            student_management: "Student Management",
+            title: "Complete Student Management",
+            subtitle: "Total tools to streamline student information, track progress, and maintain records effortlessly.",
+            enrollment_management: {
+                enrollment_management: "Enrollment Management",
+                description: "Streamline the enrollment process with electronic forms, document uploading, and automated workflows.",
+                tick1: "Digital Form Processing",
+                tick2: "Document Management",
+                tick3: "Automated Workflows"
+            },
+            student_profiles: {
+                student_profiles: "Student Profiles",
+                description: "Create and maintain detailed student profiles with personal information, academic history, and contact details.",
+                tick1: "Personal Information Management",
+                tick2: "Academic History Tracking",
+                tick3: "Contact Details Management"
+            }
+        },
+        attendance_system: {
+            attendance_system: "Attendance System",
+            title: "Smart Attendance Tracking",
+            subtitle: "Efficiently monitor and manage student attendance with our comprehensive attendance management system.",
+            real_time_tracking: {
+                real_time_tracking: "Real-time Tracking",
+                description: "Track attendance in real-time with instant updates and notifications for absences.",
+                tick1: "Instant Attendance Updates",
+                tick2: "Absence Notifications",
+                tick3: "Real-time Reports"
+            },
+            automated_reports: {
+                automated_reports: "Automated Reports",
+                description: "Generate detailed attendance reports automatically with customizable parameters and export options.",
+                tick1: "Custom Report Generation",
+                tick2: "Multiple Export Formats",
+                tick3: "Scheduled Reports"
+            }
+        },
+        learn_more: "Learn More"
     }
 }; 

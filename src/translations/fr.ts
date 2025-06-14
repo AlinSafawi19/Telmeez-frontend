@@ -1,6 +1,17 @@
 export const fr = {
     header: {
         home: "Accueil",
+        why_us: {
+            why_us: "Pourquoi les Institutions Choisissent ",
+            company_name: "Telmeez",
+            question_mark: "?",
+            role_based: "Accès Basé sur les Rôles",
+            role_based_desc: "Tableaux de bord administrateur, personnel, parent et étudiant avec accès sécurisé basé sur les rôles.",
+            advanced_security: "Sécurité Avancée",
+            advanced_security_desc: "Sécurité de niveau entreprise avec chiffrement des mots de passe, sessions basées sur des jetons et protection des comptes.",
+            seamless_comm: "Communication Transparente",
+            seamless_comm_desc: "Engagez les administrateurs, le personnel, les parents et les étudiants sur notre plateforme intégrée."
+        },
         features: {
             features: "Fonctionnalités",
             student_management: "Gestion des Étudiants",
@@ -87,5 +98,46 @@ export const fr = {
                 answer: "Oui, nous utilisons des mesures de sécurité de niveau entreprise comme le chiffrement des données, des serveurs sécurisés et des audits de sécurité réguliers."
             }
         ]
+    },
+    features: {
+        student_management: {
+            student_management: "Gestion des Étudiants",
+            title: "Gestion Complète des Étudiants",
+            subtitle: "Outils complets pour rationaliser les informations des étudiants, suivre les progrès et maintenir les dossiers facilement.",
+            enrollment_management: {
+                enrollment_management: "Gestion des Inscriptions",
+                description: "Rationalisez le processus d'inscription avec des formulaires électroniques, le téléchargement de documents et des flux de travail automatisés.",
+                tick1: "Traitement des Formulaires Numériques",
+                tick2: "Gestion des Documents",
+                tick3: "Flux de Travail Automatisés"
+            },
+            student_profiles: {
+                student_profiles: "Profils des Étudiants",
+                description: "Créez et maintenez des profils d'étudiants détaillés avec des informations personnelles, l'historique académique et les coordonnées.",
+                tick1: "Gestion des Informations Personnelles",
+                tick2: "Suivi de l'Historique Académique",
+                tick3: "Gestion des Coordonnées"
+            }
+        },
+        attendance_system: {
+            attendance_system: "Système de Présence",
+            title: "Suivi Intelligent des Présences",
+            subtitle: "Surveillez et gérez efficacement la présence des étudiants avec notre système complet de gestion des présences.",
+            real_time_tracking: {
+                real_time_tracking: "Suivi en Temps Réel",
+                description: "Suivez les présences en temps réel avec des mises à jour instantanées et des notifications pour les absences.",
+                tick1: "Mises à Jour Instantanées des Présences",
+                tick2: "Notifications d'Absences",
+                tick3: "Rapports en Temps Réel"
+            },
+            automated_reports: {
+                automated_reports: "Rapports Automatisés",
+                description: "Générez automatiquement des rapports détaillés de présence avec des paramètres personnalisables et des options d'exportation.",
+                tick1: "Génération de Rapports Personnalisés",
+                tick2: "Formats d'Exportation Multiples",
+                tick3: "Rapports Programmés"
+            }
+        },
+        learn_more: "En Savoir Plus"
     }
-}; 
+};

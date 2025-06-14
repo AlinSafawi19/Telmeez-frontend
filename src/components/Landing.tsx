@@ -63,13 +63,16 @@ const Landing: React.FC = () => {
 
     const handleLanguageChange = (langCode: Language) => {
         setIsScrolling(true);
-        // Here you would typically also update the document direction for RTL languages
-        if (langCode === 'ar') {
-            document.documentElement.dir = 'rtl';
-        } else {
-            document.documentElement.dir = 'ltr';
-        }
-        setTimeout(() => { setIsScrolling(false); setCurrentLanguage(langCode); }, 500);
+        setTimeout(() => {
+            setIsScrolling(false);
+            setCurrentLanguage(langCode);
+            // Here you would typically also update the document direction for RTL languages
+            if (langCode === 'ar') {
+                document.documentElement.dir = 'rtl';
+            } else {
+                document.documentElement.dir = 'ltr';
+            }
+        }, 500);
     };
 
     useEffect(() => {
@@ -140,25 +143,25 @@ const Landing: React.FC = () => {
         e.preventDefault();
         if (featureName) {
             switch (featureName) {
-                case 'Student Management':
+                case t.header.features.student_management:
                     handleSmoothScroll(studentManagementRef);
                     break;
-                case 'Attendance System':
+                case t.header.features.attendance_system:
                     handleSmoothScroll(attendanceSystemRef);
                     break;
-                case 'Grade Management':
+                case t.header.features.grade_management:
                     handleSmoothScroll(gradeManagementRef);
                     break;
-                case 'Communication Tools':
+                case t.header.features.communication_tools:
                     handleSmoothScroll(communicationToolsRef);
                     break;
-                case 'Our Story':
+                case t.header.about.our_story:
                     const ourStorySection = document.getElementById('our-story');
                     setIsScrolling(true);
                     ourStorySection?.scrollIntoView({ behavior: 'smooth' });
                     setTimeout(() => setIsScrolling(false), 1000);
                     break;
-                case 'Press':
+                case t.header.about.press:
                     const aboutSection = document.getElementById(featureName.toLowerCase().replace(' ', '-'));
                     setIsScrolling(true);
                     aboutSection?.scrollIntoView({ behavior: 'smooth' });
@@ -443,7 +446,7 @@ const Landing: React.FC = () => {
                                     aria-haspopup="true"
                                     aria-label="Select language"
                                 >
-                                    <span className="uppercase font-medium">
+                                    <span className="font-medium">
                                         {languages.find(lang => lang.code === currentLanguage)?.label}
                                     </span>
                                     <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -626,28 +629,28 @@ const Landing: React.FC = () => {
             <div id="features-section" className="py-20 bg-white">
                 <div className="container mx-auto px-4">
                     <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
-                        Why Institutions Choose <span className="text-blue-600">Telmeez</span>?
+                        {t.header.why_us.why_us} <span className="text-blue-600">{t.header.why_us.company_name}</span>{t.header.why_us.question_mark}
                     </h2>
                     <div className="grid md:grid-cols-3 gap-8">
                         <div className="p-8 rounded-xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
                             <div className="text-blue-600 text-4xl mb-6">👤</div>
-                            <h3 className="text-2xl font-semibold mb-4">Role-Based Access</h3>
+                            <h3 className="text-2xl font-semibold mb-4">{t.header.why_us.role_based}</h3>
                             <p className="text-gray-600 leading-relaxed">
-                                Administrator, staff, parent, and student dashboards with role-based secure access.
+                                {t.header.why_us.role_based_desc}
                             </p>
                         </div>
                         <div className="p-8 rounded-xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
                             <div className="text-blue-600 text-4xl mb-6">🔒</div>
-                            <h3 className="text-2xl font-semibold mb-4">Advanced Security</h3>
+                            <h3 className="text-2xl font-semibold mb-4">{t.header.why_us.advanced_security}</h3>
                             <p className="text-gray-600 leading-relaxed">
-                                Enterprise-grade security with password encryption, token-based sessions, and account protection.
+                                {t.header.why_us.advanced_security_desc}
                             </p>
                         </div>
                         <div className="p-8 rounded-xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
                             <div className="text-blue-600 text-4xl mb-6">💬</div>
-                            <h3 className="text-2xl font-semibold mb-4">Seamless Communication</h3>
+                            <h3 className="text-2xl font-semibold mb-4">{t.header.why_us.seamless_comm}</h3>
                             <p className="text-gray-600 leading-relaxed">
-                                Engage administrators, staff, parents, and students on our integrated platform.
+                                {t.header.why_us.seamless_comm_desc}
                             </p>
                         </div>
                     </div>
@@ -660,10 +663,10 @@ const Landing: React.FC = () => {
                 <div className="container mx-auto px-4 relative">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-16">
-                            <span className="inline-block px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm font-semibold mb-4 animate-fadeInUp">Student Management</span>
-                            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">Complete Student Management</h2>
+                            <span className="inline-block px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm font-semibold mb-4 animate-fadeInUp">{t.features.student_management.student_management}</span>
+                            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">{t.features.student_management.title}</h2>
                             <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fadeInUp delay-200">
-                                Total tools to streamline student information, track progress, and maintain records effortlessly.
+                                {t.features.student_management.subtitle}
                             </p>
                         </div>
                         <div className="grid md:grid-cols-2 gap-8">
@@ -674,29 +677,29 @@ const Landing: React.FC = () => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                         </svg>
                                     </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">Student Profiles</h3>
+                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.student_management.student_profiles.student_profiles}</h3>
                                 </div>
                                 <p className="text-gray-600 mb-6">
-                                    Create and maintain detailed student profiles with personal information, academic history, and contact details.
+                                    {t.features.student_management.student_profiles.description}
                                 </p>
                                 <ul className="space-y-3">
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Personal Information Management
+                                        {t.features.student_management.student_profiles.tick1}
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Academic History Tracking
+                                        {t.features.student_management.student_profiles.tick2}
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Contact Details Management
+                                        {t.features.student_management.student_profiles.tick3}
                                     </li>
                                 </ul>
                                 <div className="mt-6 pt-6 border-t border-gray-100">
@@ -705,7 +708,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsStudentProfilesModalOpen(true)}
                                         className="text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
-                                        Learn More
+                                        {t.features.learn_more}
                                         <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
@@ -719,29 +722,29 @@ const Landing: React.FC = () => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                         </svg>
                                     </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">Enrollment Management</h3>
+                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.student_management.enrollment_management.enrollment_management}</h3>
                                 </div>
                                 <p className="text-gray-600 mb-6">
-                                    Streamline the enrollment process with electronic forms, document uploading, and automated workflows.
+                                    {t.features.student_management.enrollment_management.description}
                                 </p>
                                 <ul className="space-y-3">
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Digital Form Processing
+                                        {t.features.student_management.enrollment_management.tick1}
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Document Management
+                                        {t.features.student_management.enrollment_management.tick2}
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Automated Workflows
+                                        {t.features.student_management.enrollment_management.tick3}
                                     </li>
                                 </ul>
                                 <div className="mt-6 pt-6 border-t border-gray-100">
@@ -750,7 +753,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsEnrollmentModalOpen(true)}
                                         className="text-purple-600 font-semibold hover:text-purple-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
-                                        Learn More
+                                        {t.features.learn_more}
                                         <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
@@ -768,10 +771,10 @@ const Landing: React.FC = () => {
                 <div className="container mx-auto px-4 relative">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-16">
-                            <span className="inline-block px-4 py-2 rounded-full bg-green-100 text-green-600 text-sm font-semibold mb-4 animate-fadeInUp">Attendance System</span>
-                            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">Modern Attendance Tracking</h2>
+                            <span className="inline-block px-4 py-2 rounded-full bg-green-100 text-green-600 text-sm font-semibold mb-4 animate-fadeInUp">{t.features.attendance_system.attendance_system}</span>
+                            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">{t.features.attendance_system.title}</h2>
                             <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fadeInUp delay-200">
-                                Advanced attendance tracking in real-time, with reports automated.
+                                {t.features.attendance_system.subtitle}
                             </p>
                         </div>
                         <div className="grid md:grid-cols-2 gap-8">
@@ -782,29 +785,29 @@ const Landing: React.FC = () => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                     </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">Digital Attendance</h3>
+                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.attendance_system.real_time_tracking.real_time_tracking}</h3>
                                 </div>
                                 <p className="text-gray-600 mb-6">
-                                    Take attendance digitally with QR codes, biometric integration, or manual input options.
+                                    {t.features.attendance_system.real_time_tracking.description}
                                 </p>
                                 <ul className="space-y-3">
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        QR Code Scanning
+                                        {t.features.attendance_system.real_time_tracking.tick1}
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Biometric Integration
+                                        {t.features.attendance_system.real_time_tracking.tick2}
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Manual Input Options
+                                        {t.features.attendance_system.real_time_tracking.tick3}
                                     </li>
                                 </ul>
                                 <div className="mt-6 pt-6 border-t border-gray-100">
@@ -813,7 +816,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsAttendanceModalOpen(true)}
                                         className="text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
-                                        Learn More
+                                        {t.features.learn_more}
                                         <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
@@ -827,29 +830,29 @@ const Landing: React.FC = () => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                         </svg>
                                     </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">Automated Reports</h3>
+                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.attendance_system.automated_reports.automated_reports}</h3>
                                 </div>
                                 <p className="text-gray-600 mb-6">
-                                    Pull rich attendance reports and analytics to view patterns and trends.
+                                    {t.features.attendance_system.automated_reports.description}
                                 </p>
                                 <ul className="space-y-3">
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Rich Analytics
+                                        {t.features.attendance_system.automated_reports.tick1}
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Pattern Detection
+                                        {t.features.attendance_system.automated_reports.tick2}
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Custom Report Generation
+                                        {t.features.attendance_system.automated_reports.tick3}
                                     </li>
                                 </ul>
                                 <div className="mt-6 pt-6 border-t border-gray-100">
@@ -858,7 +861,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsReportsModalOpen(true)}
                                         className="text-green-600 font-semibold hover:text-green-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
-                                        Learn More
+                                        {t.features.learn_more}
                                         <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
