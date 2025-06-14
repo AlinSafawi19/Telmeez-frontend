@@ -64,14 +64,14 @@ const FAQ: React.FC = () => {
                     </p>
                 </motion.div>
 
-                <div className="max-w-2xl mx-auto space-y-3">
+                <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
                     {faqItems.map((item, index) => (
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4, delay: index * 0.05 }}
-                            className="bg-white rounded-lg shadow-sm border border-gray-100"
+                            className="bg-white rounded-lg shadow-sm border border-gray-100 h-fit"
                         >
                             <button
                                 className="w-full px-5 py-4 text-left focus:outline-none"
@@ -103,7 +103,7 @@ const FAQ: React.FC = () => {
                                         animate={{ opacity: 1, height: 'auto' }}
                                         exit={{ opacity: 0, height: 0 }}
                                         transition={{ duration: 0.2 }}
-                                        className="px-5 pb-4"
+                                        className="px-5 pb-4 overflow-hidden"
                                     >
                                         <p className="text-gray-600 text-sm leading-relaxed">{item.answer}</p>
                                     </motion.div>

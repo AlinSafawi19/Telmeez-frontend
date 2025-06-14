@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import logo from '../assets/images/logo.png';
 import logo2 from '../assets/images/logo2.png';
 import PricingPlans from './PricingPlans';
@@ -438,71 +439,91 @@ const Landing: React.FC = () => {
                         </div>
                     </div>
                     {/* Mobile Menu */}
-                    {isMobileMenuOpen && (
-                        <div className="md:hidden mt-4 py-4 border-t animate-fadeIn">
-                            <div className="flex justify-end mb-4">
-                                <button
-                                    className="text-gray-600 hover:text-blue-600 focus:outline-none"
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    aria-label="Close mobile menu"
-                                >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <nav className="flex flex-col space-y-4">
-                                <a href="#" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium">Home</a>
-                                <div className="pl-4 border-l-2 border-gray-200">
-                                    <span className="text-gray-600 font-medium block mb-2">Features</span>
-                                    {dropdownItems.features.map((item, index) => (
-                                        <a
-                                            key={index}
-                                            href={item.href}
-                                            onClick={(e) => handleDropdownItemClick(e, item.label)}
-                                            className="block pl-4 py-1 text-gray-500 hover:text-blue-600 transition-colors duration-200"
-                                        >
-                                            {item.label}
-                                        </a>
-                                    ))}
+                    <AnimatePresence>
+                        {isMobileMenuOpen && (
+                            <motion.div 
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.3, ease: "easeInOut" }}
+                                className="md:hidden mt-4 py-4 border-t overflow-hidden"
+                            >
+                                <div className="flex justify-end mb-4">
+                                    <button
+                                        className="text-gray-600 hover:text-blue-600 focus:outline-none"
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        aria-label="Close mobile menu"
+                                    >
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
                                 </div>
-                                <a
-                                    href="#"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                        setIsMobileMenuOpen(false);
-                                    }}
-                                    className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium"
-                                >
-                                    Pricing
-                                </a>
-                                <div className="pl-4 border-l-2 border-gray-200">
-                                    <span className="text-gray-600 font-medium block mb-2">About</span>
-                                    {dropdownItems.about.map((item, index) => (
-                                        <a
-                                            key={index}
-                                            href={item.href}
-                                            onClick={(e) => {
-                                                handleDropdownItemClick(e, item.label);
-                                                setIsMobileMenuOpen(false);
-                                            }}
-                                            className="block pl-4 py-1 text-gray-500 hover:text-blue-600 transition-colors duration-200"
-                                        >
-                                            {item.label}
-                                        </a>
-                                    ))}
-                                </div>
-                                <div className="pl-4 border-l-2 border-gray-200">
-                                    <span className="text-gray-600 font-medium block mb-2">Resources</span>
-                                    <ul className="space-y-2">
-                                        <li><a href="#demo" onClick={(e) => { e.preventDefault(); demoSectionRef.current?.scrollIntoView({ behavior: 'smooth' }); }} className="block pl-4 py-1 text-gray-500 hover:text-blue-600 transition-colors duration-300 font-medium">Demo</a></li>
-                                        <li><a href="#" onClick={(e) => { e.preventDefault(); faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' }); }} className="block pl-4 py-1 text-gray-500 hover:text-blue-600 transition-colors duration-300 font-medium">FAQ</a></li>
-                                    </ul>
-                                </div>
-                            </nav>
-                        </div>
-                    )}
+                                <nav className="flex flex-col space-y-4">
+                                    <a href="#" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium">Home</a>
+                                    <div className="pl-4 border-l-2 border-gray-200">
+                                        <span className="text-gray-600 font-medium block mb-2">Features</span>
+                                        {dropdownItems.features.map((item, index) => (
+                                            <a
+                                                key={index}
+                                                href={item.href}
+                                                onClick={(e) => {
+                                                    handleDropdownItemClick(e, item.label);
+                                                    setIsScrolling(true);
+                                                    setTimeout(() => setIsScrolling(false), 1000); setIsMobileMenuOpen(false);
+                                                }}
+                                                className="block pl-4 py-1 text-gray-500 hover:text-blue-600 transition-colors duration-200"
+                                            >
+                                                {item.label}
+                                            </a>
+                                        ))}
+                                    </div>
+                                    <a
+                                        href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                            setIsScrolling(true);
+                                            setTimeout(() => setIsScrolling(false), 1000); setIsMobileMenuOpen(false);
+                                            setIsMobileMenuOpen(false);
+                                        }}
+                                        className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium"
+                                    >
+                                        Pricing
+                                    </a>
+                                    <div className="pl-4 border-l-2 border-gray-200">
+                                        <span className="text-gray-600 font-medium block mb-2">About</span>
+                                        {dropdownItems.about.map((item, index) => (
+                                            <a
+                                                key={index}
+                                                href={item.href}
+                                                onClick={(e) => {
+                                                    handleDropdownItemClick(e, item.label);
+                                                    setIsMobileMenuOpen(false);
+                                                }}
+                                                className="block pl-4 py-1 text-gray-500 hover:text-blue-600 transition-colors duration-200"
+                                            >
+                                                {item.label}
+                                            </a>
+                                        ))}
+                                    </div>
+                                    <div className="pl-4 border-l-2 border-gray-200">
+                                        <span className="text-gray-600 font-medium block mb-2">Resources</span>
+                                        <ul className="space-y-2">
+                                            <li><a href="#demo" onClick={(e) => {
+                                                e.preventDefault(); demoSectionRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
+                                                setTimeout(() => setIsScrolling(false), 1000); setIsMobileMenuOpen(false);
+                                            }} className="block pl-4 py-1 text-gray-500 hover:text-blue-600 transition-colors duration-300 font-medium">Demo</a></li>
+                                            <li><a href="#" onClick={(e) => {
+                                                e.preventDefault(); faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
+                                                setTimeout(() => setIsScrolling(false), 1000); setIsMobileMenuOpen(false);
+                                            }} className="block pl-4 py-1 text-gray-500 hover:text-blue-600 transition-colors duration-300 font-medium">FAQ</a></li>
+                                        </ul>
+                                    </div>
+                                </nav>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             </header>
 
@@ -2425,6 +2446,19 @@ const Landing: React.FC = () => {
                 }
                 .feature-card:hover::before {
                     transform: translateX(100%);
+                }
+                @keyframes slideDown {
+                    from {
+                        opacity: 0;
+                        transform: translateY(-100%);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                .animate-slideDown {
+                    animation: slideDown 0.6s ease-out forwards;
                 }
             `}</style>
         </div>
