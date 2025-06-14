@@ -22,8 +22,8 @@ interface PricingPlansProps {
     language?: Language;
 }
 
-const PricingPlans: React.FC<PricingPlansProps> = ({ 
-    initialSelectedPlan = null, 
+const PricingPlans: React.FC<PricingPlansProps> = ({
+    initialSelectedPlan = null,
     onContinue,
     language = 'en'
 }) => {
@@ -32,10 +32,19 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
         if (initialSelectedPlan) {
             return initialSelectedPlan;
         }
-        return 'Standard'; // Default to Standard plan
+        return translations[language].pricing.plans.standard.name; // Default to Standard plan
     });
 
     const t = translations[language].pricing;
+    const isRTL = language === 'ar'; // Only Arabic is RTL in our supported languages
+
+    useEffect(() => {
+        if (initialSelectedPlan) {
+            setSelectedPlan(initialSelectedPlan);
+        } else {
+            setSelectedPlan(translations[language].pricing.plans.standard.name);
+        }
+    }, [language, initialSelectedPlan]);
 
     useEffect(() => {
         if (initialSelectedPlan) {
@@ -79,7 +88,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
     ];
 
     return (
-        <div className="py-24 bg-gradient-to-b from-gray-50 to-white">
+        <div className="py-24 bg-gradient-to-b from-gray-50 to-white" dir={isRTL ? 'rtl' : 'ltr'}>
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
                     <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -99,13 +108,18 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
                                 aria-label="Toggle billing period between monthly and annual"
                             >
                                 <div
-                                    className={`bg-white w-5 h-5 rounded-full shadow-lg transform transition-all duration-300 ease-in-out ${isAnnual ? 'translate-x-7' : 'translate-x-0'}`}
+                                    className={`bg-white w-5 h-5 rounded-full shadow-lg transform transition-all duration-300 ease-in-out ${isAnnual
+                                            ? isRTL
+                                                ? '-translate-x-7'
+                                                : 'translate-x-7'
+                                            : 'translate-x-0'
+                                        }`}
                                 />
                             </button>
                         </div>
                         <span className={`text-base px-4 py-1 rounded-full transition-all duration-300 ${isAnnual ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-600'}`}>
+                            <span className={`text-xs text-green-600 font-medium ${isRTL ? 'ml-2' : 'mr-2'}`}>{t.save_20}</span>
                             {t.annual}
-                            <span className="ml-2 text-xs text-green-600 font-medium">{t.save_20}</span>
                         </span>
                     </div>
                 </div>
