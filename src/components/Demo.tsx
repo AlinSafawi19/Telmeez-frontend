@@ -122,20 +122,21 @@ const Demo: React.FC = () => {
                                     </p>
                                     <ul className="space-y-4">
                                         {demoFeatures[activeTab as keyof typeof demoFeatures].features.map((feature, index) => (
-                                            <motion.li
-                                                key={index}
-                                                initial={{ opacity: 0, x: -20 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                transition={{ delay: index * 0.1 }}
-                                                className="flex items-center text-gray-600"
-                                            >
-                                                <span className={`w-2 h-2 rounded-full mr-3 ${
-                                                    activeTab === 'student-management' ? 'bg-sky-500' :
-                                                    activeTab === 'attendance' ? 'bg-emerald-500' :
-                                                    activeTab === 'grades' ? 'bg-violet-500' : 'bg-amber-500'
-                                                }`} />
-                                                {feature}
-                                            </motion.li>
+                                            <li key={index}>
+                                                <motion.div
+                                                    initial={{ opacity: 0, x: -20 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    transition={{ delay: index * 0.1 }}
+                                                    className="flex items-center text-gray-600"
+                                                >
+                                                    <span className={`w-2 h-2 rounded-full mr-3 ${
+                                                        activeTab === 'student-management' ? 'bg-sky-500' :
+                                                        activeTab === 'attendance' ? 'bg-emerald-500' :
+                                                        activeTab === 'grades' ? 'bg-violet-500' : 'bg-amber-500'
+                                                    }`} />
+                                                    {feature}
+                                                </motion.div>
+                                            </li>
                                         ))}
                                     </ul>
                                 </div>
