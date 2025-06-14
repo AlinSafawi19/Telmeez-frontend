@@ -7,7 +7,7 @@ const Demo: React.FC = () => {
     const demoFeatures = {
         'student-management': {
             title: 'Student Management',
-            description: 'Comprehensive tools for managing student information, enrollment, and records.',
+            description: 'Comprehensive student information management, enrollment, and records management features.',
             features: [
                 'Student profile management',
                 'Enrollment processing',
@@ -19,12 +19,12 @@ const Demo: React.FC = () => {
         },
         'attendance': {
             title: 'Attendance System',
-            description: 'Efficient attendance tracking with real-time monitoring and reporting.',
+            description: 'Efficient attendance monitoring with real-time tracking and reporting.',
             features: [
-                'Real-time attendance tracking',
+                'Real-time attendance monitoring',
                 'Automated notifications',
-                'Attendance analytics',
-                'Customizable attendance rules'
+                'Attendance analysis',
+                'Custom attendance rules'
             ],
             icon: '📊',
             color: 'from-emerald-400 to-green-500'
@@ -33,20 +33,20 @@ const Demo: React.FC = () => {
             title: 'Grade Management',
             description: 'Streamlined grade entry, calculation, and reporting system.',
             features: [
-                'Automated grade calculations',
-                'Custom grading scales',
-                'Progress tracking',
-                'Report card generation'
+                'Automated grade calculation',
+                'Custom grading systems',
+                'Progress monitoring',
+                'Report card printing'
             ],
             icon: '📝',
             color: 'from-violet-400 to-purple-500'
         },
         'communication': {
             title: 'Communication Tools',
-            description: 'Integrated messaging and announcement system for seamless communication.',
+            description: 'Integrated messaging and announcement system for streamlined communication.',
             features: [
                 'Real-time messaging',
-                'Announcement broadcasting',
+                'Broadcasting announcements',
                 'Parent-teacher communication',
                 'Group messaging'
             ],
@@ -68,7 +68,7 @@ const Demo: React.FC = () => {
                         Discover Telmeez
                     </h2>
                     <p className="text-lg text-gray-600 leading-relaxed">
-                        Experience the future of education management with our innovative platform.
+                        Find out about the future of education management with our
                     </p>
                 </motion.div>
 
@@ -80,11 +80,10 @@ const Demo: React.FC = () => {
                                 onClick={() => setActiveTab(feature)}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className={`p-6 rounded-2xl transition-all duration-300 focus:outline-none ${
-                                    activeTab === feature
+                                className={`p-6 rounded-2xl transition-all duration-300 focus:outline-none ${activeTab === feature
                                         ? `bg-gradient-to-r ${demoFeatures[feature as keyof typeof demoFeatures].color} text-white shadow-lg`
                                         : 'bg-white text-gray-700 hover:bg-gray-50 shadow-sm'
-                                }`}
+                                    }`}
                             >
                                 <div className="text-3xl mb-3">
                                     {demoFeatures[feature as keyof typeof demoFeatures].icon}
@@ -107,11 +106,10 @@ const Demo: React.FC = () => {
                         >
                             <div className="grid lg:grid-cols-2 gap-0">
                                 <div className="p-12">
-                                    <div className={`text-6xl mb-6 ${
-                                        activeTab === 'student-management' ? 'text-sky-500' :
-                                        activeTab === 'attendance' ? 'text-emerald-500' :
-                                        activeTab === 'grades' ? 'text-violet-500' : 'text-amber-500'
-                                    }`}>
+                                    <div className={`text-6xl mb-6 ${activeTab === 'student-management' ? 'text-sky-500' :
+                                            activeTab === 'attendance' ? 'text-emerald-500' :
+                                                activeTab === 'grades' ? 'text-violet-500' : 'text-amber-500'
+                                        }`}>
                                         {demoFeatures[activeTab as keyof typeof demoFeatures].icon}
                                     </div>
                                     <h3 className="text-2xl font-bold text-gray-800 mb-4">
@@ -129,11 +127,10 @@ const Demo: React.FC = () => {
                                                     transition={{ delay: index * 0.1 }}
                                                     className="flex items-center text-gray-600"
                                                 >
-                                                    <span className={`w-2 h-2 rounded-full mr-3 ${
-                                                        activeTab === 'student-management' ? 'bg-sky-500' :
-                                                        activeTab === 'attendance' ? 'bg-emerald-500' :
-                                                        activeTab === 'grades' ? 'bg-violet-500' : 'bg-amber-500'
-                                                    }`} />
+                                                    <span className={`w-2 h-2 rounded-full mr-3 ${activeTab === 'student-management' ? 'bg-sky-500' :
+                                                            activeTab === 'attendance' ? 'bg-emerald-500' :
+                                                                activeTab === 'grades' ? 'bg-violet-500' : 'bg-amber-500'
+                                                        }`} />
                                                     {feature}
                                                 </motion.div>
                                             </li>

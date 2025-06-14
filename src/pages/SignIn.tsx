@@ -48,15 +48,15 @@ const SignIn: React.FC = () => {
                     <div className="max-w-md w-full space-y-8">
                         <div>
                             <h2 className="text-center text-3xl font-extrabold text-gray-900">
-                                Sign in to your account
+                                Log into your account
                             </h2>
                             <p className="mt-2 text-center text-sm text-gray-600">
-                                New to Telmeez?{' '}
-                                <button 
+                                Not a Telmeez member?{' '}
+                                <button
                                     onClick={handleCreateAccount}
                                     className="font-medium text-indigo-600 hover:text-indigo-500 hover:underline focus:outline-none focus:underline transition-colors duration-200 border-0 bg-transparent p-0"
                                 >
-                                    Join us!
+                                    Register!
                                 </button>
                             </p>
                         </div>

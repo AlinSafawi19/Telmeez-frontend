@@ -15,9 +15,7 @@ const About: React.FC = () => {
                     >
                         <h2 className="text-5xl font-bold text-gray-900 mb-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">Our Story</h2>
                         <p className="text-xl text-gray-600 leading-relaxed">
-                            Founded in 2025, Telmeez emerged from a vision to revolutionize educational management through technology.
-                            Our journey began when a group of educators and technologists came together to address the challenges
-                            faced by modern educational institutions.
+                            Founded in 2025, Telmeez emerged from a vision to revolutionize education management through the strength of technology. Our tale began when like-minded educators and technologists came together to address the issues of today's educational institutions.
                         </p>
                     </motion.div>
                     <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -25,17 +23,17 @@ const About: React.FC = () => {
                             {
                                 icon: "🎯",
                                 title: "Our Mission",
-                                description: "To empower educational institutions with innovative technology solutions that enhance learning outcomes and streamline administrative processes."
+                                description: "Enabling education institutions with innovative technology solutions to enhance learning experiences and automate administrative processes."
                             },
                             {
                                 icon: "👁️",
                                 title: "Our Vision",
-                                description: "To be the global leader in educational technology, transforming how institutions manage and deliver education."
+                                description: "We see ourselves becoming a global leader in education technology, transforming institutions' approach to managing and delivering education."
                             },
                             {
                                 icon: "💎",
                                 title: "Our Values",
-                                description: "Innovation, integrity, and impact drive everything we do. We're committed to excellence and continuous improvement."
+                                description: "Innovation, integrity, and impact inspire all that we do. Excellence and constant improvement are what we're dedicated to."
                             }
                         ].map((item, index) => (
                             <motion.div
@@ -74,7 +72,7 @@ const About: React.FC = () => {
                                 title: "Telmeez Announces Official Launch",
                                 date: "Coming Soon",
                                 source: "Telmeez Founder & CEO",
-                                description: "Revolutionary educational management platform set to launch, promising to transform how institutions handle administrative tasks and enhance learning experiences."
+                                description: "Revolutionary educational management platform set to launch soon, poised to change how institutions approach administrative process management and enhance learning outcomes."
                             }
                         ].map((press, index) => (
                             <motion.div

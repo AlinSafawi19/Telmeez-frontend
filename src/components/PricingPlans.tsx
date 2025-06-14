@@ -22,7 +22,7 @@ interface PricingPlansProps {
 const plans: Plan[] = [
     {
         name: 'Starter',
-        description: 'Perfect for small schools and tutoring centers',
+        description: 'Perfect for tutoring centers and small schools',
         monthlyPrice: '$49',
         annualPrice: '$470',
         features: [
@@ -34,7 +34,7 @@ const plans: Plan[] = [
     },
     {
         name: 'Standard',
-        description: 'Best for growing educational institutions',
+        description: 'Perfect for growing educational institutions',
         monthlyPrice: '$99',
         annualPrice: '$950',
         features: [
@@ -47,7 +47,7 @@ const plans: Plan[] = [
     },
     {
         name: 'Enterprise',
-        description: 'For large institutions with advanced needs',
+        description: 'For institutions big in size and high in demands',
         monthlyPrice: '$299',
         annualPrice: '$2,870',
         features: [
@@ -93,7 +93,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({ initialSelectedPlan = null,
                         Choose Your Plan
                     </h2>
                     <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-                        Select the perfect plan for your institution and start transforming your educational experience today
+                        Select the perfect plan for your institution and start crafting your learning experience today
                     </p>
                     <div className="flex items-center justify-center space-x-4 p-2 inline-block">
                         <span className={`text-base px-4 py-1 rounded-full transition-all duration-300 ${!isAnnual ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-600'}`}>

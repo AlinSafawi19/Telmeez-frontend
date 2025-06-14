@@ -195,7 +195,7 @@ const Landing: React.FC = () => {
                 href: '#',
                 monthlyPrice: '$49',
                 annualPrice: '$470',
-                description: 'Perfect for small schools and tutoring centers',
+                description: 'Perfect for tutoring centers and small schools',
                 details: '3 Admin Accounts, 25 Teacher Accounts, 250 Student Accounts',
                 savings: 'Save 20% annually'
             },
@@ -204,7 +204,7 @@ const Landing: React.FC = () => {
                 href: '#',
                 monthlyPrice: '$99',
                 annualPrice: '$950',
-                description: 'Best for growing educational institutions',
+                description: 'Perfect for growing educational institutions',
                 details: '10 Admin Accounts, 150 Teacher Accounts, 1,500 Student Accounts',
                 savings: 'Save 20% annually'
             },
@@ -213,7 +213,7 @@ const Landing: React.FC = () => {
                 href: '#',
                 monthlyPrice: '$299',
                 annualPrice: '$2,870',
-                description: 'For large institutions with advanced needs',
+                description: 'For institutions big in size and high in demands',
                 details: 'Unlimited Admin, Teacher, and Student Accounts',
                 savings: 'Save 20% annually'
             }
@@ -458,7 +458,7 @@ const Landing: React.FC = () => {
                                                 handleLanguageChange(lang.code);
                                                 setActiveDropdown(null);
                                             }}
-                                            className={`flex items-center w-full text-left px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none ${currentLanguage === lang.code ? 'bg-blue-50 text-blue-600' : ''}`}
+                                            className={`flex items-center w-full text-left px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none ${currentLanguage === lang.code ? 'bg-blue-50 text-blue-600' : 'bg-transparent'}`}
                                             role="menuitem"
                                         >
                                             <span className="uppercase font-medium mr-2">{lang.code}</span>
@@ -587,8 +587,7 @@ const Landing: React.FC = () => {
                             Empowering Educational Institutions
                         </h1>
                         <p className={`text-2xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed ${isVisible ? 'animate-fadeInUp delay-200' : 'opacity-0'}`}>
-                            A comprehensive platform designed for schools, universities, and educational institutions.
-                            Streamline your operations and enhance communication across your organization.
+                            A one-stop platform designed to cater to schools, colleges, and educational institutions. Streamline your operations and communication within your organization.
                         </p>
                         <div className={`flex justify-center space-x-6 ${isVisible ? 'animate-fadeInUp delay-300' : 'opacity-0'}`}>
                             <button
@@ -629,7 +628,7 @@ const Landing: React.FC = () => {
                             <div className="text-blue-600 text-4xl mb-6">👤</div>
                             <h3 className="text-2xl font-semibold mb-4">Role-Based Access</h3>
                             <p className="text-gray-600 leading-relaxed">
-                                Customized dashboards for administrators, staff, parents, and students with secure role-based permissions.
+                                Administrator, staff, parent, and student dashboards with role-based secure access.
                             </p>
                         </div>
                         <div className="p-8 rounded-xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
@@ -643,7 +642,7 @@ const Landing: React.FC = () => {
                             <div className="text-blue-600 text-4xl mb-6">💬</div>
                             <h3 className="text-2xl font-semibold mb-4">Seamless Communication</h3>
                             <p className="text-gray-600 leading-relaxed">
-                                Connect administrators, staff, parents, and students through our integrated platform.
+                                Engage administrators, staff, parents, and students on our integrated platform.
                             </p>
                         </div>
                     </div>
@@ -657,9 +656,9 @@ const Landing: React.FC = () => {
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-16">
                             <span className="inline-block px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm font-semibold mb-4 animate-fadeInUp">Student Management</span>
-                            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">Comprehensive Student Management</h2>
+                            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">Complete Student Management</h2>
                             <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fadeInUp delay-200">
-                                Comprehensive tools to manage student information, track progress, and maintain records efficiently.
+                                Total tools to streamline student information, track progress, and maintain records effortlessly.
                             </p>
                         </div>
                         <div className="grid md:grid-cols-2 gap-8">
@@ -673,7 +672,7 @@ const Landing: React.FC = () => {
                                     <h3 className="text-2xl font-semibold text-gray-900">Student Profiles</h3>
                                 </div>
                                 <p className="text-gray-600 mb-6">
-                                    Create and manage detailed student profiles with personal information, academic history, and contact details.
+                                    Create and maintain detailed student profiles with personal information, academic history, and contact details.
                                 </p>
                                 <ul className="space-y-3">
                                     <li className="flex items-center text-gray-600">
@@ -718,7 +717,7 @@ const Landing: React.FC = () => {
                                     <h3 className="text-2xl font-semibold text-gray-900">Enrollment Management</h3>
                                 </div>
                                 <p className="text-gray-600 mb-6">
-                                    Streamline the enrollment process with digital forms, document uploads, and automated workflows.
+                                    Streamline the enrollment process with electronic forms, document uploading, and automated workflows.
                                 </p>
                                 <ul className="space-y-3">
                                     <li className="flex items-center text-gray-600">
@@ -767,7 +766,7 @@ const Landing: React.FC = () => {
                             <span className="inline-block px-4 py-2 rounded-full bg-green-100 text-green-600 text-sm font-semibold mb-4 animate-fadeInUp">Attendance System</span>
                             <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">Modern Attendance Tracking</h2>
                             <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fadeInUp delay-200">
-                                Modern attendance tracking with real-time monitoring and automated reporting.
+                                Advanced attendance tracking in real-time, with reports automated.
                             </p>
                         </div>
                         <div className="grid md:grid-cols-2 gap-8">
@@ -781,7 +780,7 @@ const Landing: React.FC = () => {
                                     <h3 className="text-2xl font-semibold text-gray-900">Digital Attendance</h3>
                                 </div>
                                 <p className="text-gray-600 mb-6">
-                                    Take attendance digitally with QR codes, biometric integration, or manual entry options.
+                                    Take attendance digitally with QR codes, biometric integration, or manual input options.
                                 </p>
                                 <ul className="space-y-3">
                                     <li className="flex items-center text-gray-600">
@@ -800,7 +799,7 @@ const Landing: React.FC = () => {
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Manual Entry Options
+                                        Manual Input Options
                                     </li>
                                 </ul>
                                 <div className="mt-6 pt-6 border-t border-gray-100">
@@ -826,20 +825,20 @@ const Landing: React.FC = () => {
                                     <h3 className="text-2xl font-semibold text-gray-900">Automated Reports</h3>
                                 </div>
                                 <p className="text-gray-600 mb-6">
-                                    Generate detailed attendance reports and analytics to track patterns and identify trends.
+                                    Pull rich attendance reports and analytics to view patterns and trends.
                                 </p>
                                 <ul className="space-y-3">
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Detailed Analytics
+                                        Rich Analytics
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Pattern Recognition
+                                        Pattern Detection
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -875,7 +874,7 @@ const Landing: React.FC = () => {
                             <span className="inline-block px-4 py-2 rounded-full bg-yellow-100 text-yellow-600 text-sm font-semibold mb-4 animate-fadeInUp">Grade Management</span>
                             <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">Comprehensive Grading System</h2>
                             <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fadeInUp delay-200">
-                                Efficiently manage and track student grades with our comprehensive grading system.
+                                Streamline and track student grades with our comprehensive grading system.
                             </p>
                         </div>
                         <div className="grid md:grid-cols-2 gap-8">
@@ -889,7 +888,7 @@ const Landing: React.FC = () => {
                                     <h3 className="text-2xl font-semibold text-gray-900">Grade Entry</h3>
                                 </div>
                                 <p className="text-gray-600 mb-6">
-                                    Easy-to-use interface for entering and managing grades with support for various grading scales.
+                                    Easy-to-use interface for grade management and entry with multiple grading scales support.
                                 </p>
                                 <ul className="space-y-3">
                                     <li className="flex items-center text-gray-600">
@@ -983,7 +982,7 @@ const Landing: React.FC = () => {
                             <span className="inline-block px-4 py-2 rounded-full bg-pink-100 text-pink-600 text-sm font-semibold mb-4 animate-fadeInUp">Communication Tools</span>
                             <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">Integrated Communication Platform</h2>
                             <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fadeInUp delay-200">
-                                Stay connected with students, parents, and staff through our integrated communication platform.
+                                Stay connected with students, parents, and staff using our integrated communication platform.
                             </p>
                         </div>
                         <div className="grid md:grid-cols-2 gap-8">
@@ -997,7 +996,7 @@ const Landing: React.FC = () => {
                                     <h3 className="text-2xl font-semibold text-gray-900">Messaging System</h3>
                                 </div>
                                 <p className="text-gray-600 mb-6">
-                                    Real-time messaging between teachers, students, and parents with support for attachments and group chats.
+                                    Real-time messaging between teachers, students, and parents with attachments and support for group conversation.
                                 </p>
                                 <ul className="space-y-3">
                                     <li className="flex items-center text-gray-600">
@@ -1042,7 +1041,7 @@ const Landing: React.FC = () => {
                                     <h3 className="text-2xl font-semibold text-gray-900">Announcements</h3>
                                 </div>
                                 <p className="text-gray-600 mb-6">
-                                    Share important updates and announcements with the entire school community through targeted broadcasts.
+                                    Share important announcements and updates to the entire school community through targeted broadcasts.
                                 </p>
                                 <ul className="space-y-3">
                                     <li className="flex items-center text-gray-600">
@@ -1106,10 +1105,10 @@ const Landing: React.FC = () => {
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 py-20">
                 <div className="container mx-auto px-4 text-center">
                     <h2 className="text-4xl font-bold text-white mb-8">
-                        Ready to Transform Your Institution?
+                        Ready to Change Your Institution?
                     </h2>
                     <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                        Experience a modern, intuitive platform designed specifically for educational institutions. Streamline your operations and enhance communication across your organization.
+                        Experience a fresh, user-friendly platform that is specifically designed for educational institutions. Streamline your operations and enhance collaboration within your organization.
                     </p>
                     <button
                         type="button"
@@ -1130,10 +1129,10 @@ const Landing: React.FC = () => {
                 <div className="container mx-auto px-4">
                     <div className="max-w-3xl mx-auto text-center">
                         <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                            Stay Updated with Telmeez
+                            Get the Latest from Telmeez
                         </h2>
                         <p className="text-gray-600 mb-8">
-                            Subscribe to our newsletter for the latest updates, features, and educational insights.
+                            Subscribe to our newsletter and get the latest news, features, and education insights.
                         </p>
 
                         <form onSubmit={handleNewsletterSubmit} className="max-w-md mx-auto">
@@ -1154,12 +1153,12 @@ const Landing: React.FC = () => {
                             </div>
 
                             <p className="mt-4 text-sm text-gray-500">
-                                We respect your privacy. <button
+                                We value your privacy. <button
                                     onClick={() => setIsUnsubscribeModalOpen(true)}
                                     className="font-medium text-indigo-600 hover:text-indigo-500 hover:underline focus:outline-none focus:underline transition-colors duration-200 border-0 bg-transparent p-0"
                                 >
                                     Unsubscribe
-                                </button> at any time.
+                                </button> anytime.
                             </p>
                         </form>
                     </div>
@@ -1178,7 +1177,7 @@ const Landing: React.FC = () => {
                                 <img src={logo2} alt="Telmeez Logo" className="h-16 w-16 mb-4" />
                             </a>
                             <p className="text-gray-400">
-                                Empowering educational institutions with innovative solutions.
+                                Empowering educational institutions through creative solutions.
                             </p>
                         </div>
                         <div>
@@ -1260,8 +1259,8 @@ const Landing: React.FC = () => {
                                         key={lang.code}
                                         onClick={() => handleLanguageChange(lang.code)}
                                         className={`flex items-center justify-center space-x-2 px-3 py-1.5 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none ${currentLanguage === lang.code
-                                                ? 'bg-blue-600 text-white shadow-lg'
-                                                : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                                            ? 'bg-blue-600 text-white shadow-lg'
+                                            : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                                             }`}
                                     >
                                         <span className="text-base uppercase text-sm">
@@ -1313,55 +1312,55 @@ const Landing: React.FC = () => {
 
                                 <div className="space-y-8">
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Comprehensive Student Information</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Information of the Student in Detail</h4>
                                         <p className="text-gray-600 mb-4">
-                                            Our student profile system provides a centralized location for all student-related information, making it easy to access and manage student data efficiently.
+                                            Our student profile module is a one-stop access point for every piece of student information, and it facilitates easy access and an effective management of information on students.
                                         </p>
                                         <div className="grid md:grid-cols-2 gap-4">
                                             <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Personal Information</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Personal Details</h5>
                                                 <ul className="space-y-2 text-gray-600">
-                                                    <li>• Basic details (name, DOB, gender)</li>
-                                                    <li>• Contact information</li>
+                                                    <li>• General details (name, birth date, gender, etc..)</li>
+                                                    <li>• Contact details</li>
                                                     <li>• Emergency contacts</li>
                                                     <li>• Medical information</li>
                                                 </ul>
                                             </div>
                                             <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Academic Information</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Academic Details</h5>
                                                 <ul className="space-y-2 text-gray-600">
                                                     <li>• Enrollment history</li>
-                                                    <li>• Course registrations</li>
-                                                    <li>• Academic performance</li>
-                                                    <li>• Attendance records</li>
+                                                    <li>• Payment history and tracking</li>
+                                                    <li>• Academic standing</li>
+                                                    <li>• Attendance history</li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Vital Features</h4>
                                         <div className="grid md:grid-cols-3 gap-4">
                                             <div className="bg-blue-50 p-4 rounded-lg">
                                                 <div className="text-blue-600 mb-2">
                                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a4 4 0 00-8 0v2m10 0v10a2 2 0 01-2 2H7a2 2 0 01-2-2V9m12 0H5" />
                                                     </svg>
                                                 </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Customizable Fields</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Parent & Guardian Access</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Add custom fields to capture institution-specific information
+                                                    Allow guardians to see academic records, attendance, and communicate with educators
                                                 </p>
                                             </div>
                                             <div className="bg-green-50 p-4 rounded-lg">
                                                 <div className="text-green-600 mb-2">
                                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-6h6v6h4l-7 7-7-7h4zM4 4h16v2H4z" />
                                                     </svg>
                                                 </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Data Security</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Grades & Schedules</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Advanced encryption and access controls for sensitive information
+                                                    Students can view examination marks, subject split, upcoming deadlines, and a weekly class schedule.
                                                 </p>
                                             </div>
                                             <div className="bg-purple-50 p-4 rounded-lg">
@@ -1372,7 +1371,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Document Management</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Upload and manage important student documents securely
+                                                    Securely upload and manage important student documents
                                                 </p>
                                             </div>
                                         </div>
@@ -1386,25 +1385,26 @@ const Landing: React.FC = () => {
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Streamlined student information management and retrieval</span>
+                                                    <span className="text-gray-600">Efficient management of student information and retrieval</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Improved communication between staff and parents</span>
+                                                    <span className="text-gray-600">Improved teacher-student-parent communication</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Enhanced data accuracy and reduced administrative workload</span>
+                                                    <span className="text-gray-600">More accurate data and less administration</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Comprehensive student history tracking and reporting</span>
+                                                    <span className="text-gray-600">Intelligent tracking and reporting of student history
+                                                        Tight</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -1462,25 +1462,25 @@ const Landing: React.FC = () => {
                                     <div>
                                         <h4 className="text-xl font-semibold text-gray-900 mb-4">Streamlined Enrollment Process</h4>
                                         <p className="text-gray-600 mb-4">
-                                            Our enrollment management system simplifies the entire process from application to registration, making it efficient for both administrators and applicants.
+                                            Our enrollment management solution simplifies the entire process from application to registration, making it efficient for both administrators and applicants.
                                         </p>
                                         <div className="grid md:grid-cols-2 gap-4">
                                             <div className="bg-gray-50 p-4 rounded-lg">
                                                 <h5 className="font-semibold text-gray-900 mb-2">Application Process</h5>
                                                 <ul className="space-y-2 text-gray-600">
                                                     <li>• Online application forms</li>
-                                                    <li>• Document upload system</li>
+                                                    <li>• Document verification system</li>
                                                     <li>• Application status tracking</li>
-                                                    <li>• Automated notifications</li>
+                                                    <li>• Automated reminders</li>
                                                 </ul>
                                             </div>
                                             <div className="bg-gray-50 p-4 rounded-lg">
                                                 <h5 className="font-semibold text-gray-900 mb-2">Registration Features</h5>
                                                 <ul className="space-y-2 text-gray-600">
-                                                    <li>• Course selection</li>
-                                                    <li>• Schedule management</li>
-                                                    <li>• Fee payment integration</li>
-                                                    <li>• Student ID generation</li>
+                                                    <li>• Profile management</li>
+                                                    <li>• Uploading documents</li>
+                                                    <li>• Payment processing</li>
+                                                    <li>• Generation of ID card</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -1497,7 +1497,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Automated Workflows</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Streamline enrollment with customizable approval processes
+                                                    Streamline enrollment with customized approval flows
                                                 </p>
                                             </div>
                                             <div className="bg-blue-50 p-4 rounded-lg">
@@ -1508,7 +1508,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Real-time Processing</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Instant updates and status changes for all stakeholders
+                                                    Instant updating and status changes for all concerned
                                                 </p>
                                             </div>
                                             <div className="bg-green-50 p-4 rounded-lg">
@@ -1519,7 +1519,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Document Management</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Secure storage and verification of enrollment documents
+                                                    Secure storage and verification of documents for enrollment
                                                 </p>
                                             </div>
                                         </div>
@@ -1533,13 +1533,13 @@ const Landing: React.FC = () => {
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Reduced administrative workload and processing time</span>
+                                                    <span className="text-gray-600">Reduced administrative weight and processing duration</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Improved applicant experience with self-service options</span>
+                                                    <span className="text-gray-600">Improved applicant experience through self-service</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1551,7 +1551,7 @@ const Landing: React.FC = () => {
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Comprehensive reporting and analytics</span>
+                                                    <span className="text-gray-600">Complete reporting and analytics</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -1609,7 +1609,7 @@ const Landing: React.FC = () => {
                                     <div>
                                         <h4 className="text-xl font-semibold text-gray-900 mb-4">Smart Attendance Tracking</h4>
                                         <p className="text-gray-600 mb-4">
-                                            Our digital attendance system revolutionizes how schools track and manage student attendance, making it more efficient and accurate than traditional methods.
+                                            Our digital attendance system revolutionizes how schools take and manage student attendance with more efficiency and accuracy compared to traditional systems.
                                         </p>
                                         <div className="grid md:grid-cols-2 gap-4">
                                             <div className="bg-gray-50 p-4 rounded-lg">
@@ -1644,7 +1644,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Quick Check-in</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Fast and efficient attendance marking with multiple verification methods
+                                                    Fast and efficient attendance marking through multiple verification methods
                                                 </p>
                                             </div>
                                             <div className="bg-green-50 p-4 rounded-lg">
@@ -1655,7 +1655,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Automated Reports</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Generate comprehensive attendance reports and analytics
+                                                    Generate detailed attendance reports and analytics
                                                 </p>
                                             </div>
                                             <div className="bg-purple-50 p-4 rounded-lg">
@@ -1764,8 +1764,8 @@ const Landing: React.FC = () => {
                                                 <ul className="space-y-2 text-gray-600">
                                                     <li>• Academic performance reports</li>
                                                     <li>• Attendance analytics</li>
-                                                    <li>• Financial statements</li>
-                                                    <li>• Custom report generation</li>
+                                                    <li>• Financial reports</li>
+                                                    <li>• Custom report creation</li>
                                                 </ul>
                                             </div>
                                             <div className="bg-gray-50 p-4 rounded-lg">
@@ -1773,8 +1773,8 @@ const Landing: React.FC = () => {
                                                 <ul className="space-y-2 text-gray-600">
                                                     <li>• Trend analysis</li>
                                                     <li>• Comparative studies</li>
-                                                    <li>• Predictive insights</li>
-                                                    <li>• Performance metrics</li>
+                                                    <li>• Predictive analytics</li>
+                                                    <li>• Performance measures</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -1791,7 +1791,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Data Visualization</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Interactive charts and graphs for better data understanding
+                                                    Interactive charts and graphs for better understanding of data
                                                 </p>
                                             </div>
                                             <div className="bg-blue-50 p-4 rounded-lg">
@@ -1802,7 +1802,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Real-time Updates</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Instant report generation with live data integration
+                                                    Report creation in real time with live feed of data
                                                 </p>
                                             </div>
                                             <div className="bg-purple-50 p-4 rounded-lg">
@@ -1813,7 +1813,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Automated Scheduling</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Scheduled report generation and distribution
+                                                    Report creation and dissemination on a scheduled basis
                                                 </p>
                                             </div>
                                         </div>
@@ -1827,13 +1827,13 @@ const Landing: React.FC = () => {
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Saves time with automated report generation</span>
+                                                    <span className="text-gray-600">Saves time by automating report creation</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Provides actionable insights for decision-making</span>
+                                                    <span className="text-gray-600">Provides actionable information for decision-making</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1845,7 +1845,7 @@ const Landing: React.FC = () => {
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Supports data-driven educational strategies</span>
+                                                    <span className="text-gray-600">Supports data-driven educational programs</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -1901,9 +1901,9 @@ const Landing: React.FC = () => {
 
                                 <div className="space-y-8">
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Efficient Grade Management</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Effective Grade Management</h4>
                                         <p className="text-gray-600 mb-4">
-                                            Our grade entry system streamlines the process of recording, calculating, and managing student grades, making it easier for teachers to focus on teaching.
+                                            Our grade entry system streamlines entering, calculating, and administering student grades so that teachers can focus on what's most important—teaching.
                                         </p>
                                         <div className="grid md:grid-cols-2 gap-4">
                                             <div className="bg-gray-50 p-4 rounded-lg">
@@ -1913,15 +1913,22 @@ const Landing: React.FC = () => {
                                                     <li>• Custom grading scales</li>
                                                     <li>• Weighted assignments</li>
                                                     <li>• Grade calculation tools</li>
+                                                    <li>• Exam schedule management</li>
+                                                    <li>• Room allocation tracking</li>
                                                 </ul>
                                             </div>
                                             <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Management Tools</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Exam Management</h5>
                                                 <ul className="space-y-2 text-gray-600">
                                                     <li>• Grade history tracking</li>
                                                     <li>• Grade modification logs</li>
                                                     <li>• Parent portal access</li>
                                                     <li>• Progress monitoring</li>
+                                                    <li>• Exam date scheduling</li>
+                                                    <li>• Room assignment tracking</li>
+                                                    <li>• Exam timetable generation</li>
+                                                    <li>• Conflict resolution</li>
+                                                    <li>• Student notifications</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -1938,7 +1945,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Flexible Entry</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Multiple ways to enter and manage grades efficiently
+                                                    Several management and entry of grades in an efficient way
                                                 </p>
                                             </div>
                                             <div className="bg-blue-50 p-4 rounded-lg">
@@ -1949,7 +1956,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Auto Calculation</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Automatic grade calculations with customizable formulas
+                                                    Automated calculation of grades with editable formulas
                                                 </p>
                                             </div>
                                             <div className="bg-purple-50 p-4 rounded-lg">
@@ -1974,25 +1981,25 @@ const Landing: React.FC = () => {
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Reduces time spent on grade management</span>
+                                                    <span className="text-gray-600">Saves time spent on managing grades</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Minimizes calculation errors</span>
+                                                    <span className="text-gray-600">Reduces calculation errors</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Improves communication with parents</span>
+                                                    <span className="text-gray-600">Improves parent communication</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Provides comprehensive grade history</span>
+                                                    <span className="text-gray-600">Provides complete grade history</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -2050,7 +2057,7 @@ const Landing: React.FC = () => {
                                     <div>
                                         <h4 className="text-xl font-semibold text-gray-900 mb-4">Comprehensive Progress Monitoring</h4>
                                         <p className="text-gray-600 mb-4">
-                                            Our progress tracking system provides detailed insights into student performance, helping educators identify strengths, weaknesses, and areas for improvement.
+                                            Our progress tracking system provides end-to-end insights into student performance, allowing educators to identify strengths, weaknesses, and areas of improvement.
                                         </p>
                                         <div className="grid md:grid-cols-2 gap-4">
                                             <div className="bg-gray-50 p-4 rounded-lg">
@@ -2065,10 +2072,10 @@ const Landing: React.FC = () => {
                                             <div className="bg-gray-50 p-4 rounded-lg">
                                                 <h5 className="font-semibold text-gray-900 mb-2">Analytics Tools</h5>
                                                 <ul className="space-y-2 text-gray-600">
-                                                    <li>• Performance dashboards</li>
+                                                    <li>• Dashboards for performance</li>
                                                     <li>• Comparative analysis</li>
                                                     <li>• Predictive insights</li>
-                                                    <li>• Custom reporting</li>
+                                                    <li>• Custom reports</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -2085,7 +2092,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Performance Analytics</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Detailed analysis of student performance across subjects
+                                                    Detailed analysis of student performance per subject
                                                 </p>
                                             </div>
                                             <div className="bg-blue-50 p-4 rounded-lg">
@@ -2096,7 +2103,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Trend Analysis</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Track progress over time with visual trend indicators
+                                                    Track progress over time using visual trend indicators
                                                 </p>
                                             </div>
                                             <div className="bg-purple-50 p-4 rounded-lg">
@@ -2107,7 +2114,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Early Warning System</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Identify at-risk students and intervene proactively
+                                                    Recognize struggling students and act before they fall behind
                                                 </p>
                                             </div>
                                         </div>
@@ -2121,25 +2128,25 @@ const Landing: React.FC = () => {
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Enables data-driven teaching strategies</span>
+                                                    <span className="text-gray-600">Empowers data-driven instructional practices</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Facilitates personalized learning plans</span>
+                                                    <span className="text-gray-600">Supports individual learning plans</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Improves student engagement and outcomes</span>
+                                                    <span className="text-gray-600">Increases student engagement and outcomes</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Enhances parent-teacher communication</span>
+                                                    <span className="text-gray-600">Fosters parent-teacher communication</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -2197,7 +2204,7 @@ const Landing: React.FC = () => {
                                     <div>
                                         <h4 className="text-xl font-semibold text-gray-900 mb-4">Real-time Messaging</h4>
                                         <p className="text-gray-600 mb-4">
-                                            Our messaging system allows for real-time communication between teachers, students, and parents.
+                                            Our messaging system supports for real-time communication between teachers, students, and parents.
                                         </p>
                                         <div className="grid md:grid-cols-2 gap-4">
                                             <div className="bg-gray-50 p-4 rounded-lg">
@@ -2209,11 +2216,11 @@ const Landing: React.FC = () => {
                                                 </ul>
                                             </div>
                                             <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Benefits</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Key Advantages</h5>
                                                 <ul className="space-y-2 text-gray-600">
-                                                    <li>• Improved communication</li>
-                                                    <li>• Increased collaboration</li>
-                                                    <li>• Enhanced parent-teacher communication</li>
+                                                    <li>• Instant message delivery</li>
+                                                    <li>• Secure data transmission</li>
+                                                    <li>• Multiple platform access</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -2230,7 +2237,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Real-time Chat</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Fast and efficient real-time messaging
+                                                    Quick and effective real-time messaging
                                                 </p>
                                             </div>
                                             <div className="bg-green-50 p-4 rounded-lg">
@@ -2252,7 +2259,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Group Conversations</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Organize conversations with customizable group settings
+                                                    Control conversations with adjustable group options
                                                 </p>
                                             </div>
                                         </div>
@@ -2266,25 +2273,25 @@ const Landing: React.FC = () => {
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Enhanced communication and collaboration</span>
+                                                    <span className="text-gray-600">Enhanced collaboration and communication</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Increased parent-teacher interaction</span>
+                                                    <span className="text-gray-600">More parent-teacher communication</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Improved student engagement and outcomes</span>
+                                                    <span className="text-gray-600">Enhanced student participation and results</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Reduced administrative workload</span>
+                                                    <span className="text-gray-600">Less administrative work</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -2340,9 +2347,9 @@ const Landing: React.FC = () => {
 
                                 <div className="space-y-8">
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">School-wide Announcements</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">School Announcements</h4>
                                         <p className="text-gray-600 mb-4">
-                                            Our announcements system enables efficient communication of important updates and information to the entire school community.
+                                            Our announcements system supports efficient communication of important updates and information to the overall school community.
                                         </p>
                                         <div className="grid md:grid-cols-2 gap-4">
                                             <div className="bg-gray-50 p-4 rounded-lg">
@@ -2354,11 +2361,11 @@ const Landing: React.FC = () => {
                                                 </ul>
                                             </div>
                                             <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Benefits</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Use Cases</h5>
                                                 <ul className="space-y-2 text-gray-600">
-                                                    <li>• Improved information flow</li>
-                                                    <li>• Better community engagement</li>
-                                                    <li>• Enhanced communication</li>
+                                                    <li>• Daily students' and parents' updates</li>
+                                                    <li>• Emergency alerts and quick response notifications</li>
+                                                    <li>• Event reminders and schedule notifications</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -2375,7 +2382,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Targeted Broadcasts</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Send announcements to specific groups or the entire school
+                                                    Broadcast announcements to specific groups or the entire school
                                                 </p>
                                             </div>
                                             <div className="bg-yellow-50 p-4 rounded-lg">
@@ -2386,7 +2393,7 @@ const Landing: React.FC = () => {
                                                 </div>
                                                 <h5 className="font-semibold text-gray-900 mb-2">Scheduled Announcements</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Plan and schedule announcements in advance
+                                                    Schedule and plan announcements ahead of time
                                                 </p>
                                             </div>
                                             <div className="bg-red-50 p-4 rounded-lg">
@@ -2395,9 +2402,9 @@ const Landing: React.FC = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                                     </svg>
                                                 </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Priority Notifications</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">Priority Announcements</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Highlight urgent announcements with priority status
+                                                    Highlight significant announcements with priority status
                                                 </p>
                                             </div>
                                         </div>
@@ -2411,7 +2418,7 @@ const Landing: React.FC = () => {
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Streamlined communication across the school community</span>
+                                                    <span className="text-gray-600">Efficient communication within the school community</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2423,13 +2430,13 @@ const Landing: React.FC = () => {
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Enhanced parent and student engagement</span>
+                                                    <span className="text-gray-600">Improved parent and student engagement</span>
                                                 </li>
                                                 <li className="flex items-start">
                                                     <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                     </svg>
-                                                    <span className="text-gray-600">Reduced administrative workload for communication tasks</span>
+                                                    <span className="text-gray-600">Fewer administrative tasks on communications</span>
                                                 </li>
                                             </ul>
                                         </div>
