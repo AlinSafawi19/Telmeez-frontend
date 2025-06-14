@@ -38,6 +38,35 @@ const Landing: React.FC = () => {
     const [unsubscribeEmail, setUnsubscribeEmail] = useState('');
     const [isScrolling, setIsScrolling] = useState(false);
     const [showBackToTop, setShowBackToTop] = useState(false);
+    const [currentLanguage, setCurrentLanguage] = useState('en');
+    const languageDropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target as Node)) {
+                setActiveDropdown(null);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const languages = [
+        { code: 'en', label: 'English' },
+        { code: 'ar', label: 'عربي' },
+        { code: 'fr', label: 'Français' }
+    ];
+
+    const handleLanguageChange = (langCode: string) => {
+        setCurrentLanguage(langCode);
+        // Here you would typically also update the document direction for RTL languages
+        if (langCode === 'ar') {
+            document.documentElement.dir = 'rtl';
+        } else {
+            document.documentElement.dir = 'ltr';
+        }
+    };
 
     useEffect(() => {
         setIsVisible(true);
@@ -166,8 +195,8 @@ const Landing: React.FC = () => {
                 href: '#',
                 monthlyPrice: '$49',
                 annualPrice: '$470',
-                description: 'Perfect for small schools',
-                details: '1 Admin, 10 Teachers, 100 Students',
+                description: 'Perfect for small schools and tutoring centers',
+                details: '3 Admin Accounts, 25 Teacher Accounts, 250 Student Accounts',
                 savings: 'Save 20% annually'
             },
             {
@@ -175,18 +204,18 @@ const Landing: React.FC = () => {
                 href: '#',
                 monthlyPrice: '$99',
                 annualPrice: '$950',
-                description: 'Best for medium-sized institutions',
-                details: '2 Admins, 30 Teachers, 300 Students',
+                description: 'Best for growing educational institutions',
+                details: '10 Admin Accounts, 150 Teacher Accounts, 1,500 Student Accounts',
                 savings: 'Save 20% annually'
             },
             {
                 label: 'Enterprise',
                 href: '#',
-                monthlyPrice: 'Custom',
-                annualPrice: 'Custom',
-                description: 'Includes custom domain, priority support',
-                details: 'Unlimited users',
-                savings: 'Contact for pricing'
+                monthlyPrice: '$299',
+                annualPrice: '$2,870',
+                description: 'For large institutions with advanced needs',
+                details: 'Unlimited Admin, Teacher, and Student Accounts',
+                savings: 'Save 20% annually'
             }
         ]
     };
@@ -402,6 +431,47 @@ const Landing: React.FC = () => {
                             </div>
                         </nav>
                         <div className="flex items-center space-x-4">
+                            <div className="relative group">
+                                <button
+                                    className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium focus:outline-none"
+                                    onClick={() => setActiveDropdown(activeDropdown === 'language' ? null : 'language')}
+                                    aria-expanded="false"
+                                    aria-haspopup="true"
+                                    aria-label="Select language"
+                                >
+                                    <span className="uppercase font-medium">{currentLanguage}</span>
+                                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <div
+                                    className={`absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'language' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
+                                    role="menu"
+                                    aria-orientation="vertical"
+                                    aria-labelledby="language-menu"
+                                    ref={languageDropdownRef}
+                                >
+                                    {languages.map((lang) => (
+                                        <button
+                                            key={lang.code}
+                                            onClick={() => {
+                                                handleLanguageChange(lang.code);
+                                                setActiveDropdown(null);
+                                            }}
+                                            className={`flex items-center w-full text-left px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none ${currentLanguage === lang.code ? 'bg-blue-50 text-blue-600' : ''}`}
+                                            role="menuitem"
+                                        >
+                                            <span className="uppercase font-medium mr-2">{lang.code}</span>
+                                            <span>{lang.label}</span>
+                                            {currentLanguage === lang.code && (
+                                                <svg className="w-4 h-4 ml-auto text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
                             <button
                                 onClick={() => navigate('/signin')}
                                 className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300 font-medium focus:outline-none"
@@ -1180,6 +1250,26 @@ const Landing: React.FC = () => {
                                         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                     </svg>
                                 </a>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold mb-4">Language</h3>
+                            <div className="grid grid-cols-3 gap-3">
+                                {languages.map((lang) => (
+                                    <button
+                                        key={lang.code}
+                                        onClick={() => handleLanguageChange(lang.code)}
+                                        className={`flex items-center justify-center space-x-2 px-3 py-1.5 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none ${currentLanguage === lang.code
+                                                ? 'bg-blue-600 text-white shadow-lg'
+                                                : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                                            }`}
+                                    >
+                                        <span className="text-base uppercase text-sm">
+                                            {lang.code}
+                                        </span>
+                                        <span className="text-sm font-medium">{lang.label}</span>
+                                    </button>
+                                ))}
                             </div>
                         </div>
                     </div>
