@@ -177,5 +177,55 @@ export const en = {
             }
         },
         learn_more: "Learn More"
+    },
+    pricing: {
+        title: "Choose Your Plan",
+        subtitle: "Select the perfect plan for your institution and start crafting your learning experience today",
+        monthly: "Monthly",
+        annual: "Annual",
+        save_20: "Save 20%",
+        most_popular: "Most Popular",
+        continue_with: "Continue with",
+        start_free_trial: "Start Free Trial",
+        select_plan: "Select Plan",
+        free_trial_badge: "✨ {days}-day free trial",
+        plans: {
+            starter: {
+                name: "Starter",
+                description: "Perfect for tutoring centers and small schools",
+                monthly_price: "$49",
+                annual_price: "$470",
+                features: [
+                    "3 Admin Accounts",
+                    "25 Teacher Accounts",
+                    "250 Student Accounts",
+                    "125 Parent Accounts"
+                ]
+            },
+            standard: {
+                name: "Standard",
+                description: "Perfect for growing educational institutions",
+                monthly_price: "$99",
+                annual_price: "$950",
+                features: [
+                    "10 Admin Accounts",
+                    "150 Teacher Accounts",
+                    "1,500 Student Accounts",
+                    "750 Parent Accounts"
+                ]
+            },
+            enterprise: {
+                name: "Enterprise",
+                description: "For institutions big in size and high in demands",
+                monthly_price: "$299",
+                annual_price: "$2,870",
+                features: [
+                    "Unlimited Admin Accounts",
+                    "Unlimited Teacher Accounts",
+                    "Unlimited Student Accounts",
+                    "Unlimited Parent Accounts"
+                ]
+            }
+        }
     }
 }; 

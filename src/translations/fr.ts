@@ -177,5 +177,55 @@ export const fr = {
             }
         },
         learn_more: "En Savoir Plus"
+    },
+    pricing: {
+        title: "Choisissez Votre Plan",
+        subtitle: "Sélectionnez le plan parfait pour votre institution et commencez à créer votre expérience d'apprentissage dès aujourd'hui",
+        monthly: "Mensuel",
+        annual: "Annuel",
+        save_20: "Économisez 20%",
+        most_popular: "Le Plus Populaire",
+        continue_with: "Continuer avec",
+        start_free_trial: "Commencer l'essai gratuit",
+        select_plan: "Sélectionner le plan",
+        free_trial_badge: "✨ Essai gratuit de {days} jours",
+        plans: {
+            starter: {
+                name: "Débutant",
+                description: "Parfait pour les centres de tutorat et les petites écoles",
+                monthly_price: "$49",
+                annual_price: "$470",
+                features: [
+                    "3 Comptes Admin",
+                    "25 Comptes Enseignants",
+                    "250 Comptes Étudiants",
+                    "125 Comptes Parents"
+                ]
+            },
+            standard: {
+                name: "Standard",
+                description: "Parfait pour les institutions éducatives en croissance",
+                monthly_price: "$99",
+                annual_price: "$950",
+                features: [
+                    "10 Comptes Admin",
+                    "150 Comptes Enseignants",
+                    "1,500 Comptes Étudiants",
+                    "750 Comptes Parents"
+                ]
+            },
+            enterprise: {
+                name: "Entreprise",
+                description: "Pour les institutions de grande taille et à forte demande",
+                monthly_price: "$299",
+                annual_price: "$2,870",
+                features: [
+                    "Comptes Admin illimités",
+                    "Comptes Enseignants illimités",
+                    "Comptes Étudiants illimités",
+                    "Comptes Parents illimités"
+                ]
+            }
+        }
     }
 };

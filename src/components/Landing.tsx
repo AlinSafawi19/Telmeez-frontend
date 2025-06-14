@@ -1091,7 +1091,7 @@ const Landing: React.FC = () => {
 
             {/* Pricing Plans Section */}
             <div ref={pricingSectionRef} data-section="pricing">
-                <PricingPlans initialSelectedPlan={selectedPricingPlan} />
+                <PricingPlans initialSelectedPlan={selectedPricingPlan} language={currentLanguage} />
             </div>
 
             {/* About Section */}
