@@ -115,7 +115,7 @@ const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
                                                     transition={{ delay: index * 0.1 }}
                                                     className="flex items-center text-gray-600"
                                                 >
-                                                    <span className={`w-2 h-2 rounded-full mr-3 ${activeTab === 'student-management' ? 'bg-sky-500' :
+                                                    <span className={`w-2 h-2 rounded-full ${isRTL ? 'ml-3' : 'mr-3'} ${activeTab === 'student-management' ? 'bg-sky-500' :
                                                             activeTab === 'attendance' ? 'bg-emerald-500' :
                                                                 activeTab === 'grades' ? 'bg-violet-500' : 'bg-amber-500'
                                                         }`} />
