@@ -879,10 +879,10 @@ const Landing: React.FC = () => {
                 <div className="container mx-auto px-4 relative">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-16">
-                            <span className="inline-block px-4 py-2 rounded-full bg-yellow-100 text-yellow-600 text-sm font-semibold mb-4 animate-fadeInUp">Grade Management</span>
-                            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">Comprehensive Grading System</h2>
+                            <span className="inline-block px-4 py-2 rounded-full bg-yellow-100 text-yellow-600 text-sm font-semibold mb-4 animate-fadeInUp">{t.features.grade_management.grade_management}</span>
+                            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">{t.features.grade_management.title}</h2>
                             <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fadeInUp delay-200">
-                                Streamline and track student grades with our comprehensive grading system.
+                                {t.features.grade_management.subtitle}
                             </p>
                         </div>
                         <div className="grid md:grid-cols-2 gap-8">
@@ -893,29 +893,29 @@ const Landing: React.FC = () => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
                                     </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">Grade Entry</h3>
+                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.grade_management.grade_entry.grade_entry}</h3>
                                 </div>
                                 <p className="text-gray-600 mb-6">
-                                    Easy-to-use interface for grade management and entry with multiple grading scales support.
+                                    {t.features.grade_management.grade_entry.description}
                                 </p>
                                 <ul className="space-y-3">
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Multiple Grading Scales
+                                        {t.features.grade_management.grade_entry.tick1}
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Bulk Grade Entry
+                                        {t.features.grade_management.grade_entry.tick2}
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Grade History Tracking
+                                        {t.features.grade_management.grade_entry.tick3}
                                     </li>
                                 </ul>
                                 <div className="mt-6 pt-6 border-t border-gray-100">
@@ -924,7 +924,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsGradeEntryModalOpen(true)}
                                         className="text-indigo-600 font-semibold hover:text-indigo-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
-                                        Learn More
+                                        {t.features.learn_more}
                                         <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
@@ -938,17 +938,17 @@ const Landing: React.FC = () => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                         </svg>
                                     </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">Progress Tracking</h3>
+                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.grade_management.progress_tracking.progress_tracking}</h3>
                                 </div>
                                 <p className="text-gray-600 mb-6">
-                                    Monitor student progress over time with visual analytics and detailed performance reports.
+                                    {t.features.grade_management.progress_tracking.description}
                                 </p>
                                 <ul className="space-y-3">
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
-                                        Visual Analytics
+                                        {t.features.grade_management.progress_tracking.tick1}
                                     </li>
                                     <li className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

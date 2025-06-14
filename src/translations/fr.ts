@@ -138,6 +138,25 @@ export const fr = {
                 tick3: "Rapports Programmés"
             }
         },
+        grade_management: {
+            grade_management: "Gestion des Notes",
+            title: "Système Complet de Notation",
+            subtitle: "Rationalisez et suivez les notes des étudiants avec notre système complet de notation.",
+            grade_entry: {
+                grade_entry: "Saisie des Notes",
+                description: "Interface facile à utiliser pour la gestion et la saisie des notes avec support de plusieurs échelles de notation.",
+                tick1: "Échelles de Notation Multiples",
+                tick2: "Saisie en Masse des Notes",
+                tick3: "Suivi de l'Historique des Notes"
+            },
+            progress_tracking: {
+                progress_tracking: "Suivi des Progrès",
+                description: "Surveillez les progrès des étudiants dans le temps avec des analyses visuelles et des rapports de performance détaillés.",
+                tick1: "Analyses Visuelles",
+                tick2: "Rapports de Performance",
+                tick3: "Analyse des Tendances"
+            }
+        },
         learn_more: "En Savoir Plus"
     }
 };

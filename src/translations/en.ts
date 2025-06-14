@@ -138,6 +138,25 @@ export const en = {
                 tick3: "Scheduled Reports"
             }
         },
+        grade_management: {
+            grade_management: "Grade Management",
+            title: "Comprehensive Grading System",
+            subtitle: "Streamline and track student grades with our comprehensive grading system.",
+            grade_entry: {
+                grade_entry: "Grade Entry",
+                description: "Easy-to-use interface for grade management and entry with multiple grading scales support.",
+                tick1: "Multiple Grading Scales",
+                tick2: "Bulk Grade Entry",
+                tick3: "Grade History Tracking"
+            },
+            progress_tracking: {
+                progress_tracking: "Progress Tracking",
+                description: "Monitor student progress over time with visual analytics and detailed performance reports.",
+                tick1: "Visual Analytics",
+                tick2: "Performance Reports",
+                tick3: "Trend Analysis"
+            }
+        },
         learn_more: "Learn More"
     }
 }; 
