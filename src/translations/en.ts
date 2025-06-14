@@ -255,5 +255,52 @@ export const en = {
                 description: "Revolutionary educational management platform set to launch soon, poised to change how institutions approach administrative process management and enhance learning outcomes."
             }
         }
+    },
+    demo: {
+        title: "Discover Telmeez",
+        subtitle: "Find out about the future of education management with our",
+        features: {
+            student_management: {
+                title: "Student Management",
+                description: "Comprehensive student information management, enrollment, and records management features.",
+                features: [
+                    "Student profile management",
+                    "Enrollment processing",
+                    "Document management",
+                    "Academic history tracking"
+                ]
+            },
+            attendance: {
+                title: "Attendance System",
+                description: "Efficient attendance monitoring with real-time tracking and reporting.",
+                features: [
+                    "Real-time attendance monitoring",
+                    "Automated notifications",
+                    "Attendance analysis",
+                    "Custom attendance rules"
+                ]
+            },
+            grades: {
+                title: "Grade Management",
+                description: "Streamlined grade entry, calculation, and reporting system.",
+                features: [
+                    "Automated grade calculation",
+                    "Custom grading systems",
+                    "Progress monitoring",
+                    "Report card printing"
+                ]
+            },
+            communication: {
+                title: "Communication Tools",
+                description: "Integrated messaging and announcement system for streamlined communication.",
+                features: [
+                    "Real-time messaging",
+                    "Broadcasting announcements",
+                    "Parent-teacher communication",
+                    "Group messaging"
+                ]
+            }
+        },
+        coming_soon: "Interactive demo coming soon"
     }
 }; 

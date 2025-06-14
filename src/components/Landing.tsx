@@ -1101,7 +1101,7 @@ const Landing: React.FC = () => {
 
             {/* Demo Section */}
             <div ref={demoSectionRef}>
-                <Demo />
+                <Demo language={currentLanguage} />
             </div>
 
             {/* FAQ Section */}

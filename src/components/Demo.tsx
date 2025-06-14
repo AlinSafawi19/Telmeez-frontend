@@ -1,62 +1,50 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { translations } from '../translations';
+import type { Language } from '../translations';
 
-const Demo: React.FC = () => {
+interface DemoProps {
+    language?: Language;
+}
+
+const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
     const [activeTab, setActiveTab] = useState('student-management');
+    const t = translations[language].demo;
+    const isRTL = language === 'ar';
 
     const demoFeatures = {
         'student-management': {
-            title: 'Student Management',
-            description: 'Comprehensive student information management, enrollment, and records management features.',
-            features: [
-                'Student profile management',
-                'Enrollment processing',
-                'Document management',
-                'Academic history tracking'
-            ],
+            title: t.features.student_management.title,
+            description: t.features.student_management.description,
+            features: t.features.student_management.features,
             icon: '👥',
             color: 'from-sky-400 to-blue-500'
         },
         'attendance': {
-            title: 'Attendance System',
-            description: 'Efficient attendance monitoring with real-time tracking and reporting.',
-            features: [
-                'Real-time attendance monitoring',
-                'Automated notifications',
-                'Attendance analysis',
-                'Custom attendance rules'
-            ],
+            title: t.features.attendance.title,
+            description: t.features.attendance.description,
+            features: t.features.attendance.features,
             icon: '📊',
             color: 'from-emerald-400 to-green-500'
         },
         'grades': {
-            title: 'Grade Management',
-            description: 'Streamlined grade entry, calculation, and reporting system.',
-            features: [
-                'Automated grade calculation',
-                'Custom grading systems',
-                'Progress monitoring',
-                'Report card printing'
-            ],
+            title: t.features.grades.title,
+            description: t.features.grades.description,
+            features: t.features.grades.features,
             icon: '📝',
             color: 'from-violet-400 to-purple-500'
         },
         'communication': {
-            title: 'Communication Tools',
-            description: 'Integrated messaging and announcement system for streamlined communication.',
-            features: [
-                'Real-time messaging',
-                'Broadcasting announcements',
-                'Parent-teacher communication',
-                'Group messaging'
-            ],
+            title: t.features.communication.title,
+            description: t.features.communication.description,
+            features: t.features.communication.features,
             icon: '💬',
             color: 'from-amber-400 to-orange-500'
         }
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 py-20">
+        <div className="min-h-screen bg-gray-100 py-20" dir={isRTL ? 'rtl' : 'ltr'}>
             <div className="container mx-auto px-4">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -65,10 +53,10 @@ const Demo: React.FC = () => {
                     className="max-w-4xl mx-auto text-center mb-16"
                 >
                     <h2 className="text-4xl font-bold text-gray-800 mb-6">
-                        Discover Telmeez
+                        {t.title}
                     </h2>
                     <p className="text-lg text-gray-600 leading-relaxed">
-                        Find out about the future of education management with our
+                        {t.subtitle}
                     </p>
                 </motion.div>
 
@@ -143,7 +131,7 @@ const Demo: React.FC = () => {
                                             {demoFeatures[activeTab as keyof typeof demoFeatures].icon}
                                         </div>
                                         <p className="text-base font-light">
-                                            Interactive demo coming soon
+                                            {t.coming_soon}
                                         </p>
                                     </div>
                                 </div>

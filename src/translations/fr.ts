@@ -255,5 +255,52 @@ export const fr = {
                 description: "Plateforme révolutionnaire de gestion éducative sur le point d'être lancée, prête à changer la façon dont les institutions abordent la gestion des processus administratifs et améliorent les résultats d'apprentissage."
             }
         }
+    },
+    demo: {
+        title: "Découvrez Telmeez",
+        subtitle: "Découvrez l'avenir de la gestion de l'éducation avec notre",
+        features: {
+            student_management: {
+                title: "Gestion des Étudiants",
+                description: "Fonctionnalités complètes de gestion des informations des étudiants, d'inscription et de gestion des dossiers.",
+                features: [
+                    "Gestion des profils étudiants",
+                    "Traitement des inscriptions",
+                    "Gestion des documents",
+                    "Suivi de l'historique académique"
+                ]
+            },
+            attendance: {
+                title: "Système de Présence",
+                description: "Surveillance efficace des présences avec suivi en temps réel et rapports.",
+                features: [
+                    "Surveillance des présences en temps réel",
+                    "Notifications automatisées",
+                    "Analyse des présences",
+                    "Règles de présence personnalisées"
+                ]
+            },
+            grades: {
+                title: "Gestion des Notes",
+                description: "Système simplifié de saisie, de calcul et de rapports des notes.",
+                features: [
+                    "Calcul automatique des notes",
+                    "Systèmes de notation personnalisés",
+                    "Suivi des progrès",
+                    "Impression des bulletins"
+                ]
+            },
+            communication: {
+                title: "Outils de Communication",
+                description: "Système intégré de messagerie et d'annonces pour une communication simplifiée.",
+                features: [
+                    "Messagerie instantanée",
+                    "Diffusion d'annonces",
+                    "Communication parents-enseignants",
+                    "Conversations de groupe"
+                ]
+            }
+        },
+        coming_soon: "Démo interactive bientôt disponible"
     }
 };
