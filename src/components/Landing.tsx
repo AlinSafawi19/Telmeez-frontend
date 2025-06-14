@@ -7,6 +7,7 @@ import PricingPlans from './PricingPlans';
 import About from './About';
 import Demo from './Demo';
 import FAQ from './FAQ';
+import type { Language } from '../translations';
 
 const Landing: React.FC = () => {
     const navigate = useNavigate();
@@ -38,7 +39,7 @@ const Landing: React.FC = () => {
     const [unsubscribeEmail, setUnsubscribeEmail] = useState('');
     const [isScrolling, setIsScrolling] = useState(false);
     const [showBackToTop, setShowBackToTop] = useState(false);
-    const [currentLanguage, setCurrentLanguage] = useState('en');
+    const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
     const languageDropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -58,7 +59,7 @@ const Landing: React.FC = () => {
         { code: 'fr', label: 'Français' }
     ];
 
-    const handleLanguageChange = (langCode: string) => {
+    const handleLanguageChange = (langCode: Language) => {
         setCurrentLanguage(langCode);
         // Here you would typically also update the document direction for RTL languages
         if (langCode === 'ar') {
@@ -455,7 +456,7 @@ const Landing: React.FC = () => {
                                         <button
                                             key={lang.code}
                                             onClick={() => {
-                                                handleLanguageChange(lang.code);
+                                                handleLanguageChange(lang.code as Language);
                                                 setActiveDropdown(null);
                                             }}
                                             className={`flex items-center w-full text-left px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none ${currentLanguage === lang.code ? 'bg-blue-50 text-blue-600' : 'bg-transparent'}`}
@@ -1098,7 +1099,7 @@ const Landing: React.FC = () => {
 
             {/* FAQ Section */}
             <div ref={faqSectionRef}>
-                <FAQ />
+                <FAQ language={currentLanguage} />
             </div>
 
             {/* CTA Section */}
@@ -1257,7 +1258,7 @@ const Landing: React.FC = () => {
                                 {languages.map((lang) => (
                                     <button
                                         key={lang.code}
-                                        onClick={() => handleLanguageChange(lang.code)}
+                                        onClick={() => handleLanguageChange(lang.code as Language)}
                                         className={`flex items-center justify-center space-x-2 px-3 py-1.5 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none ${currentLanguage === lang.code
                                             ? 'bg-blue-600 text-white shadow-lg'
                                             : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
