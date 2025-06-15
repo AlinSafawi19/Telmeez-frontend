@@ -30,7 +30,11 @@ const Landing: React.FC = () => {
     // Add newsletter form states
     const [subscribeEmail, setSubscribeEmail] = useState('');
     const [isUnsubscribeModalOpen, setIsUnsubscribeModalOpen] = useState(false);
-    const [unsubscribeEmail, setUnsubscribeEmail] = useState('');
+    const [unsubscribeEmail, setUnsubscribeEmail] = useState(() => {
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+        return hasConsent ? localStorage.getItem('newsletterEmail') || '' : '';
+    });
     const [isScrolling, setIsScrolling] = useState(false);
     const [showBackToTop, setShowBackToTop] = useState(false);
     const languageDropdownRef = useRef<HTMLDivElement>(null);
@@ -257,16 +261,17 @@ const Landing: React.FC = () => {
             // Here you would typically make an API call to your backend
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            // Store newsletter subscription status as a necessary cookie
+            // Store newsletter subscription status and email as necessary cookies
             const cookieConsent = localStorage.getItem('cookieConsent');
             const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
 
             if (hasConsent) {
                 localStorage.setItem('newsletterSubscribed', 'true');
+                localStorage.setItem('newsletterEmail', subscribeEmail);
                 setIsScrolling(true);
                 setTimeout(() => { setIsScrolling(false); setIsNewsletterSubscribed(true); }, 1000);
             }
-
+            setUnsubscribeEmail(subscribeEmail);
             setSubscribeEmail('');
         } catch (error) {
         } finally {
@@ -282,12 +287,13 @@ const Landing: React.FC = () => {
             // Here you would typically make an API call to your backend
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            // Remove newsletter subscription status
+            // Remove newsletter subscription status and email
             const cookieConsent = localStorage.getItem('cookieConsent');
             const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
 
             if (hasConsent) {
                 localStorage.removeItem('newsletterSubscribed');
+                localStorage.removeItem('newsletterEmail');
                 setIsNewsletterSubscribed(false);
             }
 
@@ -1040,7 +1046,11 @@ const Landing: React.FC = () => {
 
                             <p className="mt-4 text-sm text-gray-500">
                                 {translations[currentLanguage].newsletter.privacy_message} <button
-                                    onClick={() => setIsUnsubscribeModalOpen(true)}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setIsUnsubscribeModalOpen(true);
+                                    }}
                                     className="font-medium text-indigo-600 hover:text-indigo-500 hover:underline focus:outline-none focus:underline transition-colors duration-200 border-0 bg-transparent p-0"
                                 >
                                     {translations[currentLanguage].newsletter.unsubscribe_button}
