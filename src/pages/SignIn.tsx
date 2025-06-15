@@ -13,6 +13,7 @@ const SignIn: React.FC = () => {
     const [password, setPassword] = useState('');
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
     const [isScrolling, setIsScrolling] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
     const navigate = useNavigate();
     const { currentLanguage, setCurrentLanguage } = useLanguage();
     const t = translations[currentLanguage];
@@ -29,6 +30,20 @@ const SignIn: React.FC = () => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
+    }, []);
+
+    // Load saved credentials if they exist and user has given consent
+    useEffect(() => {
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+
+        if (hasConsent) {
+            const savedEmail = localStorage.getItem('rememberedEmail');
+            if (savedEmail) {
+                setEmail(savedEmail);
+                setRememberMe(true);
+            }
+        }
     }, []);
 
     const languages = [
@@ -54,8 +69,15 @@ const SignIn: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Implement sign in logic
-        console.log('Sign in attempt with:', { email, password });
+        // Save email if remember me is checked and user has given consent
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+
+        if (rememberMe && hasConsent) {
+            localStorage.setItem('rememberedEmail', email);
+        } else if (!rememberMe) {
+            localStorage.removeItem('rememberedEmail');
+        }
     };
 
     const handleCreateAccount = () => {
@@ -181,6 +203,8 @@ const SignIn: React.FC = () => {
                                         name="remember-me"
                                         type="checkbox"
                                         className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                        checked={rememberMe}
+                                        onChange={(e) => setRememberMe(e.target.checked)}
                                     />
                                     <label htmlFor="remember-me" className={`${currentLanguage === 'ar' ? 'mr-2' : 'ml-2'} block text-sm text-gray-900`}>
                                         {t.header.remember_me}
