@@ -1,33 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useCookieConsent } from '../contexts/CookieConsentContext';
 import { translations } from '../translations';
-
-interface CookiePreferences {
-    necessary: boolean;
-    analytics: boolean;
-    marketing: boolean;
-}
 
 const CookieBanner: React.FC = () => {
     const { currentLanguage } = useLanguage();
+    const { preferences, updatePreferences, hasUserConsent } = useCookieConsent();
     const t = translations[currentLanguage].cookie_banner;
-    
+
     const [showBanner, setShowBanner] = useState(false);
     const [showCustomize, setShowCustomize] = useState(false);
-    const [preferences, setPreferences] = useState<CookiePreferences>({
-        necessary: true,
-        analytics: false,
-        marketing: false
-    });
+    const [localPreferences, setLocalPreferences] = useState(preferences);
     const [showSavedMessage, setShowSavedMessage] = useState(false);
 
     useEffect(() => {
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        if (!cookieConsent) {
+        if (!hasUserConsent) {
             setShowBanner(true);
         }
-    }, []);
+    }, [hasUserConsent]);
 
     const handleAcceptAll = () => {
         const allAccepted = {
@@ -35,8 +26,8 @@ const CookieBanner: React.FC = () => {
             analytics: true,
             marketing: true
         };
-        setPreferences(allAccepted);
-        savePreferences(allAccepted);
+        setLocalPreferences(allAccepted);
+        updatePreferences(allAccepted);
         setShowBanner(false);
     };
 
@@ -46,8 +37,8 @@ const CookieBanner: React.FC = () => {
             analytics: false,
             marketing: false
         };
-        setPreferences(allRejected);
-        savePreferences(allRejected);
+        setLocalPreferences(allRejected);
+        updatePreferences(allRejected);
         setShowBanner(false);
     };
 
@@ -55,22 +46,18 @@ const CookieBanner: React.FC = () => {
         setShowCustomize(true);
     };
 
-    const handlePreferenceChange = (type: keyof CookiePreferences) => {
+    const handlePreferenceChange = (type: keyof typeof preferences) => {
         if (type === 'necessary') return; // Cannot change necessary cookies
-        setPreferences(prev => ({
+        setLocalPreferences(prev => ({
             ...prev,
             [type]: !prev[type]
         }));
     };
 
-    const savePreferences = (prefs: CookiePreferences) => {
-        localStorage.setItem('cookieConsent', JSON.stringify(prefs));
+    const handleSavePreferences = () => {
+        updatePreferences(localPreferences);
         setShowSavedMessage(true);
         setTimeout(() => setShowSavedMessage(false), 3000);
-    };
-
-    const handleSavePreferences = () => {
-        savePreferences(preferences);
         setShowBanner(false);
     };
 
@@ -88,7 +75,13 @@ const CookieBanner: React.FC = () => {
                 >
                     <div className="container mx-auto max-w-5xl">
                         {!showCustomize ? (
-                            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 20 }}
+                                transition={{ duration: 0.3 }}
+                                className="flex flex-col md:flex-row items-center justify-between gap-6"
+                            >
                                 <div className="flex-1 space-y-3">
                                     <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                                         {t.title}
@@ -115,10 +108,26 @@ const CookieBanner: React.FC = () => {
                                         {t.customize}
                                     </button>
                                 </div>
-                            </div>
+                            </motion.div>
                         ) : (
-                            <div className="space-y-6">
-                                <div className="flex justify-between items-center">
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.98, y: 10 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.98, y: 10 }}
+                                transition={{
+                                    type: "spring",
+                                    stiffness: 300,
+                                    damping: 30,
+                                    mass: 1
+                                }}
+                                className="space-y-6"
+                            >
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.1 }}
+                                    className="flex justify-between items-center"
+                                >
                                     <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                                         {t.title}
                                     </h3>
@@ -131,13 +140,18 @@ const CookieBanner: React.FC = () => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                     </button>
-                                </div>
-                                <div className="space-y-4 bg-gray-50 dark:bg-gray-800/50 p-6 rounded-xl">
+                                </motion.div>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="space-y-4 bg-gray-50 dark:bg-gray-800/50 p-6 rounded-xl"
+                                >
                                     <div className="flex items-start space-x-4 rtl:space-x-reverse">
                                         <div className="flex items-center h-5">
                                             <input
                                                 type="checkbox"
-                                                checked={preferences.necessary}
+                                                checked={localPreferences.necessary}
                                                 disabled
                                                 className="h-5 w-5 text-indigo-600 border-gray-300 dark:border-gray-600 rounded focus:ring-indigo-500 bg-white dark:bg-gray-700"
                                                 aria-label="Necessary cookies"
@@ -152,7 +166,7 @@ const CookieBanner: React.FC = () => {
                                         <div className="flex items-center h-5">
                                             <input
                                                 type="checkbox"
-                                                checked={preferences.analytics}
+                                                checked={localPreferences.analytics}
                                                 onChange={() => handlePreferenceChange('analytics')}
                                                 className="h-5 w-5 text-indigo-600 border-gray-300 dark:border-gray-600 rounded focus:ring-indigo-500 bg-white dark:bg-gray-700"
                                                 aria-label="Analytics cookies"
@@ -167,7 +181,7 @@ const CookieBanner: React.FC = () => {
                                         <div className="flex items-center h-5">
                                             <input
                                                 type="checkbox"
-                                                checked={preferences.marketing}
+                                                checked={localPreferences.marketing}
                                                 onChange={() => handlePreferenceChange('marketing')}
                                                 className="h-5 w-5 text-indigo-600 border-gray-300 dark:border-gray-600 rounded focus:ring-indigo-500 bg-white dark:bg-gray-700"
                                                 aria-label="Marketing cookies"
@@ -178,7 +192,7 @@ const CookieBanner: React.FC = () => {
                                             <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">{t.marketing_desc}</p>
                                         </div>
                                     </div>
-                                </div>
+                                </motion.div>
                                 <div className="flex justify-end">
                                     <button
                                         onClick={handleSavePreferences}
@@ -187,7 +201,7 @@ const CookieBanner: React.FC = () => {
                                         {t.save_preferences}
                                     </button>
                                 </div>
-                            </div>
+                            </motion.div>
                         )}
                     </div>
                     <AnimatePresence>
