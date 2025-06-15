@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import logo from '../assets/images/logo.png';
 import logo2 from '../assets/images/logo2.png';
+import logoarb from '../assets/images/logo_arb.png';
+import logo2arb from '../assets/images/logo2_arb.png';
 import PricingPlans from './PricingPlans';
 import About from './About';
 import Demo from './Demo';
@@ -293,7 +295,7 @@ const Landing: React.FC = () => {
                                 e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); setIsScrolling(true);
                                 setTimeout(() => setIsScrolling(false), 1000);
                             }} className="transition-transform hover:scale-105">
-                                <img src={logo} alt="Telmeez Logo" className="h-20 w-20" />
+                                <img src={currentLanguage === 'ar' ? logoarb : logo} alt="Telmeez Logo" className="h-20 w-20" />
                             </a>
                         </div>
                         <nav className={`hidden md:flex ${currentLanguage === 'ar' ? 'space-x-reverse space-x-8' : 'space-x-8'}`}>
@@ -1010,7 +1012,7 @@ const Landing: React.FC = () => {
                                 e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); setIsScrolling(true);
                                 setTimeout(() => setIsScrolling(false), 1000);
                             }} className="inline-block transition-transform hover:scale-105">
-                                <img src={logo2} alt="Telmeez Logo" className="h-16 w-16 mb-4" />
+                                <img src={currentLanguage === 'ar' ? logo2arb : logo2} alt="Telmeez Logo" className="h-16 w-16 mb-4" />
                             </a>
                             <p className="text-gray-400">
                                 {translations[currentLanguage].footer.text}

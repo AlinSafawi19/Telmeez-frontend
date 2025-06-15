@@ -6,6 +6,7 @@ import type { Language } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
 import logo from '../assets/images/logo.png';
 import forgetpasssvvg from '../assets/images/forgotpass-illustration.svg';
+import logoarb from '../assets/images/logo_arb.png';
 
 const ForgotPassword: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -65,7 +66,7 @@ const ForgotPassword: React.FC = () => {
                 <div className="max-w-md mx-auto w-full">
                     <div className="flex items-center justify-between mb-8">
                         <img
-                            src={logo}
+                            src={currentLanguage === 'ar' ? logoarb : logo}
                             alt="Company Logo"
                             className="h-16 w-auto transition-transform"
                         />

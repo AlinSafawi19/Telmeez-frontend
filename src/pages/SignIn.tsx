@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { translations } from '../translations';
 import type { Language } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
+import logoarb from '../assets/images/logo_arb.png';
 
 const SignIn: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -76,7 +77,7 @@ const SignIn: React.FC = () => {
                     <div className="max-w-md w-full space-y-8">
                         <div className="flex items-center justify-between mb-8">
                             <img
-                                src={logo}
+                                src={currentLanguage === 'ar' ? logoarb : logo}
                                 alt="Company Logo"
                                 className="h-16 w-auto transition-transform"
                             />
