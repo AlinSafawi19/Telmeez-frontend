@@ -33,6 +33,7 @@ const Landing: React.FC = () => {
     const languageDropdownRef = useRef<HTMLDivElement>(null);
     const { currentLanguage, setCurrentLanguage } = useLanguage();
     const t = translations[currentLanguage];
+    const [testimonials] = useState<any[]>([]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -623,6 +624,233 @@ const Landing: React.FC = () => {
                 </div>
             </div>
 
+            {/* Testimonials Section */}
+            <div className="py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+                {/* Enhanced decorative elements */}
+                <div className="absolute top-0 left-0 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+                <div className="absolute top-0 right-0 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+                <div className="absolute -bottom-8 left-20 w-96 h-96 bg-pink-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+
+                <div className="container mx-auto px-4 relative">
+                    <div className="text-center mb-16">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            viewport={{ once: true }}
+                        >
+                            <h2 className="text-5xl font-bold text-gray-900 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+                                {testimonials.length > 0 ? 'Success Stories' : 'Be Our First Success Story'}
+                            </h2>
+                            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                                {testimonials.length > 0
+                                    ? 'Discover how educational institutions are transforming their communication with Telmeez'
+                                    : 'Join the growing community of educational institutions revolutionizing their communication'}
+                            </p>
+                        </motion.div>
+                    </div>
+
+                    {testimonials.length >= 3 ? (
+                        <div className="grid md:grid-cols-3 gap-8">
+                            {testimonials.slice(-3).map((testimonial, index) => (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                    viewport={{ once: true }}
+                                    whileHover={{ scale: 1.02 }}
+                                    className="group bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-gray-100 transform transition-all duration-300 hover:shadow-2xl relative overflow-hidden"
+                                >
+                                    <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    <div className="relative">
+                                        <div className="flex items-center mb-6">
+                                            <div className="relative">
+                                                <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                                                    {testimonial.initials || 'AK'}
+                                                </div>
+                                            </div>
+                                            <div className="ml-4">
+                                                <h4 className="text-lg font-semibold text-gray-900">{testimonial.name || 'Dr. Aisha Khan'}</h4>
+                                                <p className="text-gray-600">{testimonial.position || 'Dean of International Relations'}</p>
+                                                <p className="text-sm text-blue-600 font-medium">{testimonial.institution || 'Dubai International University'}</p>
+                                            </div>
+                                        </div>
+                                        <div className="relative">
+                                            <svg className="absolute -top-4 -left-4 w-8 h-8 text-blue-200 transform group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 32 32">
+                                                <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
+                                            </svg>
+                                            <p className="text-gray-600 italic mb-4 pl-4 group-hover:text-gray-900 transition-colors duration-300">
+                                                {testimonial.quote || "Telmeez has been a game-changer for our international student body. The multilingual support and cultural sensitivity features have helped us bridge communication gaps across 45+ countries."}
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex text-yellow-400">
+                                                {[...Array(5)].map((_, i) => (
+                                                    <svg key={i} className="w-5 h-5 transform group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                    </svg>
+                                                ))}
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-sm text-gray-500">{testimonial.date || '2 months ago'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    ) : (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            viewport={{ once: true }}
+                            className="max-w-6xl mx-auto"
+                        >
+                            <div className="grid md:grid-cols-2 gap-8 items-center">
+                                {/* Left side - Main content */}
+                                <div className="space-y-6">
+                                    <div className="inline-block">
+                                        <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                                            <span className="mr-2">✨</span>
+                                            Be Among Our First 3 Pioneers
+                                        </span>
+                                    </div>
+                                    <h3 className="text-3xl font-bold text-gray-900 leading-tight">
+                                        Join Our Elite Group of First 3 Educational Institutions
+                                    </h3>
+                                    <p className="text-lg text-gray-600">
+                                        We're selecting only 3 pioneering institutions to join us in revolutionizing educational communication. Your journey to becoming a digital leader starts here.
+                                    </p>
+                                    <div className="flex flex-col space-y-4">
+                                        <div className="flex items-start space-x-4">
+                                            <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                                <span className="text-2xl">🎯</span>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold text-gray-900">Early Access Benefits</h4>
+                                                <ul className="text-gray-600 space-y-2 mt-2">
+                                                    <li className="flex items-center">
+                                                        <svg className="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                        Lifetime 20% discount on all plans
+                                                    </li>
+                                                    <li className="flex items-center">
+                                                        <svg className="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                        Early access to new features and beta testing
+                                                    </li>
+                                                    <li className="flex items-center">
+                                                        <svg className="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                        Custom onboarding and training sessions
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start space-x-4">
+                                            <div className="flex-shrink-0 w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                                <span className="text-2xl">💡</span>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold text-gray-900">Shape the Future</h4>
+                                                <p className="text-gray-600">Your feedback directly influences our platform's development</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start space-x-4">
+                                            <div className="flex-shrink-0 w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center">
+                                                <span className="text-2xl">🌟</span>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold text-gray-900">Recognition</h4>
+                                                <p className="text-gray-600">Be featured as a founding partner in our success story</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="pt-4">
+                                        <button
+                                            onClick={() => {
+                                                pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                                setIsScrolling(true);
+                                                setTimeout(() => setIsScrolling(false), 1000);
+                                            }}
+                                            className="inline-flex items-center px-6 py-3 rounded-lg text-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                        >
+                                            Start Your Journey
+                                            <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Right side - Visual elements */}
+                                <div className="relative">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-2xl transform rotate-3"></div>
+                                    <div className="relative bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
+                                        <div className="space-y-6">
+                                            <div className="flex items-center space-x-4">
+                                                <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                                                    1
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-semibold text-gray-900">Join as Early Adopter</h4>
+                                                    <p className="text-sm text-gray-600">Get started with our platform today</p>
+                                                </div>
+                                            </div>
+                                            <div className="h-8 w-0.5 bg-gradient-to-b from-blue-400 to-purple-400 mx-6"></div>
+                                            <div className="flex items-center space-x-4">
+                                                <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                                                    2
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-semibold text-gray-900">Shape the Platform</h4>
+                                                    <p className="text-sm text-gray-600">Provide feedback and influence development</p>
+                                                </div>
+                                            </div>
+                                            <div className="h-8 w-0.5 bg-gradient-to-b from-purple-400 to-pink-400 mx-6"></div>
+                                            <div className="flex items-center space-x-4">
+                                                <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                                                    3
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-semibold text-gray-900">Become a Success Story</h4>
+                                                    <p className="text-sm text-gray-600">Share your experience with others</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="mt-8 pt-6 border-t border-gray-100">
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex -space-x-2">
+                                                    {[...Array(3)].map((_, i) => (
+                                                        <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-white font-bold text-sm">
+                                                            {String.fromCharCode(65 + i)}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                                <div className="mt-4 text-center">
+                                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                                        <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                        Limited Time Offer - Join Our Pioneer Program
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </div>
+            </div>
+
             {/* Pricing Plans Section */}
             <div ref={pricingSectionRef} data-section="pricing">
                 <PricingPlans initialSelectedPlan={selectedPricingPlan} language={currentLanguage} />
@@ -851,7 +1079,7 @@ const Landing: React.FC = () => {
                             <form onSubmit={handleUnsubscribe}>
                                 <div className="mb-4">
                                     <label htmlFor="unsubscribe-email" className="block text-sm font-medium text-gray-700 mb-2">
-                                    {translations[currentLanguage].newsletter.email_placeholder}
+                                        {translations[currentLanguage].newsletter.email_placeholder}
                                     </label>
                                     <input
                                         type="email"
@@ -959,6 +1187,29 @@ const Landing: React.FC = () => {
                 }
                 .animate-slideDown {
                     animation: slideDown 0.6s ease-out forwards;
+                }
+                @keyframes blob {
+                    0% {
+                        transform: translate(0px, 0px) scale(1);
+                    }
+                    33% {
+                        transform: translate(30px, -50px) scale(1.1);
+                    }
+                    66% {
+                        transform: translate(-20px, 20px) scale(0.9);
+                    }
+                    100% {
+                        transform: translate(0px, 0px) scale(1);
+                    }
+                }
+                .animate-blob {
+                    animation: blob 7s infinite;
+                }
+                .animation-delay-2000 {
+                    animation-delay: 2s;
+                }
+                .animation-delay-4000 {
+                    animation-delay: 4s;
                 }
             `}</style>
         </div>
