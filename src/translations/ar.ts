@@ -191,8 +191,11 @@ export const ar = {
         subscribe_button: "اشترك",
         unsubscribe_button: "إلغاء الاشتراك",
         privacy_message: "نحن نحترم خصوصيتك. يمكنك",
-        unsubscribe_anytime: "في أي وقت."
+        unsubscribe_anytime: "في أي وقت.",
+        unsubscribe_title: "إلغاء الاشتراك من النشرة الإخبارية",
+        unsubscribe_placeholder: "أدخل عنوان بريدك الإلكتروني لإلغاء الاشتراك"
     },
+    cancel: "إلغاء",
     footer: {
         text: "تمكين المؤسسات التعليمية من خلال حلول مبتكرة.",
         quick_links: {

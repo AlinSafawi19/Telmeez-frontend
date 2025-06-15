@@ -191,8 +191,11 @@ export const fr = {
         subscribe_button: "S'abonner",
         unsubscribe_button: "Se désabonner",
         privacy_message: "Nous respectons votre vie privée. Vous pouvez vous",
-        unsubscribe_anytime: "à tout moment."
+        unsubscribe_anytime: "à tout moment.",
+        unsubscribe_title: "Se désabonner de la Newsletter",
+        unsubscribe_placeholder: "Entrez votre adresse e-mail pour vous désabonner"
     },
+    cancel: "Annuler",
     footer: {
         text: "Renforcer les institutions éducatives grâce à des solutions innovantes.",
         quick_links: {

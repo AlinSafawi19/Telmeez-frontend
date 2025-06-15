@@ -635,7 +635,7 @@ const Landing: React.FC = () => {
 
             {/* Demo Section */}
             <div ref={demoSectionRef}>
-                <Demo language={currentLanguage}/>
+                <Demo language={currentLanguage} />
             </div>
 
             {/* FAQ Section */}
@@ -688,7 +688,7 @@ const Landing: React.FC = () => {
                                 />
                                 <button
                                     type="submit"
-                                    className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="bg-blue-600 text-white px-6 py-3 rounded-lg focus:outline-none font-semibold hover:bg-blue-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {translations[currentLanguage].newsletter.subscribe_button}
                                 </button>
@@ -835,7 +835,7 @@ const Landing: React.FC = () => {
                             className="bg-white rounded-lg p-8 max-w-md w-full mx-4"
                         >
                             <div className="flex justify-between items-center mb-6">
-                                <h3 className="text-xl font-semibold text-gray-900">Unsubscribe from Newsletter</h3>
+                                <h3 className="text-xl font-semibold text-gray-900">{translations[currentLanguage].newsletter.unsubscribe_title}</h3>
                                 <button
                                     type="button"
                                     onClick={() => setIsUnsubscribeModalOpen(false)}
@@ -851,7 +851,7 @@ const Landing: React.FC = () => {
                             <form onSubmit={handleUnsubscribe}>
                                 <div className="mb-4">
                                     <label htmlFor="unsubscribe-email" className="block text-sm font-medium text-gray-700 mb-2">
-                                        Enter your email address to unsubscribe
+                                    {translations[currentLanguage].newsletter.email_placeholder}
                                     </label>
                                     <input
                                         type="email"
@@ -868,13 +868,13 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsUnsubscribeModalOpen(false)}
                                         className="px-4 py-2 focus:outline-none text-gray-700 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        Cancel
+                                        {translations[currentLanguage].cancel}
                                     </button>
                                     <button
                                         type="submit"
                                         className="px-4 py-2 focus:outline-none bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        Unsubscribe
+                                        {translations[currentLanguage].newsletter.unsubscribe_button}
                                     </button>
                                 </div>
                             </form>

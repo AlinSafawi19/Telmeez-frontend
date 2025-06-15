@@ -191,8 +191,11 @@ export const en = {
         subscribe_button: "Subscribe",
         unsubscribe_button: "Unsubscribe",
         privacy_message: "We value your privacy. You can",
-        unsubscribe_anytime: "anytime."
+        unsubscribe_anytime: "anytime.",
+        unsubscribe_title: "Unsubscribe from Newsletter",
+        unsubscribe_placeholder: "Enter your email address to unsubscribe",
     },
+    cancel: "Cancel",
     footer: {
         text: "Empowering educational institutions through creative solutions.",
         quick_links: {
