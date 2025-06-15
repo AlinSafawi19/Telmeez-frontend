@@ -22,8 +22,8 @@ function App() {
   }, []);*/
 
   return (
-    <LanguageProvider>
-      <CookieConsentProvider>
+    <CookieConsentProvider>
+      <LanguageProvider>
         <Router>
           {/* <div className="text-xl font-medium text-green-600">
             API says: {apiMessage}
@@ -39,8 +39,8 @@ function App() {
             <Route path="/demo-dashboard/parent" element={<ParentDashboard />} />
           </Routes>
         </Router>
-      </CookieConsentProvider>
-    </LanguageProvider>
+      </LanguageProvider>
+    </CookieConsentProvider>
   );
 }
 

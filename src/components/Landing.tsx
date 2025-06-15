@@ -81,6 +81,24 @@ const Landing: React.FC = () => {
     useEffect(() => {
         setIsVisible(true);
         //localStorage.clear();
+        if (import.meta.env.DEV) {
+            const logKey = 'lastLocalStorageLog';
+            const lastLog = localStorage.getItem(logKey);
+            const now = Date.now();
+
+            // Only log if it's been more than 1 second since last log
+            if (!lastLog || (now - parseInt(lastLog)) > 1000) {
+                console.log('LocalStorage contents:', Object.entries(localStorage).reduce((obj, [key, value]) => {
+                    try {
+                        obj[key] = JSON.parse(value);
+                    } catch {
+                        obj[key] = value;
+                    }
+                    return obj;
+                }, {} as Record<string, any>));
+                localStorage.setItem(logKey, now.toString());
+            }
+        }
     }, []);
 
     // Add scroll detection
@@ -524,9 +542,9 @@ const Landing: React.FC = () => {
                                     </button>
                                 </div>
                                 <nav className="flex flex-col space-y-4">
-                                    <a href="#" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium">Home</a>
-                                    <div className="pl-4 border-l-2 border-gray-200">
-                                        <span className="text-gray-600 font-medium block mb-2">Features</span>
+                                    <a href="#" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium">{t.header.home}</a>
+                                    <div className={`${currentLanguage === 'ar' ? 'pr-4 border-r-2' : 'pl-4 border-l-2'} border-gray-200`}>
+                                        <span className="text-gray-600 font-medium block mb-2">{t.header.features.features}</span>
                                         {dropdownItems.features.map((/*item,*/ index) => (
                                             <a
                                                 key={index}
@@ -536,7 +554,7 @@ const Landing: React.FC = () => {
                                                     setIsScrolling(true);
                                                     setTimeout(() => setIsScrolling(false), 1000); setIsMobileMenuOpen(false);
                                                 }}
-                                                className="block pl-4 py-1 text-gray-500 hover:text-blue-600 transition-colors duration-200"
+                                                className={`block ${currentLanguage === 'ar' ? 'pr-4' : 'pl-4'} py-1 text-gray-500 hover:text-blue-600 transition-colors duration-200`}
                                             >
                                                 {/*item.label*/}
                                             </a>
@@ -553,10 +571,10 @@ const Landing: React.FC = () => {
                                         }}
                                         className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium"
                                     >
-                                        Pricing
+                                        {t.header.pricing.pricing}
                                     </a>
-                                    <div className="pl-4 border-l-2 border-gray-200">
-                                        <span className="text-gray-600 font-medium block mb-2">About</span>
+                                    <div className={`${currentLanguage === 'ar' ? 'pr-4 border-r-2' : 'pl-4 border-l-2'} border-gray-200`}>
+                                        <span className="text-gray-600 font-medium block mb-2">{t.header.about.about}</span>
                                         {dropdownItems.about.map((item, index) => (
                                             <a
                                                 key={index}
@@ -565,23 +583,23 @@ const Landing: React.FC = () => {
                                                     handleDropdownItemClick(e, item.label);
                                                     setIsMobileMenuOpen(false);
                                                 }}
-                                                className="block pl-4 py-1 text-gray-500 hover:text-blue-600 transition-colors duration-200"
+                                                className={`block ${currentLanguage === 'ar' ? 'pr-4' : 'pl-4'} py-1 text-gray-500 hover:text-blue-600 transition-colors duration-200`}
                                             >
                                                 {item.label}
                                             </a>
                                         ))}
                                     </div>
-                                    <div className="pl-4 border-l-2 border-gray-200">
-                                        <span className="text-gray-600 font-medium block mb-2">Resources</span>
+                                    <div className={`${currentLanguage === 'ar' ? 'pr-4 border-r-2' : 'pl-4 border-l-2'} border-gray-200`}>
+                                        <span className="text-gray-600 font-medium block mb-2">{t.header.resources.resources}</span>
                                         <ul className="space-y-2">
                                             <li><a href="#demo" onClick={(e) => {
                                                 e.preventDefault(); demoSectionRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
                                                 setTimeout(() => setIsScrolling(false), 1000); setIsMobileMenuOpen(false);
-                                            }} className="block pl-4 py-1 text-gray-500 hover:text-blue-600 transition-colors duration-300 font-medium">Demo</a></li>
+                                            }} className={`block ${currentLanguage === 'ar' ? 'pr-4' : 'pl-4'} py-1 text-gray-500 hover:text-blue-600 transition-colors duration-300 font-medium`}>{t.header.resources.demo}</a></li>
                                             <li><a href="#" onClick={(e) => {
                                                 e.preventDefault(); faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
                                                 setTimeout(() => setIsScrolling(false), 1000); setIsMobileMenuOpen(false);
-                                            }} className="block pl-4 py-1 text-gray-500 hover:text-blue-600 transition-colors duration-300 font-medium">FAQ</a></li>
+                                            }} className={`block ${currentLanguage === 'ar' ? 'pr-4' : 'pl-4'} py-1 text-gray-500 hover:text-blue-600 transition-colors duration-300 font-medium`}>{t.header.resources.faq}</a></li>
                                         </ul>
                                     </div>
                                 </nav>

@@ -16,8 +16,14 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     });
 
     useEffect(() => {
-        // Save language preference to localStorage
-        localStorage.setItem('language', currentLanguage);
+        // Check if user has given cookie consent
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+
+        // Only save language preference to localStorage if user has given consent
+        if (hasConsent) {
+            localStorage.setItem('language', currentLanguage);
+        }
         
         // Update document direction for RTL languages
         if (currentLanguage === 'ar') {

@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 
 interface CookiePreferences {
     necessary: boolean;
@@ -27,14 +28,24 @@ export const CookieConsentProvider: React.FC<{ children: ReactNode }> = ({ child
     useEffect(() => {
         const savedPreferences = localStorage.getItem('cookieConsent');
         if (savedPreferences) {
-            setPreferences(JSON.parse(savedPreferences));
+            const parsedPreferences = JSON.parse(savedPreferences);
+            // Ensure necessary cookies are always enabled
+            setPreferences({
+                ...parsedPreferences,
+                necessary: true
+            });
             setHasUserConsent(true);
         }
     }, []);
 
     const updatePreferences = (prefs: CookiePreferences) => {
-        setPreferences(prefs);
-        localStorage.setItem('cookieConsent', JSON.stringify(prefs));
+        // Ensure necessary cookies are always enabled
+        const updatedPrefs = {
+            ...prefs,
+            necessary: true
+        };
+        setPreferences(updatedPrefs);
+        localStorage.setItem('cookieConsent', JSON.stringify(updatedPrefs));
         setHasUserConsent(true);
     };
 
