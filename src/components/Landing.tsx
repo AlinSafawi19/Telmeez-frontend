@@ -14,6 +14,15 @@ import type { Language } from '../translations';
 import { translations } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
 
+interface TestimonialForm {
+    name: string;
+    position: string;
+    institution: string;
+    quote: string;
+    rating: number;
+    email: string;
+}
+
 const Landing: React.FC = () => {
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -44,13 +53,28 @@ const Landing: React.FC = () => {
 
     // Add testimonial form states
     const [isTestimonialModalOpen, setIsTestimonialModalOpen] = useState(false);
-    const [testimonialForm, setTestimonialForm] = useState({
-        name: '',
-        position: '',
-        institution: '',
-        quote: '',
-        rating: 0,
-        email: ''
+    const [testimonialForm, setTestimonialForm] = useState<TestimonialForm>(() => {
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+        if (hasConsent) {
+            const savedForm = localStorage.getItem('testimonialForm');
+            return savedForm ? JSON.parse(savedForm) : {
+                name: '',
+                position: '',
+                institution: '',
+                quote: '',
+                rating: 0,
+                email: ''
+            };
+        }
+        return {
+            name: '',
+            position: '',
+            institution: '',
+            quote: '',
+            rating: 0,
+            email: ''
+        };
     });
 
     const [isNewsletterSubscribed, setIsNewsletterSubscribed] = useState(() => {
@@ -311,18 +335,34 @@ const Landing: React.FC = () => {
     // Add testimonial form change handler
     const handleTestimonialFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setTestimonialForm(prev => ({
-            ...prev,
+        const updatedForm = {
+            ...testimonialForm,
             [name]: value
-        }));
+        };
+        setTestimonialForm(updatedForm);
+
+        // Save form data as a necessary cookie
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+        if (hasConsent) {
+            localStorage.setItem('testimonialForm', JSON.stringify(updatedForm));
+        }
     };
 
     // Add rating change handler
     const handleRatingChange = (rating: number) => {
-        setTestimonialForm(prev => ({
-            ...prev,
+        const updatedForm = {
+            ...testimonialForm,
             rating
-        }));
+        };
+        setTestimonialForm(updatedForm);
+
+        // Save form data as a necessary cookie
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+        if (hasConsent) {
+            localStorage.setItem('testimonialForm', JSON.stringify(updatedForm));
+        }
     };
 
     useEffect(() => {
@@ -1364,7 +1404,6 @@ const Landing: React.FC = () => {
                                                 name="name"
                                                 value={testimonialForm.name}
                                                 onChange={handleTestimonialFormChange}
-                                                required
                                                 className={`w-full text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                                 placeholder={t.testimonials.modal.form.name_placeholder}
                                             />
@@ -1386,7 +1425,6 @@ const Landing: React.FC = () => {
                                                 name="role"
                                                 value={testimonialForm.position}
                                                 onChange={handleTestimonialFormChange}
-                                                required
                                                 className={`w-full text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                                 placeholder={t.testimonials.modal.form.role_placeholder}
                                             />
@@ -1411,7 +1449,6 @@ const Landing: React.FC = () => {
                                                 name="institution"
                                                 value={testimonialForm.institution}
                                                 onChange={handleTestimonialFormChange}
-                                                required
                                                 className={`w-full text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                                 placeholder={t.testimonials.modal.form.institution_placeholder}
                                             />
@@ -1433,7 +1470,6 @@ const Landing: React.FC = () => {
                                                 name="email"
                                                 value={testimonialForm.email}
                                                 onChange={handleTestimonialFormChange}
-                                                required
                                                 className={`w-full text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                                 placeholder="john@example.com"
                                             />
@@ -1456,7 +1492,6 @@ const Landing: React.FC = () => {
                                             name="quote"
                                             value={testimonialForm.quote}
                                             onChange={handleTestimonialFormChange}
-                                            required
                                             rows={4}
                                             className={`w-full text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md resize-none ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                             placeholder={t.testimonials.modal.form.testimonial_placeholder}

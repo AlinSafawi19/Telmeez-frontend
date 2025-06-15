@@ -420,7 +420,7 @@ export const fr = {
         reject_all: "Tout Refuser",
         customize: "Personnaliser",
         necessary: "Nécessaire",
-        necessary_desc: "Cookies essentiels qui permettent les fonctionnalités de base. Le site ne peut pas fonctionner correctement sans ces cookies. Cela inclut la préférence de langue, la position de défilement, l'état des sections FAQ, le statut d'abonnement à la newsletter et l'adresse e-mail de la newsletter.",
+        necessary_desc: "Cookies essentiels qui permettent les fonctionnalités de base. Le site ne peut pas fonctionner correctement sans ces cookies. Cela inclut la préférence de langue, la position de défilement, l'état des sections FAQ, le statut d'abonnement à la newsletter, l'adresse e-mail de la newsletter et les données du formulaire de témoignage partiellement remplies.",
         analytics: "Analytique",
         analytics_desc: "Nous aident à comprendre comment les visiteurs interagissent avec notre site en collectant et en rapportant des informations de manière anonyme.",
         marketing: "Marketing",
