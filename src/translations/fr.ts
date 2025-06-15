@@ -121,7 +121,35 @@ export const fr = {
                 tick2: "Suivi de l'Historique Académique",
                 tick3: "Gestion des Coordonnées",
                 modal: {
-                    
+                    title: "Profils des Étudiants",
+                    subtitle: "Système complet de gestion des informations des étudiants",
+                    features: {
+                        personal_info: {
+                            title: "Informations Personnelles",
+                            description: "Stockez et gérez les détails personnels des étudiants, y compris le nom, la date de naissance, l'adresse, les contacts d'urgence et les informations médicales telles que les allergies, les conditions et les médicaments."
+                        },
+                        academic_history: {
+                            title: "Historique Académique",
+                            description: "Suivez le parcours académique des étudiants, y compris les cours, les notes, les réalisations et les activités parascolaires."
+                        },
+                        documents: {
+                            title: "Gestion des Documents",
+                            description: "Stockez et gérez en toute sécurité les documents importants des étudiants comme les relevés de notes, les certificats et les dossiers médicaux."
+                        },
+                        attendance: {
+                            title: "Registres de Présence",
+                            description: "Surveillez les modèles de présence des étudiants et générez des rapports détaillés pour l'analyse."
+                        }
+                    },
+                    benefits: {
+                        title: "Avantages Clés",
+                        items: [
+                            "Gestion centralisée des informations des étudiants",
+                            "Accès facile aux dossiers des étudiants",
+                            "Génération automatique de rapports",
+                            "Stockage sécurisé des données et contrôle d'accès"
+                        ]
+                    }
                 }
             }
         },

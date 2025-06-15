@@ -121,7 +121,35 @@ export const en = {
                 tick2: "Academic History Tracking",
                 tick3: "Contact Details Management",
                 modal: {
-
+                    title: "Student Profiles",
+                    subtitle: "Comprehensive student information management system",
+                    features: {
+                        personal_info: {
+                            title: "Personal Information",
+                            description: "Store and manage student personal details including name, date of birth, address, emergency contacts, and medical information such as allergies, conditions, and medications."
+                        },
+                        academic_history: {
+                            title: "Academic History",
+                            description: "Track student's academic journey including courses, grades, achievements, and extracurricular activities."
+                        },
+                        documents: {
+                            title: "Document Management",
+                            description: "Securely store and manage important student documents like transcripts, certificates, and medical records."
+                        },
+                        attendance: {
+                            title: "Attendance Records",
+                            description: "Monitor student attendance patterns and generate detailed reports for analysis."
+                        }
+                    },
+                    benefits: {
+                        title: "Key Benefits",
+                        items: [
+                            "Centralized student information management",
+                            "Easy access to student records",
+                            "Automated report generation",
+                            "Secure data storage and access control"
+                        ]
+                    }
                 }
             }
         },

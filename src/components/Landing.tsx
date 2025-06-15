@@ -1283,53 +1283,6 @@ const Landing: React.FC = () => {
                 </div>
             </footer>
 
-            {/* Student Profiles Modal */}
-            <AnimatePresence>
-                {isStudentProfilesModalOpen && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.95, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-                        >
-                            <div className="p-8">
-                                <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.student_management.student_profiles.student_profiles}</h3>
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsStudentProfilesModalOpen(false)}
-                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                        aria-label="Close modal"
-                                    >
-                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-
-                                <div className="mt-8 flex justify-end">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsStudentProfilesModalOpen(false)}
-                                        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                    >
-                                        {translations[currentLanguage].close}
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
             {/* Enrollment Management Modal */}
             <AnimatePresence>
                 {isEnrollmentModalOpen && (
@@ -1354,21 +1307,123 @@ const Landing: React.FC = () => {
                                     </h3>
                                     <button
                                         type="button"
+                                        aria-label="Close enrollment modal"
                                         onClick={() => setIsEnrollmentModalOpen(false)}
-                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                        aria-label="Close modal"
+                                        className="text-gray-400 hover:text-gray-500 focus:outline-none"
                                     >
-                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Student Profiles Modal */}
+            <AnimatePresence>
+                {isStudentProfilesModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                        >
+                            <div className="p-8">
+                                <div className="flex justify-between items-start mb-6">
+                                    <div>
+                                        <h3 className="text-2xl font-bold text-gray-900">
+                                            {translations[currentLanguage].features.student_management.student_profiles.modal.title}
+                                        </h3>
+                                        <p className="mt-2 text-gray-600">
+                                            {translations[currentLanguage].features.student_management.student_profiles.modal.subtitle}
+                                        </p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        aria-label="Close student profiles modal"
+                                        onClick={() => setIsStudentProfilesModalOpen(false)}
+                                        className="text-gray-400 hover:text-gray-500 focus:outline-none"
+                                    >
+                                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                     </button>
                                 </div>
 
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                    {/* Features Section */}
+                                    <div className="space-y-6">
+                                        <div className="bg-blue-50 p-6 rounded-xl">
+                                            <h4 className="text-lg font-semibold text-blue-900 mb-3">
+                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.personal_info.title}
+                                            </h4>
+                                            <p className="text-blue-800">
+                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.personal_info.description}
+                                            </p>
+                                        </div>
+
+                                        <div className="bg-green-50 p-6 rounded-xl">
+                                            <h4 className="text-lg font-semibold text-green-900 mb-3">
+                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.academic_history.title}
+                                            </h4>
+                                            <p className="text-green-800">
+                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.academic_history.description}
+                                            </p>
+                                        </div>
+
+                                        <div className="bg-purple-50 p-6 rounded-xl">
+                                            <h4 className="text-lg font-semibold text-purple-900 mb-3">
+                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.documents.title}
+                                            </h4>
+                                            <p className="text-purple-800">
+                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.documents.description}
+                                            </p>
+                                        </div>
+
+                                        <div className="bg-orange-50 p-6 rounded-xl">
+                                            <h4 className="text-lg font-semibold text-orange-900 mb-3">
+                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.attendance.title}
+                                            </h4>
+                                            <p className="text-orange-800">
+                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.attendance.description}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Benefits Section */}
+                                    <div className="bg-gray-50 p-6 rounded-xl">
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">
+                                            {translations[currentLanguage].features.student_management.student_profiles.modal.benefits.title}
+                                        </h4>
+                                        <ul className="space-y-3">
+                                            {translations[currentLanguage].features.student_management.student_profiles.modal.benefits.items.map((item, index) => (
+                                                <li key={index} className="flex items-start">
+                                                    <svg className="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span className="text-gray-700">{item}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+
                                 <div className="mt-8 flex justify-end">
                                     <button
                                         type="button"
-                                        onClick={() => setIsEnrollmentModalOpen(false)}
-                                        className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+                                        onClick={() => setIsStudentProfilesModalOpen(false)}
+                                        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     >
                                         {translations[currentLanguage].close}
                                     </button>
