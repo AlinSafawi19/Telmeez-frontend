@@ -1302,7 +1302,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">Student Profiles</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.student_management.student_profiles.student_profiles}</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsStudentProfilesModalOpen(false)}
@@ -1321,7 +1321,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsStudentProfilesModalOpen(false)}
                                         className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     >
-                                        Close
+                                        {translations[currentLanguage].close}
                                     </button>
                                 </div>
                             </div>
@@ -1350,7 +1350,7 @@ const Landing: React.FC = () => {
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
                                     <h3 className="text-2xl font-bold text-gray-900">
-                                        Enrollment Management
+                                        {translations[currentLanguage].features.student_management.enrollment_management.enrollment_management}
                                     </h3>
                                     <button
                                         type="button"
@@ -1370,7 +1370,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsEnrollmentModalOpen(false)}
                                         className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
                                     >
-                                        Close
+                                        {translations[currentLanguage].close}
                                     </button>
                                 </div>
                             </div>
@@ -1398,7 +1398,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">Digital Attendance</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.attendance_system.attendance_system}</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsAttendanceModalOpen(false)}
@@ -1417,7 +1417,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsAttendanceModalOpen(false)}
                                         className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     >
-                                        Close
+                                        {translations[currentLanguage].close}
                                     </button>
                                 </div>
                             </div>
@@ -1445,7 +1445,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">Automated Reports</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.attendance_system.automated_reports.automated_reports}</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsReportsModalOpen(false)}
@@ -1464,7 +1464,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsReportsModalOpen(false)}
                                         className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     >
-                                        Close
+                                        {translations[currentLanguage].close}
                                     </button>
                                 </div>
                             </div>
@@ -1492,7 +1492,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-6">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">Grade Entry</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.grade_management.grade_management}</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsGradeEntryModalOpen(false)}
@@ -1511,7 +1511,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsGradeEntryModalOpen(false)}
                                         className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     >
-                                        Close
+                                        {translations[currentLanguage].close}
                                     </button>
                                 </div>
                             </div>
@@ -1539,7 +1539,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">Progress Tracking</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.grade_management.progress_tracking.progress_tracking}</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsProgressTrackingModalOpen(false)}
@@ -1558,7 +1558,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsProgressTrackingModalOpen(false)}
                                         className="bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
                                     >
-                                        Close
+                                        {translations[currentLanguage].close}
                                     </button>
                                 </div>
                             </div>
@@ -1586,7 +1586,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">Messaging System</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.communication_tools.messaging.messaging}</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsMessagingSystemModalOpen(false)}
@@ -1605,7 +1605,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsMessagingSystemModalOpen(false)}
                                         className="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
                                     >
-                                        Close
+                                        {translations[currentLanguage].close}
                                     </button>
                                 </div>
                             </div>
@@ -1633,7 +1633,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">Announcements System</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.communication_tools.notifications.notifications}</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsAnnouncementsModalOpen(false)}
@@ -1652,7 +1652,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsAnnouncementsModalOpen(false)}
                                         className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                                     >
-                                        Close
+                                        {translations[currentLanguage].close}
                                     </button>
                                 </div>
                             </div>

@@ -109,14 +109,20 @@ export const en = {
                 description: "Streamline the enrollment process with electronic forms, document uploading, and automated workflows.",
                 tick1: "Digital Form Processing",
                 tick2: "Document Management",
-                tick3: "Automated Workflows"
+                tick3: "Automated Workflows",
+                modal: {
+
+                }
             },
             student_profiles: {
                 student_profiles: "Student Profiles",
                 description: "Create and maintain detailed student profiles with personal information, academic history, and contact details.",
                 tick1: "Personal Information Management",
                 tick2: "Academic History Tracking",
-                tick3: "Contact Details Management"
+                tick3: "Contact Details Management",
+                modal: {
+
+                }
             }
         },
         attendance_system: {
@@ -128,14 +134,20 @@ export const en = {
                 description: "Track attendance in real-time with instant updates and notifications for absences.",
                 tick1: "Instant Attendance Updates",
                 tick2: "Absence Notifications",
-                tick3: "Real-time Reports"
+                tick3: "Real-time Reports",
+                modal: {
+                    
+                }
             },
             automated_reports: {
                 automated_reports: "Automated Reports",
                 description: "Generate detailed attendance reports automatically with customizable parameters and export options.",
                 tick1: "Custom Report Generation",
                 tick2: "Multiple Export Formats",
-                tick3: "Scheduled Reports"
+                tick3: "Scheduled Reports",
+                modal: {
+                    
+                }
             }
         },
         grade_management: {
@@ -147,14 +159,20 @@ export const en = {
                 description: "Easy-to-use interface for grade management and entry with multiple grading scales support.",
                 tick1: "Multiple Grading Scales",
                 tick2: "Bulk Grade Entry",
-                tick3: "Grade History Tracking"
+                tick3: "Grade History Tracking",
+                modal: {
+                    
+                }
             },
             progress_tracking: {
                 progress_tracking: "Progress Tracking",
                 description: "Monitor student progress over time with visual analytics and detailed performance reports.",
                 tick1: "Visual Analytics",
                 tick2: "Performance Reports",
-                tick3: "Trend Analysis"
+                tick3: "Trend Analysis",
+                modal: {
+                    
+                }
             },
         },
         communication_tools: {
@@ -166,14 +184,20 @@ export const en = {
                 description: "Secure and efficient messaging platform for seamless communication between all stakeholders.",
                 tick1: "Real-time Messaging",
                 tick2: "Group Conversations",
-                tick3: "File Sharing"
+                tick3: "File Sharing",
+                modal: {
+                    
+                }
             },
             notifications: {
                 notifications: "Smart Notifications",
                 description: "Stay informed with customizable notifications and alerts for important updates.",
                 tick1: "Customizable Alerts",
                 tick2: "Priority Notifications",
-                tick3: "Notification History"
+                tick3: "Notification History",
+                modal: {
+                    
+                }
             }
         },
         learn_more: "Learn More"
@@ -336,5 +360,6 @@ export const en = {
         social: "Connect With Us",
         language: "Language",
         copyright: "Telmeez. All rights reserved"
-    }
+    },
+    close: "Close"
 }; 
