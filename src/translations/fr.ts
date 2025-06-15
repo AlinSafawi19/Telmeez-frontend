@@ -391,7 +391,39 @@ export const fr = {
                 description: "Surveillez les progrès des étudiants dans le temps avec des analyses visuelles et des rapports de performance détaillés.",
                 tick1: "Analyses Visuelles",
                 tick2: "Rapports de Performance",
-                tick3: "Analyse des Tendances"
+                tick3: "Analyse des Tendances",
+                modal: {
+                    title: "Suivi des Progrès",
+                    close: "Fermer",
+                    information: {
+                        title: "Suivi Complet des Progrès",
+                        description: "Notre système de suivi des progrès fournit des informations détaillées sur la performance des étudiants, aidant les éducateurs à identifier les forces et les domaines d'amélioration.",
+                        features: {
+                            title: "Fonctionnalités Clés",
+                            visual_analytics: {
+                                title: "Analyses Visuelles",
+                                description: "Graphiques et diagrammes interactifs pour une visualisation facile des progrès"
+                            },
+                            performance_reports: {
+                                title: "Rapports de Performance",
+                                description: "Rapports détaillés sur la performance académique et les réalisations"
+                            },
+                            trend_analysis: {
+                                title: "Analyse des Tendances",
+                                description: "Suivre les modèles de progression et identifier les domaines d'amélioration"
+                            }
+                        },
+                        benefits: {
+                            title: "Avantages",
+                            items: [
+                                "Suivi des progrès en temps réel",
+                                "Prise de décision basée sur les données",
+                                "Parcours d'apprentissage personnalisés",
+                                "Amélioration des résultats des étudiants"
+                            ]
+                        }
+                    }
+                }
             }
         },
         communication_tools: {

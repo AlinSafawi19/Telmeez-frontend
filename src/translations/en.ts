@@ -391,7 +391,39 @@ export const en = {
                 description: "Monitor student progress over time with visual analytics and detailed performance reports.",
                 tick1: "Visual Analytics",
                 tick2: "Performance Reports",
-                tick3: "Trend Analysis"
+                tick3: "Trend Analysis",
+                modal: {
+                    title: "Progress Tracking",
+                    close: "Close",
+                    information: {
+                        title: "Comprehensive Progress Monitoring",
+                        description: "Our progress tracking system provides detailed insights into student performance, helping educators identify strengths and areas for improvement.",
+                        features: {
+                            title: "Key Features",
+                            visual_analytics: {
+                                title: "Visual Analytics",
+                                description: "Interactive charts and graphs for easy progress visualization"
+                            },
+                            performance_reports: {
+                                title: "Performance Reports",
+                                description: "Detailed reports on academic performance and achievements"
+                            },
+                            trend_analysis: {
+                                title: "Trend Analysis",
+                                description: "Track progress patterns and identify improvement areas"
+                            }
+                        },
+                        benefits: {
+                            title: "Benefits",
+                            items: [
+                                "Real-time progress monitoring",
+                                "Data-driven decision making",
+                                "Personalized learning paths",
+                                "Improved student outcomes"
+                            ]
+                        }
+                    }
+                }
             },
         },
         communication_tools: {

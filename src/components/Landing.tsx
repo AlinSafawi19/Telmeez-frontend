@@ -1900,7 +1900,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">Progress Tracking & Analytics</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">{t.features.grade_management.progress_tracking.modal.title}</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsProgressTrackingModalOpen(false)}
@@ -1915,100 +1915,36 @@ const Landing: React.FC = () => {
 
                                 <div className="space-y-8">
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Comprehensive Progress Monitoring</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{t.features.grade_management.progress_tracking.modal.information.title}</h4>
                                         <p className="text-gray-600 mb-4">
-                                            Our progress tracking system provides end-to-end insights into student performance, allowing educators to identify strengths, weaknesses, and areas of improvement.
+                                            {t.features.grade_management.progress_tracking.modal.information.description}
                                         </p>
                                         <div className="grid md:grid-cols-2 gap-4">
                                             <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Tracking Metrics</h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    <li>• Academic performance trends</li>
-                                                    <li>• Attendance patterns</li>
-                                                    <li>• Assignment completion rates</li>
-                                                    <li>• Skill development progress</li>
-                                                </ul>
+                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.grade_management.progress_tracking.modal.information.features.title}</h5>
+                                                <div className="space-y-4">
+                                                    <div>
+                                                        <h6 className="font-medium text-gray-900">{t.features.grade_management.progress_tracking.modal.information.features.visual_analytics.title}</h6>
+                                                        <p className="text-gray-600">{t.features.grade_management.progress_tracking.modal.information.features.visual_analytics.description}</p>
+                                                    </div>
+                                                    <div>
+                                                        <h6 className="font-medium text-gray-900">{t.features.grade_management.progress_tracking.modal.information.features.performance_reports.title}</h6>
+                                                        <p className="text-gray-600">{t.features.grade_management.progress_tracking.modal.information.features.performance_reports.description}</p>
+                                                    </div>
+                                                    <div>
+                                                        <h6 className="font-medium text-gray-900">{t.features.grade_management.progress_tracking.modal.information.features.trend_analysis.title}</h6>
+                                                        <p className="text-gray-600">{t.features.grade_management.progress_tracking.modal.information.features.trend_analysis.description}</p>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Analytics Tools</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.grade_management.progress_tracking.modal.information.benefits.title}</h5>
                                                 <ul className="space-y-2 text-gray-600">
-                                                    <li>• Dashboards for performance</li>
-                                                    <li>• Comparative analysis</li>
-                                                    <li>• Predictive insights</li>
-                                                    <li>• Custom reports</li>
+                                                    {t.features.grade_management.progress_tracking.modal.information.benefits.items.map((item, idx) => (
+                                                        <li key={idx}>• {item}</li>
+                                                    ))}
                                                 </ul>
                                             </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
-                                        <div className="grid md:grid-cols-3 gap-4">
-                                            <div className="bg-yellow-50 p-4 rounded-lg">
-                                                <div className="text-yellow-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Performance Analytics</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    Detailed analysis of student performance per subject
-                                                </p>
-                                            </div>
-                                            <div className="bg-blue-50 p-4 rounded-lg">
-                                                <div className="text-blue-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Trend Analysis</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    Track progress over time using visual trend indicators
-                                                </p>
-                                            </div>
-                                            <div className="bg-purple-50 p-4 rounded-lg">
-                                                <div className="text-purple-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Early Warning System</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    Recognize struggling students and act before they fall behind
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
-                                        <div className="bg-gray-50 p-6 rounded-lg">
-                                            <ul className="space-y-4">
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Empowers data-driven instructional practices</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Supports individual learning plans</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Increases student engagement and outcomes</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Fosters parent-teacher communication</span>
-                                                </li>
-                                            </ul>
                                         </div>
                                     </div>
                                 </div>
@@ -2019,7 +1955,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsProgressTrackingModalOpen(false)}
                                         className="bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
                                     >
-                                        Close
+                                        {t.features.grade_management.progress_tracking.modal.close}
                                     </button>
                                 </div>
                             </div>
