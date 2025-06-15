@@ -1369,8 +1369,8 @@ const Landing: React.FC = () => {
                                                     });
                                                 }}
                                                 className={`p-1 rounded-lg border-none focus:outline-none transition-all duration-200 transform hover:scale-110 ${testimonialForm.rating >= rating
-                                                        ? 'text-yellow-400'
-                                                        : 'text-gray-300'
+                                                    ? 'text-yellow-400'
+                                                    : 'text-gray-300'
                                                     }`}
                                                 aria-label={`Rate ${rating} out of 5`}
                                             >

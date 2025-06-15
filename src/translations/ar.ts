@@ -47,7 +47,11 @@ export const ar = {
         email: "البريد الإلكتروني",
         password: "كلمة المرور",
         remember_me: "تذكرني",
-        forgot_password: "نسيت كلمة المرور؟"
+        forgot_password: "نسيت كلمة المرور؟",
+        forgot_password_desc: "أدخل عنوان بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور.",
+        reset_password: "إعادة تعيين كلمة المرور",
+        reset_password_sent: "إذا كان هناك حساب بهذا البريد الإلكتروني، فقد أرسلنا رابط إعادة تعيين كلمة المرور.",
+        back_to_signin: "العودة إلى تسجيل الدخول"
     },
     about: {
         our_story: {

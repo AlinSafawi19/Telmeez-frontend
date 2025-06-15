@@ -3,6 +3,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Landing from "./components/Landing";
 import SignIn from "./pages/SignIn";
+import ForgotPassword from "./pages/ForgotPassword";
 import SuperAdminDashboard from "./pages/demo-dashboard/SuperAdminDashboard";
 import SchoolAdminDashboard from "./pages/demo-dashboard/SchoolAdminDashboard";
 import TeacherDashboard from "./pages/demo-dashboard/TeacherDashboard";
@@ -28,6 +29,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/demo-dashboard/super-admin" element={<SuperAdminDashboard />} />
           <Route path="/demo-dashboard/admin" element={<SchoolAdminDashboard />} />
           <Route path="/demo-dashboard/teacher" element={<TeacherDashboard />} />

@@ -47,7 +47,11 @@ export const en = {
         email: "Email address",
         password: "Password",
         remember_me: "Remember me",
-        forgot_password: "Forgot your password?"
+        forgot_password: "Forgot your password?",
+        forgot_password_desc: "Enter your email address and we'll send you a link to reset your password.",
+        reset_password: "Reset Password",
+        reset_password_sent: "If an account exists with that email, we've sent a password reset link.",
+        back_to_signin: "Back to Sign In"
     },
     hero: {
         title: "Empowering Educational Institutions",

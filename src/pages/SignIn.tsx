@@ -172,9 +172,12 @@ const SignIn: React.FC = () => {
                                 </div>
 
                                 <div className="text-sm">
-                                    <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                                    <button
+                                        onClick={() => navigate('/forgot-password')}
+                                        className="font-medium text-indigo-600 hover:text-indigo-500 hover:underline focus:outline-none focus:underline transition-colors duration-200 border-0 bg-transparent p-0"
+                                        >
                                         {t.header.forgot_password}
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
 
