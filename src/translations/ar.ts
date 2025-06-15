@@ -34,7 +34,8 @@ export const ar = {
         about: {
             about: "من نحن",
             our_story: "قصتنا",
-            press: "الصحافة"
+            press: "الصحافة",
+            testimonials: "آراء العملاء"
         },
         resources: {
             resources: "الموارد",
@@ -210,7 +211,9 @@ export const ar = {
             quick_links: "روابط سريعة",
             about_us: "من نحن",
             features: "الميزات",
-            pricing: "الأسعار"
+            pricing: "الأسعار",
+            why_us: "لماذا نحن؟",
+            testimonials: "الشهادات"
         },
         resources: {
             resources: "الموارد",

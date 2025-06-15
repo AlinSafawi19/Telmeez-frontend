@@ -148,6 +148,12 @@ const Landing: React.FC = () => {
                     aboutSection?.scrollIntoView({ behavior: 'smooth' });
                     setTimeout(() => setIsScrolling(false), 1000);
                     break;
+                case t.header.about.testimonials:
+                    const testimonialsSection = document.getElementById('testimonials');
+                    setIsScrolling(true);
+                    testimonialsSection?.scrollIntoView({ behavior: 'smooth' });
+                    setTimeout(() => setIsScrolling(false), 1000);
+                    break;
             }
         }
         setActiveDropdown(null);
@@ -172,7 +178,8 @@ const Landing: React.FC = () => {
         ],
         about: [
             { label: t.header.about.our_story, href: '#' },
-            { label: t.header.about.press, href: '#' }
+            { label: t.header.about.press, href: '#' },
+            { label: t.header.about.testimonials, href: '#' }
         ],
         pricing: [
             {
@@ -653,7 +660,7 @@ const Landing: React.FC = () => {
             </div>
 
             {/* Testimonials Section */}
-            <div className="py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+            <div id="testimonials" className="py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
                 {/* Enhanced decorative elements */}
                 <div className="absolute top-0 left-0 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
                 <div className="absolute top-0 right-0 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
@@ -1004,6 +1011,14 @@ const Landing: React.FC = () => {
                                     e.preventDefault(); pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
                                     setTimeout(() => setIsScrolling(false), 1000);
                                 }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.pricing}</a></li>
+                                <li><a href="#features-section" onClick={(e) => {
+                                    e.preventDefault(); document.getElementById('features-section')?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
+                                    setTimeout(() => setIsScrolling(false), 1000);
+                                }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.why_us}</a></li>
+                                <li><a href="#testimonials" onClick={(e) => {
+                                    e.preventDefault(); document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
+                                    setTimeout(() => setIsScrolling(false), 1000);
+                                }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.testimonials}</a></li>
                             </ul>
                         </div>
                         <div>

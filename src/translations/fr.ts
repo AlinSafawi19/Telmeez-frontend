@@ -34,7 +34,8 @@ export const fr = {
         about: {
             about: "À Propos",
             our_story: "Notre Histoire",
-            press: "Presse"
+            press: "Presse",
+            testimonials: "Témoignages"
         },
         resources: {
             resources: "Ressources",
@@ -210,7 +211,9 @@ export const fr = {
             quick_links: "Liens Rapides",
             about_us: "À Propos",
             features: "Fonctionnalités",
-            pricing: "Tarification"
+            pricing: "Tarification",
+            why_us: "Pourquoi Nous ?",
+            testimonials: "Témoignages"
         },
         resources: {
             resources: "Ressources",
