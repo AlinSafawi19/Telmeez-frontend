@@ -418,7 +418,7 @@ export const fr = {
         reject_all: "Tout Refuser",
         customize: "Personnaliser",
         necessary: "Nécessaire",
-        necessary_desc: "Cookies essentiels qui permettent les fonctionnalités de base. Le site ne peut pas fonctionner correctement sans ces cookies.",
+        necessary_desc: "Cookies essentiels qui permettent les fonctionnalités de base. Le site ne peut pas fonctionner correctement sans ces cookies. Cela inclut la préférence de langue, la position de défilement et l'état des sections FAQ.",
         analytics: "Analytique",
         analytics_desc: "Nous aident à comprendre comment les visiteurs interagissent avec notre site en collectant et en rapportant des informations de manière anonyme.",
         marketing: "Marketing",

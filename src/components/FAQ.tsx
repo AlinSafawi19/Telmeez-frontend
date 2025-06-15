@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { translations } from '../translations';
 import type { Language } from '../translations';
@@ -10,6 +10,32 @@ interface FAQProps {
 const FAQ: React.FC<FAQProps> = ({ language = 'en' }) => {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
     const t = translations[language].faq;
+
+    // Load expanded state from localStorage on mount
+    useEffect(() => {
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+        
+        if (hasConsent) {
+            const savedOpenIndex = localStorage.getItem('faqOpenIndex');
+            if (savedOpenIndex !== null) {
+                setOpenIndex(parseInt(savedOpenIndex));
+            }
+        }
+    }, []);
+
+    // Save expanded state to localStorage when it changes
+    const handleToggle = (index: number) => {
+        const newIndex = openIndex === index ? null : index;
+        setOpenIndex(newIndex);
+        
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+        
+        if (hasConsent) {
+            localStorage.setItem('faqOpenIndex', newIndex?.toString() ?? '');
+        }
+    };
 
     return (
         <div id="faq-section" className="min-h-screen bg-gray-50 py-10">
@@ -39,7 +65,7 @@ const FAQ: React.FC<FAQProps> = ({ language = 'en' }) => {
                         >
                             <button
                                 className="w-full px-5 py-4 text-left focus:outline-none"
-                                onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                                onClick={() => handleToggle(index)}
                             >
                                 <div className="flex justify-between items-center">
                                     <h3 className="text-base font-medium text-gray-800">{item.question}</h3>
