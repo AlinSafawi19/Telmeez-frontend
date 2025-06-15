@@ -13,11 +13,7 @@ export const en = {
             seamless_comm_desc: "Engage administrators, staff, parents, and students on our integrated platform."
         },
         features: {
-            features: "Features",
-            student_management: "Student Management",
-            attendance_system: "Attendance System",
-            grade_management: "Grade Management",
-            communication_tools: "Communication Tools"
+            features: "Features"
         },
         pricing: {
             pricing: "Pricing",
@@ -99,84 +95,6 @@ export const en = {
             }
         ]
     },
-    features: {
-        student_management: {
-            student_management: "Student Management",
-            title: "Complete Student Management",
-            subtitle: "Total tools to streamline student information, track progress, and maintain records effortlessly.",
-            enrollment_management: {
-                enrollment_management: "Enrollment Management",
-                description: "Streamline the enrollment process with electronic forms, document uploading, and automated workflows.",
-                tick1: "Digital Form Processing",
-                tick2: "Document Management",
-                tick3: "Automated Workflows"
-            },
-            student_profiles: {
-                student_profiles: "Student Profiles",
-                description: "Create and maintain detailed student profiles with personal information, academic history, and contact details.",
-                tick1: "Personal Information Management",
-                tick2: "Academic History Tracking",
-                tick3: "Contact Details Management"
-            }
-        },
-        attendance_system: {
-            attendance_system: "Attendance System",
-            title: "Smart Attendance Tracking",
-            subtitle: "Efficiently monitor and manage student attendance with our comprehensive attendance management system.",
-            real_time_tracking: {
-                real_time_tracking: "Real-time Tracking",
-                description: "Track attendance in real-time with instant updates and notifications for absences.",
-                tick1: "Instant Attendance Updates",
-                tick2: "Absence Notifications",
-                tick3: "Real-time Reports"
-            },
-            automated_reports: {
-                automated_reports: "Automated Reports",
-                description: "Generate detailed attendance reports automatically with customizable parameters and export options.",
-                tick1: "Custom Report Generation",
-                tick2: "Multiple Export Formats",
-                tick3: "Scheduled Reports"
-            }
-        },
-        grade_management: {
-            grade_management: "Grade Management",
-            title: "Comprehensive Grading System",
-            subtitle: "Streamline and track student grades with our comprehensive grading system.",
-            grade_entry: {
-                grade_entry: "Grade Entry",
-                description: "Easy-to-use interface for grade management and entry with multiple grading scales support.",
-                tick1: "Multiple Grading Scales",
-                tick2: "Bulk Grade Entry",
-                tick3: "Grade History Tracking"
-            },
-            progress_tracking: {
-                progress_tracking: "Progress Tracking",
-                description: "Monitor student progress over time with visual analytics and detailed performance reports.",
-                tick1: "Visual Analytics",
-                tick2: "Performance Reports",
-                tick3: "Trend Analysis"
-            },
-        },
-        communication_tools: {
-            communication_tools: "Communication Tools",
-            title: "Enhanced Communication Platform",
-            subtitle: "Connect with students, parents, and staff through our integrated communication tools.",
-            messaging: {
-                messaging: "Messaging System",
-                description: "Secure and efficient messaging platform for seamless communication between all stakeholders.",
-                tick1: "Real-time Messaging",
-                tick2: "Group Conversations",
-                tick3: "File Sharing"
-            },
-            notifications: {
-                notifications: "Smart Notifications",
-                description: "Stay informed with customizable notifications and alerts for important updates.",
-                tick1: "Customizable Alerts",
-                tick2: "Priority Notifications",
-                tick3: "Notification History"
-            }
-        }
-    },
     pricing: {
         title: "Choose Your Plan",
         subtitle: "Select the perfect plan for your institution and start crafting your learning experience today",
@@ -254,53 +172,6 @@ export const en = {
                 description: "Revolutionary educational management platform set to launch soon, poised to change how institutions approach administrative process management and enhance learning outcomes."
             }
         }
-    },
-    demo: {
-        title: "Discover Telmeez",
-        subtitle: "Find out about the future of education management with our",
-        features: {
-            student_management: {
-                title: "Student Management",
-                description: "Comprehensive student information management, enrollment, and records management features.",
-                features: [
-                    "Student profile management",
-                    "Enrollment processing",
-                    "Document management",
-                    "Academic history tracking"
-                ]
-            },
-            attendance: {
-                title: "Attendance System",
-                description: "Efficient attendance monitoring with real-time tracking and reporting.",
-                features: [
-                    "Real-time attendance monitoring",
-                    "Automated notifications",
-                    "Attendance analysis",
-                    "Custom attendance rules"
-                ]
-            },
-            grades: {
-                title: "Grade Management",
-                description: "Streamlined grade entry, calculation, and reporting system.",
-                features: [
-                    "Automated grade calculation",
-                    "Custom grading systems",
-                    "Progress monitoring",
-                    "Report card printing"
-                ]
-            },
-            communication: {
-                title: "Communication Tools",
-                description: "Integrated messaging and announcement system for streamlined communication.",
-                features: [
-                    "Real-time messaging",
-                    "Broadcasting announcements",
-                    "Parent-teacher communication",
-                    "Group messaging"
-                ]
-            }
-        },
-        coming_soon: "Interactive demo coming soon"
     },
     cta: {
         title: "Ready to Change Your Institution?",

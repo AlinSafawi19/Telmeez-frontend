@@ -20,9 +20,6 @@ const Landing: React.FC = () => {
     const isHoveringRef = useRef(false);
     const pricingSectionRef = useRef<HTMLDivElement>(null);
     const studentManagementRef = useRef<HTMLDivElement>(null);
-    const attendanceSystemRef = useRef<HTMLDivElement>(null);
-    const gradeManagementRef = useRef<HTMLDivElement>(null);
-    const communicationToolsRef = useRef<HTMLDivElement>(null);
     const ourStoryRef = useRef<HTMLDivElement>(null);
     const demoSectionRef = useRef<HTMLDivElement>(null);
     const faqSectionRef = useRef<HTMLDivElement>(null);
@@ -121,32 +118,11 @@ const Landing: React.FC = () => {
         }
     };
 
-    // Add loading state handler for smooth scrolling
-    const handleSmoothScroll = (ref: React.RefObject<HTMLDivElement | null>) => {
-        if (ref.current) {
-            setIsScrolling(true);
-            ref.current.scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => setIsScrolling(false), 1000);
-        }
-    };
-
     // Update the handleDropdownItemClick to use loading state
-    const handleDropdownItemClick = (e: React.MouseEvent, featureName?: string) => {
+    const handleDropdownItemClick = (e: React.MouseEvent, name?: string) => {
         e.preventDefault();
-        if (featureName) {
-            switch (featureName) {
-                case t.header.features.student_management:
-                    handleSmoothScroll(studentManagementRef);
-                    break;
-                case t.header.features.attendance_system:
-                    handleSmoothScroll(attendanceSystemRef);
-                    break;
-                case t.header.features.grade_management:
-                    handleSmoothScroll(gradeManagementRef);
-                    break;
-                case t.header.features.communication_tools:
-                    handleSmoothScroll(communicationToolsRef);
-                    break;
+        if (name) {
+            switch (name) {
                 case t.header.about.our_story:
                     const ourStorySection = document.getElementById('our-story');
                     setIsScrolling(true);
@@ -154,7 +130,7 @@ const Landing: React.FC = () => {
                     setTimeout(() => setIsScrolling(false), 1000);
                     break;
                 case t.header.about.press:
-                    const aboutSection = document.getElementById(featureName.toLowerCase().replace(' ', '-'));
+                    const aboutSection = document.getElementById(name.toLowerCase().replace(' ', '-'));
                     setIsScrolling(true);
                     aboutSection?.scrollIntoView({ behavior: 'smooth' });
                     setTimeout(() => setIsScrolling(false), 1000);
@@ -175,10 +151,7 @@ const Landing: React.FC = () => {
 
     const dropdownItems = {
         features: [
-            { label: t.header.features.student_management, href: '#student-management' },
-            { label: t.header.features.attendance_system, href: '#attendance-system' },
-            { label: t.header.features.grade_management, href: '#grade-management' },
-            { label: t.header.features.communication_tools, href: '#communication-tools' }
+            //{ label: , href: '#' }
         ],
         resources: [
             { label: t.header.resources.demo, href: '#' },
@@ -293,14 +266,14 @@ const Landing: React.FC = () => {
                                     onMouseEnter={() => handleDropdownEnter('features')}
                                     onMouseLeave={handleDropdownLeave}
                                 >
-                                    {dropdownItems.features.map((item, index) => (
+                                    {dropdownItems.features.map((/*item,*/ index) => (
                                         <a
                                             key={index}
-                                            href={item.href}
-                                            onClick={(e) => handleDropdownItemClick(e, item.label)}
+                                            //href={item.href}
+                                            //onClick={(e) => handleDropdownItemClick(e, item.label)}
                                             className="block px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200"
                                         >
-                                            {item.label}
+                                            {/*item.label*/}
                                         </a>
                                     ))}
                                 </div>
@@ -515,18 +488,18 @@ const Landing: React.FC = () => {
                                     <a href="#" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium">Home</a>
                                     <div className="pl-4 border-l-2 border-gray-200">
                                         <span className="text-gray-600 font-medium block mb-2">Features</span>
-                                        {dropdownItems.features.map((item, index) => (
+                                        {dropdownItems.features.map((/*item,*/ index) => (
                                             <a
                                                 key={index}
-                                                href={item.href}
-                                                onClick={(e) => {
-                                                    handleDropdownItemClick(e, item.label);
+                                                //href={item.href}
+                                                onClick={(/*e*/) => {
+                                                    // handleDropdownItemClick(e, item.label);
                                                     setIsScrolling(true);
                                                     setTimeout(() => setIsScrolling(false), 1000); setIsMobileMenuOpen(false);
                                                 }}
                                                 className="block pl-4 py-1 text-gray-500 hover:text-blue-600 transition-colors duration-200"
                                             >
-                                                {item.label}
+                                                {/*item.label*/}
                                             </a>
                                         ))}
                                     </div>
@@ -649,342 +622,6 @@ const Landing: React.FC = () => {
                 </div>
             </div>
 
-            {/* Student Management Section */}
-            <div ref={studentManagementRef} id="student-management" className="py-20 bg-gradient-to-b from-blue-50 to-white relative overflow-hidden">
-                <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-                <div className="container mx-auto px-4 relative">
-                    <div className="max-w-6xl mx-auto">
-                        <div className="text-center mb-16">
-                            <span className="inline-block px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm font-semibold mb-4 animate-fadeInUp">{t.features.student_management.student_management}</span>
-                            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">{t.features.student_management.title}</h2>
-                            <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fadeInUp delay-200">
-                                {t.features.student_management.subtitle}
-                            </p>
-                        </div>
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <div className="feature-card bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 group">
-                                <div className="flex items-center mb-6">
-                                    <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mr-4 ml-4 group-hover:scale-110 transition-transform duration-300">
-                                        <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                        </svg>
-                                    </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.student_management.student_profiles.student_profiles}</h3>
-                                </div>
-                                <p className="text-gray-600 mb-6">
-                                    {t.features.student_management.student_profiles.description}
-                                </p>
-                                <ul className="space-y-3">
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.student_management.student_profiles.tick1}
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.student_management.student_profiles.tick2}
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.student_management.student_profiles.tick3}
-                                    </li>
-                                </ul>
-                            </div>
-                            <div className="feature-card bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 group">
-                                <div className="flex items-center mb-6">
-                                    <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center ml-4 mr-4 group-hover:scale-110 transition-transform duration-300">
-                                        <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                        </svg>
-                                    </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.student_management.enrollment_management.enrollment_management}</h3>
-                                </div>
-                                <p className="text-gray-600 mb-6">
-                                    {t.features.student_management.enrollment_management.description}
-                                </p>
-                                <ul className="space-y-3">
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.student_management.enrollment_management.tick1}
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.student_management.enrollment_management.tick2}
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.student_management.enrollment_management.tick3}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Attendance System Section */}
-            <div ref={attendanceSystemRef} id="attendance-system" className="py-20 bg-gradient-to-b from-green-50 to-white relative overflow-hidden">
-                <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-                <div className="container mx-auto px-4 relative">
-                    <div className="max-w-6xl mx-auto">
-                        <div className="text-center mb-16">
-                            <span className="inline-block px-4 py-2 rounded-full bg-green-100 text-green-600 text-sm font-semibold mb-4 animate-fadeInUp">{t.features.attendance_system.attendance_system}</span>
-                            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">{t.features.attendance_system.title}</h2>
-                            <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fadeInUp delay-200">
-                                {t.features.attendance_system.subtitle}
-                            </p>
-                        </div>
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <div className="feature-card bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 group">
-                                <div className="flex items-center mb-6">
-                                    <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center rtl:ml-4 mr-4 group-hover:scale-110 transition-transform duration-300">
-                                        <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                    </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.attendance_system.real_time_tracking.real_time_tracking}</h3>
-                                </div>
-                                <p className="text-gray-600 mb-6">
-                                    {t.features.attendance_system.real_time_tracking.description}
-                                </p>
-                                <ul className="space-y-3">
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.attendance_system.real_time_tracking.tick1}
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.attendance_system.real_time_tracking.tick2}
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.attendance_system.real_time_tracking.tick3}
-                                    </li>
-                                </ul>
-                            </div>
-                            <div className="feature-card bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 group">
-                                <div className="flex items-center mb-6">
-                                    <div className="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center rtl:ml-4 mr-4 group-hover:scale-110 transition-transform duration-300">
-                                        <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                        </svg>
-                                    </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.attendance_system.automated_reports.automated_reports}</h3>
-                                </div>
-                                <p className="text-gray-600 mb-6">
-                                    {t.features.attendance_system.automated_reports.description}
-                                </p>
-                                <ul className="space-y-3">
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.attendance_system.automated_reports.tick1}
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.attendance_system.automated_reports.tick2}
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.attendance_system.automated_reports.tick3}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Grade Management Section */}
-            <div ref={gradeManagementRef} id="grade-management" className="py-20 bg-gradient-to-b from-yellow-50 to-white relative overflow-hidden">
-                <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-                <div className="container mx-auto px-4 relative">
-                    <div className="max-w-6xl mx-auto">
-                        <div className="text-center mb-16">
-                            <span className="inline-block px-4 py-2 rounded-full bg-yellow-100 text-yellow-600 text-sm font-semibold mb-4 animate-fadeInUp">{t.features.grade_management.grade_management}</span>
-                            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">{t.features.grade_management.title}</h2>
-                            <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fadeInUp delay-200">
-                                {t.features.grade_management.subtitle}
-                            </p>
-                        </div>
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <div className="feature-card bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 group">
-                                <div className="flex items-center mb-6">
-                                    <div className="w-12 h-12 rounded-xl bg-yellow-100 flex items-center justify-center rtl:ml-4 mr-4 group-hover:scale-110 transition-transform duration-300">
-                                        <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                        </svg>
-                                    </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.grade_management.grade_entry.grade_entry}</h3>
-                                </div>
-                                <p className="text-gray-600 mb-6">
-                                    {t.features.grade_management.grade_entry.description}
-                                </p>
-                                <ul className="space-y-3">
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.grade_management.grade_entry.tick1}
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.grade_management.grade_entry.tick2}
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.grade_management.grade_entry.tick3}
-                                    </li>
-                                </ul>
-                            </div>
-                            <div className="feature-card bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 group">
-                                <div className="flex items-center mb-6">
-                                    <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center rtl:ml-4 mr-4 group-hover:scale-110 transition-transform duration-300">
-                                        <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                        </svg>
-                                    </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.grade_management.progress_tracking.progress_tracking}</h3>
-                                </div>
-                                <p className="text-gray-600 mb-6">
-                                    {t.features.grade_management.progress_tracking.description}
-                                </p>
-                                <ul className="space-y-3">
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.grade_management.progress_tracking.tick1}
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        Performance Reports
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        Trend Analysis
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Communication Tools Section */}
-            <div ref={communicationToolsRef} id="communication-tools" className="py-20 bg-gradient-to-b from-pink-50 to-white relative overflow-hidden">
-                <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-                <div className="container mx-auto px-4 relative">
-                    <div className="max-w-6xl mx-auto">
-                        <div className="text-center mb-16">
-                            <span className="inline-block px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm font-semibold mb-4 animate-fadeInUp">{t.features.communication_tools.communication_tools}</span>
-                            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-fadeInUp delay-100">{t.features.communication_tools.title}</h2>
-                            <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fadeInUp delay-200">
-                                {t.features.communication_tools.subtitle}
-                            </p>
-                        </div>
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <div className="feature-card bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 group">
-                                <div className="flex items-center mb-6">
-                                    <div className="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center ml-4 mr-4 group-hover:scale-110 transition-transform duration-300">
-                                        <svg className="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                        </svg>
-                                    </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.communication_tools.messaging.messaging}</h3>
-                                </div>
-                                <p className="text-gray-600 mb-6">
-                                    {t.features.communication_tools.messaging.description}
-                                </p>
-                                <ul className="space-y-3">
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.communication_tools.messaging.tick1}
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.communication_tools.messaging.tick2}
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.communication_tools.messaging.tick3}
-                                    </li>
-                                </ul>
-                            </div>
-                            <div className="feature-card bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 group">
-                                <div className="flex items-center mb-6">
-                                    <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center ml-4 mr-4 group-hover:scale-110 transition-transform duration-300">
-                                        <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                                        </svg>
-                                    </div>
-                                    <h3 className="text-2xl font-semibold text-gray-900">{t.features.communication_tools.notifications.notifications}</h3>
-                                </div>
-                                <p className="text-gray-600 mb-6">
-                                    {t.features.communication_tools.notifications.description}
-                                </p>
-                                <ul className="space-y-3">
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.communication_tools.notifications.tick1}
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.communication_tools.notifications.tick2}
-                                    </li>
-                                    <li className="flex items-center text-gray-600">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {t.features.communication_tools.notifications.tick3}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             {/* Pricing Plans Section */}
             <div ref={pricingSectionRef} data-section="pricing">
                 <PricingPlans initialSelectedPlan={selectedPricingPlan} language={currentLanguage} />
@@ -997,7 +634,7 @@ const Landing: React.FC = () => {
 
             {/* Demo Section */}
             <div ref={demoSectionRef}>
-                <Demo language={currentLanguage} />
+                <Demo />
             </div>
 
             {/* FAQ Section */}

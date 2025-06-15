@@ -13,11 +13,7 @@ export const fr = {
             seamless_comm_desc: "Engagez les administrateurs, le personnel, les parents et les étudiants sur notre plateforme intégrée."
         },
         features: {
-            features: "Fonctionnalités",
-            student_management: "Gestion des Étudiants",
-            attendance_system: "Système de Présence",
-            grade_management: "Gestion des Notes",
-            communication_tools: "Outils de Communication"
+            features: "Fonctionnalités"
         },
         pricing: {
             pricing: "Tarification",
@@ -99,84 +95,6 @@ export const fr = {
             }
         ]
     },
-    features: {
-        student_management: {
-            student_management: "Gestion des Étudiants",
-            title: "Gestion Complète des Étudiants",
-            subtitle: "Outils complets pour rationaliser les informations des étudiants, suivre les progrès et maintenir les dossiers facilement.",
-            enrollment_management: {
-                enrollment_management: "Gestion des Inscriptions",
-                description: "Rationalisez le processus d'inscription avec des formulaires électroniques, le téléchargement de documents et des flux de travail automatisés.",
-                tick1: "Traitement des Formulaires Numériques",
-                tick2: "Gestion des Documents",
-                tick3: "Flux de Travail Automatisés"
-            },
-            student_profiles: {
-                student_profiles: "Profils des Étudiants",
-                description: "Créez et maintenez des profils d'étudiants détaillés avec des informations personnelles, l'historique académique et les coordonnées.",
-                tick1: "Gestion des Informations Personnelles",
-                tick2: "Suivi de l'Historique Académique",
-                tick3: "Gestion des Coordonnées"
-            }
-        },
-        attendance_system: {
-            attendance_system: "Système de Présence",
-            title: "Suivi Intelligent des Présences",
-            subtitle: "Surveillez et gérez efficacement la présence des étudiants avec notre système complet de gestion des présences.",
-            real_time_tracking: {
-                real_time_tracking: "Suivi en Temps Réel",
-                description: "Suivez les présences en temps réel avec des mises à jour instantanées et des notifications pour les absences.",
-                tick1: "Mises à Jour Instantanées",
-                tick2: "Notifications d'Absence",
-                tick3: "Rapports en Temps Réel"
-            },
-            automated_reports: {
-                automated_reports: "Rapports Automatisés",
-                description: "Générez automatiquement des rapports de présence détaillés avec des paramètres personnalisables et des options d'exportation.",
-                tick1: "Génération de Rapports Personnalisés",
-                tick2: "Formats d'Exportation Multiples",
-                tick3: "Rapports Programmés"
-            }
-        },
-        grade_management: {
-            grade_management: "Gestion des Notes",
-            title: "Système Complet de Notation",
-            subtitle: "Rationalisez et suivez les notes des étudiants avec notre système complet de notation.",
-            grade_entry: {
-                grade_entry: "Saisie des Notes",
-                description: "Interface facile à utiliser pour la gestion et la saisie des notes avec support de plusieurs échelles de notation.",
-                tick1: "Échelles de Notation Multiples",
-                tick2: "Saisie en Masse des Notes",
-                tick3: "Suivi de l'Historique des Notes"
-            },
-            progress_tracking: {
-                progress_tracking: "Suivi des Progrès",
-                description: "Surveillez les progrès des étudiants dans le temps avec des analyses visuelles et des rapports de performance détaillés.",
-                tick1: "Analyses Visuelles",
-                tick2: "Rapports de Performance",
-                tick3: "Analyse des Tendances"
-            }
-        },
-        communication_tools: {
-            communication_tools: "Outils de Communication",
-            title: "Plateforme de Communication Améliorée",
-            subtitle: "Connectez-vous avec les étudiants, les parents et le personnel grâce à nos outils de communication intégrés.",
-            messaging: {
-                messaging: "Système de Messagerie",
-                description: "Plateforme de messagerie sécurisée et efficace pour une communication fluide entre toutes les parties prenantes.",
-                tick1: "Messagerie en Temps Réel",
-                tick2: "Conversations de Groupe",
-                tick3: "Partage de Fichiers"
-            },
-            notifications: {
-                notifications: "Notifications Intelligentes",
-                description: "Restez informé avec des notifications et alertes personnalisables pour les mises à jour importantes.",
-                tick1: "Alertes Personnalisables",
-                tick2: "Notifications Prioritaires",
-                tick3: "Historique des Notifications"
-            }
-        }
-    },
     pricing: {
         title: "Choisissez Votre Plan",
         subtitle: "Sélectionnez le plan parfait pour votre institution et commencez à créer votre expérience d'apprentissage dès aujourd'hui",
@@ -254,53 +172,6 @@ export const fr = {
                 description: "Plateforme révolutionnaire de gestion éducative sur le point d'être lancée, prête à changer la façon dont les institutions abordent la gestion des processus administratifs et améliorent les résultats d'apprentissage."
             }
         }
-    },
-    demo: {
-        title: "Découvrez Telmeez",
-        subtitle: "Découvrez l'avenir de la gestion de l'éducation avec notre",
-        features: {
-            student_management: {
-                title: "Gestion des Étudiants",
-                description: "Fonctionnalités complètes de gestion des informations des étudiants, d'inscription et de gestion des dossiers.",
-                features: [
-                    "Gestion des profils étudiants",
-                    "Traitement des inscriptions",
-                    "Gestion des documents",
-                    "Suivi de l'historique académique"
-                ]
-            },
-            attendance: {
-                title: "Système de Présence",
-                description: "Surveillance efficace des présences avec suivi en temps réel et rapports.",
-                features: [
-                    "Surveillance des présences en temps réel",
-                    "Notifications automatisées",
-                    "Analyse des présences",
-                    "Règles de présence personnalisées"
-                ]
-            },
-            grades: {
-                title: "Gestion des Notes",
-                description: "Système simplifié de saisie, de calcul et de rapports des notes.",
-                features: [
-                    "Calcul automatique des notes",
-                    "Systèmes de notation personnalisés",
-                    "Suivi des progrès",
-                    "Impression des bulletins"
-                ]
-            },
-            communication: {
-                title: "Outils de Communication",
-                description: "Système intégré de messagerie et d'annonces pour une communication simplifiée.",
-                features: [
-                    "Messagerie instantanée",
-                    "Diffusion d'annonces",
-                    "Communication parents-enseignants",
-                    "Conversations de groupe"
-                ]
-            }
-        },
-        coming_soon: "Démo interactive bientôt disponible"
     },
     cta: {
         title: "Prêt à Transformer Votre Institution ?",
