@@ -1,5 +1,3 @@
-import { desc } from "framer-motion/m";
-
 export const en = {
     header: {
         home: "Home",

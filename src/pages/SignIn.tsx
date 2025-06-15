@@ -5,13 +5,14 @@ import { FaHome } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { translations } from '../translations';
 import type { Language } from '../translations';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const SignIn: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
     const navigate = useNavigate();
+    const { currentLanguage, setCurrentLanguage } = useLanguage();
     const t = translations[currentLanguage];
 
     const languages = [
@@ -23,12 +24,6 @@ const SignIn: React.FC = () => {
     const handleLanguageChange = (langCode: Language) => {
         setCurrentLanguage(langCode);
         setIsLanguageDropdownOpen(false);
-        // Update document direction for RTL languages
-        if (langCode === 'ar') {
-            document.documentElement.dir = 'rtl';
-        } else {
-            document.documentElement.dir = 'ltr';
-        }
     };
 
     const handleSubmit = (e: React.FormEvent) => {

@@ -8,6 +8,7 @@ import SchoolAdminDashboard from "./pages/demo-dashboard/SchoolAdminDashboard";
 import TeacherDashboard from "./pages/demo-dashboard/TeacherDashboard";
 import StudentDashboard from "./pages/demo-dashboard/StudentDashboard";
 import ParentDashboard from "./pages/demo-dashboard/ParentDashboard";
+import { LanguageProvider } from './contexts/LanguageContext';
 
 function App() {
   //const [apiMessage, setApiMessage] = useState("");
@@ -19,20 +20,22 @@ function App() {
   }, []);*/
 
   return (
-    <Router>
-       {/* <div className="text-xl font-medium text-green-600">
-        API says: {apiMessage}
-      </div> */}
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/demo-dashboard/super-admin" element={<SuperAdminDashboard />} />
-        <Route path="/demo-dashboard/admin" element={<SchoolAdminDashboard />} />
-        <Route path="/demo-dashboard/teacher" element={<TeacherDashboard />} />
-        <Route path="/demo-dashboard/student" element={<StudentDashboard />} />
-        <Route path="/demo-dashboard/parent" element={<ParentDashboard />} />
-      </Routes>
-    </Router>
+    <LanguageProvider>
+      <Router>
+        {/* <div className="text-xl font-medium text-green-600">
+          API says: {apiMessage}
+        </div> */}
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/demo-dashboard/super-admin" element={<SuperAdminDashboard />} />
+          <Route path="/demo-dashboard/admin" element={<SchoolAdminDashboard />} />
+          <Route path="/demo-dashboard/teacher" element={<TeacherDashboard />} />
+          <Route path="/demo-dashboard/student" element={<StudentDashboard />} />
+          <Route path="/demo-dashboard/parent" element={<ParentDashboard />} />
+        </Routes>
+      </Router>
+    </LanguageProvider>
   );
 }
 

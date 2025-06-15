@@ -9,6 +9,7 @@ import Demo from './Demo';
 import FAQ from './FAQ';
 import type { Language } from '../translations';
 import { translations } from '../translations';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Landing: React.FC = () => {
     const navigate = useNavigate();
@@ -29,8 +30,8 @@ const Landing: React.FC = () => {
     const [unsubscribeEmail, setUnsubscribeEmail] = useState('');
     const [isScrolling, setIsScrolling] = useState(false);
     const [showBackToTop, setShowBackToTop] = useState(false);
-    const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
     const languageDropdownRef = useRef<HTMLDivElement>(null);
+    const { currentLanguage, setCurrentLanguage } = useLanguage();
     const t = translations[currentLanguage];
 
     useEffect(() => {
