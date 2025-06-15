@@ -1,3 +1,5 @@
+import { desc } from "framer-motion/m";
+
 export const en = {
     header: {
         home: "Home",
@@ -207,5 +209,125 @@ export const en = {
         language: "Language",
         copyright: "Telmeez. All rights reserved"
     },
-    close: "Close"
+    close: "Close",
+    demo: {
+        roles: {
+            super_admin: {
+                title: "Super Admin",
+                description: "Complete system control and management",
+                features: {
+                    feature1: "Manage all schools and institutions",
+                    feature2: "Configure system-wide settings",
+                    feature3: "Monitor platform performance",
+                    feature4: "Manage user roles and permissions",
+                    feature5: "Access advanced analytics"
+                }
+            },
+            admin: {
+                title: "School Admin",
+                description: "School-level administration and management",
+                features: {
+                    feature1: "Manage school staff and students",
+                    feature2: "Configure school settings",
+                    feature3: "Monitor school performance",
+                    feature4: "Generate school reports",
+                    feature5: "Manage school resources"
+                }
+            },
+            teacher: {
+                title: "Teacher",
+                description: "Classroom management and teaching tools",
+                features: {
+                    feature1: "Manage class schedules",
+                    feature2: "Create and grade assignments",
+                    feature3: "Track student progress",
+                    feature4: "Communicate with parents",
+                    feature5: "Access teaching resources"
+                }
+            },
+            student: {
+                title: "Student",
+                description: "Learning and academic management",
+                features: {
+                    feature1: "Access course materials",
+                    feature2: "Submit assignments",
+                    feature3: "Track academic progress",
+                    feature4: "Communicate with teachers",
+                    feature5: "Access learning resources"
+                }
+            },
+            parent: {
+                title: "Parent",
+                description: "Monitor and support student progress",
+                features: {
+                    feature1: "Track child\'s academic progress",
+                    feature2: "Communicate with teachers",
+                    feature3: "View attendance records",
+                    feature4: "Access school announcements",
+                    feature5: "Monitor assignments"
+                }
+            }
+        },
+        title: "Platform Preview",
+        subtitle: "Experience Our Platform",
+        description: "Discover how our platform empowers different roles to create an efficient and engaging educational environment.",
+        tabs: {
+            features: "Features",
+            getting_started: "Getting Started",
+            mobile_preview: "Mobile Preview",
+            videos_tutorials: "Video Tutorials"
+        },
+        guide_title: "Quick Start Guide",
+        getting_started_steps: {
+            super_admin: {
+                step1: {
+                    title: "Choose Your Plan",
+                    description: "Select the subscription plan that best fits your institution's needs"
+                },
+                step2: {
+                    title: "Set Up Credentials",
+                    description: "Create your super admin account and configure security settings"
+                },
+                step3: {
+                    title: "Configure System",
+                    description: "Set up system-wide settings and customize platform features"
+                },
+                step4: {
+                    title: "Create Roles",
+                    description: "Create and configure roles for school admins, teachers, and other users"
+                }
+            },
+            other_roles: {
+                step1: {
+                    title: "Receive Credentials",
+                    description: "Get your login credentials from your super admin"
+                },
+                step2: {
+                    title: "Complete Profile",
+                    description: "Set up your profile and configure your preferences"
+                },
+                step3: {
+                    title: "Role-Specific Setup",
+                    description: "Complete the setup process specific to your role"
+                },
+                step4: {
+                    title: "Start Using",
+                    description: "Begin exploring the platform's features and capabilities"
+                }
+            }
+        },
+        mobile: {
+            title: "Mobile App",
+            coming_soon: "Our mobile app is coming soon! Stay tuned for an enhanced mobile experience.",
+        },
+        video_tutorials: {
+            title: "Video Tutorials",
+            coming_soon: {
+                title: "Coming Soon",
+                description: "We're working on creating comprehensive video tutorials to help you get the most out of our platform. Stay tuned!"
+            }
+        },
+        try: "Try",
+        dashboard: "Dashboard"
+    }
 }; 

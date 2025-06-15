@@ -207,5 +207,125 @@ export const fr = {
         language: "Langue",
         copyright: "Telmeez. Tous droits réservés"
     },
-    close: "Fermer"
+    close: "Fermer",
+    demo: {
+        roles: {
+            super_admin: {
+                title: "Super Administrateur",
+                description: "Contrôle et gestion complets du système",
+                features: {
+                    feature1: "Gérer toutes les écoles et institutions",
+                    feature2: "Configurer les paramètres système",
+                    feature3: "Surveiller les performances de la plateforme",
+                    feature4: "Gérer les rôles et les permissions",
+                    feature5: "Accéder aux analyses avancées"
+                }
+            },
+            admin: {
+                title: "Administrateur d'École",
+                description: "Administration et gestion au niveau de l'école",
+                features: {
+                    feature1: "Gérer le personnel et les étudiants de l'école",
+                    feature2: "Configurer les paramètres de l'école",
+                    feature3: "Surveiller les performances de l'école",
+                    feature4: "Générer des rapports d'école",
+                    feature5: "Gérer les ressources de l'école"
+                }
+            },
+            teacher: {
+                title: "Enseignant",
+                description: "Gestion de classe et outils d'enseignement",
+                features: {
+                    feature1: "Gérer les emplois du temps des classes",
+                    feature2: "Créer et noter les devoirs",
+                    feature3: "Suivre les progrès des étudiants",
+                    feature4: "Communiquer avec les parents",
+                    feature5: "Accéder aux ressources pédagogiques"
+                }
+            },
+            student: {
+                title: "Étudiant",
+                description: "Gestion de l'apprentissage et académique",
+                features: {
+                    feature1: "Accéder aux supports de cours",
+                    feature2: "Soumettre les devoirs",
+                    feature3: "Suivre les progrès académiques",
+                    feature4: "Communiquer avec les enseignants",
+                    feature5: "Accéder aux ressources d'apprentissage"
+                }
+            },
+            parent: {
+                title: "Parent",
+                description: "Surveiller et soutenir les progrès de l'étudiant",
+                features: {
+                    feature1: "Suivre les progrès académiques de l'enfant",
+                    feature2: "Communiquer avec les enseignants",
+                    feature3: "Voir les registres de présence",
+                    feature4: "Accéder aux annonces de l'école",
+                    feature5: "Surveiller les devoirs"
+                }
+            }
+        },
+        title: "Aperçu de la Plateforme",
+        subtitle: "Découvrez Notre Plateforme",
+        description: "Découvrez comment notre plateforme permet aux différents rôles de créer un environnement éducatif efficace et engageant.",
+        tabs: {
+            features: "Fonctionnalités",
+            getting_started: "Démarrage",
+            mobile_preview: "Aperçu Mobile",
+            videos_tutorials: "Tutoriels Vidéo"
+        },
+        guide_title: "Guide de Démarrage Rapide",
+        getting_started_steps: {
+            super_admin: {
+                step1: {
+                    title: "Choisissez Votre Plan",
+                    description: "Sélectionnez le plan d'abonnement qui correspond aux besoins de votre institution"
+                },
+                step2: {
+                    title: "Configurez Vos Identifiants",
+                    description: "Créez votre compte super administrateur et configurez les paramètres de sécurité"
+                },
+                step3: {
+                    title: "Configurez le Système",
+                    description: "Configurez les paramètres système et personnalisez les fonctionnalités de la plateforme"
+                },
+                step4: {
+                    title: "Créez les Rôles",
+                    description: "Créez et configurez les rôles pour les administrateurs d'école, les enseignants et autres utilisateurs"
+                }
+            },
+            other_roles: {
+                step1: {
+                    title: "Recevez Vos Identifiants",
+                    description: "Obtenez vos identifiants de connexion de votre super administrateur"
+                },
+                step2: {
+                    title: "Complétez Votre Profil",
+                    description: "Configurez votre profil et vos préférences"
+                },
+                step3: {
+                    title: "Configuration Spécifique au Rôle",
+                    description: "Terminez le processus de configuration spécifique à votre rôle"
+                },
+                step4: {
+                    title: "Commencez à Utiliser",
+                    description: "Commencez à explorer les fonctionnalités et capacités de la plateforme"
+                }
+            }
+        },
+        mobile: {
+            title: "Application Mobile",
+            coming_soon: "Notre application mobile arrive bientôt ! Restez à l'écoute pour une expérience mobile améliorée."
+        },
+        video_tutorials: {
+            title: "Tutoriels Vidéo",
+            coming_soon: {
+                title: "Bientôt Disponible",
+                description: "Nous travaillons à la création de tutoriels vidéo complets pour vous aider à tirer le meilleur parti de notre plateforme. Restez à l'écoute !"
+            }
+        },
+        try: "Essayer",
+        dashboard: "Tableau de Bord"
+    }
 };

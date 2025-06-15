@@ -1,22 +1,30 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { translations } from '../translations';
+import type { Language } from '../translations';
 
-const Demo: React.FC = () => {
+interface DemoProps {
+    language: Language;
+}
+
+const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
     const [activeRole, setActiveRole] = useState<string>('super-admin');
     const [isHovered, setIsHovered] = useState<string | null>(null);
-    const [activeTab, setActiveTab] = useState<'features' | 'getting-started' | 'mobile' | 'video-tutorials'>('features');
+    type TabType = 'features' | 'getting_started' | 'mobile_preview' | 'videos_tutorials';
+    const [activeTab, setActiveTab] = useState<TabType>('features');
+    const t = translations[language].demo;
 
     const roles = [
         {
             id: 'super-admin',
-            title: 'Super Admin',
-            description: 'Complete system control and management',
+            title: t.roles.super_admin.title,
+            description: t.roles.super_admin.description,
             features: [
-                'Manage all schools and institutions',
-                'Configure system-wide settings',
-                'Monitor platform performance',
-                'Manage user roles and permissions',
-                'Access advanced analytics'
+                t.roles.super_admin.features.feature1,
+                t.roles.super_admin.features.feature2,
+                t.roles.super_admin.features.feature3,
+                t.roles.super_admin.features.feature4,
+                t.roles.super_admin.features.feature5
             ],
             icon: '👑',
             color: 'from-purple-500 to-indigo-600',
@@ -24,14 +32,14 @@ const Demo: React.FC = () => {
         },
         {
             id: 'admin',
-            title: 'School Admin',
-            description: 'School-level administration and management',
+            title: t.roles.admin.title,
+            description: t.roles.admin.description,
             features: [
-                'Manage school staff and students',
-                'Configure school settings',
-                'Monitor school performance',
-                'Generate school reports',
-                'Manage school resources'
+                t.roles.admin.features.feature1,
+                t.roles.admin.features.feature2,
+                t.roles.admin.features.feature3,
+                t.roles.admin.features.feature4,
+                t.roles.admin.features.feature5
             ],
             icon: '🏫',
             color: 'from-blue-500 to-cyan-600',
@@ -39,14 +47,14 @@ const Demo: React.FC = () => {
         },
         {
             id: 'teacher',
-            title: 'Teacher',
-            description: 'Classroom management and teaching tools',
+            title: t.roles.teacher.title,
+            description: t.roles.teacher.description,
             features: [
-                'Manage class schedules',
-                'Create and grade assignments',
-                'Track student progress',
-                'Communicate with parents',
-                'Access teaching resources'
+                t.roles.teacher.features.feature1,
+                t.roles.teacher.features.feature2,
+                t.roles.teacher.features.feature3,
+                t.roles.teacher.features.feature4,
+                t.roles.teacher.features.feature5
             ],
             icon: '👨‍🏫',
             color: 'from-green-500 to-emerald-600',
@@ -54,14 +62,14 @@ const Demo: React.FC = () => {
         },
         {
             id: 'student',
-            title: 'Student',
-            description: 'Learning and academic management',
+            title: t.roles.student.title,
+            description: t.roles.student.description,
             features: [
-                'Access course materials',
-                'Submit assignments',
-                'Track academic progress',
-                'Communicate with teachers',
-                'Access learning resources'
+                t.roles.student.features.feature1,
+                t.roles.student.features.feature2,
+                t.roles.student.features.feature3,
+                t.roles.student.features.feature4,
+                t.roles.student.features.feature5
             ],
             icon: '👨‍🎓',
             color: 'from-orange-500 to-amber-600',
@@ -69,14 +77,14 @@ const Demo: React.FC = () => {
         },
         {
             id: 'parent',
-            title: 'Parent',
-            description: 'Monitor and support student progress',
+            title: t.roles.parent.title,
+            description: t.roles.parent.description,
             features: [
-                'Track child\'s academic progress',
-                'Communicate with teachers',
-                'View attendance records',
-                'Access school announcements',
-                'Monitor assignments'
+                t.roles.parent.features.feature1,
+                t.roles.parent.features.feature2,
+                t.roles.parent.features.feature3,
+                t.roles.parent.features.feature4,
+                t.roles.parent.features.feature5
             ],
             icon: '👨‍👩‍👧‍👦',
             color: 'from-pink-500 to-rose-600',
@@ -102,7 +110,7 @@ const Demo: React.FC = () => {
                         className="inline-block"
                     >
                         <span className="inline-block px-4 py-2 rounded-full bg-blue-100 text-blue-800 text-sm font-medium mb-4">
-                            Platform Preview
+                            {t.title}
                         </span>
                     </motion.div>
                     <motion.h2
@@ -110,7 +118,7 @@ const Demo: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         className="text-5xl font-bold text-gray-900 mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600"
                     >
-                        Experience Our Platform
+                        {t.subtitle}
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -118,7 +126,7 @@ const Demo: React.FC = () => {
                         transition={{ delay: 0.2 }}
                         className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed"
                     >
-                        Discover how our platform empowers different roles to create an efficient and engaging educational environment.
+                        {t.description}
                     </motion.p>
                 </div>
 
@@ -132,8 +140,8 @@ const Demo: React.FC = () => {
                                 onMouseEnter={() => setIsHovered(role.id)}
                                 onMouseLeave={() => setIsHovered(null)}
                                 className={`w-full p-6 rounded-xl text-left transition-all focus:outline-none duration-300 relative overflow-hidden group ${activeRole === role.id
-                                        ? `${role.gradient} text-white shadow-lg transform`
-                                        : 'bg-white hover:bg-gray-50 text-gray-800 shadow-md'
+                                    ? `${role.gradient} text-white shadow-lg transform`
+                                    : 'bg-white hover:bg-gray-50 text-gray-800 shadow-md'
                                     }`}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
@@ -170,38 +178,38 @@ const Demo: React.FC = () => {
                             <button
                                 onClick={() => setActiveTab('features')}
                                 className={`px-6 py-3 text-sm font-medium focus:outline-none ${activeTab === 'features'
-                                        ? 'text-blue-600 border-b-2 border-blue-600'
-                                        : 'text-gray-500 hover:text-gray-700'
+                                    ? 'text-blue-600 border-b-2 border-blue-600'
+                                    : 'text-gray-500 hover:text-gray-700'
                                     }`}
                             >
-                                Features
+                                {t.tabs.features}
                             </button>
                             <button
-                                onClick={() => setActiveTab('getting-started')}
-                                className={`px-6 py-3 text-sm font-medium focus:outline-none ${activeTab === 'getting-started'
-                                        ? 'text-blue-600 border-b-2 border-blue-600'
-                                        : 'text-gray-500 hover:text-gray-700'
+                                onClick={() => setActiveTab('getting_started')}
+                                className={`px-6 py-3 text-sm font-medium focus:outline-none ${activeTab === 'getting_started'
+                                    ? 'text-blue-600 border-b-2 border-blue-600'
+                                    : 'text-gray-500 hover:text-gray-700'
                                     }`}
                             >
-                                Getting Started
+                                {t.tabs.getting_started}
                             </button>
                             <button
-                                onClick={() => setActiveTab('mobile')}
-                                className={`px-6 py-3 text-sm font-medium focus:outline-none ${activeTab === 'mobile'
-                                        ? 'text-blue-600 border-b-2 border-blue-600'
-                                        : 'text-gray-500 hover:text-gray-700'
+                                onClick={() => setActiveTab('mobile_preview')}
+                                className={`px-6 py-3 text-sm font-medium focus:outline-none ${activeTab === 'mobile_preview'
+                                    ? 'text-blue-600 border-b-2 border-blue-600'
+                                    : 'text-gray-500 hover:text-gray-700'
                                     }`}
                             >
-                                Mobile Preview
+                                {t.tabs.mobile_preview}
                             </button>
                             <button
-                                onClick={() => setActiveTab('video-tutorials')}
-                                className={`px-6 py-3 text-sm font-medium focus:outline-none ${activeTab === 'video-tutorials'
-                                        ? 'text-blue-600 border-b-2 border-blue-600'
-                                        : 'text-gray-500 hover:text-gray-700'
+                                onClick={() => setActiveTab('videos_tutorials')}
+                                className={`px-6 py-3 text-sm font-medium focus:outline-none ${activeTab === 'videos_tutorials'
+                                    ? 'text-blue-600 border-b-2 border-blue-600'
+                                    : 'text-gray-500 hover:text-gray-700'
                                     }`}
                             >
-                                Video Tutorials
+                                {t.tabs.videos_tutorials}
                             </button>
                         </div>
 
@@ -271,7 +279,7 @@ const Demo: React.FC = () => {
                                     </>
                                 )}
 
-                                {activeTab === 'getting-started' && (
+                                {activeTab === 'getting_started' && (
                                     <div className="space-y-6">
                                         <div className="flex items-center space-x-4 mb-6">
                                             <motion.div
@@ -282,52 +290,52 @@ const Demo: React.FC = () => {
                                                 🚀
                                             </motion.div>
                                             <h3 className="text-2xl font-bold text-gray-900">
-                                                Quick Start Guide
+                                                {t.guide_title}
                                             </h3>
                                         </div>
-                                        
+
                                         <div className="space-y-4">
                                             {(activeRole === 'super-admin' ? [
                                                 {
                                                     step: 1,
-                                                    title: "Choose Your Plan",
-                                                    description: "Select the subscription plan that best fits your institution's needs"
+                                                    title: t.getting_started_steps.super_admin.step1.title,
+                                                    description: t.getting_started_steps.super_admin.step1.description
                                                 },
                                                 {
                                                     step: 2,
-                                                    title: "Set Up Credentials",
-                                                    description: "Create your super admin account and configure security settings"
+                                                    title: t.getting_started_steps.super_admin.step2.title,
+                                                    description: t.getting_started_steps.super_admin.step2.description
                                                 },
                                                 {
                                                     step: 3,
-                                                    title: "Configure System",
-                                                    description: "Set up system-wide settings and customize platform features"
+                                                    title: t.getting_started_steps.super_admin.step3.title,
+                                                    description: t.getting_started_steps.super_admin.step3.description
                                                 },
                                                 {
                                                     step: 4,
-                                                    title: "Create Roles",
-                                                    description: "Create and configure roles for school admins, teachers, and other users"
+                                                    title: t.getting_started_steps.super_admin.step4.title,
+                                                    description: t.getting_started_steps.super_admin.step4.description
                                                 }
                                             ] : [
                                                 {
                                                     step: 1,
-                                                    title: "Receive Credentials",
-                                                    description: "Get your login credentials from your super admin"
+                                                    title: t.getting_started_steps.other_roles.step1.title,
+                                                    description: t.getting_started_steps.other_roles.step1.description
                                                 },
                                                 {
                                                     step: 2,
-                                                    title: "Complete Profile",
-                                                    description: "Set up your profile and configure your preferences"
+                                                    title: t.getting_started_steps.other_roles.step2.title,
+                                                    description: t.getting_started_steps.other_roles.step2.description
                                                 },
                                                 {
                                                     step: 3,
-                                                    title: "Role-Specific Setup",
-                                                    description: "Complete the setup process specific to your role"
+                                                    title: t.getting_started_steps.other_roles.step3.title,
+                                                    description: t.getting_started_steps.other_roles.step3.description
                                                 },
                                                 {
                                                     step: 4,
-                                                    title: "Start Using",
-                                                    description: "Begin exploring the platform's features and capabilities"
+                                                    title: t.getting_started_steps.other_roles.step4.title,
+                                                    description: t.getting_started_steps.other_roles.step4.description
                                                 }
                                             ]).map((item, index) => (
                                                 <motion.div
@@ -335,7 +343,7 @@ const Demo: React.FC = () => {
                                                     initial={{ opacity: 0, x: -20 }}
                                                     animate={{ opacity: 1, x: 0 }}
                                                     transition={{ delay: index * 0.1 }}
-                                                    className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg"
+                                                    className="flex items-start p-4 bg-gray-50 rounded-lg [&:not(:dir(rtl))]:space-x-4 [&:dir(rtl)]:space-x-reverse [&:dir(rtl)]:space-x-4"
                                                 >
                                                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
                                                         <span className="text-blue-600 font-semibold">{item.step}</span>
@@ -350,7 +358,7 @@ const Demo: React.FC = () => {
                                     </div>
                                 )}
 
-                                {activeTab === 'mobile' && (
+                                {activeTab === 'mobile_preview' && (
                                     <div className="relative">
                                         <div className="w-64 h-[500px] mx-auto bg-gray-900 rounded-[40px] p-4 shadow-xl">
                                             <div className="w-full h-full bg-white rounded-[32px] overflow-hidden relative">
@@ -365,9 +373,9 @@ const Demo: React.FC = () => {
                                                     >
                                                         📱
                                                     </motion.div>
-                                                    <h4 className="text-lg font-semibold text-gray-900 mb-2 text-center">Mobile App</h4>
+                                                    <h4 className="text-lg font-semibold text-gray-900 mb-2 text-center">{t.mobile.title}</h4>
                                                     <p className="text-gray-600 text-sm text-center">
-                                                        Our mobile app is coming soon! Stay tuned for an enhanced mobile experience.
+                                                        {t.mobile.coming_soon}
                                                     </p>
                                                 </div>
                                             </div>
@@ -378,7 +386,7 @@ const Demo: React.FC = () => {
                                     </div>
                                 )}
 
-                                {activeTab === 'video-tutorials' && (
+                                {activeTab === 'videos_tutorials' && (
                                     <div className="space-y-6">
                                         <div className="flex items-center space-x-4 mb-6">
                                             <motion.div
@@ -389,10 +397,10 @@ const Demo: React.FC = () => {
                                                 🎥
                                             </motion.div>
                                             <h3 className="text-2xl font-bold text-gray-900">
-                                                Video Tutorials
+                                                {t.video_tutorials.title}
                                             </h3>
                                         </div>
-                                        
+
                                         <div className="flex flex-col items-center justify-center py-12 bg-gray-50 rounded-xl">
                                             <motion.div
                                                 initial={{ opacity: 0, y: 20 }}
@@ -401,9 +409,9 @@ const Demo: React.FC = () => {
                                             >
                                                 🚧
                                             </motion.div>
-                                            <h4 className="text-xl font-semibold text-gray-900 mb-2">Coming Soon</h4>
+                                            <h4 className="text-xl font-semibold text-gray-900 mb-2">{t.video_tutorials.coming_soon.title}</h4>
                                             <p className="text-gray-600 text-center max-w-md">
-                                                We're working on creating comprehensive video tutorials to help you get the most out of our platform. Stay tuned!
+                                                {t.video_tutorials.coming_soon.description}
                                             </p>
                                         </div>
                                     </div>
@@ -416,7 +424,7 @@ const Demo: React.FC = () => {
                                         className={`w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-300 ${roles.find(r => r.id === activeRole)?.gradient} focus:outline-none shadow-lg hover:shadow-xl`}
                                         onClick={() => window.open(`/demo-dashboard/${activeRole}`, '_blank')}
                                     >
-                                        Try {roles.find(r => r.id === activeRole)?.title} Dashboard
+                                        {t.try} {roles.find(r => r.id === activeRole)?.title} {t.dashboard}
                                     </motion.button>
                                 </div>
                             </motion.div>
