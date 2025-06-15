@@ -41,7 +41,13 @@ export const ar = {
             demo: "تجريبي",
             faq: "الأسئلة الشائعة"
         },
-        signin: "تسجيل الدخول"
+        signin: "تسجيل الدخول",
+        not_member: "لست عضواً في تلميز؟",
+        register: "سجل الآن!",
+        email: "البريد الإلكتروني",
+        password: "كلمة المرور",
+        remember_me: "تذكرني",
+        forgot_password: "نسيت كلمة المرور؟"
     },
     about: {
         our_story: {

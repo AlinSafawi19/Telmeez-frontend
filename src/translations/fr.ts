@@ -41,7 +41,13 @@ export const fr = {
             demo: "Démo",
             faq: "FAQ"
         },
-        signin: "Se Connecter"
+        signin: "Se Connecter",
+        not_member: "Pas encore membre de Telmeez ?",
+        register: "Inscrivez-vous !",
+        email: "Adresse e-mail",
+        password: "Mot de passe",
+        remember_me: "Se souvenir de moi",
+        forgot_password: "Mot de passe oublié ?"
     },
     hero: {
         title: "Renforcer les Institutions Éducatives",

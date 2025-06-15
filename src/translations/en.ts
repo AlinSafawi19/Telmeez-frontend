@@ -43,7 +43,13 @@ export const en = {
             demo: "Demo",
             faq: "FAQ"
         },
-        signin: "Sign In"
+        signin: "Sign In",
+        not_member: "Not a Telmeez member?",
+        register: "Register!",
+        email: "Email address",
+        password: "Password",
+        remember_me: "Remember me",
+        forgot_password: "Forgot your password?"
     },
     hero: {
         title: "Empowering Educational Institutions",
