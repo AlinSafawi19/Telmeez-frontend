@@ -109,109 +109,14 @@ export const fr = {
                 description: "Rationalisez le processus d'inscription avec des formulaires électroniques, le téléchargement de documents et des flux de travail automatisés.",
                 tick1: "Traitement des Formulaires Numériques",
                 tick2: "Gestion des Documents",
-                tick3: "Flux de Travail Automatisés",
-                modal: {
-                    title: "Gestion des Inscriptions",
-                    close: "Fermer",
-                    information: {
-                        title: "Détails du Processus d'Inscription",
-                        description: "Notre système de gestion des inscriptions rationalise l'ensemble du processus d'inscription des étudiants, le rendant efficace et convivial pour les administrateurs et les candidats.",
-                        process_steps: {
-                            title: "Étapes du Processus d'Inscription",
-                            items: [
-                                "Soumission de la Demande en Ligne",
-                                "Vérification des Documents",
-                                "Traitement des Paiements",
-                                "Sélection des Cours"
-                            ]
-                        },
-                        features: {
-                            title: "Fonctionnalités Clés",
-                            online_application: {
-                                title: "Demande en Ligne",
-                                description: "Formulaires conviviaux pour une inscription facile des étudiants"
-                            },
-                            document_verification: {
-                                title: "Vérification des Documents",
-                                description: "Système sécurisé de téléchargement et de vérification des documents"
-                            },
-                            payment_processing: {
-                                title: "Traitement des Paiements",
-                                description: "Système de paiement intégré pour les frais de scolarité"
-                            },
-                            course_selection: {
-                                title: "Sélection des Cours",
-                                description: "Sélection et planification interactives des cours"
-                            }
-                        },
-                        benefits: {
-                            title: "Avantages",
-                            items: [
-                                "Réduction de la charge administrative",
-                                "Traitement plus rapide des inscriptions",
-                                "Amélioration de la précision de la saisie des données",
-                                "Expérience étudiante améliorée"
-                            ]
-                        }
-                    }
-                }
+                tick3: "Flux de Travail Automatisés"
             },
             student_profiles: {
                 student_profiles: "Profils des Étudiants",
                 description: "Créez et maintenez des profils d'étudiants détaillés avec des informations personnelles, l'historique académique et les coordonnées.",
                 tick1: "Gestion des Informations Personnelles",
                 tick2: "Suivi de l'Historique Académique",
-                tick3: "Gestion des Coordonnées",
-                modal: {
-                    title: "Profils des Étudiants",
-                    close: "Fermer",
-                    information: {
-                        title: "Informations Détaillées de l'Étudiant",
-                        description: "Notre module de profil étudiant est un point d'accès unique pour chaque information sur l'étudiant, facilitant l'accès facile et une gestion efficace des informations sur les étudiants.",
-                        personal_details: {
-                            title: "Informations Personnelles",
-                            items: [
-                                "Informations générales (nom, date de naissance, genre, etc.)",
-                                "Coordonnées",
-                                "Contacts d'urgence",
-                                "Informations médicales"
-                            ]
-                        },
-                        academic_details: {
-                            title: "Informations Académiques",
-                            items: [
-                                "Historique des inscriptions",
-                                "Historique et suivi des paiements",
-                                "Statut académique",
-                                "Historique de présence"
-                            ]
-                        }
-                    },
-                    features: {
-                        title: "Fonctionnalités Essentielles",
-                        parent_access: {
-                            title: "Accès Parents et Tuteurs",
-                            description: "Permettre aux tuteurs de voir les dossiers académiques, la présence et de communiquer avec les éducateurs"
-                        },
-                        grades_schedules: {
-                            title: "Notes et Emplois du Temps",
-                            description: "Les étudiants peuvent consulter les notes d'examen, la répartition des matières, les échéances à venir et un emploi du temps hebdomadaire."
-                        },
-                        document_management: {
-                            title: "Gestion des Documents",
-                            description: "Téléchargez et gérez en toute sécurité les documents importants des étudiants"
-                        }
-                    },
-                    benefits: {
-                        title: "Avantages",
-                        items: [
-                            "Gestion efficace des informations des étudiants et leur récupération",
-                            "Amélioration de la communication entre enseignants, étudiants et parents",
-                            "Données plus précises et moins d'administration",
-                            "Suivi et reporting intelligent de l'historique des étudiants"
-                        ]
-                    }
-                }
+                tick3: "Gestion des Coordonnées"
             }
         },
         attendance_system: {
@@ -230,93 +135,7 @@ export const fr = {
                 description: "Générez automatiquement des rapports de présence détaillés avec des paramètres personnalisables et des options d'exportation.",
                 tick1: "Génération de Rapports Personnalisés",
                 tick2: "Formats d'Exportation Multiples",
-                tick3: "Rapports Programmés",
-                modal: {
-                    title: "Rapports Automatisés",
-                    close: "Fermer",
-                    information: {
-                        title: "Génération Automatisée de Rapports",
-                        description: "Notre système de rapports automatisés rationalise le processus de génération et de distribution des rapports de présence, économisant du temps et garantissant la précision.",
-                        report_types: {
-                            title: "Types de Rapports",
-                            items: [
-                                "Rapports de Présence Quotidiens",
-                                "Rapports Hebdomadaires",
-                                "Analyses Mensuelles",
-                                "Rapports de Périodes Personnalisées"
-                            ]
-                        },
-                        features: {
-                            title: "Fonctionnalités Clés",
-                            customization: {
-                                title: "Options de Personnalisation",
-                                description: "Adaptez les rapports à vos besoins spécifiques avec des paramètres et filtres personnalisables"
-                            },
-                            export_formats: {
-                                title: "Formats d'Exportation",
-                                description: "Exportez les rapports dans plusieurs formats incluant PDF, Excel et CSV"
-                            },
-                            scheduling: {
-                                title: "Programmation Automatique",
-                                description: "Programmez la génération et la distribution automatique des rapports"
-                            }
-                        },
-                        benefits: {
-                            title: "Avantages",
-                            items: [
-                                "Génération de rapports automatisée pour gagner du temps",
-                                "Amélioration de la précision et de la cohérence",
-                                "Partage et distribution faciles",
-                                "Analyse de données complète"
-                            ]
-                        }
-                    }
-                }
-            },
-            modal: {
-                title: "Système de Présence Numérique",
-                close: "Fermer",
-                information: {
-                    title: "Suivi Intelligent des Présences",
-                    description: "Notre système de présence numérique révolutionne la façon dont les écoles prennent et gèrent la présence des étudiants avec plus d'efficacité et de précision par rapport aux systèmes traditionnels.",
-                    attendance_methods: {
-                        title: "Méthodes de Présence",
-                        items: [
-                            "Scan de code QR",
-                            "Vérification biométrique",
-                            "Pointage via application mobile",
-                            "Accès via portail web"
-                        ]
-                    },
-                    features: {
-                        title: "Fonctionnalités Clés",
-                        real_time_tracking: {
-                            title: "Suivi en Temps Réel",
-                            description: "Surveillez les présences en temps réel avec des mises à jour instantanées"
-                        },
-                        automated_notifications: {
-                            title: "Notifications Automatisées",
-                            description: "Recevez des alertes instantanées pour les absences et les retards"
-                        },
-                        reporting: {
-                            title: "Rapports Complets",
-                            description: "Générez des rapports de présence détaillés et des analyses"
-                        },
-                        integration: {
-                            title: "Intégration Système",
-                            description: "S'intègre parfaitement avec les autres modules de gestion scolaire"
-                        }
-                    },
-                    benefits: {
-                        title: "Avantages",
-                        items: [
-                            "Réduction de la charge administrative",
-                            "Amélioration de la précision des registres de présence",
-                            "Meilleur suivi des tendances de présence des étudiants",
-                            "Amélioration de la communication avec les parents"
-                        ]
-                    }
-                }
+                tick3: "Rapports Programmés"
             }
         },
         grade_management: {
@@ -328,102 +147,14 @@ export const fr = {
                 description: "Interface facile à utiliser pour la gestion et la saisie des notes avec support de plusieurs échelles de notation.",
                 tick1: "Échelles de Notation Multiples",
                 tick2: "Saisie en Masse des Notes",
-                tick3: "Suivi de l'Historique des Notes",
-                modal: {
-                    title: "Saisie des Notes",
-                    close: "Fermer",
-                    information: {
-                        title: "Gestion Efficace des Notes",
-                        description: "Notre système de saisie des notes rationalise la saisie, le calcul et l'administration des notes des étudiants afin que les enseignants puissent se concentrer sur l'essentiel - l'enseignement.",
-                        features: {
-                            title: "Fonctionnalités de Saisie des Notes",
-                            items: [
-                                "Saisie en masse des notes",
-                                "Échelles de notation personnalisées",
-                                "Devoirs pondérés",
-                                "Outils de calcul des notes",
-                                "Gestion des horaires d'examens",
-                                "Suivi de l'attribution des salles"
-                            ]
-                        },
-                        exam_management: {
-                            title: "Gestion des Examens",
-                            items: [
-                                "Suivi de l'historique des notes",
-                                "Journaux de modification des notes",
-                                "Accès au portail parents",
-                                "Suivi des progrès",
-                                "Planification des dates d'examens",
-                                "Suivi de l'attribution des salles",
-                                "Génération des emplois du temps d'examens",
-                                "Résolution des conflits",
-                                "Notifications aux étudiants"
-                            ]
-                        }
-                    },
-                    key_features: {
-                        title: "Fonctionnalités Clés",
-                        flexible_entry: {
-                            title: "Saisie Flexible",
-                            description: "Gestion et saisie multiple des notes de manière efficace"
-                        },
-                        auto_calculation: {
-                            title: "Calcul Automatique",
-                            description: "Calcul automatique des notes avec des formules modifiables"
-                        },
-                        progress_monitoring: {
-                            title: "Suivi des Progrès",
-                            description: "Surveillez les progrès des étudiants et identifiez les domaines d'amélioration"
-                        }
-                    },
-                    benefits: {
-                        title: "Avantages",
-                        items: [
-                            "Économise du temps consacré à la gestion des notes",
-                            "Réduit les erreurs de calcul",
-                            "Améliore la communication avec les parents"
-                        ]
-                    }
-                }
+                tick3: "Suivi de l'Historique des Notes"
             },
             progress_tracking: {
                 progress_tracking: "Suivi des Progrès",
                 description: "Surveillez les progrès des étudiants dans le temps avec des analyses visuelles et des rapports de performance détaillés.",
                 tick1: "Analyses Visuelles",
                 tick2: "Rapports de Performance",
-                tick3: "Analyse des Tendances",
-                modal: {
-                    title: "Suivi des Progrès",
-                    close: "Fermer",
-                    information: {
-                        title: "Suivi Complet des Progrès",
-                        description: "Notre système de suivi des progrès fournit des informations détaillées sur la performance des étudiants, aidant les éducateurs à identifier les forces et les domaines d'amélioration.",
-                        features: {
-                            title: "Fonctionnalités Clés",
-                            visual_analytics: {
-                                title: "Analyses Visuelles",
-                                description: "Graphiques et diagrammes interactifs pour une visualisation facile des progrès"
-                            },
-                            performance_reports: {
-                                title: "Rapports de Performance",
-                                description: "Rapports détaillés sur la performance académique et les réalisations"
-                            },
-                            trend_analysis: {
-                                title: "Analyse des Tendances",
-                                description: "Suivre les modèles de progression et identifier les domaines d'amélioration"
-                            }
-                        },
-                        benefits: {
-                            title: "Avantages",
-                            items: [
-                                "Suivi des progrès en temps réel",
-                                "Prise de décision basée sur les données",
-                                "Parcours d'apprentissage personnalisés",
-                                "Amélioration des résultats des étudiants"
-                            ]
-                        }
-                    }
-                }
+                tick3: "Analyse des Tendances"
             }
         },
         communication_tools: {

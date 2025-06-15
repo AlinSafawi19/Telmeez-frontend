@@ -109,109 +109,14 @@ export const en = {
                 description: "Streamline the enrollment process with electronic forms, document uploading, and automated workflows.",
                 tick1: "Digital Form Processing",
                 tick2: "Document Management",
-                tick3: "Automated Workflows",
-                modal: {
-                    title: "Enrollment Management",
-                    close: "Close",
-                    information: {
-                        title: "Enrollment Process Details",
-                        description: "Our enrollment management system streamlines the entire student registration process, making it efficient and user-friendly for both administrators and applicants.",
-                        process_steps: {
-                            title: "Enrollment Process Steps",
-                            items: [
-                                "Online Application Submission",
-                                "Document Verification",
-                                "Payment Processing",
-                                "Course Selection"
-                            ]
-                        },
-                        features: {
-                            title: "Key Features",
-                            online_application: {
-                                title: "Online Application",
-                                description: "User-friendly forms for easy student registration"
-                            },
-                            document_verification: {
-                                title: "Document Verification",
-                                description: "Secure document upload and verification system"
-                            },
-                            payment_processing: {
-                                title: "Payment Processing",
-                                description: "Integrated payment system for tuition and fees"
-                            },
-                            course_selection: {
-                                title: "Course Selection",
-                                description: "Interactive course selection and scheduling"
-                            }
-                        },
-                        benefits: {
-                            title: "Benefits",
-                            items: [
-                                "Reduced administrative workload",
-                                "Faster enrollment processing",
-                                "Improved accuracy in data entry",
-                                "Enhanced student experience"
-                            ]
-                        }
-                    }
-                }
+                tick3: "Automated Workflows"
             },
             student_profiles: {
                 student_profiles: "Student Profiles",
                 description: "Create and maintain detailed student profiles with personal information, academic history, and contact details.",
                 tick1: "Personal Information Management",
                 tick2: "Academic History Tracking",
-                tick3: "Contact Details Management",
-                modal: {
-                    title: "Student Profiles",
-                    close: "Close",
-                    information: {
-                        title: "Information of the Student in Detail",
-                        description: "Our student profile module is a one-stop access point for every piece of student information, and it facilitates easy access and an effective management of information on students.",
-                        personal_details: {
-                            title: "Personal Details",
-                            items: [
-                                "General details (name, birth date, gender, etc..)",
-                                "Contact details",
-                                "Emergency contacts",
-                                "Medical information"
-                            ]
-                        },
-                        academic_details: {
-                            title: "Academic Details",
-                            items: [
-                                "Enrollment history",
-                                "Payment history and tracking",
-                                "Academic standing",
-                                "Attendance history"
-                            ]
-                        }
-                    },
-                    features: {
-                        title: "Vital Features",
-                        parent_access: {
-                            title: "Parent & Guardian Access",
-                            description: "Allow guardians to see academic records, attendance, and communicate with educators"
-                        },
-                        grades_schedules: {
-                            title: "Grades & Schedules",
-                            description: "Students can view examination marks, subject split, upcoming deadlines, and a weekly class schedule."
-                        },
-                        document_management: {
-                            title: "Document Management",
-                            description: "Securely upload and manage important student documents"
-                        }
-                    },
-                    benefits: {
-                        title: "Benefits",
-                        items: [
-                            "Efficient management of student information and retrieval",
-                            "Improved teacher-student-parent communication",
-                            "More accurate data and less administration",
-                            "Intelligent tracking and reporting of student history"
-                        ]
-                    }
-                }
+                tick3: "Contact Details Management"
             }
         },
         attendance_system: {
@@ -230,93 +135,7 @@ export const en = {
                 description: "Generate detailed attendance reports automatically with customizable parameters and export options.",
                 tick1: "Custom Report Generation",
                 tick2: "Multiple Export Formats",
-                tick3: "Scheduled Reports",
-                modal: {
-                    title: "Automated Reports",
-                    close: "Close",
-                    information: {
-                        title: "Automated Report Generation",
-                        description: "Our automated reporting system streamlines the process of generating and distributing attendance reports, saving time and ensuring accuracy.",
-                        report_types: {
-                            title: "Report Types",
-                            items: [
-                                "Daily Attendance Reports",
-                                "Weekly Summary Reports",
-                                "Monthly Analytics",
-                                "Custom Period Reports"
-                            ]
-                        },
-                        features: {
-                            title: "Key Features",
-                            customization: {
-                                title: "Customization Options",
-                                description: "Tailor reports to your specific needs with customizable parameters and filters"
-                            },
-                            export_formats: {
-                                title: "Export Formats",
-                                description: "Export reports in multiple formats including PDF, Excel, and CSV"
-                            },
-                            scheduling: {
-                                title: "Automated Scheduling",
-                                description: "Schedule reports to be generated and distributed automatically"
-                            }
-                        },
-                        benefits: {
-                            title: "Benefits",
-                            items: [
-                                "Time-saving automated report generation",
-                                "Improved accuracy and consistency",
-                                "Easy sharing and distribution",
-                                "Comprehensive data analysis"
-                            ]
-                        }
-                    }
-                }
-            },
-            modal: {
-                title: "Digital Attendance System",
-                close: "Close",
-                information: {
-                    title: "Smart Attendance Tracking",
-                    description: "Our digital attendance system revolutionizes how schools take and manage student attendance with more efficiency and accuracy compared to traditional systems.",
-                    attendance_methods: {
-                        title: "Attendance Methods",
-                        items: [
-                            "QR code scanning",
-                            "Biometric verification",
-                            "Mobile app check-in",
-                            "Web portal access"
-                        ]
-                    },
-                    features: {
-                        title: "Key Features",
-                        real_time_tracking: {
-                            title: "Real-time Tracking",
-                            description: "Monitor attendance as it happens with instant updates"
-                        },
-                        automated_notifications: {
-                            title: "Automated Notifications",
-                            description: "Get instant alerts for absences and late arrivals"
-                        },
-                        reporting: {
-                            title: "Comprehensive Reporting",
-                            description: "Generate detailed attendance reports and analytics"
-                        },
-                        integration: {
-                            title: "System Integration",
-                            description: "Seamlessly integrates with other school management modules"
-                        }
-                    },
-                    benefits: {
-                        title: "Benefits",
-                        items: [
-                            "Reduced administrative workload",
-                            "Improved accuracy in attendance records",
-                            "Better tracking of student attendance patterns",
-                            "Enhanced parent communication"
-                        ]
-                    }
-                }
+                tick3: "Scheduled Reports"
             }
         },
         grade_management: {
@@ -328,102 +147,14 @@ export const en = {
                 description: "Easy-to-use interface for grade management and entry with multiple grading scales support.",
                 tick1: "Multiple Grading Scales",
                 tick2: "Bulk Grade Entry",
-                tick3: "Grade History Tracking",
-                modal: {
-                    title: "Grade Entry",
-                    close: "Close",
-                    information: {
-                        title: "Effective Grade Management",
-                        description: "Our grade entry system streamlines entering, calculating, and administering student grades so that teachers can focus on what's most important—teaching.",
-                        features: {
-                            title: "Grade Entry Features",
-                            items: [
-                                "Bulk grade entry",
-                                "Custom grading scales",
-                                "Weighted assignments",
-                                "Grade calculation tools",
-                                "Exam schedule management",
-                                "Room allocation tracking"
-                            ]
-                        },
-                        exam_management: {
-                            title: "Exam Management",
-                            items: [
-                                "Grade history tracking",
-                                "Grade modification logs",
-                                "Parent portal access",
-                                "Progress monitoring",
-                                "Exam date scheduling",
-                                "Room assignment tracking",
-                                "Exam timetable generation",
-                                "Conflict resolution",
-                                "Student notifications"
-                            ]
-                        }
-                    },
-                    key_features: {
-                        title: "Key Features",
-                        flexible_entry: {
-                            title: "Flexible Entry",
-                            description: "Several management and entry of grades in an efficient way"
-                        },
-                        auto_calculation: {
-                            title: "Auto Calculation",
-                            description: "Automated calculation of grades with editable formulas"
-                        },
-                        progress_monitoring: {
-                            title: "Progress Monitoring",
-                            description: "Monitor student progress and identify areas for improvement"
-                        }
-                    },
-                    benefits: {
-                        title: "Benefits",
-                        items: [
-                            "Saves time spent on managing grades",
-                            "Reduces calculation errors",
-                            "Improves parent communication"
-                        ]
-                    }
-                }
+                tick3: "Grade History Tracking"
             },
             progress_tracking: {
                 progress_tracking: "Progress Tracking",
                 description: "Monitor student progress over time with visual analytics and detailed performance reports.",
                 tick1: "Visual Analytics",
                 tick2: "Performance Reports",
-                tick3: "Trend Analysis",
-                modal: {
-                    title: "Progress Tracking",
-                    close: "Close",
-                    information: {
-                        title: "Comprehensive Progress Monitoring",
-                        description: "Our progress tracking system provides detailed insights into student performance, helping educators identify strengths and areas for improvement.",
-                        features: {
-                            title: "Key Features",
-                            visual_analytics: {
-                                title: "Visual Analytics",
-                                description: "Interactive charts and graphs for easy progress visualization"
-                            },
-                            performance_reports: {
-                                title: "Performance Reports",
-                                description: "Detailed reports on academic performance and achievements"
-                            },
-                            trend_analysis: {
-                                title: "Trend Analysis",
-                                description: "Track progress patterns and identify improvement areas"
-                            }
-                        },
-                        benefits: {
-                            title: "Benefits",
-                            items: [
-                                "Real-time progress monitoring",
-                                "Data-driven decision making",
-                                "Personalized learning paths",
-                                "Improved student outcomes"
-                            ]
-                        }
-                    }
-                }
+                tick3: "Trend Analysis"
             },
         },
         communication_tools: {

@@ -709,7 +709,7 @@ const Landing: React.FC = () => {
                                         className="text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
                                         {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
@@ -754,7 +754,7 @@ const Landing: React.FC = () => {
                                         className="text-purple-600 font-semibold hover:text-purple-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
                                         {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
@@ -817,7 +817,7 @@ const Landing: React.FC = () => {
                                         className="text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
                                         {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
@@ -862,7 +862,7 @@ const Landing: React.FC = () => {
                                         className="text-green-600 font-semibold hover:text-green-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
                                         {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
@@ -925,7 +925,7 @@ const Landing: React.FC = () => {
                                         className="text-indigo-600 font-semibold hover:text-indigo-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
                                         {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
@@ -970,7 +970,7 @@ const Landing: React.FC = () => {
                                         className="text-yellow-600 font-semibold hover:text-yellow-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
                                         {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
@@ -1033,7 +1033,7 @@ const Landing: React.FC = () => {
                                         className="text-pink-600 font-semibold hover:text-pink-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
                                         {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
@@ -1078,7 +1078,7 @@ const Landing: React.FC = () => {
                                         className="text-orange-600 font-semibold hover:text-orange-700 transition-colors duration-200 flex items-center group focus:outline-none"
                                     >
                                         {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ltr:ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
@@ -1302,7 +1302,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.student_management.student_profiles.modal.title}</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">Student Profiles</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsStudentProfilesModalOpen(false)}
@@ -1315,95 +1315,13 @@ const Landing: React.FC = () => {
                                     </button>
                                 </div>
 
-                                <div className="space-y-8">
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{translations[currentLanguage].features.student_management.student_profiles.modal.information.title}</h4>
-                                        <p className="text-gray-600 mb-4">
-                                            {translations[currentLanguage].features.student_management.student_profiles.modal.information.description}
-                                        </p>
-                                        <div className="grid md:grid-cols-2 gap-4">
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">{translations[currentLanguage].features.student_management.student_profiles.modal.information.personal_details.title}</h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    {translations[currentLanguage].features.student_management.student_profiles.modal.information.personal_details.items.map((item, index) => (
-                                                        <li key={index}>• {item}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">{translations[currentLanguage].features.student_management.student_profiles.modal.information.academic_details.title}</h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    {translations[currentLanguage].features.student_management.student_profiles.modal.information.academic_details.items.map((item, index) => (
-                                                        <li key={index}>• {item}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{translations[currentLanguage].features.student_management.student_profiles.modal.features.title}</h4>
-                                        <div className="grid md:grid-cols-3 gap-4">
-                                            <div className="bg-blue-50 p-4 rounded-lg">
-                                                <div className="text-blue-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a4 4 0 00-8 0v2m10 0v10a2 2 0 01-2 2H7a2 2 0 01-2-2V9m12 0H5" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">{translations[currentLanguage].features.student_management.student_profiles.modal.features.parent_access.title}</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    {translations[currentLanguage].features.student_management.student_profiles.modal.features.parent_access.description}
-                                                </p>
-                                            </div>
-                                            <div className="bg-green-50 p-4 rounded-lg">
-                                                <div className="text-green-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-6h6v6h4l-7 7-7-7h4zM4 4h16v2H4z" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">{translations[currentLanguage].features.student_management.student_profiles.modal.features.grades_schedules.title}</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    {translations[currentLanguage].features.student_management.student_profiles.modal.features.grades_schedules.description}
-                                                </p>
-                                            </div>
-                                            <div className="bg-purple-50 p-4 rounded-lg">
-                                                <div className="text-purple-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">{translations[currentLanguage].features.student_management.student_profiles.modal.features.document_management.title}</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    {translations[currentLanguage].features.student_management.student_profiles.modal.features.document_management.description}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{translations[currentLanguage].features.student_management.student_profiles.modal.benefits.title}</h4>
-                                        <div className="bg-gray-50 p-6 rounded-lg">
-                                            <ul className="space-y-4">
-                                                {translations[currentLanguage].features.student_management.student_profiles.modal.benefits.items.map((item, index) => (
-                                                    <li key={index} className="flex items-start">
-                                                        <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                        </svg>
-                                                        <span className="text-gray-600">{item}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div className="mt-8 flex justify-end">
                                     <button
                                         type="button"
                                         onClick={() => setIsStudentProfilesModalOpen(false)}
                                         className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     >
-                                        {translations[currentLanguage].features.student_management.student_profiles.modal.close}
+                                        Close
                                     </button>
                                 </div>
                             </div>
@@ -1432,7 +1350,7 @@ const Landing: React.FC = () => {
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
                                     <h3 className="text-2xl font-bold text-gray-900">
-                                        {t.features.student_management.enrollment_management.modal.title}
+                                        Enrollment Management
                                     </h3>
                                     <button
                                         type="button"
@@ -1446,112 +1364,13 @@ const Landing: React.FC = () => {
                                     </button>
                                 </div>
 
-                                <div className="space-y-8">
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">
-                                            {t.features.student_management.enrollment_management.modal.information.title}
-                                        </h4>
-                                        <p className="text-gray-600 mb-4">
-                                            {t.features.student_management.enrollment_management.modal.information.description}
-                                        </p>
-                                        <div className="grid md:grid-cols-2 gap-4">
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">
-                                                    {t.features.student_management.enrollment_management.modal.information.process_steps.title}
-                                                </h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    {t.features.student_management.enrollment_management.modal.information.process_steps.items.map((item, index) => (
-                                                        <li key={index}>• {item}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">
-                                                    {t.features.student_management.enrollment_management.modal.information.features.title}
-                                                </h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    <li>• {t.features.student_management.enrollment_management.modal.information.features.online_application.title}</li>
-                                                    <li>• {t.features.student_management.enrollment_management.modal.information.features.document_verification.title}</li>
-                                                    <li>• {t.features.student_management.enrollment_management.modal.information.features.payment_processing.title}</li>
-                                                    <li>• {t.features.student_management.enrollment_management.modal.information.features.course_selection.title}</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">
-                                            {t.features.student_management.enrollment_management.modal.information.features.title}
-                                        </h4>
-                                        <div className="grid md:grid-cols-3 gap-4">
-                                            <div className="bg-purple-50 p-4 rounded-lg">
-                                                <div className="text-purple-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">
-                                                    {t.features.student_management.enrollment_management.modal.information.features.online_application.title}
-                                                </h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    {t.features.student_management.enrollment_management.modal.information.features.online_application.description}
-                                                </p>
-                                            </div>
-                                            <div className="bg-blue-50 p-4 rounded-lg">
-                                                <div className="text-blue-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">
-                                                    {t.features.student_management.enrollment_management.modal.information.features.document_verification.title}
-                                                </h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    {t.features.student_management.enrollment_management.modal.information.features.document_verification.description}
-                                                </p>
-                                            </div>
-                                            <div className="bg-green-50 p-4 rounded-lg">
-                                                <div className="text-green-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">
-                                                    {t.features.student_management.enrollment_management.modal.information.features.payment_processing.title}
-                                                </h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    {t.features.student_management.enrollment_management.modal.information.features.payment_processing.description}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">
-                                            {t.features.student_management.enrollment_management.modal.information.benefits.title}
-                                        </h4>
-                                        <div className="bg-gray-50 p-6 rounded-lg">
-                                            <ul className="space-y-4">
-                                                {t.features.student_management.enrollment_management.modal.information.benefits.items.map((item, index) => (
-                                                    <li key={index} className="flex items-start">
-                                                        <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                        </svg>
-                                                        <span className="text-gray-600">{item}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div className="mt-8 flex justify-end">
                                     <button
                                         type="button"
                                         onClick={() => setIsEnrollmentModalOpen(false)}
                                         className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
                                     >
-                                        {t.features.student_management.enrollment_management.modal.close}
+                                        Close
                                     </button>
                                 </div>
                             </div>
@@ -1579,7 +1398,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">{t.features.attendance_system.modal.title}</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">Digital Attendance</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsAttendanceModalOpen(false)}
@@ -1592,59 +1411,13 @@ const Landing: React.FC = () => {
                                     </button>
                                 </div>
 
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">{t.features.attendance_system.modal.information.title}</h4>
-                                    <p className="text-gray-600 mb-4">
-                                        {t.features.attendance_system.modal.information.description}
-                                    </p>
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">{t.features.attendance_system.modal.information.attendance_methods.title}</h5>
-                                            <ul className="space-y-2 text-gray-600">
-                                                {t.features.attendance_system.modal.information.attendance_methods.items.map((item, index) => (
-                                                    <li key={index}>• {item}</li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <h5 className="font-semibold text-gray-900 mb-2">{t.features.attendance_system.modal.information.features.title}</h5>
-                                            <div className="space-y-4">
-                                                <div>
-                                                    <h6 className="font-medium text-gray-900">{t.features.attendance_system.modal.information.features.real_time_tracking.title}</h6>
-                                                    <p className="text-gray-600">{t.features.attendance_system.modal.information.features.real_time_tracking.description}</p>
-                                                </div>
-                                                <div>
-                                                    <h6 className="font-medium text-gray-900">{t.features.attendance_system.modal.information.features.automated_notifications.title}</h6>
-                                                    <p className="text-gray-600">{t.features.attendance_system.modal.information.features.automated_notifications.description}</p>
-                                                </div>
-                                                <div>
-                                                    <h6 className="font-medium text-gray-900">{t.features.attendance_system.modal.information.features.reporting.title}</h6>
-                                                    <p className="text-gray-600">{t.features.attendance_system.modal.information.features.reporting.description}</p>
-                                                </div>
-                                                <div>
-                                                    <h6 className="font-medium text-gray-900">{t.features.attendance_system.modal.information.features.integration.title}</h6>
-                                                    <p className="text-gray-600">{t.features.attendance_system.modal.information.features.integration.description}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="mt-6 bg-gray-50 p-4 rounded-lg">
-                                        <h5 className="font-semibold text-gray-900 mb-2">{t.features.attendance_system.modal.information.benefits.title}</h5>
-                                        <ul className="space-y-2 text-gray-600">
-                                            {t.features.attendance_system.modal.information.benefits.items.map((item, index) => (
-                                                <li key={index}>• {item}</li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </div>
-
                                 <div className="mt-8 flex justify-end">
                                     <button
                                         type="button"
                                         onClick={() => setIsAttendanceModalOpen(false)}
                                         className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     >
-                                        {t.features.attendance_system.modal.close}
+                                        Close
                                     </button>
                                 </div>
                             </div>
@@ -1672,7 +1445,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">{t.features.attendance_system.automated_reports.modal.title}</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">Automated Reports</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsReportsModalOpen(false)}
@@ -1685,65 +1458,13 @@ const Landing: React.FC = () => {
                                     </button>
                                 </div>
 
-                                <div className="space-y-8">
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{t.features.attendance_system.automated_reports.modal.information.title}</h4>
-                                        <p className="text-gray-600 mb-4">
-                                            {t.features.attendance_system.automated_reports.modal.information.description}
-                                        </p>
-                                        <div className="grid md:grid-cols-2 gap-4">
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.attendance_system.automated_reports.modal.information.report_types.title}</h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    {t.features.attendance_system.automated_reports.modal.information.report_types.items.map((item, index) => (
-                                                        <li key={index}>• {item}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.attendance_system.automated_reports.modal.information.features.title}</h5>
-                                                <div className="space-y-4">
-                                                    <div>
-                                                        <h6 className="font-medium text-gray-900">{t.features.attendance_system.automated_reports.modal.information.features.customization.title}</h6>
-                                                        <p className="text-gray-600 text-sm">{t.features.attendance_system.automated_reports.modal.information.features.customization.description}</p>
-                                                    </div>
-                                                    <div>
-                                                        <h6 className="font-medium text-gray-900">{t.features.attendance_system.automated_reports.modal.information.features.export_formats.title}</h6>
-                                                        <p className="text-gray-600 text-sm">{t.features.attendance_system.automated_reports.modal.information.features.export_formats.description}</p>
-                                                    </div>
-                                                    <div>
-                                                        <h6 className="font-medium text-gray-900">{t.features.attendance_system.automated_reports.modal.information.features.scheduling.title}</h6>
-                                                        <p className="text-gray-600 text-sm">{t.features.attendance_system.automated_reports.modal.information.features.scheduling.description}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{t.features.attendance_system.automated_reports.modal.information.benefits.title}</h4>
-                                        <div className="bg-gray-50 p-6 rounded-lg">
-                                            <ul className="space-y-4">
-                                                {t.features.attendance_system.automated_reports.modal.information.benefits.items.map((item, index) => (
-                                                    <li key={index} className="flex items-start">
-                                                        <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                        </svg>
-                                                        <span className="text-gray-600">{item}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div className="mt-8 flex justify-end">
                                     <button
                                         type="button"
                                         onClick={() => setIsReportsModalOpen(false)}
                                         className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     >
-                                        {t.features.attendance_system.automated_reports.modal.close}
+                                        Close
                                     </button>
                                 </div>
                             </div>
@@ -1771,7 +1492,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-6">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">{t.features.grade_management.grade_entry.modal.title}</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">Grade Entry</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsGradeEntryModalOpen(false)}
@@ -1784,95 +1505,13 @@ const Landing: React.FC = () => {
                                     </button>
                                 </div>
 
-                                <div className="space-y-8">
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{t.features.grade_management.grade_entry.modal.information.title}</h4>
-                                        <p className="text-gray-600 mb-4">
-                                            {t.features.grade_management.grade_entry.modal.information.description}
-                                        </p>
-                                        <div className="grid md:grid-cols-2 gap-4">
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.grade_management.grade_entry.modal.information.features.title}</h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    {t.features.grade_management.grade_entry.modal.information.features.items.map((item, index) => (
-                                                        <li key={index}>• {item}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.grade_management.grade_entry.modal.information.exam_management.title}</h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    {t.features.grade_management.grade_entry.modal.information.exam_management.items.map((item, index) => (
-                                                        <li key={index}>• {item}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{t.features.grade_management.grade_entry.modal.key_features.title}</h4>
-                                        <div className="grid md:grid-cols-3 gap-4">
-                                            <div className="bg-indigo-50 p-4 rounded-lg">
-                                                <div className="text-indigo-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.grade_management.grade_entry.modal.key_features.flexible_entry.title}</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    {t.features.grade_management.grade_entry.modal.key_features.flexible_entry.description}
-                                                </p>
-                                            </div>
-                                            <div className="bg-blue-50 p-4 rounded-lg">
-                                                <div className="text-blue-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.grade_management.grade_entry.modal.key_features.auto_calculation.title}</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    {t.features.grade_management.grade_entry.modal.key_features.auto_calculation.description}
-                                                </p>
-                                            </div>
-                                            <div className="bg-purple-50 p-4 rounded-lg">
-                                                <div className="text-purple-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.grade_management.grade_entry.modal.key_features.progress_monitoring.title}</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    {t.features.grade_management.grade_entry.modal.key_features.progress_monitoring.description}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{t.features.grade_management.grade_entry.modal.benefits.title}</h4>
-                                        <div className="bg-gray-50 p-6 rounded-lg">
-                                            <ul className="space-y-4">
-                                                {t.features.grade_management.grade_entry.modal.benefits.items.map((item, index) => (
-                                                    <li key={index} className="flex items-start">
-                                                        <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                        </svg>
-                                                        <span className="text-gray-600">{item}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div className="mt-8 flex justify-end">
                                     <button
                                         type="button"
                                         onClick={() => setIsGradeEntryModalOpen(false)}
                                         className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     >
-                                        {t.features.grade_management.grade_entry.modal.close}
+                                        Close
                                     </button>
                                 </div>
                             </div>
@@ -1900,7 +1539,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">{t.features.grade_management.progress_tracking.modal.title}</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">Progress Tracking</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsProgressTrackingModalOpen(false)}
@@ -1913,49 +1552,13 @@ const Landing: React.FC = () => {
                                     </button>
                                 </div>
 
-                                <div className="space-y-8">
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{t.features.grade_management.progress_tracking.modal.information.title}</h4>
-                                        <p className="text-gray-600 mb-4">
-                                            {t.features.grade_management.progress_tracking.modal.information.description}
-                                        </p>
-                                        <div className="grid md:grid-cols-2 gap-4">
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.grade_management.progress_tracking.modal.information.features.title}</h5>
-                                                <div className="space-y-4">
-                                                    <div>
-                                                        <h6 className="font-medium text-gray-900">{t.features.grade_management.progress_tracking.modal.information.features.visual_analytics.title}</h6>
-                                                        <p className="text-gray-600">{t.features.grade_management.progress_tracking.modal.information.features.visual_analytics.description}</p>
-                                                    </div>
-                                                    <div>
-                                                        <h6 className="font-medium text-gray-900">{t.features.grade_management.progress_tracking.modal.information.features.performance_reports.title}</h6>
-                                                        <p className="text-gray-600">{t.features.grade_management.progress_tracking.modal.information.features.performance_reports.description}</p>
-                                                    </div>
-                                                    <div>
-                                                        <h6 className="font-medium text-gray-900">{t.features.grade_management.progress_tracking.modal.information.features.trend_analysis.title}</h6>
-                                                        <p className="text-gray-600">{t.features.grade_management.progress_tracking.modal.information.features.trend_analysis.description}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.grade_management.progress_tracking.modal.information.benefits.title}</h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    {t.features.grade_management.progress_tracking.modal.information.benefits.items.map((item, idx) => (
-                                                        <li key={idx}>• {item}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div className="mt-8 flex justify-end">
                                     <button
                                         type="button"
                                         onClick={() => setIsProgressTrackingModalOpen(false)}
                                         className="bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
                                     >
-                                        {t.features.grade_management.progress_tracking.modal.close}
+                                        Close
                                     </button>
                                 </div>
                             </div>
@@ -1994,104 +1597,6 @@ const Landing: React.FC = () => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                     </button>
-                                </div>
-
-                                <div className="space-y-8">
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Real-time Messaging</h4>
-                                        <p className="text-gray-600 mb-4">
-                                            Our messaging system supports for real-time communication between teachers, students, and parents.
-                                        </p>
-                                        <div className="grid md:grid-cols-2 gap-4">
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Features</h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    <li>• Real-time chat</li>
-                                                    <li>• File sharing</li>
-                                                    <li>• Group conversations</li>
-                                                </ul>
-                                            </div>
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Key Advantages</h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    <li>• Instant message delivery</li>
-                                                    <li>• Secure data transmission</li>
-                                                    <li>• Multiple platform access</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
-                                        <div className="grid md:grid-cols-3 gap-4">
-                                            <div className="bg-blue-50 p-4 rounded-lg">
-                                                <div className="text-blue-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Real-time Chat</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    Quick and effective real-time messaging
-                                                </p>
-                                            </div>
-                                            <div className="bg-green-50 p-4 rounded-lg">
-                                                <div className="text-green-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">File Sharing</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    Secure and efficient file sharing
-                                                </p>
-                                            </div>
-                                            <div className="bg-purple-50 p-4 rounded-lg">
-                                                <div className="text-purple-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Group Conversations</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    Control conversations with adjustable group options
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
-                                        <div className="bg-gray-50 p-6 rounded-lg">
-                                            <ul className="space-y-4">
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Enhanced collaboration and communication</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">More parent-teacher communication</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Enhanced student participation and results</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Less administrative work</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <div className="mt-8 flex justify-end">
@@ -2139,104 +1644,6 @@ const Landing: React.FC = () => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                     </button>
-                                </div>
-
-                                <div className="space-y-8">
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">School Announcements</h4>
-                                        <p className="text-gray-600 mb-4">
-                                            Our announcements system supports efficient communication of important updates and information to the overall school community.
-                                        </p>
-                                        <div className="grid md:grid-cols-2 gap-4">
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Features</h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    <li>• Targeted broadcasts</li>
-                                                    <li>• Scheduled announcements</li>
-                                                    <li>• Priority notifications</li>
-                                                </ul>
-                                            </div>
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Use Cases</h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    <li>• Daily students' and parents' updates</li>
-                                                    <li>• Emergency alerts and quick response notifications</li>
-                                                    <li>• Event reminders and schedule notifications</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
-                                        <div className="grid md:grid-cols-3 gap-4">
-                                            <div className="bg-orange-50 p-4 rounded-lg">
-                                                <div className="text-orange-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Targeted Broadcasts</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    Broadcast announcements to specific groups or the entire school
-                                                </p>
-                                            </div>
-                                            <div className="bg-yellow-50 p-4 rounded-lg">
-                                                <div className="text-yellow-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Scheduled Announcements</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    Schedule and plan announcements ahead of time
-                                                </p>
-                                            </div>
-                                            <div className="bg-red-50 p-4 rounded-lg">
-                                                <div className="text-red-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Priority Announcements</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    Highlight significant announcements with priority status
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
-                                        <div className="bg-gray-50 p-6 rounded-lg">
-                                            <ul className="space-y-4">
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Efficient communication within the school community</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Improved information delivery and accessibility</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Improved parent and student engagement</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Fewer administrative tasks on communications</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <div className="mt-8 flex justify-end">
