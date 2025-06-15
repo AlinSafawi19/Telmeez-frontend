@@ -231,6 +231,51 @@ export const en = {
                 tick1: "Custom Report Generation",
                 tick2: "Multiple Export Formats",
                 tick3: "Scheduled Reports"
+            },
+            modal: {
+                title: "Digital Attendance System",
+                close: "Close",
+                information: {
+                    title: "Smart Attendance Tracking",
+                    description: "Our digital attendance system revolutionizes how schools take and manage student attendance with more efficiency and accuracy compared to traditional systems.",
+                    attendance_methods: {
+                        title: "Attendance Methods",
+                        items: [
+                            "QR code scanning",
+                            "Biometric verification",
+                            "Mobile app check-in",
+                            "Web portal access"
+                        ]
+                    },
+                    features: {
+                        title: "Key Features",
+                        real_time_tracking: {
+                            title: "Real-time Tracking",
+                            description: "Monitor attendance as it happens with instant updates"
+                        },
+                        automated_notifications: {
+                            title: "Automated Notifications",
+                            description: "Get instant alerts for absences and late arrivals"
+                        },
+                        reporting: {
+                            title: "Comprehensive Reporting",
+                            description: "Generate detailed attendance reports and analytics"
+                        },
+                        integration: {
+                            title: "System Integration",
+                            description: "Seamlessly integrates with other school management modules"
+                        }
+                    },
+                    benefits: {
+                        title: "Benefits",
+                        items: [
+                            "Reduced administrative workload",
+                            "Improved accuracy in attendance records",
+                            "Better tracking of student attendance patterns",
+                            "Enhanced parent communication"
+                        ]
+                    }
+                }
             }
         },
         grade_management: {

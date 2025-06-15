@@ -221,16 +221,61 @@ export const fr = {
             real_time_tracking: {
                 real_time_tracking: "Suivi en Temps Réel",
                 description: "Suivez les présences en temps réel avec des mises à jour instantanées et des notifications pour les absences.",
-                tick1: "Mises à Jour Instantanées des Présences",
-                tick2: "Notifications d'Absences",
+                tick1: "Mises à Jour Instantanées",
+                tick2: "Notifications d'Absence",
                 tick3: "Rapports en Temps Réel"
             },
             automated_reports: {
                 automated_reports: "Rapports Automatisés",
-                description: "Générez automatiquement des rapports détaillés de présence avec des paramètres personnalisables et des options d'exportation.",
+                description: "Générez automatiquement des rapports de présence détaillés avec des paramètres personnalisables et des options d'exportation.",
                 tick1: "Génération de Rapports Personnalisés",
                 tick2: "Formats d'Exportation Multiples",
                 tick3: "Rapports Programmés"
+            },
+            modal: {
+                title: "Système de Présence Numérique",
+                close: "Fermer",
+                information: {
+                    title: "Suivi Intelligent des Présences",
+                    description: "Notre système de présence numérique révolutionne la façon dont les écoles prennent et gèrent la présence des étudiants avec plus d'efficacité et de précision par rapport aux systèmes traditionnels.",
+                    attendance_methods: {
+                        title: "Méthodes de Présence",
+                        items: [
+                            "Scan de code QR",
+                            "Vérification biométrique",
+                            "Pointage via application mobile",
+                            "Accès via portail web"
+                        ]
+                    },
+                    features: {
+                        title: "Fonctionnalités Clés",
+                        real_time_tracking: {
+                            title: "Suivi en Temps Réel",
+                            description: "Surveillez les présences en temps réel avec des mises à jour instantanées"
+                        },
+                        automated_notifications: {
+                            title: "Notifications Automatisées",
+                            description: "Recevez des alertes instantanées pour les absences et les retards"
+                        },
+                        reporting: {
+                            title: "Rapports Complets",
+                            description: "Générez des rapports de présence détaillés et des analyses"
+                        },
+                        integration: {
+                            title: "Intégration Système",
+                            description: "S'intègre parfaitement avec les autres modules de gestion scolaire"
+                        }
+                    },
+                    benefits: {
+                        title: "Avantages",
+                        items: [
+                            "Réduction de la charge administrative",
+                            "Amélioration de la précision des registres de présence",
+                            "Meilleur suivi des tendances de présence des étudiants",
+                            "Amélioration de la communication avec les parents"
+                        ]
+                    }
+                }
             }
         },
         grade_management: {

@@ -1579,7 +1579,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">Digital Attendance System</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">{t.features.attendance_system.modal.title}</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsAttendanceModalOpen(false)}
@@ -1592,103 +1592,49 @@ const Landing: React.FC = () => {
                                     </button>
                                 </div>
 
-                                <div className="space-y-8">
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Smart Attendance Tracking</h4>
-                                        <p className="text-gray-600 mb-4">
-                                            Our digital attendance system revolutionizes how schools take and manage student attendance with more efficiency and accuracy compared to traditional systems.
-                                        </p>
-                                        <div className="grid md:grid-cols-2 gap-4">
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Attendance Methods</h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    <li>• QR code scanning</li>
-                                                    <li>• Biometric verification</li>
-                                                    <li>• Mobile app check-in</li>
-                                                    <li>• Web portal access</li>
-                                                </ul>
-                                            </div>
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Real-time Features</h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    <li>• Instant attendance updates</li>
-                                                    <li>• Automated notifications</li>
-                                                    <li>• Absence tracking</li>
-                                                    <li>• Late arrival monitoring</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
-                                        <div className="grid md:grid-cols-3 gap-4">
-                                            <div className="bg-blue-50 p-4 rounded-lg">
-                                                <div className="text-blue-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Quick Check-in</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    Fast and efficient attendance marking through multiple verification methods
-                                                </p>
-                                            </div>
-                                            <div className="bg-green-50 p-4 rounded-lg">
-                                                <div className="text-green-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Automated Reports</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    Generate detailed attendance reports and analytics
-                                                </p>
-                                            </div>
-                                            <div className="bg-purple-50 p-4 rounded-lg">
-                                                <div className="text-purple-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Smart Alerts</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    Instant notifications for absences and attendance patterns
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
-                                        <div className="bg-gray-50 p-6 rounded-lg">
-                                            <ul className="space-y-4">
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Eliminates manual attendance taking and reduces errors</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Saves time for teachers and administrators</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Provides real-time attendance data and insights</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Enhances communication with parents and guardians</span>
-                                                </li>
+                                <div>
+                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">{t.features.attendance_system.modal.information.title}</h4>
+                                    <p className="text-gray-600 mb-4">
+                                        {t.features.attendance_system.modal.information.description}
+                                    </p>
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                        <div className="bg-gray-50 p-4 rounded-lg">
+                                            <h5 className="font-semibold text-gray-900 mb-2">{t.features.attendance_system.modal.information.attendance_methods.title}</h5>
+                                            <ul className="space-y-2 text-gray-600">
+                                                {t.features.attendance_system.modal.information.attendance_methods.items.map((item, index) => (
+                                                    <li key={index}>• {item}</li>
+                                                ))}
                                             </ul>
                                         </div>
+                                        <div className="bg-gray-50 p-4 rounded-lg">
+                                            <h5 className="font-semibold text-gray-900 mb-2">{t.features.attendance_system.modal.information.features.title}</h5>
+                                            <div className="space-y-4">
+                                                <div>
+                                                    <h6 className="font-medium text-gray-900">{t.features.attendance_system.modal.information.features.real_time_tracking.title}</h6>
+                                                    <p className="text-gray-600">{t.features.attendance_system.modal.information.features.real_time_tracking.description}</p>
+                                                </div>
+                                                <div>
+                                                    <h6 className="font-medium text-gray-900">{t.features.attendance_system.modal.information.features.automated_notifications.title}</h6>
+                                                    <p className="text-gray-600">{t.features.attendance_system.modal.information.features.automated_notifications.description}</p>
+                                                </div>
+                                                <div>
+                                                    <h6 className="font-medium text-gray-900">{t.features.attendance_system.modal.information.features.reporting.title}</h6>
+                                                    <p className="text-gray-600">{t.features.attendance_system.modal.information.features.reporting.description}</p>
+                                                </div>
+                                                <div>
+                                                    <h6 className="font-medium text-gray-900">{t.features.attendance_system.modal.information.features.integration.title}</h6>
+                                                    <p className="text-gray-600">{t.features.attendance_system.modal.information.features.integration.description}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mt-6 bg-gray-50 p-4 rounded-lg">
+                                        <h5 className="font-semibold text-gray-900 mb-2">{t.features.attendance_system.modal.information.benefits.title}</h5>
+                                        <ul className="space-y-2 text-gray-600">
+                                            {t.features.attendance_system.modal.information.benefits.items.map((item, index) => (
+                                                <li key={index}>• {item}</li>
+                                            ))}
+                                        </ul>
                                     </div>
                                 </div>
 
@@ -1698,7 +1644,7 @@ const Landing: React.FC = () => {
                                         onClick={() => setIsAttendanceModalOpen(false)}
                                         className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     >
-                                        Close
+                                        {t.features.attendance_system.modal.close}
                                     </button>
                                 </div>
                             </div>
