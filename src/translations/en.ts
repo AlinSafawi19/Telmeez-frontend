@@ -203,6 +203,8 @@ export const en = {
         unsubscribe_anytime: "anytime.",
         unsubscribe_title: "Unsubscribe from Newsletter",
         unsubscribe_placeholder: "Enter your email address to unsubscribe",
+        subscribe_message: "Thanks for subscribing. You're in the loop! 🎉",
+        unsubscribe_message: "We'll miss you! You've been unsubscribed successfully. 👋"
     },
     cancel: "Cancel",
     footer: {

@@ -202,7 +202,9 @@ export const fr = {
         privacy_message: "Nous respectons votre vie privée. Vous pouvez vous",
         unsubscribe_anytime: "à tout moment.",
         unsubscribe_title: "Se désabonner de la Newsletter",
-        unsubscribe_placeholder: "Entrez votre adresse e-mail pour vous désabonner"
+        unsubscribe_placeholder: "Entrez votre adresse e-mail pour vous désabonner",
+        subscribe_message: "Merci de vous être abonné. Vous êtes maintenant dans la boucle ! 🎉",
+        unsubscribe_message: "Vous allez nous manquer ! Vous avez été désabonné avec succès. 👋"
     },
     cancel: "Annuler",
     footer: {
