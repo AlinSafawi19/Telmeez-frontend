@@ -413,8 +413,8 @@ const Demo: React.FC = () => {
                                     <motion.button
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
-                                        className={`w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-300 ${roles.find(r => r.id === activeRole)?.gradient} shadow-lg hover:shadow-xl`}
-                                        onClick={() => window.location.href = `/demo-dashboard/${activeRole}`}
+                                        className={`w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-300 ${roles.find(r => r.id === activeRole)?.gradient} focus:outline-none shadow-lg hover:shadow-xl`}
+                                        onClick={() => window.open(`/demo-dashboard/${activeRole}`, '_blank')}
                                     >
                                         Try {roles.find(r => r.id === activeRole)?.title} Dashboard
                                     </motion.button>
