@@ -16,14 +16,6 @@ const Landing: React.FC = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const [selectedPricingPlan, setSelectedPricingPlan] = useState<string | null>(null);
-    const [isStudentProfilesModalOpen, setIsStudentProfilesModalOpen] = useState(false);
-    const [isEnrollmentModalOpen, setIsEnrollmentModalOpen] = useState(false);
-    const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
-    const [isReportsModalOpen, setIsReportsModalOpen] = useState(false);
-    const [isGradeEntryModalOpen, setIsGradeEntryModalOpen] = useState(false);
-    const [isProgressTrackingModalOpen, setIsProgressTrackingModalOpen] = useState(false);
-    const [isMessagingSystemModalOpen, setIsMessagingSystemModalOpen] = useState(false);
-    const [isAnnouncementsModalOpen, setIsAnnouncementsModalOpen] = useState(false);
     const dropdownTimeoutRef = useRef<number | null>(null);
     const isHoveringRef = useRef(false);
     const pricingSectionRef = useRef<HTMLDivElement>(null);
@@ -702,18 +694,6 @@ const Landing: React.FC = () => {
                                         {t.features.student_management.student_profiles.tick3}
                                     </li>
                                 </ul>
-                                <div className="mt-6 pt-6 border-t border-gray-100">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsStudentProfilesModalOpen(true)}
-                                        className="text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-200 flex items-center group focus:outline-none"
-                                    >
-                                        {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                        </svg>
-                                    </button>
-                                </div>
                             </div>
                             <div className="feature-card bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 group">
                                 <div className="flex items-center mb-6">
@@ -747,18 +727,6 @@ const Landing: React.FC = () => {
                                         {t.features.student_management.enrollment_management.tick3}
                                     </li>
                                 </ul>
-                                <div className="mt-6 pt-6 border-t border-gray-100">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsEnrollmentModalOpen(true)}
-                                        className="text-purple-600 font-semibold hover:text-purple-700 transition-colors duration-200 flex items-center group focus:outline-none"
-                                    >
-                                        {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                        </svg>
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -810,18 +778,6 @@ const Landing: React.FC = () => {
                                         {t.features.attendance_system.real_time_tracking.tick3}
                                     </li>
                                 </ul>
-                                <div className="mt-6 pt-6 border-t border-gray-100">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsAttendanceModalOpen(true)}
-                                        className="text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-200 flex items-center group focus:outline-none"
-                                    >
-                                        {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                        </svg>
-                                    </button>
-                                </div>
                             </div>
                             <div className="feature-card bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 group">
                                 <div className="flex items-center mb-6">
@@ -855,18 +811,6 @@ const Landing: React.FC = () => {
                                         {t.features.attendance_system.automated_reports.tick3}
                                     </li>
                                 </ul>
-                                <div className="mt-6 pt-6 border-t border-gray-100">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsReportsModalOpen(true)}
-                                        className="text-green-600 font-semibold hover:text-green-700 transition-colors duration-200 flex items-center group focus:outline-none"
-                                    >
-                                        {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                        </svg>
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -918,18 +862,6 @@ const Landing: React.FC = () => {
                                         {t.features.grade_management.grade_entry.tick3}
                                     </li>
                                 </ul>
-                                <div className="mt-6 pt-6 border-t border-gray-100">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsGradeEntryModalOpen(true)}
-                                        className="text-indigo-600 font-semibold hover:text-indigo-700 transition-colors duration-200 flex items-center group focus:outline-none"
-                                    >
-                                        {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                        </svg>
-                                    </button>
-                                </div>
                             </div>
                             <div className="feature-card bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 group">
                                 <div className="flex items-center mb-6">
@@ -963,18 +895,6 @@ const Landing: React.FC = () => {
                                         Trend Analysis
                                     </li>
                                 </ul>
-                                <div className="mt-6 pt-6 border-t border-gray-100">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsProgressTrackingModalOpen(true)}
-                                        className="text-yellow-600 font-semibold hover:text-yellow-700 transition-colors duration-200 flex items-center group focus:outline-none"
-                                    >
-                                        {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                        </svg>
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -1026,18 +946,6 @@ const Landing: React.FC = () => {
                                         {t.features.communication_tools.messaging.tick3}
                                     </li>
                                 </ul>
-                                <div className="mt-6 pt-6 border-t border-gray-100">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsMessagingSystemModalOpen(true)}
-                                        className="text-pink-600 font-semibold hover:text-pink-700 transition-colors duration-200 flex items-center group focus:outline-none"
-                                    >
-                                        {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                        </svg>
-                                    </button>
-                                </div>
                             </div>
                             <div className="feature-card bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 group">
                                 <div className="flex items-center mb-6">
@@ -1071,18 +979,6 @@ const Landing: React.FC = () => {
                                         {t.features.communication_tools.notifications.tick3}
                                     </li>
                                 </ul>
-                                <div className="mt-6 pt-6 border-t border-gray-100">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsAnnouncementsModalOpen(true)}
-                                        className="text-orange-600 font-semibold hover:text-orange-700 transition-colors duration-200 flex items-center group focus:outline-none"
-                                    >
-                                        {t.features.learn_more}
-                                        <svg className="w-5 h-5 rtl:mr-2 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                        </svg>
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -1282,439 +1178,6 @@ const Landing: React.FC = () => {
                     </div>
                 </div>
             </footer>
-
-            {/* Enrollment Management Modal */}
-            <AnimatePresence>
-                {isEnrollmentModalOpen && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.95, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-                        >
-                            <div className="p-8">
-                                <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">
-                                        {translations[currentLanguage].features.student_management.enrollment_management.enrollment_management}
-                                    </h3>
-                                    <button
-                                        type="button"
-                                        aria-label="Close enrollment modal"
-                                        onClick={() => setIsEnrollmentModalOpen(false)}
-                                        className="text-gray-400 hover:text-gray-500 focus:outline-none"
-                                    >
-                                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* Student Profiles Modal */}
-            <AnimatePresence>
-                {isStudentProfilesModalOpen && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.95, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-                        >
-                            <div className="p-8">
-                                <div className="flex justify-between items-start mb-6">
-                                    <div>
-                                        <h3 className="text-2xl font-bold text-gray-900">
-                                            {translations[currentLanguage].features.student_management.student_profiles.modal.title}
-                                        </h3>
-                                        <p className="mt-2 text-gray-600">
-                                            {translations[currentLanguage].features.student_management.student_profiles.modal.subtitle}
-                                        </p>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        aria-label="Close student profiles modal"
-                                        onClick={() => setIsStudentProfilesModalOpen(false)}
-                                        className="text-gray-400 hover:text-gray-500 focus:outline-none"
-                                    >
-                                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                                    {/* Features Section */}
-                                    <div className="space-y-6">
-                                        <div className="bg-blue-50 p-6 rounded-xl">
-                                            <h4 className="text-lg font-semibold text-blue-900 mb-3">
-                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.personal_info.title}
-                                            </h4>
-                                            <p className="text-blue-800">
-                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.personal_info.description}
-                                            </p>
-                                        </div>
-
-                                        <div className="bg-green-50 p-6 rounded-xl">
-                                            <h4 className="text-lg font-semibold text-green-900 mb-3">
-                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.academic_history.title}
-                                            </h4>
-                                            <p className="text-green-800">
-                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.academic_history.description}
-                                            </p>
-                                        </div>
-
-                                        <div className="bg-purple-50 p-6 rounded-xl">
-                                            <h4 className="text-lg font-semibold text-purple-900 mb-3">
-                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.documents.title}
-                                            </h4>
-                                            <p className="text-purple-800">
-                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.documents.description}
-                                            </p>
-                                        </div>
-
-                                        <div className="bg-orange-50 p-6 rounded-xl">
-                                            <h4 className="text-lg font-semibold text-orange-900 mb-3">
-                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.attendance.title}
-                                            </h4>
-                                            <p className="text-orange-800">
-                                                {translations[currentLanguage].features.student_management.student_profiles.modal.features.attendance.description}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    {/* Benefits Section */}
-                                    <div className="bg-gray-50 p-6 rounded-xl">
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">
-                                            {translations[currentLanguage].features.student_management.student_profiles.modal.benefits.title}
-                                        </h4>
-                                        <ul className="space-y-3">
-                                            {translations[currentLanguage].features.student_management.student_profiles.modal.benefits.items.map((item, index) => (
-                                                <li key={index} className="flex items-start">
-                                                    <svg className="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-700">{item}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div className="mt-8 flex justify-end">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsStudentProfilesModalOpen(false)}
-                                        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                    >
-                                        {translations[currentLanguage].close}
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* Digital Attendance Modal */}
-            <AnimatePresence>
-                {isAttendanceModalOpen && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.95, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-                        >
-                            <div className="p-8">
-                                <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.attendance_system.attendance_system}</h3>
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsAttendanceModalOpen(false)}
-                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                        aria-label="Close modal"
-                                    >
-                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-
-                                <div className="mt-8 flex justify-end">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsAttendanceModalOpen(false)}
-                                        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                    >
-                                        {translations[currentLanguage].close}
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* Automated Reports Modal */}
-            <AnimatePresence>
-                {isReportsModalOpen && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.95, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-                        >
-                            <div className="p-8">
-                                <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.attendance_system.automated_reports.automated_reports}</h3>
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsReportsModalOpen(false)}
-                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                        aria-label="Close modal"
-                                    >
-                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-
-                                <div className="mt-8 flex justify-end">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsReportsModalOpen(false)}
-                                        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                    >
-                                        {translations[currentLanguage].close}
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* Grade Entry Modal */}
-            <AnimatePresence>
-                {isGradeEntryModalOpen && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.95, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-                        >
-                            <div className="p-6">
-                                <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.grade_management.grade_management}</h3>
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsGradeEntryModalOpen(false)}
-                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                        aria-label="Close modal"
-                                    >
-                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-
-                                <div className="mt-8 flex justify-end">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsGradeEntryModalOpen(false)}
-                                        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                    >
-                                        {translations[currentLanguage].close}
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* Progress Tracking Modal */}
-            <AnimatePresence>
-                {isProgressTrackingModalOpen && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.95, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-                        >
-                            <div className="p-8">
-                                <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.grade_management.progress_tracking.progress_tracking}</h3>
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsProgressTrackingModalOpen(false)}
-                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                        aria-label="Close modal"
-                                    >
-                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-
-                                <div className="mt-8 flex justify-end">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsProgressTrackingModalOpen(false)}
-                                        className="bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
-                                    >
-                                        {translations[currentLanguage].close}
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* Messaging System Modal */}
-            <AnimatePresence>
-                {isMessagingSystemModalOpen && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.95, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-                        >
-                            <div className="p-8">
-                                <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.communication_tools.messaging.messaging}</h3>
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsMessagingSystemModalOpen(false)}
-                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                        aria-label="Close modal"
-                                    >
-                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-
-                                <div className="mt-8 flex justify-end">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsMessagingSystemModalOpen(false)}
-                                        className="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
-                                    >
-                                        {translations[currentLanguage].close}
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* Announcements Modal */}
-            <AnimatePresence>
-                {isAnnouncementsModalOpen && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.95, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-                        >
-                            <div className="p-8">
-                                <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">{translations[currentLanguage].features.communication_tools.notifications.notifications}</h3>
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsAnnouncementsModalOpen(false)}
-                                        className="text-gray-400 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
-                                        aria-label="Close modal"
-                                    >
-                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-
-                                <div className="mt-8 flex justify-end">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsAnnouncementsModalOpen(false)}
-                                        className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-                                    >
-                                        {translations[currentLanguage].close}
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
 
             {/* Add Unsubscribe Modal */}
             <AnimatePresence>

@@ -109,48 +109,14 @@ export const en = {
                 description: "Streamline the enrollment process with electronic forms, document uploading, and automated workflows.",
                 tick1: "Digital Form Processing",
                 tick2: "Document Management",
-                tick3: "Automated Workflows",
-                modal: {
-
-                }
+                tick3: "Automated Workflows"
             },
             student_profiles: {
                 student_profiles: "Student Profiles",
                 description: "Create and maintain detailed student profiles with personal information, academic history, and contact details.",
                 tick1: "Personal Information Management",
                 tick2: "Academic History Tracking",
-                tick3: "Contact Details Management",
-                modal: {
-                    title: "Student Profiles",
-                    subtitle: "Comprehensive student information management system",
-                    features: {
-                        personal_info: {
-                            title: "Personal Information",
-                            description: "Store and manage student personal details including name, date of birth, address, emergency contacts, and medical information such as allergies, conditions, and medications."
-                        },
-                        academic_history: {
-                            title: "Academic History",
-                            description: "Track student's academic journey including courses, grades, achievements, and extracurricular activities."
-                        },
-                        documents: {
-                            title: "Document Management",
-                            description: "Securely store and manage important student documents like transcripts, certificates, and medical records."
-                        },
-                        attendance: {
-                            title: "Attendance Records",
-                            description: "Monitor student attendance patterns and generate detailed reports for analysis."
-                        }
-                    },
-                    benefits: {
-                        title: "Key Benefits",
-                        items: [
-                            "Centralized student information management",
-                            "Easy access to student records",
-                            "Automated report generation",
-                            "Secure data storage and access control"
-                        ]
-                    }
-                }
+                tick3: "Contact Details Management"
             }
         },
         attendance_system: {
@@ -162,20 +128,14 @@ export const en = {
                 description: "Track attendance in real-time with instant updates and notifications for absences.",
                 tick1: "Instant Attendance Updates",
                 tick2: "Absence Notifications",
-                tick3: "Real-time Reports",
-                modal: {
-                    
-                }
+                tick3: "Real-time Reports"
             },
             automated_reports: {
                 automated_reports: "Automated Reports",
                 description: "Generate detailed attendance reports automatically with customizable parameters and export options.",
                 tick1: "Custom Report Generation",
                 tick2: "Multiple Export Formats",
-                tick3: "Scheduled Reports",
-                modal: {
-                    
-                }
+                tick3: "Scheduled Reports"
             }
         },
         grade_management: {
@@ -187,20 +147,14 @@ export const en = {
                 description: "Easy-to-use interface for grade management and entry with multiple grading scales support.",
                 tick1: "Multiple Grading Scales",
                 tick2: "Bulk Grade Entry",
-                tick3: "Grade History Tracking",
-                modal: {
-                    
-                }
+                tick3: "Grade History Tracking"
             },
             progress_tracking: {
                 progress_tracking: "Progress Tracking",
                 description: "Monitor student progress over time with visual analytics and detailed performance reports.",
                 tick1: "Visual Analytics",
                 tick2: "Performance Reports",
-                tick3: "Trend Analysis",
-                modal: {
-                    
-                }
+                tick3: "Trend Analysis"
             },
         },
         communication_tools: {
@@ -212,23 +166,16 @@ export const en = {
                 description: "Secure and efficient messaging platform for seamless communication between all stakeholders.",
                 tick1: "Real-time Messaging",
                 tick2: "Group Conversations",
-                tick3: "File Sharing",
-                modal: {
-                    
-                }
+                tick3: "File Sharing"
             },
             notifications: {
                 notifications: "Smart Notifications",
                 description: "Stay informed with customizable notifications and alerts for important updates.",
                 tick1: "Customizable Alerts",
                 tick2: "Priority Notifications",
-                tick3: "Notification History",
-                modal: {
-                    
-                }
+                tick3: "Notification History"
             }
-        },
-        learn_more: "Learn More"
+        }
     },
     pricing: {
         title: "Choose Your Plan",

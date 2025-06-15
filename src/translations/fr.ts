@@ -109,48 +109,14 @@ export const fr = {
                 description: "Rationalisez le processus d'inscription avec des formulaires électroniques, le téléchargement de documents et des flux de travail automatisés.",
                 tick1: "Traitement des Formulaires Numériques",
                 tick2: "Gestion des Documents",
-                tick3: "Flux de Travail Automatisés",
-                modal: {
-                    
-                }
+                tick3: "Flux de Travail Automatisés"
             },
             student_profiles: {
                 student_profiles: "Profils des Étudiants",
                 description: "Créez et maintenez des profils d'étudiants détaillés avec des informations personnelles, l'historique académique et les coordonnées.",
                 tick1: "Gestion des Informations Personnelles",
                 tick2: "Suivi de l'Historique Académique",
-                tick3: "Gestion des Coordonnées",
-                modal: {
-                    title: "Profils des Étudiants",
-                    subtitle: "Système complet de gestion des informations des étudiants",
-                    features: {
-                        personal_info: {
-                            title: "Informations Personnelles",
-                            description: "Stockez et gérez les détails personnels des étudiants, y compris le nom, la date de naissance, l'adresse, les contacts d'urgence et les informations médicales telles que les allergies, les conditions et les médicaments."
-                        },
-                        academic_history: {
-                            title: "Historique Académique",
-                            description: "Suivez le parcours académique des étudiants, y compris les cours, les notes, les réalisations et les activités parascolaires."
-                        },
-                        documents: {
-                            title: "Gestion des Documents",
-                            description: "Stockez et gérez en toute sécurité les documents importants des étudiants comme les relevés de notes, les certificats et les dossiers médicaux."
-                        },
-                        attendance: {
-                            title: "Registres de Présence",
-                            description: "Surveillez les modèles de présence des étudiants et générez des rapports détaillés pour l'analyse."
-                        }
-                    },
-                    benefits: {
-                        title: "Avantages Clés",
-                        items: [
-                            "Gestion centralisée des informations des étudiants",
-                            "Accès facile aux dossiers des étudiants",
-                            "Génération automatique de rapports",
-                            "Stockage sécurisé des données et contrôle d'accès"
-                        ]
-                    }
-                }
+                tick3: "Gestion des Coordonnées"
             }
         },
         attendance_system: {
@@ -162,20 +128,14 @@ export const fr = {
                 description: "Suivez les présences en temps réel avec des mises à jour instantanées et des notifications pour les absences.",
                 tick1: "Mises à Jour Instantanées",
                 tick2: "Notifications d'Absence",
-                tick3: "Rapports en Temps Réel",
-                modal: {
-                    
-                }
+                tick3: "Rapports en Temps Réel"
             },
             automated_reports: {
                 automated_reports: "Rapports Automatisés",
                 description: "Générez automatiquement des rapports de présence détaillés avec des paramètres personnalisables et des options d'exportation.",
                 tick1: "Génération de Rapports Personnalisés",
                 tick2: "Formats d'Exportation Multiples",
-                tick3: "Rapports Programmés",
-                modal: {
-                    
-                }
+                tick3: "Rapports Programmés"
             }
         },
         grade_management: {
@@ -187,20 +147,14 @@ export const fr = {
                 description: "Interface facile à utiliser pour la gestion et la saisie des notes avec support de plusieurs échelles de notation.",
                 tick1: "Échelles de Notation Multiples",
                 tick2: "Saisie en Masse des Notes",
-                tick3: "Suivi de l'Historique des Notes",
-                modal: {
-                    
-                }
+                tick3: "Suivi de l'Historique des Notes"
             },
             progress_tracking: {
                 progress_tracking: "Suivi des Progrès",
                 description: "Surveillez les progrès des étudiants dans le temps avec des analyses visuelles et des rapports de performance détaillés.",
                 tick1: "Analyses Visuelles",
                 tick2: "Rapports de Performance",
-                tick3: "Analyse des Tendances",
-                modal: {
-                    
-                }
+                tick3: "Analyse des Tendances"
             }
         },
         communication_tools: {
@@ -212,23 +166,16 @@ export const fr = {
                 description: "Plateforme de messagerie sécurisée et efficace pour une communication fluide entre toutes les parties prenantes.",
                 tick1: "Messagerie en Temps Réel",
                 tick2: "Conversations de Groupe",
-                tick3: "Partage de Fichiers",
-                modal: {
-                    
-                }
+                tick3: "Partage de Fichiers"
             },
             notifications: {
                 notifications: "Notifications Intelligentes",
                 description: "Restez informé avec des notifications et alertes personnalisables pour les mises à jour importantes.",
                 tick1: "Alertes Personnalisables",
                 tick2: "Notifications Prioritaires",
-                tick3: "Historique des Notifications",
-                modal: {
-                    
-                }
+                tick3: "Historique des Notifications"
             }
-        },
-        learn_more: "En Savoir Plus"
+        }
     },
     pricing: {
         title: "Choisissez Votre Plan",
