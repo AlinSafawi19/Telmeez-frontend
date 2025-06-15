@@ -27,7 +27,11 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
     onContinue,
     language = 'en'
 }) => {
-    const [isAnnual, setIsAnnual] = useState(true);
+    const BILLING_PREFERENCE_KEY = 'billing_preference';
+    const [isAnnual, setIsAnnual] = useState(() => {
+        const savedPreference = localStorage.getItem(BILLING_PREFERENCE_KEY);
+        return savedPreference ? savedPreference === 'annual' : true;
+    });
     const [selectedPlan, setSelectedPlan] = useState<string | null>(() => {
         if (initialSelectedPlan) {
             return initialSelectedPlan;
@@ -60,6 +64,12 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
         if (selectedPlan && onContinue) {
             onContinue(selectedPlan, isAnnual);
         }
+    };
+
+    const handleBillingToggle = () => {
+        const newIsAnnual = !isAnnual;
+        setIsAnnual(newIsAnnual);
+        localStorage.setItem(BILLING_PREFERENCE_KEY, newIsAnnual ? 'annual' : 'monthly');
     };
 
     const plans: Plan[] = [
@@ -103,7 +113,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
                         </span>
                         <div className="relative">
                             <button
-                                onClick={() => setIsAnnual(!isAnnual)}
+                                onClick={handleBillingToggle}
                                 className={`w-14 h-7 rounded-full p-1 transition-all duration-300 ease-in-out focus:outline-none focus:ring-0 ${isAnnual ? 'bg-blue-600' : 'bg-gray-300'}`}
                                 aria-label="Toggle billing period between monthly and annual"
                             >
