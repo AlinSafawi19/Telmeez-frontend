@@ -381,6 +381,23 @@ export const fr = {
                     third: "C"
                 }
             }
+        },
+        modal: {
+            title: "Partagez Votre Histoire de Réussite",
+            subtitle: "Aidez les autres à découvrir la puissance de Telmeez",
+            form: {
+                name: "Nom",
+                name_placeholder: "Entrez votre nom",
+                institution: "Institution",
+                institution_placeholder: "Entrez le nom de votre institution",
+                role: "Rôle",
+                role_placeholder: "Entrez votre rôle",
+                testimonial: "Témoignage",
+                testimonial_placeholder: "Partagez votre expérience avec Telmeez",
+                rating: "Évaluation",
+                submit: "Soumettre le Témoignage",
+                cancel: "Annuler"
+            }
         }
     }
 };

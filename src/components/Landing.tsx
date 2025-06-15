@@ -680,10 +680,10 @@ const Landing: React.FC = () => {
                                 onClick={() => setIsTestimonialModalOpen(true)}
                                 className="mt-8 inline-flex items-center px-6 py-3 rounded-lg text-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                             >
-                                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className={`w-5 h-5 ${currentLanguage === 'ar' ? 'ml-2' : 'mr-2'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
-                                Share Your Story
+                                {t.testimonials.modal.title}
                             </button>
                         </motion.div>
                     </div>
@@ -1206,14 +1206,14 @@ const Landing: React.FC = () => {
                             <div className="flex justify-between items-center mb-6">
                                 <div>
                                     <h3 className="text-xl font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                        Share Your Success Story
+                                        {t.testimonials.modal.title}
                                     </h3>
-                                    <p className="text-sm text-gray-500 mt-1">Help others discover the power of Telmeez</p>
+                                    <p className="text-sm text-gray-500 mt-1">{t.testimonials.modal.subtitle}</p>
                                 </div>
                                 <button
                                     type="button"
                                     onClick={() => setIsTestimonialModalOpen(false)}
-                                    className="text-gray-400 hover:text-gray-500 focus:outline-none transition-colors duration-200 p-2 hover:bg-gray-100 rounded-full"
+                                    className="text-gray-400 hover:text-gray-500 focus:outline-none transition-colors duration-200 p-2 hover:bg-gray-100 rounded-md"
                                     aria-label="Close testimonial modal"
                                 >
                                     <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1226,7 +1226,7 @@ const Landing: React.FC = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="group">
                                         <label htmlFor="name" className="block text-xs font-medium text-gray-700 mb-1 group-focus-within:text-blue-600 transition-colors duration-200">
-                                            Full Name
+                                            {t.testimonials.modal.form.name}
                                         </label>
                                         <div className="relative">
                                             <input
@@ -1236,8 +1236,8 @@ const Landing: React.FC = () => {
                                                 value={testimonialForm.name}
                                                 onChange={handleTestimonialFormChange}
                                                 required
-                                                className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md"
-                                                placeholder="John Doe"
+                                                className={`w-full text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
+                                                placeholder={t.testimonials.modal.form.name_placeholder}
                                             />
                                             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                                 <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1247,19 +1247,19 @@ const Landing: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="group">
-                                        <label htmlFor="position" className="block text-xs font-medium text-gray-700 mb-1 group-focus-within:text-blue-600 transition-colors duration-200">
-                                            Position
+                                        <label htmlFor="role" className="block text-xs font-medium text-gray-700 mb-1 group-focus-within:text-blue-600 transition-colors duration-200">
+                                            {t.testimonials.modal.form.role}
                                         </label>
                                         <div className="relative">
                                             <input
                                                 type="text"
-                                                id="position"
-                                                name="position"
+                                                id="role"
+                                                name="role"
                                                 value={testimonialForm.position}
                                                 onChange={handleTestimonialFormChange}
                                                 required
-                                                className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md"
-                                                placeholder="Software Engineer"
+                                                className={`w-full text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
+                                                placeholder={t.testimonials.modal.form.role_placeholder}
                                             />
                                             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                                 <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1273,7 +1273,7 @@ const Landing: React.FC = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="group">
                                         <label htmlFor="institution" className="block text-xs font-medium text-gray-700 mb-1 group-focus-within:text-blue-600 transition-colors duration-200">
-                                            Institution
+                                            {t.testimonials.modal.form.institution}
                                         </label>
                                         <div className="relative">
                                             <input
@@ -1283,8 +1283,8 @@ const Landing: React.FC = () => {
                                                 value={testimonialForm.institution}
                                                 onChange={handleTestimonialFormChange}
                                                 required
-                                                className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md"
-                                                placeholder="University of Technology"
+                                                className={`w-full text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
+                                                placeholder={t.testimonials.modal.form.institution_placeholder}
                                             />
                                             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                                 <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1305,7 +1305,7 @@ const Landing: React.FC = () => {
                                                 value={testimonialForm.email}
                                                 onChange={handleTestimonialFormChange}
                                                 required
-                                                className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md"
+                                                className={`w-full text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                                 placeholder="john@example.com"
                                             />
                                             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -1319,7 +1319,7 @@ const Landing: React.FC = () => {
 
                                 <div className="group">
                                     <label htmlFor="quote" className="block text-xs font-medium text-gray-700 mb-1 group-focus-within:text-blue-600 transition-colors duration-200">
-                                        Your Testimonial
+                                        {t.testimonials.modal.form.testimonial}
                                     </label>
                                     <div className="relative">
                                         <textarea
@@ -1329,8 +1329,8 @@ const Landing: React.FC = () => {
                                             onChange={handleTestimonialFormChange}
                                             required
                                             rows={4}
-                                            className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md resize-none"
-                                            placeholder="Share your experience with Telmeez..."
+                                            className={`w-full text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md resize-none ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
+                                            placeholder={t.testimonials.modal.form.testimonial_placeholder}
                                         />
                                         <div className="absolute top-2 right-2 pointer-events-none">
                                             <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1342,9 +1342,9 @@ const Landing: React.FC = () => {
 
                                 <div className="group">
                                     <label className="block text-xs font-medium text-gray-700 mb-1 group-focus-within:text-blue-600 transition-colors duration-200">
-                                        Rating
+                                        {t.testimonials.modal.form.rating}
                                     </label>
-                                    <div className="flex space-x-1 bg-gray-50 p-3 rounded-xl">
+                                    <div className="flex items-center space-x-1">
                                         {[1, 2, 3, 4, 5].map((rating) => (
                                             <button
                                                 key={rating}
@@ -1368,11 +1368,10 @@ const Landing: React.FC = () => {
                                                         }
                                                     });
                                                 }}
-                                                className={`p-1 rounded-lg border-none focus:outline-none transition-all duration-200 transform hover:scale-110 ${
-                                                    testimonialForm.rating >= rating
+                                                className={`p-1 rounded-lg border-none focus:outline-none transition-all duration-200 transform hover:scale-110 ${testimonialForm.rating >= rating
                                                         ? 'text-yellow-400'
                                                         : 'text-gray-300'
-                                                }`}
+                                                    }`}
                                                 aria-label={`Rate ${rating} out of 5`}
                                             >
                                                 <svg className="w-6 h-6 star-rating" fill="currentColor" viewBox="0 0 20 20">
@@ -1387,15 +1386,15 @@ const Landing: React.FC = () => {
                                     <button
                                         type="button"
                                         onClick={() => setIsTestimonialModalOpen(false)}
-                                        className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900 focus:outline-none transition-colors duration-200 font-medium"
+                                        className={`px-4 py-2 text-sm text-gray-700 hover:text-gray-900 focus:outline-none transition-colors duration-200 font-medium ${currentLanguage === 'ar' ? 'ml-3' : 'mr-3'}`}
                                     >
-                                        Cancel
+                                        {t.testimonials.modal.form.cancel}
                                     </button>
                                     <button
                                         type="submit"
                                         className="px-4 py-2 text-sm bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                                     >
-                                        Submit Testimonial
+                                        {t.testimonials.modal.form.submit}
                                     </button>
                                 </div>
                             </form>

@@ -381,6 +381,23 @@ export const ar = {
                     third: "ج"
                 }
             }
+        },
+        modal: {
+            title: "شارك قصتك الناجحة",
+            subtitle: "ساعد الآخرين في اكتشاف قوة تلميز",
+            form: {
+                name: "الاسم",
+                name_placeholder: "أدخل اسمك",
+                institution: "المؤسسة",
+                institution_placeholder: "أدخل اسم مؤسستك",
+                role: "المنصب",
+                role_placeholder: "أدخل منصبك",
+                testimonial: "الشهادة",
+                testimonial_placeholder: "شارك تجربتك مع تلميز",
+                rating: "التقييم",
+                submit: "إرسال الشهادة",
+                cancel: "إلغاء"
+            }
         }
     }
 }; 

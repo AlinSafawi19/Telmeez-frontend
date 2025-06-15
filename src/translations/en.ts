@@ -381,6 +381,23 @@ export const en = {
                     third: "C"
                 }
             }
+        },
+        modal: {
+            title: "Share Your Success Story",
+            subtitle: "Help others discover the power of Telmeez",
+            form: {
+                name: "Name",
+                name_placeholder: "Enter your name",
+                institution: "Institution",
+                institution_placeholder: "Enter your institution name",
+                role: "Role",
+                role_placeholder: "Enter your role",
+                testimonial: "Testimonial",
+                testimonial_placeholder: "Share your experience with Telmeez",
+                rating: "Rating",
+                submit: "Submit Testimonial",
+                cancel: "Cancel"
+            }
         }
     }
 }; 
