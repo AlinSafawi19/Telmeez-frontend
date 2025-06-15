@@ -8,6 +8,7 @@ interface PlanFeature {
 }
 
 interface Plan {
+    id: string;
     name: string;
     description: string;
     monthlyPrice: string;
@@ -28,6 +29,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
     language = 'en'
 }) => {
     const BILLING_PREFERENCE_KEY = 'billing_preference';
+    const SELECTED_PLAN_KEY = 'selected_plan';
     const [isAnnual, setIsAnnual] = useState(() => {
         const savedPreference = localStorage.getItem(BILLING_PREFERENCE_KEY);
         return savedPreference ? savedPreference === 'annual' : true;
@@ -36,7 +38,8 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
         if (initialSelectedPlan) {
             return initialSelectedPlan;
         }
-        return translations[language].pricing.plans.standard.name; // Default to Standard plan
+        const savedPlan = localStorage.getItem(SELECTED_PLAN_KEY);
+        return savedPlan || 'standard'; // Default to standard plan ID
     });
 
     const t = translations[language].pricing;
@@ -46,18 +49,14 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
         if (initialSelectedPlan) {
             setSelectedPlan(initialSelectedPlan);
         } else {
-            setSelectedPlan(translations[language].pricing.plans.standard.name);
+            const savedPlan = localStorage.getItem(SELECTED_PLAN_KEY);
+            setSelectedPlan(savedPlan || 'standard');
         }
     }, [language, initialSelectedPlan]);
 
-    useEffect(() => {
-        if (initialSelectedPlan) {
-            setSelectedPlan(initialSelectedPlan);
-        }
-    }, [initialSelectedPlan]);
-
-    const handlePlanSelect = (planName: string) => {
-        setSelectedPlan(planName);
+    const handlePlanSelect = (planId: string) => {
+        setSelectedPlan(planId);
+        localStorage.setItem(SELECTED_PLAN_KEY, planId);
     };
 
     const handleContinue = () => {
@@ -74,6 +73,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
 
     const plans: Plan[] = [
         {
+            id: 'starter',
             name: t.plans.starter.name,
             description: t.plans.starter.description,
             monthlyPrice: t.plans.starter.monthly_price,
@@ -81,6 +81,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
             features: t.plans.starter.features.map(text => ({ text, included: true })),
         },
         {
+            id: 'standard',
             name: t.plans.standard.name,
             description: t.plans.standard.description,
             monthlyPrice: t.plans.standard.monthly_price,
@@ -89,6 +90,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
             recommended: true,
         },
         {
+            id: 'enterprise',
             name: t.plans.enterprise.name,
             description: t.plans.enterprise.description,
             monthlyPrice: t.plans.enterprise.monthly_price,
@@ -137,12 +139,12 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
                 <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
                     {plans.map((plan) => (
                         <div
-                            key={plan.name}
-                            onClick={() => handlePlanSelect(plan.name)}
+                            key={plan.id}
+                            onClick={() => handlePlanSelect(plan.id)}
                             className={`relative rounded-xl bg-white p-5 shadow-lg cursor-pointer focus:outline-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${plan.recommended
                                     ? 'transform scale-[1.02] hover:scale-[1.03]'
                                     : 'border border-gray-200 hover:border-blue-200'
-                                } ${selectedPlan === plan.name ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`}
+                                } ${selectedPlan === plan.id ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`}
                         >
                             {plan.recommended && (
                                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -165,7 +167,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
                                 {isAnnual && (
                                     <p className="text-xs text-green-600 font-medium">{t.save_20}</p>
                                 )}
-                                {plan.name === t.plans.starter.name && (
+                                {plan.id === 'starter' && (
                                     <div className="mt-2">
                                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                             {t.free_trial_badge.replace('{days}', isAnnual ? '30' : '7')}
@@ -192,7 +194,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
                                     </li>
                                 ))}
                             </ul>
-                            {selectedPlan === plan.name ? (
+                            {selectedPlan === plan.id ? (
                                 <button
                                     type="button"
                                     className="w-full py-3 px-4 rounded-lg font-semibold text-base bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-700 hover:to-blue-600 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -204,9 +206,9 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
                                 <button
                                     type="button"
                                     className="w-full py-3 px-4 rounded-lg font-semibold text-base transition-all duration-300 focus:outline-none bg-gray-100 text-gray-900 hover:bg-gray-200"
-                                    onClick={() => handlePlanSelect(plan.name)}
+                                    onClick={() => handlePlanSelect(plan.id)}
                                 >
-                                    {plan.name === t.plans.starter.name ? t.start_free_trial : t.select_plan}
+                                    {plan.id === 'starter' ? t.start_free_trial : t.select_plan}
                                 </button>
                             )}
                         </div>
