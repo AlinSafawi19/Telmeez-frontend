@@ -108,6 +108,14 @@ const Landing: React.FC = () => {
         const handleScroll = () => {
             const scrollPosition = window.scrollY;
             setShowBackToTop(scrollPosition > 300);
+            
+            // Save scroll position to localStorage as a necessary cookie
+            const cookieConsent = localStorage.getItem('cookieConsent');
+            const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+            
+            if (hasConsent) {
+                localStorage.setItem('scrollPosition', scrollPosition.toString());
+            }
         };
 
         window.addEventListener('scroll', handleScroll);
@@ -283,6 +291,19 @@ const Landing: React.FC = () => {
             rating
         }));
     };
+
+    useEffect(() => {
+        // Restore scroll position if it exists
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+        
+        if (hasConsent) {
+            const savedScrollPosition = localStorage.getItem('scrollPosition');
+            if (savedScrollPosition) {
+                window.scrollTo(0, parseInt(savedScrollPosition));
+            }
+        }
+    }, []);
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
