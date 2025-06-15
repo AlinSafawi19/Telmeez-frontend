@@ -47,12 +47,14 @@ const Landing: React.FC = () => {
     const faqSectionRef = useRef<HTMLDivElement>(null);
     // Add newsletter form states
     const [subscribeEmail, setSubscribeEmail] = useState('');
+    const [subscribeEmailError, setSubscribeEmailError] = useState('');
     const [isUnsubscribeModalOpen, setIsUnsubscribeModalOpen] = useState(false);
     const [unsubscribeEmail, setUnsubscribeEmail] = useState(() => {
         const cookieConsent = localStorage.getItem('cookieConsent');
         const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
         return hasConsent ? localStorage.getItem('newsletterEmail') || '' : '';
     });
+    const [unsubscribeEmailError, setUnsubscribeEmailError] = useState('');
     const [isScrolling, setIsScrolling] = useState(false);
     const [showBackToTop, setShowBackToTop] = useState(false);
     const languageDropdownRef = useRef<HTMLDivElement>(null);
@@ -287,9 +289,45 @@ const Landing: React.FC = () => {
         ]
     };
 
+    const validateEmail = (email: string): boolean => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const handleSubscribeEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const email = e.target.value;
+        setSubscribeEmail(email);
+        
+        if (!email.trim()) {
+            setSubscribeEmailError(t.newsletter.errors.email_required);
+        } else if (!validateEmail(email)) {
+            setSubscribeEmailError(t.newsletter.errors.invalid_email);
+        } else {
+            setSubscribeEmailError('');
+        }
+    };
+
+    const handleUnsubscribeEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const email = e.target.value;
+        setUnsubscribeEmail(email);
+        
+        if (!email.trim()) {
+            setUnsubscribeEmailError(t.newsletter.errors.email_required);
+        } else if (!validateEmail(email)) {
+            setUnsubscribeEmailError(t.newsletter.errors.invalid_email);
+        } else {
+            setUnsubscribeEmailError('');
+        }
+    };
+
     // Update the newsletter subscription handler
     const handleNewsletterSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!validateEmail(subscribeEmail)) {
+            setSubscribeEmailError(t.newsletter.errors.invalid_email);
+            return;
+        }
 
         try {
             // Here you would typically make an API call to your backend
@@ -307,15 +345,20 @@ const Landing: React.FC = () => {
             }
             setUnsubscribeEmail(subscribeEmail);
             setSubscribeEmail('');
+            setSubscribeEmailError('');
         } catch (error) {
-        } finally {
+            
         }
     };
 
     // Update the unsubscribe handler
     const handleUnsubscribe = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!unsubscribeEmail) return; // Don't proceed if email is empty
+        
+        if (!validateEmail(unsubscribeEmail)) {
+            setUnsubscribeEmailError(t.newsletter.errors.invalid_email);
+            return;
+        }
 
         try {
             // Here you would typically make an API call to your backend
@@ -332,6 +375,7 @@ const Landing: React.FC = () => {
             }
 
             setUnsubscribeEmail('');
+            setUnsubscribeEmailError('');
             setShowUnsubscribeMessage(true);
             setTimeout(() => {
                 setIsUnsubscribeModalOpen(false);
@@ -1158,13 +1202,18 @@ const Landing: React.FC = () => {
 
                         <form onSubmit={handleNewsletterSubmit} className="max-w-md mx-auto">
                             <div className="flex flex-col sm:flex-row gap-4">
-                                <input
-                                    type="email"
-                                    value={subscribeEmail}
-                                    onChange={(e) => setSubscribeEmail(e.target.value)}
-                                    placeholder={translations[currentLanguage].newsletter.email_placeholder}
-                                    className="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
-                                />
+                                <div className="flex-1">
+                                    <input
+                                        type="text"
+                                        value={subscribeEmail}
+                                        onChange={handleSubscribeEmailChange}
+                                        placeholder={translations[currentLanguage].newsletter.email_placeholder}
+                                        className={`w-full px-4 py-3 rounded-lg border ${subscribeEmailError ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
+                                    />
+                                    {subscribeEmailError && (
+                                        <p className="mt-1 text-sm text-red-500">{subscribeEmailError}</p>
+                                    )}
+                                </div>
                                 <button
                                     type="submit"
                                     className="bg-blue-600 text-white px-6 py-3 rounded-lg focus:outline-none font-semibold hover:bg-blue-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -1364,13 +1413,18 @@ const Landing: React.FC = () => {
                                     <label htmlFor="unsubscribe-email" className="block text-sm font-medium text-gray-700 mb-2">
                                         {translations[currentLanguage].newsletter.email_placeholder}
                                     </label>
-                                    <input
-                                        type="email"
-                                        id="unsubscribe-email"
-                                        value={unsubscribeEmail}
-                                        onChange={(e) => setUnsubscribeEmail(e.target.value)}
-                                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
-                                    />
+                                    <div>
+                                        <input
+                                            type="text"
+                                            id="unsubscribe-email"
+                                            value={unsubscribeEmail}
+                                            onChange={handleUnsubscribeEmailChange}
+                                            className={`w-full px-4 py-2 rounded-lg border ${unsubscribeEmailError ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
+                                        />
+                                        {unsubscribeEmailError && (
+                                            <p className="mt-1 text-sm text-red-500">{unsubscribeEmailError}</p>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {showUnsubscribeMessage ? (

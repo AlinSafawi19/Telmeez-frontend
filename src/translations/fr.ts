@@ -204,7 +204,11 @@ export const fr = {
         unsubscribe_title: "Se désabonner de la Newsletter",
         unsubscribe_placeholder: "Entrez votre adresse e-mail pour vous désabonner",
         subscribe_message: "Merci de vous être abonné. Vous êtes maintenant dans la boucle ! 🎉",
-        unsubscribe_message: "Vous allez nous manquer ! Vous avez été désabonné avec succès. 👋"
+        unsubscribe_message: "Vous allez nous manquer ! Vous avez été désabonné avec succès. 👋",
+        errors: {
+            email_required: "Veuillez entrer votre adresse e-mail",
+            invalid_email: "Veuillez entrer une adresse e-mail valide"
+        }
     },
     cancel: "Annuler",
     footer: {

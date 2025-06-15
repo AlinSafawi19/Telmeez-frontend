@@ -204,7 +204,11 @@ export const en = {
         unsubscribe_title: "Unsubscribe from Newsletter",
         unsubscribe_placeholder: "Enter your email address to unsubscribe",
         subscribe_message: "Thanks for subscribing. You're in the loop! 🎉",
-        unsubscribe_message: "We'll miss you! You've been unsubscribed successfully. 👋"
+        unsubscribe_message: "We'll miss you! You've been unsubscribed successfully. 👋",
+        errors: {
+            email_required: "Please enter your email address",
+            invalid_email: "Please enter a valid email address"
+        }
     },
     cancel: "Cancel",
     footer: {
