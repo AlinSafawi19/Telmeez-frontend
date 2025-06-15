@@ -109,10 +109,10 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
                             >
                                 <div
                                     className={`bg-white w-5 h-5 rounded-full shadow-lg transform transition-all duration-300 ease-in-out ${isAnnual
-                                            ? isRTL
-                                                ? '-translate-x-7'
-                                                : 'translate-x-7'
-                                            : 'translate-x-0'
+                                        ? isRTL
+                                            ? '-translate-x-7'
+                                            : 'translate-x-7'
+                                        : 'translate-x-0'
                                         }`}
                                 />
                             </button>
@@ -129,9 +129,9 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
                         <div
                             key={plan.name}
                             onClick={() => handlePlanSelect(plan.name)}
-                            className={`relative rounded-xl bg-white p-5 shadow-lg cursor-pointer focus:outline-none ${plan.recommended
-                                ? 'transform scale-[1.02]'
-                                : 'border border-gray-200'
+                            className={`relative rounded-xl bg-white p-5 shadow-lg cursor-pointer focus:outline-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${plan.recommended
+                                    ? 'transform scale-[1.02] hover:scale-[1.03]'
+                                    : 'border border-gray-200 hover:border-blue-200'
                                 } ${selectedPlan === plan.name ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`}
                         >
                             {plan.recommended && (

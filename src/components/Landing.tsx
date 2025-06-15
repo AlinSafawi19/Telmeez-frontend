@@ -597,21 +597,21 @@ const Landing: React.FC = () => {
                         {t.header.why_us.why_us} <span className="text-blue-600">{t.header.why_us.company_name}</span>{t.header.why_us.question_mark}
                     </h2>
                     <div className="grid md:grid-cols-3 gap-8">
-                        <div className="p-8 rounded-xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+                        <div className="p-8 rounded-xl bg-white shadow-lg border border-gray-100">
                             <div className="text-blue-600 text-4xl mb-6">👤</div>
                             <h3 className="text-2xl font-semibold mb-4">{t.header.why_us.role_based}</h3>
                             <p className="text-gray-600 leading-relaxed">
                                 {t.header.why_us.role_based_desc}
                             </p>
                         </div>
-                        <div className="p-8 rounded-xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+                        <div className="p-8 rounded-xl bg-white shadow-lg border border-gray-100">
                             <div className="text-blue-600 text-4xl mb-6">🔒</div>
                             <h3 className="text-2xl font-semibold mb-4">{t.header.why_us.advanced_security}</h3>
                             <p className="text-gray-600 leading-relaxed">
                                 {t.header.why_us.advanced_security_desc}
                             </p>
                         </div>
-                        <div className="p-8 rounded-xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+                        <div className="p-8 rounded-xl bg-white shadow-lg border border-gray-100">
                             <div className="text-blue-600 text-4xl mb-6">💬</div>
                             <h3 className="text-2xl font-semibold mb-4">{t.header.why_us.seamless_comm}</h3>
                             <p className="text-gray-600 leading-relaxed">
@@ -945,24 +945,6 @@ const Landing: React.FC = () => {
                     background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
                                     linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
                     background-size: 20px 20px;
-                }
-                .feature-card {
-                    position: relative;
-                    overflow: hidden;
-                }
-                .feature-card::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-                    transform: translateX(-100%);
-                    transition: transform 0.6s;
-                }
-                .feature-card:hover::before {
-                    transform: translateX(100%);
                 }
                 @keyframes slideDown {
                     from {

@@ -3,6 +3,11 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Landing from "./components/Landing";
 import SignIn from "./pages/SignIn";
+import SuperAdminDashboard from "./pages/demo-dashboard/SuperAdminDashboard";
+import SchoolAdminDashboard from "./pages/demo-dashboard/SchoolAdminDashboard";
+import TeacherDashboard from "./pages/demo-dashboard/TeacherDashboard";
+import StudentDashboard from "./pages/demo-dashboard/StudentDashboard";
+import ParentDashboard from "./pages/demo-dashboard/ParentDashboard";
 
 function App() {
   //const [apiMessage, setApiMessage] = useState("");
@@ -21,6 +26,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/demo-dashboard/super-admin" element={<SuperAdminDashboard />} />
+        <Route path="/demo-dashboard/admin" element={<SchoolAdminDashboard />} />
+        <Route path="/demo-dashboard/teacher" element={<TeacherDashboard />} />
+        <Route path="/demo-dashboard/student" element={<StudentDashboard />} />
+        <Route path="/demo-dashboard/parent" element={<ParentDashboard />} />
       </Routes>
     </Router>
   );
