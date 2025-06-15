@@ -7,6 +7,7 @@ import PricingPlans from './PricingPlans';
 import About from './About';
 import Demo from './Demo';
 import FAQ from './FAQ';
+import CookieBanner from './CookieBanner';
 import type { Language } from '../translations';
 import { translations } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -79,6 +80,7 @@ const Landing: React.FC = () => {
 
     useEffect(() => {
         setIsVisible(true);
+        //localStorage.clear();
     }, []);
 
     // Add scroll detection
@@ -1483,6 +1485,9 @@ const Landing: React.FC = () => {
                     animation-delay: 4s;
                 }
             `}</style>
+
+            {/* Add Cookie Banner */}
+            <CookieBanner />
         </div>
     );
 };

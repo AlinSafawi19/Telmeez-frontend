@@ -410,5 +410,20 @@ export const fr = {
                 cancel: "Annuler"
             }
         }
+    },
+    cookie_banner: {
+        title: "Préférences de Cookies",
+        description: "Nous utilisons des cookies pour améliorer votre expérience de navigation, fournir du contenu personnalisé et analyser notre trafic. En cliquant sur 'Tout Accepter', vous consentez à notre utilisation des cookies.",
+        accept_all: "Tout Accepter",
+        reject_all: "Tout Refuser",
+        customize: "Personnaliser",
+        necessary: "Nécessaire",
+        necessary_desc: "Cookies essentiels qui permettent les fonctionnalités de base. Le site ne peut pas fonctionner correctement sans ces cookies.",
+        analytics: "Analytique",
+        analytics_desc: "Nous aident à comprendre comment les visiteurs interagissent avec notre site en collectant et en rapportant des informations de manière anonyme.",
+        marketing: "Marketing",
+        marketing_desc: "Utilisés pour suivre les visiteurs sur différents sites afin d'afficher des publicités pertinentes.",
+        save_preferences: "Enregistrer les Préférences",
+        preferences_saved: "Vos préférences de cookies ont été enregistrées."
     }
 };

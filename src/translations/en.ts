@@ -410,5 +410,20 @@ export const en = {
                 cancel: "Cancel"
             }
         }
-    }
+    },
+    cookie_banner: {
+        title: "Cookie Preferences",
+        description: "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking 'Accept All', you consent to our use of cookies.",
+        accept_all: "Accept All",
+        reject_all: "Reject All",
+        customize: "Customize",
+        necessary: "Necessary",
+        necessary_desc: "Essential cookies that enable core functionality. The website cannot function properly without these cookies.",
+        analytics: "Analytics",
+        analytics_desc: "Help us understand how visitors interact with our website by collecting and reporting information anonymously.",
+        marketing: "Marketing",
+        marketing_desc: "Used to track visitors across websites to display relevant advertisements.",
+        save_preferences: "Save Preferences",
+        preferences_saved: "Your cookie preferences have been saved.",
+    },
 }; 
