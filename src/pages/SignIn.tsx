@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import signinsvg from '../assets/images/signin-illustration.svg';
 import logo from '../assets/images/logo.png';
 import { FaHome } from 'react-icons/fa';
@@ -15,6 +15,20 @@ const SignIn: React.FC = () => {
     const navigate = useNavigate();
     const { currentLanguage, setCurrentLanguage } = useLanguage();
     const t = translations[currentLanguage];
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsLanguageDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const languages = [
         { code: 'en', label: 'English' },
@@ -58,56 +72,57 @@ const SignIn: React.FC = () => {
         <div className="min-h-screen flex bg-gray-50">
             {/* Left side - Sign in form */}
             <div className="w-1/2 flex flex-col py-12 px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col items-start">
-                    <div className="flex justify-between items-center w-full">
-                        <img
-                            src={logo}
-                            alt="Company Logo"
-                            className="h-24 w-auto"
-                        />
-                        <div className="relative">
-                            <button
-                                onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-                                className="flex items-center text-gray-600 hover:text-indigo-600 transition-colors focus:outline-none"
-                                aria-label="Select language"
-                            >
-                                <span className="font-medium">
-                                    {languages.find(lang => lang.code === currentLanguage)?.label}
-                                </span>
-                                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-                            {isLanguageDropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2 z-50">
-                                    {languages.map((lang) => (
-                                        <button
-                                            key={lang.code}
-                                            onClick={() => handleLanguageChange(lang.code as Language)}
-                                            className={`flex items-center w-full text-left px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none ${currentLanguage === lang.code ? 'bg-blue-50 text-blue-600' : 'bg-transparent'}`}
-                                        >
-                                            <span>{lang.label}</span>
-                                            {currentLanguage === lang.code && (
-                                                <svg className="w-4 h-4 ml-auto text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                            )}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                    <button
-                        onClick={() => navigate('/')}
-                        className="p-2 text-gray-600 hover:text-indigo-600 transition-colors mb-4 focus:outline-none"
-                        aria-label="Back to home"
-                    >
-                        <FaHome className="w-6 h-6" />
-                    </button>
-                </div>
                 <div className="flex-1 flex items-center justify-center">
                     <div className="max-w-md w-full space-y-8">
+                        <div className="flex items-center justify-between mb-8">
+                            <img
+                                src={logo}
+                                alt="Company Logo"
+                                className="h-16 w-auto transition-transform"
+                            />
+                            <div className="flex items-center gap-4">
+                                <div className="relative" ref={dropdownRef}>
+                                    <button
+                                        onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+                                        className="flex items-center text-gray-600 hover:text-indigo-600 transition-colors focus:outline-none"
+                                        aria-label="Select language"
+                                    >
+                                        <span className="font-medium">
+                                            {languages.find(lang => lang.code === currentLanguage)?.label}
+                                        </span>
+                                        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </button>
+                                    {isLanguageDropdownOpen && (
+                                        <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2 z-50">
+                                            {languages.map((lang) => (
+                                                <button
+                                                    key={lang.code}
+                                                    onClick={() => handleLanguageChange(lang.code as Language)}
+                                                    className={`flex items-center w-full text-left px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none ${currentLanguage === lang.code ? 'bg-blue-50 text-blue-600' : 'bg-transparent'}`}
+                                                >
+                                                    <span>{lang.label}</span>
+                                                    {currentLanguage === lang.code && (
+                                                        <svg className="w-4 h-4 ml-auto text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                    )}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                                <button
+                                    onClick={() => navigate('/')}
+                                    className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-full hover:bg-indigo-50"
+                                    aria-label="Back to sign in"
+                                >
+                                    <FaHome className="w-5 h-5" />
+                                    <span className="text-sm font-medium">{t.header.back_to_home}</span>
+                                </button>
+                            </div>
+                        </div>
                         <div>
                             <h2 className="text-center text-3xl font-extrabold text-gray-900">
                                 {t.header.signin}
@@ -175,7 +190,7 @@ const SignIn: React.FC = () => {
                                     <button
                                         onClick={() => navigate('/forgot-password')}
                                         className="font-medium text-indigo-600 hover:text-indigo-500 hover:underline focus:outline-none focus:underline transition-colors duration-200 border-0 bg-transparent p-0"
-                                        >
+                                    >
                                         {t.header.forgot_password}
                                     </button>
                                 </div>

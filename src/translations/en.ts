@@ -51,7 +51,11 @@ export const en = {
         forgot_password_desc: "Enter your email address and we'll send you a link to reset your password.",
         reset_password: "Reset Password",
         reset_password_sent: "If an account exists with that email, we've sent a password reset link.",
-        back_to_signin: "Back to Sign In"
+        password_reset_success: "Password reset link has been sent to your email",
+        back_to_signin: "Back to Sign In",
+        back_to_home: "Back to Home",
+        dont_worry: "Don't worry!",
+        recover_password: "We'll help you recover your password in no time."
     },
     hero: {
         title: "Empowering Educational Institutions",

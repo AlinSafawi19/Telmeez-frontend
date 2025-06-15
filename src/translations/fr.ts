@@ -51,7 +51,11 @@ export const fr = {
         forgot_password_desc: "Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
         reset_password: "Réinitialiser le mot de passe",
         reset_password_sent: "Si un compte existe avec cet e-mail, nous avons envoyé un lien de réinitialisation du mot de passe.",
-        back_to_signin: "Retour à la connexion"
+        password_reset_success: "Le lien de réinitialisation du mot de passe a été envoyé à votre e-mail",
+        back_to_signin: "Retour à la connexion",
+        back_to_home: "Retour à l'accueil",
+        dont_worry: "Ne vous inquiétez pas !",
+        recover_password: "Nous vous aiderons à récupérer votre mot de passe en un rien de temps."
     },
     hero: {
         title: "Renforcer les Institutions Éducatives",
