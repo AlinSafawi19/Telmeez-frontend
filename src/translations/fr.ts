@@ -230,7 +230,48 @@ export const fr = {
                 description: "Générez automatiquement des rapports de présence détaillés avec des paramètres personnalisables et des options d'exportation.",
                 tick1: "Génération de Rapports Personnalisés",
                 tick2: "Formats d'Exportation Multiples",
-                tick3: "Rapports Programmés"
+                tick3: "Rapports Programmés",
+                modal: {
+                    title: "Rapports Automatisés",
+                    close: "Fermer",
+                    information: {
+                        title: "Génération Automatisée de Rapports",
+                        description: "Notre système de rapports automatisés rationalise le processus de génération et de distribution des rapports de présence, économisant du temps et garantissant la précision.",
+                        report_types: {
+                            title: "Types de Rapports",
+                            items: [
+                                "Rapports de Présence Quotidiens",
+                                "Rapports Hebdomadaires",
+                                "Analyses Mensuelles",
+                                "Rapports de Périodes Personnalisées"
+                            ]
+                        },
+                        features: {
+                            title: "Fonctionnalités Clés",
+                            customization: {
+                                title: "Options de Personnalisation",
+                                description: "Adaptez les rapports à vos besoins spécifiques avec des paramètres et filtres personnalisables"
+                            },
+                            export_formats: {
+                                title: "Formats d'Exportation",
+                                description: "Exportez les rapports dans plusieurs formats incluant PDF, Excel et CSV"
+                            },
+                            scheduling: {
+                                title: "Programmation Automatique",
+                                description: "Programmez la génération et la distribution automatique des rapports"
+                            }
+                        },
+                        benefits: {
+                            title: "Avantages",
+                            items: [
+                                "Génération de rapports automatisée pour gagner du temps",
+                                "Amélioration de la précision et de la cohérence",
+                                "Partage et distribution faciles",
+                                "Analyse de données complète"
+                            ]
+                        }
+                    }
+                }
             },
             modal: {
                 title: "Système de Présence Numérique",
@@ -287,7 +328,63 @@ export const fr = {
                 description: "Interface facile à utiliser pour la gestion et la saisie des notes avec support de plusieurs échelles de notation.",
                 tick1: "Échelles de Notation Multiples",
                 tick2: "Saisie en Masse des Notes",
-                tick3: "Suivi de l'Historique des Notes"
+                tick3: "Suivi de l'Historique des Notes",
+                modal: {
+                    title: "Saisie des Notes",
+                    close: "Fermer",
+                    information: {
+                        title: "Gestion Efficace des Notes",
+                        description: "Notre système de saisie des notes rationalise la saisie, le calcul et l'administration des notes des étudiants afin que les enseignants puissent se concentrer sur l'essentiel - l'enseignement.",
+                        features: {
+                            title: "Fonctionnalités de Saisie des Notes",
+                            items: [
+                                "Saisie en masse des notes",
+                                "Échelles de notation personnalisées",
+                                "Devoirs pondérés",
+                                "Outils de calcul des notes",
+                                "Gestion des horaires d'examens",
+                                "Suivi de l'attribution des salles"
+                            ]
+                        },
+                        exam_management: {
+                            title: "Gestion des Examens",
+                            items: [
+                                "Suivi de l'historique des notes",
+                                "Journaux de modification des notes",
+                                "Accès au portail parents",
+                                "Suivi des progrès",
+                                "Planification des dates d'examens",
+                                "Suivi de l'attribution des salles",
+                                "Génération des emplois du temps d'examens",
+                                "Résolution des conflits",
+                                "Notifications aux étudiants"
+                            ]
+                        }
+                    },
+                    key_features: {
+                        title: "Fonctionnalités Clés",
+                        flexible_entry: {
+                            title: "Saisie Flexible",
+                            description: "Gestion et saisie multiple des notes de manière efficace"
+                        },
+                        auto_calculation: {
+                            title: "Calcul Automatique",
+                            description: "Calcul automatique des notes avec des formules modifiables"
+                        },
+                        progress_monitoring: {
+                            title: "Suivi des Progrès",
+                            description: "Surveillez les progrès des étudiants et identifiez les domaines d'amélioration"
+                        }
+                    },
+                    benefits: {
+                        title: "Avantages",
+                        items: [
+                            "Économise du temps consacré à la gestion des notes",
+                            "Réduit les erreurs de calcul",
+                            "Améliore la communication avec les parents"
+                        ]
+                    }
+                }
             },
             progress_tracking: {
                 progress_tracking: "Suivi des Progrès",

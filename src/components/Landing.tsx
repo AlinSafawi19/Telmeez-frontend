@@ -933,7 +933,7 @@ const Landing: React.FC = () => {
                             </div>
                             <div className="feature-card bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 group">
                                 <div className="flex items-center mb-6">
-                                    <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center etl:ml-4 mr-4 group-hover:scale-110 transition-transform duration-300">
+                                    <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center rtl:ml-4 mr-4 group-hover:scale-110 transition-transform duration-300">
                                         <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                         </svg>
@@ -1672,7 +1672,7 @@ const Landing: React.FC = () => {
                         >
                             <div className="p-8">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">Automated Reports & Analytics</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">{t.features.attendance_system.automated_reports.modal.title}</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsReportsModalOpen(false)}
@@ -1687,99 +1687,51 @@ const Landing: React.FC = () => {
 
                                 <div className="space-y-8">
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Comprehensive Reporting System</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{t.features.attendance_system.automated_reports.modal.information.title}</h4>
                                         <p className="text-gray-600 mb-4">
-                                            Our automated reporting system provides detailed insights and analytics to help schools make data-driven decisions and track student progress effectively.
+                                            {t.features.attendance_system.automated_reports.modal.information.description}
                                         </p>
                                         <div className="grid md:grid-cols-2 gap-4">
                                             <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Report Types</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.attendance_system.automated_reports.modal.information.report_types.title}</h5>
                                                 <ul className="space-y-2 text-gray-600">
-                                                    <li>• Academic performance reports</li>
-                                                    <li>• Attendance analytics</li>
-                                                    <li>• Financial reports</li>
-                                                    <li>• Custom report creation</li>
+                                                    {t.features.attendance_system.automated_reports.modal.information.report_types.items.map((item, index) => (
+                                                        <li key={index}>• {item}</li>
+                                                    ))}
                                                 </ul>
                                             </div>
                                             <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Analytics Features</h5>
-                                                <ul className="space-y-2 text-gray-600">
-                                                    <li>• Trend analysis</li>
-                                                    <li>• Comparative studies</li>
-                                                    <li>• Predictive analytics</li>
-                                                    <li>• Performance measures</li>
-                                                </ul>
+                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.attendance_system.automated_reports.modal.information.features.title}</h5>
+                                                <div className="space-y-4">
+                                                    <div>
+                                                        <h6 className="font-medium text-gray-900">{t.features.attendance_system.automated_reports.modal.information.features.customization.title}</h6>
+                                                        <p className="text-gray-600 text-sm">{t.features.attendance_system.automated_reports.modal.information.features.customization.description}</p>
+                                                    </div>
+                                                    <div>
+                                                        <h6 className="font-medium text-gray-900">{t.features.attendance_system.automated_reports.modal.information.features.export_formats.title}</h6>
+                                                        <p className="text-gray-600 text-sm">{t.features.attendance_system.automated_reports.modal.information.features.export_formats.description}</p>
+                                                    </div>
+                                                    <div>
+                                                        <h6 className="font-medium text-gray-900">{t.features.attendance_system.automated_reports.modal.information.features.scheduling.title}</h6>
+                                                        <p className="text-gray-600 text-sm">{t.features.attendance_system.automated_reports.modal.information.features.scheduling.description}</p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
-                                        <div className="grid md:grid-cols-3 gap-4">
-                                            <div className="bg-green-50 p-4 rounded-lg">
-                                                <div className="text-green-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Data Visualization</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    Interactive charts and graphs for better understanding of data
-                                                </p>
-                                            </div>
-                                            <div className="bg-blue-50 p-4 rounded-lg">
-                                                <div className="text-blue-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Real-time Updates</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    Report creation in real time with live feed of data
-                                                </p>
-                                            </div>
-                                            <div className="bg-purple-50 p-4 rounded-lg">
-                                                <div className="text-purple-600 mb-2">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                                    </svg>
-                                                </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Automated Scheduling</h5>
-                                                <p className="text-gray-600 text-sm">
-                                                    Report creation and dissemination on a scheduled basis
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{t.features.attendance_system.automated_reports.modal.information.benefits.title}</h4>
                                         <div className="bg-gray-50 p-6 rounded-lg">
                                             <ul className="space-y-4">
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Saves time by automating report creation</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Provides actionable information for decision-making</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Enhances transparency and accountability</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Supports data-driven educational programs</span>
-                                                </li>
+                                                {t.features.attendance_system.automated_reports.modal.information.benefits.items.map((item, index) => (
+                                                    <li key={index} className="flex items-start">
+                                                        <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                        <span className="text-gray-600">{item}</span>
+                                                    </li>
+                                                ))}
                                             </ul>
                                         </div>
                                     </div>
@@ -1789,9 +1741,9 @@ const Landing: React.FC = () => {
                                     <button
                                         type="button"
                                         onClick={() => setIsReportsModalOpen(false)}
-                                        className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                                        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     >
-                                        Close
+                                        {t.features.attendance_system.automated_reports.modal.close}
                                     </button>
                                 </div>
                             </div>
@@ -1817,9 +1769,9 @@ const Landing: React.FC = () => {
                             transition={{ duration: 0.2 }}
                             className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
                         >
-                            <div className="p-8">
+                            <div className="p-6">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900">Grade Entry & Management</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">{t.features.grade_management.grade_entry.modal.title}</h3>
                                     <button
                                         type="button"
                                         onClick={() => setIsGradeEntryModalOpen(false)}
@@ -1834,41 +1786,32 @@ const Landing: React.FC = () => {
 
                                 <div className="space-y-8">
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Effective Grade Management</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{t.features.grade_management.grade_entry.modal.information.title}</h4>
                                         <p className="text-gray-600 mb-4">
-                                            Our grade entry system streamlines entering, calculating, and administering student grades so that teachers can focus on what's most important—teaching.
+                                            {t.features.grade_management.grade_entry.modal.information.description}
                                         </p>
                                         <div className="grid md:grid-cols-2 gap-4">
                                             <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Grade Entry Features</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.grade_management.grade_entry.modal.information.features.title}</h5>
                                                 <ul className="space-y-2 text-gray-600">
-                                                    <li>• Bulk grade entry</li>
-                                                    <li>• Custom grading scales</li>
-                                                    <li>• Weighted assignments</li>
-                                                    <li>• Grade calculation tools</li>
-                                                    <li>• Exam schedule management</li>
-                                                    <li>• Room allocation tracking</li>
+                                                    {t.features.grade_management.grade_entry.modal.information.features.items.map((item, index) => (
+                                                        <li key={index}>• {item}</li>
+                                                    ))}
                                                 </ul>
                                             </div>
                                             <div className="bg-gray-50 p-4 rounded-lg">
-                                                <h5 className="font-semibold text-gray-900 mb-2">Exam Management</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.grade_management.grade_entry.modal.information.exam_management.title}</h5>
                                                 <ul className="space-y-2 text-gray-600">
-                                                    <li>• Grade history tracking</li>
-                                                    <li>• Grade modification logs</li>
-                                                    <li>• Parent portal access</li>
-                                                    <li>• Progress monitoring</li>
-                                                    <li>• Exam date scheduling</li>
-                                                    <li>• Room assignment tracking</li>
-                                                    <li>• Exam timetable generation</li>
-                                                    <li>• Conflict resolution</li>
-                                                    <li>• Student notifications</li>
+                                                    {t.features.grade_management.grade_entry.modal.information.exam_management.items.map((item, index) => (
+                                                        <li key={index}>• {item}</li>
+                                                    ))}
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{t.features.grade_management.grade_entry.modal.key_features.title}</h4>
                                         <div className="grid md:grid-cols-3 gap-4">
                                             <div className="bg-indigo-50 p-4 rounded-lg">
                                                 <div className="text-indigo-600 mb-2">
@@ -1876,9 +1819,9 @@ const Landing: React.FC = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                                     </svg>
                                                 </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Flexible Entry</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.grade_management.grade_entry.modal.key_features.flexible_entry.title}</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Several management and entry of grades in an efficient way
+                                                    {t.features.grade_management.grade_entry.modal.key_features.flexible_entry.description}
                                                 </p>
                                             </div>
                                             <div className="bg-blue-50 p-4 rounded-lg">
@@ -1887,9 +1830,9 @@ const Landing: React.FC = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                     </svg>
                                                 </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Auto Calculation</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.grade_management.grade_entry.modal.key_features.auto_calculation.title}</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Automated calculation of grades with editable formulas
+                                                    {t.features.grade_management.grade_entry.modal.key_features.auto_calculation.description}
                                                 </p>
                                             </div>
                                             <div className="bg-purple-50 p-4 rounded-lg">
@@ -1898,42 +1841,26 @@ const Landing: React.FC = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                     </svg>
                                                 </div>
-                                                <h5 className="font-semibold text-gray-900 mb-2">Progress Tracking</h5>
+                                                <h5 className="font-semibold text-gray-900 mb-2">{t.features.grade_management.grade_entry.modal.key_features.progress_monitoring.title}</h5>
                                                 <p className="text-gray-600 text-sm">
-                                                    Monitor student progress and identify areas for improvement
+                                                    {t.features.grade_management.grade_entry.modal.key_features.progress_monitoring.description}
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h4>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">{t.features.grade_management.grade_entry.modal.benefits.title}</h4>
                                         <div className="bg-gray-50 p-6 rounded-lg">
                                             <ul className="space-y-4">
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Saves time spent on managing grades</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Reduces calculation errors</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Improves parent communication</span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span className="text-gray-600">Provides complete grade history</span>
-                                                </li>
+                                                {t.features.grade_management.grade_entry.modal.benefits.items.map((item, index) => (
+                                                    <li key={index} className="flex items-start">
+                                                        <svg className="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                        <span className="text-gray-600">{item}</span>
+                                                    </li>
+                                                ))}
                                             </ul>
                                         </div>
                                     </div>
@@ -1943,9 +1870,9 @@ const Landing: React.FC = () => {
                                     <button
                                         type="button"
                                         onClick={() => setIsGradeEntryModalOpen(false)}
-                                        className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     >
-                                        Close
+                                        {t.features.grade_management.grade_entry.modal.close}
                                     </button>
                                 </div>
                             </div>

@@ -230,7 +230,48 @@ export const en = {
                 description: "Generate detailed attendance reports automatically with customizable parameters and export options.",
                 tick1: "Custom Report Generation",
                 tick2: "Multiple Export Formats",
-                tick3: "Scheduled Reports"
+                tick3: "Scheduled Reports",
+                modal: {
+                    title: "Automated Reports",
+                    close: "Close",
+                    information: {
+                        title: "Automated Report Generation",
+                        description: "Our automated reporting system streamlines the process of generating and distributing attendance reports, saving time and ensuring accuracy.",
+                        report_types: {
+                            title: "Report Types",
+                            items: [
+                                "Daily Attendance Reports",
+                                "Weekly Summary Reports",
+                                "Monthly Analytics",
+                                "Custom Period Reports"
+                            ]
+                        },
+                        features: {
+                            title: "Key Features",
+                            customization: {
+                                title: "Customization Options",
+                                description: "Tailor reports to your specific needs with customizable parameters and filters"
+                            },
+                            export_formats: {
+                                title: "Export Formats",
+                                description: "Export reports in multiple formats including PDF, Excel, and CSV"
+                            },
+                            scheduling: {
+                                title: "Automated Scheduling",
+                                description: "Schedule reports to be generated and distributed automatically"
+                            }
+                        },
+                        benefits: {
+                            title: "Benefits",
+                            items: [
+                                "Time-saving automated report generation",
+                                "Improved accuracy and consistency",
+                                "Easy sharing and distribution",
+                                "Comprehensive data analysis"
+                            ]
+                        }
+                    }
+                }
             },
             modal: {
                 title: "Digital Attendance System",
@@ -287,7 +328,63 @@ export const en = {
                 description: "Easy-to-use interface for grade management and entry with multiple grading scales support.",
                 tick1: "Multiple Grading Scales",
                 tick2: "Bulk Grade Entry",
-                tick3: "Grade History Tracking"
+                tick3: "Grade History Tracking",
+                modal: {
+                    title: "Grade Entry",
+                    close: "Close",
+                    information: {
+                        title: "Effective Grade Management",
+                        description: "Our grade entry system streamlines entering, calculating, and administering student grades so that teachers can focus on what's most important—teaching.",
+                        features: {
+                            title: "Grade Entry Features",
+                            items: [
+                                "Bulk grade entry",
+                                "Custom grading scales",
+                                "Weighted assignments",
+                                "Grade calculation tools",
+                                "Exam schedule management",
+                                "Room allocation tracking"
+                            ]
+                        },
+                        exam_management: {
+                            title: "Exam Management",
+                            items: [
+                                "Grade history tracking",
+                                "Grade modification logs",
+                                "Parent portal access",
+                                "Progress monitoring",
+                                "Exam date scheduling",
+                                "Room assignment tracking",
+                                "Exam timetable generation",
+                                "Conflict resolution",
+                                "Student notifications"
+                            ]
+                        }
+                    },
+                    key_features: {
+                        title: "Key Features",
+                        flexible_entry: {
+                            title: "Flexible Entry",
+                            description: "Several management and entry of grades in an efficient way"
+                        },
+                        auto_calculation: {
+                            title: "Auto Calculation",
+                            description: "Automated calculation of grades with editable formulas"
+                        },
+                        progress_monitoring: {
+                            title: "Progress Monitoring",
+                            description: "Monitor student progress and identify areas for improvement"
+                        }
+                    },
+                    benefits: {
+                        title: "Benefits",
+                        items: [
+                            "Saves time spent on managing grades",
+                            "Reduces calculation errors",
+                            "Improves parent communication"
+                        ]
+                    }
+                }
             },
             progress_tracking: {
                 progress_tracking: "Progress Tracking",
