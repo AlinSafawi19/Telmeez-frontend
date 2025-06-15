@@ -862,7 +862,7 @@ const Landing: React.FC = () => {
                                     />
                                 </div>
 
-                                <div className="flex justify-end space-x-4">
+                                <div className={`flex justify-end ${currentLanguage === 'ar' ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                                     <button
                                         type="button"
                                         onClick={() => setIsUnsubscribeModalOpen(false)}
