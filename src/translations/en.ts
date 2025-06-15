@@ -336,5 +336,51 @@ export const en = {
         },
         try: "Try",
         dashboard: "Dashboard"
+    },
+    testimonials: {
+        hasfeedbacks: {
+            title: "Success Stories",
+            subtitle: "Discover how educational institutions are transforming their communication with Telmeez",
+        },
+        nofeedbacks: {
+            title: "Be Our First Success Story",
+            subtitle: "Join the growing community of educational institutions revolutionizing their communication",
+            left: {
+                tag: "Be Among Our First 3 Pioneers",
+                offer: "Join Our Elite Group of First 3 Educational Institutions",
+                description: "We're selecting only 3 pioneering institutions to join us in revolutionizing educational communication. Your journey to becoming a digital leader starts here.",
+                benifets: {
+                    title: "Early Access Benefits",
+                    ben1: " Lifetime 20% discount on all plans",
+                    ben2: "Early access to new features and beta testing",
+                    ben3: "Custom onboarding and training sessions"
+                },
+                shape_your_future: "Shape the Future",
+                shape_your_future_desc: "Your feedback directly influences our platform's development",
+                recog: "Recognition",
+                recog_desc: "Be featured as a founding partner in our success story",
+                button: "Start Your Journey",
+            },
+            right: {
+                info1: {
+                    title: "Join as Early Adopter",
+                    subtitle: "Get started with our platform today",
+                },
+                info2: {
+                    title: "Shape the Platform",
+                    subtitle: "Provide feedback and influence development",
+                },
+                info3: {
+                    title: "Become a Success Story",
+                    subtitle: "Share your experience with others",
+                },
+                tag: "Limited Time Offer - Join Our Pioneer Program",
+                pioneers: {
+                    first: "A",
+                    second: "B",
+                    third: "C"
+                }
+            }
+        }
     }
 }; 

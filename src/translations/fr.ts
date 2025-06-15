@@ -336,5 +336,51 @@ export const fr = {
         },
         try: "Essayer",
         dashboard: "Tableau de Bord"
+    },
+    testimonials: {
+        hasfeedbacks: {
+            title: "Histoires de Réussite",
+            subtitle: "Découvrez comment les institutions éducatives transforment leur communication avec Telmeez"
+        },
+        nofeedbacks: {
+            title: "Soyez Notre Première Histoire de Réussite",
+            subtitle: "Rejoignez la communauté croissante d'institutions éducatives qui révolutionnent leur communication",
+            left: {
+                tag: "Faites Partie de Nos 3 Premiers Pionniers",
+                offer: "Rejoignez Notre Groupe d'Élite des 3 Premières Institutions Éducatives",
+                description: "Nous sélectionnons seulement 3 institutions pionnières pour nous rejoindre dans la révolution de la communication éducative. Votre voyage pour devenir un leader numérique commence ici.",
+                benifets: {
+                    title: "Avantages d'Accès Anticipé",
+                    ben1: "Réduction de 20% à vie sur tous les plans",
+                    ben2: "Accès anticipé aux nouvelles fonctionnalités et tests bêta",
+                    ben3: "Sessions d'intégration et de formation personnalisées"
+                },
+                shape_your_future: "Façonnez l'Avenir",
+                shape_your_future_desc: "Vos retours influencent directement le développement de notre plateforme",
+                recog: "Reconnaissance",
+                recog_desc: "Soyez présenté comme un partenaire fondateur dans notre histoire de réussite",
+                button: "Commencez Votre Voyage"
+            },
+            right: {
+                info1: {
+                    title: "Rejoignez en Tant que Précurseur",
+                    subtitle: "Commencez à utiliser notre plateforme dès aujourd'hui"
+                },
+                info2: {
+                    title: "Façonnez la Plateforme",
+                    subtitle: "Fournissez des retours et influencez le développement"
+                },
+                info3: {
+                    title: "Devenez une Histoire de Réussite",
+                    subtitle: "Partagez votre expérience avec les autres"
+                },
+                tag: "Offre limitée - Rejoignez notre programme pionnier",
+                pioneers: {
+                    first: "A",
+                    second: "B",
+                    third: "C"
+                }
+            }
+        }
     }
 };

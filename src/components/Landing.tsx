@@ -641,12 +641,12 @@ const Landing: React.FC = () => {
                             viewport={{ once: true }}
                         >
                             <h2 className="text-5xl font-bold text-gray-900 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
-                                {testimonials.length > 0 ? 'Success Stories' : 'Be Our First Success Story'}
+                                {testimonials.length > 0 ? t.testimonials.hasfeedbacks.title : t.testimonials.nofeedbacks.title}
                             </h2>
                             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                                 {testimonials.length > 0
-                                    ? 'Discover how educational institutions are transforming their communication with Telmeez'
-                                    : 'Join the growing community of educational institutions revolutionizing their communication'}
+                                    ? t.testimonials.hasfeedbacks.subtitle
+                                    : t.testimonials.nofeedbacks.subtitle}
                             </p>
                         </motion.div>
                     </div>
@@ -668,13 +668,13 @@ const Landing: React.FC = () => {
                                         <div className="flex items-center mb-6">
                                             <div className="relative">
                                                 <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                                                    {testimonial.initials || 'AK'}
+                                                    {testimonial.initials}
                                                 </div>
                                             </div>
                                             <div className="ml-4">
-                                                <h4 className="text-lg font-semibold text-gray-900">{testimonial.name || 'Dr. Aisha Khan'}</h4>
-                                                <p className="text-gray-600">{testimonial.position || 'Dean of International Relations'}</p>
-                                                <p className="text-sm text-blue-600 font-medium">{testimonial.institution || 'Dubai International University'}</p>
+                                                <h4 className="text-lg font-semibold text-gray-900">{testimonial.name}</h4>
+                                                <p className="text-gray-600">{testimonial.position}</p>
+                                                <p className="text-sm text-blue-600 font-medium">{testimonial.institution}</p>
                                             </div>
                                         </div>
                                         <div className="relative">
@@ -682,7 +682,7 @@ const Landing: React.FC = () => {
                                                 <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
                                             </svg>
                                             <p className="text-gray-600 italic mb-4 pl-4 group-hover:text-gray-900 transition-colors duration-300">
-                                                {testimonial.quote || "Telmeez has been a game-changer for our international student body. The multilingual support and cultural sensitivity features have helped us bridge communication gaps across 45+ countries."}
+                                                {testimonial.quote}
                                             </p>
                                         </div>
                                         <div className="flex items-center justify-between">
@@ -694,7 +694,7 @@ const Landing: React.FC = () => {
                                                 ))}
                                             </div>
                                             <div className="flex items-center space-x-2">
-                                                <span className="text-sm text-gray-500">{testimonial.date || '2 months ago'}</span>
+                                                <span className="text-sm text-gray-500">{testimonial.date}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -715,60 +715,60 @@ const Landing: React.FC = () => {
                                     <div className="inline-block">
                                         <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                                             <span className="mr-2">✨</span>
-                                            Be Among Our First 3 Pioneers
+                                            {t.testimonials.nofeedbacks.left.tag}
                                         </span>
                                     </div>
                                     <h3 className="text-3xl font-bold text-gray-900 leading-tight">
-                                        Join Our Elite Group of First 3 Educational Institutions
+                                        {t.testimonials.nofeedbacks.left.offer}
                                     </h3>
                                     <p className="text-lg text-gray-600">
-                                        We're selecting only 3 pioneering institutions to join us in revolutionizing educational communication. Your journey to becoming a digital leader starts here.
+                                        {t.testimonials.nofeedbacks.left.description}
                                     </p>
                                     <div className="flex flex-col space-y-4">
-                                        <div className="flex items-start space-x-4">
+                                        <div className={`flex items-start ${currentLanguage === 'ar' ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                                             <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                                                 <span className="text-2xl">🎯</span>
                                             </div>
                                             <div>
-                                                <h4 className="font-semibold text-gray-900">Early Access Benefits</h4>
+                                                <h4 className="font-semibold text-gray-900">{t.testimonials.nofeedbacks.left.benifets.title}</h4>
                                                 <ul className="text-gray-600 space-y-2 mt-2">
                                                     <li className="flex items-center">
-                                                        <svg className="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <svg className={`w-4 h-4 ${currentLanguage === 'ar' ? 'ml-2' : 'mr-2'} text-blue-600`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                         </svg>
-                                                        Lifetime 20% discount on all plans
+                                                        {t.testimonials.nofeedbacks.left.benifets.ben1}
                                                     </li>
                                                     <li className="flex items-center">
-                                                        <svg className="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <svg className={`w-4 h-4 ${currentLanguage === 'ar' ? 'ml-2' : 'mr-2'} text-blue-600`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                         </svg>
-                                                        Early access to new features and beta testing
+                                                        {t.testimonials.nofeedbacks.left.benifets.ben2}
                                                     </li>
                                                     <li className="flex items-center">
-                                                        <svg className="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <svg className={`w-4 h-4 ${currentLanguage === 'ar' ? 'ml-2' : 'mr-2'} text-blue-600`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                         </svg>
-                                                        Custom onboarding and training sessions
+                                                        {t.testimonials.nofeedbacks.left.benifets.ben3}
                                                     </li>
                                                 </ul>
                                             </div>
                                         </div>
-                                        <div className="flex items-start space-x-4">
+                                        <div className={`flex items-start ${currentLanguage === 'ar' ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                                             <div className="flex-shrink-0 w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                                                 <span className="text-2xl">💡</span>
                                             </div>
                                             <div>
-                                                <h4 className="font-semibold text-gray-900">Shape the Future</h4>
-                                                <p className="text-gray-600">Your feedback directly influences our platform's development</p>
+                                                <h4 className="font-semibold text-gray-900">{t.testimonials.nofeedbacks.left.shape_your_future}</h4>
+                                                <p className="text-gray-600">{t.testimonials.nofeedbacks.left.shape_your_future_desc}</p>
                                             </div>
                                         </div>
-                                        <div className="flex items-start space-x-4">
+                                        <div className={`flex items-start ${currentLanguage === 'ar' ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                                             <div className="flex-shrink-0 w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center">
                                                 <span className="text-2xl">🌟</span>
                                             </div>
                                             <div>
-                                                <h4 className="font-semibold text-gray-900">Recognition</h4>
-                                                <p className="text-gray-600">Be featured as a founding partner in our success story</p>
+                                                <h4 className="font-semibold text-gray-900">{t.testimonials.nofeedbacks.left.recog}</h4>
+                                                <p className="text-gray-600">{t.testimonials.nofeedbacks.left.recog_desc}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -781,7 +781,7 @@ const Landing: React.FC = () => {
                                             }}
                                             className="inline-flex items-center px-6 py-3 rounded-lg text-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                         >
-                                            Start Your Journey
+                                            {t.testimonials.nofeedbacks.left.button}
                                             <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                             </svg>
@@ -794,42 +794,44 @@ const Landing: React.FC = () => {
                                     <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-2xl transform rotate-3"></div>
                                     <div className="relative bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
                                         <div className="space-y-6">
-                                            <div className="flex items-center space-x-4">
+                                            <div className={`flex items-center ${currentLanguage === 'ar' ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                                                 <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
                                                     1
                                                 </div>
                                                 <div>
-                                                    <h4 className="font-semibold text-gray-900">Join as Early Adopter</h4>
-                                                    <p className="text-sm text-gray-600">Get started with our platform today</p>
+                                                    <h4 className="font-semibold text-gray-900">{t.testimonials.nofeedbacks.right.info1.title}</h4>
+                                                    <p className="text-sm text-gray-600">{t.testimonials.nofeedbacks.right.info1.subtitle}</p>
                                                 </div>
                                             </div>
                                             <div className="h-8 w-0.5 bg-gradient-to-b from-blue-400 to-purple-400 mx-6"></div>
-                                            <div className="flex items-center space-x-4">
+                                            <div className={`flex items-center ${currentLanguage === 'ar' ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                                                 <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
                                                     2
                                                 </div>
                                                 <div>
-                                                    <h4 className="font-semibold text-gray-900">Shape the Platform</h4>
-                                                    <p className="text-sm text-gray-600">Provide feedback and influence development</p>
+                                                    <h4 className="font-semibold text-gray-900">{t.testimonials.nofeedbacks.right.info2.title}</h4>
+                                                    <p className="text-sm text-gray-600">{t.testimonials.nofeedbacks.right.info2.subtitle}</p>
                                                 </div>
                                             </div>
                                             <div className="h-8 w-0.5 bg-gradient-to-b from-purple-400 to-pink-400 mx-6"></div>
-                                            <div className="flex items-center space-x-4">
+                                            <div className={`flex items-center ${currentLanguage === 'ar' ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                                                 <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
                                                     3
                                                 </div>
                                                 <div>
-                                                    <h4 className="font-semibold text-gray-900">Become a Success Story</h4>
-                                                    <p className="text-sm text-gray-600">Share your experience with others</p>
+                                                    <h4 className="font-semibold text-gray-900">{t.testimonials.nofeedbacks.right.info3.title}</h4>
+                                                    <p className="text-sm text-gray-600">{t.testimonials.nofeedbacks.right.info3.subtitle}</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="mt-8 pt-6 border-t border-gray-100">
                                             <div className="flex items-center justify-between">
-                                                <div className="flex -space-x-2">
+                                                <div className={`flex ${currentLanguage === 'ar' ? 'space-x-reverse -space-x-2' : '-space-x-2'}`}>
                                                     {[...Array(3)].map((_, i) => (
                                                         <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-white font-bold text-sm">
-                                                            {String.fromCharCode(65 + i)}
+                                                            {i === 0 ? t.testimonials.nofeedbacks.right.pioneers.first :
+                                                                i === 1 ? t.testimonials.nofeedbacks.right.pioneers.second :
+                                                                    t.testimonials.nofeedbacks.right.pioneers.third}
                                                         </div>
                                                     ))}
                                                 </div>
@@ -838,7 +840,7 @@ const Landing: React.FC = () => {
                                                         <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                         </svg>
-                                                        Limited Time Offer - Join Our Pioneer Program
+                                                        {t.testimonials.nofeedbacks.right.tag}
                                                     </span>
                                                 </div>
                                             </div>
@@ -1011,7 +1013,7 @@ const Landing: React.FC = () => {
                                 </a>
                                 <a href="https://www.instagram.com/telmeez" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors transform hover:scale-110" aria-label="Instagram">
                                     <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.281-.057 1.689-.073 4.948-.073zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                                     </svg>
                                 </a>
                                 <a href="#" className="text-gray-400 hover:text-white transition-colors transform hover:scale-110" aria-label="LinkedIn">
