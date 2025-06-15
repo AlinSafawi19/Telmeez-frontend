@@ -49,6 +49,13 @@ const Landing: React.FC = () => {
         email: ''
     });
 
+    const [isNewsletterSubscribed, setIsNewsletterSubscribed] = useState(() => {
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+        return hasConsent ? localStorage.getItem('newsletterSubscribed') === 'true' : false;
+    });
+    const [showUnsubscribeMessage, setShowUnsubscribeMessage] = useState(false);
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target as Node)) {
@@ -108,11 +115,11 @@ const Landing: React.FC = () => {
         const handleScroll = () => {
             const scrollPosition = window.scrollY;
             setShowBackToTop(scrollPosition > 300);
-            
+
             // Save scroll position to localStorage as a necessary cookie
             const cookieConsent = localStorage.getItem('cookieConsent');
             const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-            
+
             if (hasConsent) {
                 localStorage.setItem('scrollPosition', scrollPosition.toString());
             }
@@ -250,6 +257,16 @@ const Landing: React.FC = () => {
             // Here you would typically make an API call to your backend
             await new Promise(resolve => setTimeout(resolve, 1000));
 
+            // Store newsletter subscription status as a necessary cookie
+            const cookieConsent = localStorage.getItem('cookieConsent');
+            const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+
+            if (hasConsent) {
+                localStorage.setItem('newsletterSubscribed', 'true');
+                setIsScrolling(true);
+                setTimeout(() => { setIsScrolling(false); setIsNewsletterSubscribed(true); }, 1000);
+            }
+
             setSubscribeEmail('');
         } catch (error) {
         } finally {
@@ -261,14 +278,24 @@ const Landing: React.FC = () => {
         e.preventDefault();
         if (!unsubscribeEmail) return; // Don't proceed if email is empty
 
-
         try {
             // Here you would typically make an API call to your backend
             await new Promise(resolve => setTimeout(resolve, 1000));
 
+            // Remove newsletter subscription status
+            const cookieConsent = localStorage.getItem('cookieConsent');
+            const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+
+            if (hasConsent) {
+                localStorage.removeItem('newsletterSubscribed');
+                setIsNewsletterSubscribed(false);
+            }
+
             setUnsubscribeEmail('');
+            setShowUnsubscribeMessage(true);
             setTimeout(() => {
                 setIsUnsubscribeModalOpen(false);
+                setShowUnsubscribeMessage(false);
             }, 2000);
         } catch (error) {
         } finally {
@@ -296,7 +323,7 @@ const Landing: React.FC = () => {
         // Restore scroll position if it exists
         const cookieConsent = localStorage.getItem('cookieConsent');
         const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-        
+
         if (hasConsent) {
             const savedScrollPosition = localStorage.getItem('scrollPosition');
             if (savedScrollPosition) {
@@ -1020,6 +1047,26 @@ const Landing: React.FC = () => {
                                 </button> {translations[currentLanguage].newsletter.unsubscribe_anytime}
                             </p>
                         </form>
+
+                        {/* Subscription Status Indicator */}
+                        <div className="mt-8">
+                            <AnimatePresence mode="wait">
+                                {isNewsletterSubscribed ? (
+                                    <motion.div
+                                        initial={{ scale: 0, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        exit={{ scale: 0, opacity: 0 }}
+                                        className="inline-flex items-center space-x-2 bg-green-100 text-green-800 px-4 py-2 rounded-full"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span className="font-medium">Thanks for subscribing. You're in the loop! 🎉</span>
+                                    </motion.div>
+                                ) : null}
+                            </AnimatePresence>
+                        </div>
+
                     </div>
                 </div>
             </section>
@@ -1186,6 +1233,20 @@ const Landing: React.FC = () => {
                                         className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                                     />
                                 </div>
+
+                                {showUnsubscribeMessage ? (
+                                    <motion.div
+                                        initial={{ scale: 0, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        exit={{ scale: 0, opacity: 0 }}
+                                        className="mt-2 mb-2 inline-flex items-center space-x-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span className="font-medium">We'll miss you! You've been unsubscribed successfully. 👋</span>
+                                    </motion.div>
+                                ) : null}
 
                                 <div className={`flex justify-end ${currentLanguage === 'ar' ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                                     <button
