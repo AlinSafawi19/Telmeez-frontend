@@ -23,6 +23,15 @@ interface TestimonialForm {
     email: string;
 }
 
+interface TestimonialFormErrors {
+    name?: string;
+    position?: string;
+    institution?: string;
+    quote?: string;
+    rating?: string;
+    email?: string;
+}
+
 const Landing: React.FC = () => {
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -83,6 +92,7 @@ const Landing: React.FC = () => {
         return hasConsent ? localStorage.getItem('newsletterSubscribed') === 'true' : false;
     });
     const [showUnsubscribeMessage, setShowUnsubscribeMessage] = useState(false);
+    const [testimonialFormErrors, setTestimonialFormErrors] = useState<TestimonialFormErrors>({});
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -377,6 +387,85 @@ const Landing: React.FC = () => {
             }
         }
     }, []);
+
+    const validateTestimonialForm = (): boolean => {
+        const errors: TestimonialFormErrors = {};
+        let isValid = true;
+
+        // Name validation
+        if (!testimonialForm.name.trim()) {
+            errors.name = t.testimonials.modal.errors.email_required;
+            isValid = false;
+        }
+
+        // Position validation
+        if (!testimonialForm.position.trim()) {
+            errors.position = t.testimonials.modal.errors.position_required;
+            isValid = false;
+        }
+
+        // Institution validation
+        if (!testimonialForm.institution.trim()) {
+            errors.institution = t.testimonials.modal.errors.institution_required;
+            isValid = false;
+        }
+
+        // Quote validation
+        if (!testimonialForm.quote.trim()) {
+            errors.quote = t.testimonials.modal.errors.quote_required;
+            isValid = false;
+        }
+
+        // Rating validation
+        if (testimonialForm.rating === 0) {
+            errors.rating = t.testimonials.modal.errors.rating_required;
+            isValid = false;
+        }
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!testimonialForm.email.trim()) {
+            errors.email = t.testimonials.modal.errors.email_required;
+            isValid = false;
+        } else if (!emailRegex.test(testimonialForm.email)) {
+            errors.email = t.testimonials.modal.errors.invalid_email;
+            isValid = false;
+        }
+
+        setTestimonialFormErrors(errors);
+        return isValid;
+    };
+
+    const handleTestimonialSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
+        if (!validateTestimonialForm()) {
+            return;
+        }
+
+        try {
+            // Here you would typically make an API call to your backend
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
+
+            // Clear form and errors after successful submission
+            setTestimonialForm({
+                name: '',
+                position: '',
+                institution: '',
+                quote: '',
+                rating: 0,
+                email: ''
+            });
+            setTestimonialFormErrors({});
+            setIsTestimonialModalOpen(false);
+        } catch (error) {
+        }
+    };
+
+    const handleCloseTestimonialModal = () => {
+        setIsTestimonialModalOpen(false);
+        setTestimonialFormErrors({});
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
@@ -1381,7 +1470,7 @@ const Landing: React.FC = () => {
                                 </div>
                                 <button
                                     type="button"
-                                    onClick={() => setIsTestimonialModalOpen(false)}
+                                    onClick={handleCloseTestimonialModal}
                                     className="text-gray-400 hover:text-gray-500 focus:outline-none transition-colors duration-200 p-2 hover:bg-gray-100 rounded-md"
                                     aria-label="Close testimonial modal"
                                 >
@@ -1391,7 +1480,7 @@ const Landing: React.FC = () => {
                                 </button>
                             </div>
 
-                            <form /*onSubmit={handleTestimonialSubmit}*/ className="space-y-4">
+                            <form onSubmit={handleTestimonialSubmit} className="space-y-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="group">
                                         <label htmlFor="name" className="block text-xs font-medium text-gray-700 mb-1 group-focus-within:text-blue-600 transition-colors duration-200">
@@ -1404,7 +1493,7 @@ const Landing: React.FC = () => {
                                                 name="name"
                                                 value={testimonialForm.name}
                                                 onChange={handleTestimonialFormChange}
-                                                className={`w-full text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
+                                                className={`w-full text-sm rounded-xl border ${testimonialFormErrors.name ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                                 placeholder={t.testimonials.modal.form.name_placeholder}
                                             />
                                             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -1413,19 +1502,22 @@ const Landing: React.FC = () => {
                                                 </svg>
                                             </div>
                                         </div>
+                                        {testimonialFormErrors.name && (
+                                            <p className="mt-1 text-xs text-red-500">{testimonialFormErrors.name}</p>
+                                        )}
                                     </div>
                                     <div className="group">
-                                        <label htmlFor="role" className="block text-xs font-medium text-gray-700 mb-1 group-focus-within:text-blue-600 transition-colors duration-200">
+                                        <label htmlFor="position" className="block text-xs font-medium text-gray-700 mb-1 group-focus-within:text-blue-600 transition-colors duration-200">
                                             {t.testimonials.modal.form.role}
                                         </label>
                                         <div className="relative">
                                             <input
                                                 type="text"
-                                                id="role"
-                                                name="role"
+                                                id="position"
+                                                name="position"
                                                 value={testimonialForm.position}
                                                 onChange={handleTestimonialFormChange}
-                                                className={`w-full text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
+                                                className={`w-full text-sm rounded-xl border ${testimonialFormErrors.position ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                                 placeholder={t.testimonials.modal.form.role_placeholder}
                                             />
                                             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -1434,6 +1526,9 @@ const Landing: React.FC = () => {
                                                 </svg>
                                             </div>
                                         </div>
+                                        {testimonialFormErrors.position && (
+                                            <p className="mt-1 text-xs text-red-500">{testimonialFormErrors.position}</p>
+                                        )}
                                     </div>
                                 </div>
 
@@ -1449,7 +1544,7 @@ const Landing: React.FC = () => {
                                                 name="institution"
                                                 value={testimonialForm.institution}
                                                 onChange={handleTestimonialFormChange}
-                                                className={`w-full text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
+                                                className={`w-full text-sm rounded-xl border ${testimonialFormErrors.institution ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                                 placeholder={t.testimonials.modal.form.institution_placeholder}
                                             />
                                             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -1458,6 +1553,9 @@ const Landing: React.FC = () => {
                                                 </svg>
                                             </div>
                                         </div>
+                                        {testimonialFormErrors.institution && (
+                                            <p className="mt-1 text-xs text-red-500">{testimonialFormErrors.institution}</p>
+                                        )}
                                     </div>
                                     <div className="group">
                                         <label htmlFor="email" className="block text-xs font-medium text-gray-700 mb-1 group-focus-within:text-blue-600 transition-colors duration-200">
@@ -1465,12 +1563,12 @@ const Landing: React.FC = () => {
                                         </label>
                                         <div className="relative">
                                             <input
-                                                type="email"
+                                                type="text"
                                                 id="email"
                                                 name="email"
                                                 value={testimonialForm.email}
                                                 onChange={handleTestimonialFormChange}
-                                                className={`w-full text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
+                                                className={`w-full text-sm rounded-xl border ${testimonialFormErrors.email ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                                 placeholder="john@example.com"
                                             />
                                             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -1479,6 +1577,9 @@ const Landing: React.FC = () => {
                                                 </svg>
                                             </div>
                                         </div>
+                                        {testimonialFormErrors.email && (
+                                            <p className="mt-1 text-xs text-red-500">{testimonialFormErrors.email}</p>
+                                        )}
                                     </div>
                                 </div>
 
@@ -1493,7 +1594,7 @@ const Landing: React.FC = () => {
                                             value={testimonialForm.quote}
                                             onChange={handleTestimonialFormChange}
                                             rows={4}
-                                            className={`w-full text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md resize-none ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
+                                            className={`w-full text-sm rounded-xl border ${testimonialFormErrors.quote ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md resize-none ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                             placeholder={t.testimonials.modal.form.testimonial_placeholder}
                                         />
                                         <div className="absolute top-2 right-2 pointer-events-none">
@@ -1502,6 +1603,9 @@ const Landing: React.FC = () => {
                                             </svg>
                                         </div>
                                     </div>
+                                    {testimonialFormErrors.quote && (
+                                        <p className="mt-1 text-xs text-red-500">{testimonialFormErrors.quote}</p>
+                                    )}
                                 </div>
 
                                 <div className="group">
@@ -1544,12 +1648,15 @@ const Landing: React.FC = () => {
                                             </button>
                                         ))}
                                     </div>
+                                    {testimonialFormErrors.rating && (
+                                        <p className="mt-1 text-xs text-red-500">{testimonialFormErrors.rating}</p>
+                                    )}
                                 </div>
 
                                 <div className="flex justify-end space-x-3 pt-3 border-t border-gray-100">
                                     <button
                                         type="button"
-                                        onClick={() => setIsTestimonialModalOpen(false)}
+                                        onClick={handleCloseTestimonialModal}
                                         className={`px-4 py-2 text-sm text-gray-700 hover:text-gray-900 focus:outline-none transition-colors duration-200 font-medium ${currentLanguage === 'ar' ? 'ml-3' : 'mr-3'}`}
                                     >
                                         {t.testimonials.modal.form.cancel}

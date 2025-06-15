@@ -410,6 +410,17 @@ export const fr = {
                 rating: "Évaluation",
                 submit: "Soumettre le Témoignage",
                 cancel: "Annuler"
+            },
+            errors: {
+                name_required: "Veuillez entrer votre nom",
+                position_required: "Veuillez entrer votre poste",
+                institution_required: "Veuillez entrer le nom de votre institution",
+                quote_required: "Veuillez partager votre témoignage",
+                email_required: "Veuillez entrer votre adresse e-mail",
+                invalid_email: "Veuillez entrer une adresse e-mail valide",
+                rating_required: "Veuillez fournir une évaluation",
+                submission_failed: "Échec de la soumission du témoignage. Veuillez réessayer.",
+                submit: "Soumettre"
             }
         }
     },

@@ -410,6 +410,17 @@ export const en = {
                 rating: "Rating",
                 submit: "Submit Testimonial",
                 cancel: "Cancel"
+            },
+            errors: {
+                name_required: "Please enter your name",
+                position_required: "Please enter your position",
+                institution_required: "Please enter your institution name",
+                quote_required: "Please share your testimonial",
+                email_required: "Please enter your email address",
+                invalid_email: "Please enter a valid email address",
+                rating_required: "Please provide a rating",
+                submission_failed: "Failed to submit testimonial. Please try again.",
+                submit: "Submit"
             }
         }
     },

@@ -410,6 +410,17 @@ export const ar = {
                 rating: "التقييم",
                 submit: "إرسال الشهادة",
                 cancel: "إلغاء"
+            },
+            errors: {
+                name_required: "الرجاء إدخال اسمك",
+                position_required: "الرجاء إدخال منصبك",
+                institution_required: "الرجاء إدخال اسم مؤسستك",
+                quote_required: "الرجاء مشاركة شهادتك",
+                email_required: "الرجاء إدخال عنوان بريدك الإلكتروني",
+                invalid_email: "الرجاء إدخال عنوان بريد إلكتروني صحيح",
+                rating_required: "الرجاء تقديم تقييم",
+                submission_failed: "فشل في إرسال الشهادة. يرجى المحاولة مرة أخرى.",
+                submit: "إرسال"
             }
         }
     },
