@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { translations } from '../translations';
 import type { Language } from '../translations';
 
@@ -28,6 +29,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
     onContinue,
     language = 'en'
 }) => {
+    const navigate = useNavigate();
     const BILLING_PREFERENCE_KEY = 'billing_preference';
     const SELECTED_PLAN_KEY = 'selected_plan';
     const [isAnnual, setIsAnnual] = useState(() => {
@@ -60,8 +62,12 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
     };
 
     const handleContinue = () => {
-        if (selectedPlan && onContinue) {
-            onContinue(selectedPlan, isAnnual);
+        if (selectedPlan) {
+            if (onContinue) {
+                onContinue(selectedPlan, isAnnual);
+            }
+            // Navigate to checkout page with selected plan and billing period
+            navigate(`/checkout?plan=${selectedPlan}&billing=${isAnnual ? 'annual' : 'monthly'}`);
         }
     };
 

@@ -1,5 +1,6 @@
 //import { useEffect , useState } from "react";
 //import axios from "axios";
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Landing from "./components/Landing";
 import SignIn from "./pages/SignIn";
@@ -9,10 +10,11 @@ import SchoolAdminDashboard from "./pages/demo-dashboard/SchoolAdminDashboard";
 import TeacherDashboard from "./pages/demo-dashboard/TeacherDashboard";
 import StudentDashboard from "./pages/demo-dashboard/StudentDashboard";
 import ParentDashboard from "./pages/demo-dashboard/ParentDashboard";
+import Checkout from './components/Checkout';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { CookieConsentProvider } from './contexts/CookieConsentContext';
 
-function App() {
+const App: React.FC = () => {
   //const [apiMessage, setApiMessage] = useState("");
 
   /*useEffect(() => {
@@ -32,6 +34,7 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/checkout" element={<Checkout />} />
             <Route path="/demo-dashboard/super-admin" element={<SuperAdminDashboard />} />
             <Route path="/demo-dashboard/admin" element={<SchoolAdminDashboard />} />
             <Route path="/demo-dashboard/teacher" element={<TeacherDashboard />} />
@@ -42,6 +45,6 @@ function App() {
       </LanguageProvider>
     </CookieConsentProvider>
   );
-}
+};
 
 export default App;
