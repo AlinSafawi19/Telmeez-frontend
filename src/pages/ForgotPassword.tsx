@@ -13,6 +13,7 @@ const ForgotPassword: React.FC = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
     const [isScrolling, setIsScrolling] = useState(false);
+    const [errors, setErrors] = useState<{ email?: string }>({});
     const navigate = useNavigate();
     const { currentLanguage, setCurrentLanguage } = useLanguage();
     const t = translations[currentLanguage];
@@ -52,8 +53,25 @@ const ForgotPassword: React.FC = () => {
         setIsLanguageDropdownOpen(false);
     };
 
+    // Update error messages when language changes
+    useEffect(() => {
+        if (errors.email) {
+            setErrors(prev => ({ ...prev, email: t.header.signin_errors.email_required }));
+        }
+    }, [currentLanguage, t.header.signin_errors]);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
+        // Reset errors
+        setErrors({});
+
+        // Validate email
+        if (!email) {
+            setErrors(prev => ({ ...prev, email: t.header.signin_errors.email_required }));
+            return;
+        }
+
         // TODO: Implement password reset request logic
         console.log('Password reset requested for:', email);
         setIsSubmitted(true);
@@ -137,14 +155,22 @@ const ForgotPassword: React.FC = () => {
                                         <input
                                             id="email-address"
                                             name="email"
-                                            type="email"
+                                            type="text"
                                             autoComplete="email"
-                                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                                            className={`block w-full pl-10 pr-3 py-3 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200`}
                                             placeholder="Enter your email address"
                                             value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
+                                            onChange={(e) => {
+                                                setEmail(e.target.value);
+                                                if (errors.email) {
+                                                    setErrors(prev => ({ ...prev, email: undefined }));
+                                                }
+                                            }}
                                         />
                                     </div>
+                                    {errors.email && (
+                                        <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                                    )}
                                 </div>
 
                                 <button
