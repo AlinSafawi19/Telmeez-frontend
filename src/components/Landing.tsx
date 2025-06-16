@@ -124,6 +124,14 @@ const Landing: React.FC = () => {
             } else {
                 document.documentElement.dir = 'ltr';
             }
+            // Update error messages if they exist
+            if (subscribeEmailError) {
+                if (!subscribeEmail.trim()) {
+                    setSubscribeEmailError(translations[langCode].newsletter.errors.email_required);
+                } else if (!validateEmail(subscribeEmail)) {
+                    setSubscribeEmailError(translations[langCode].newsletter.errors.invalid_email);
+                }
+            }
         }, 500);
     };
 
