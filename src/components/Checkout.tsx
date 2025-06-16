@@ -908,9 +908,95 @@ const Checkout: React.FC<CheckoutProps> = ({
                                     </div>
                                 </div>
 
-                                {(isAnnual || discount > 0) && (
+                                {/* Free Trial Banner */}
+                                {selectedPlan === 'starter' && (
+                                    <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 p-6 border border-blue-100">
+                                        <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-16 -translate-y-16">
+                                            <div className="absolute inset-0 bg-blue-200 opacity-20 rounded-full"></div>
+                                        </div>
+                                        <div className="relative z-10">
+                                            <div className="flex items-center mb-3">
+                                                <div className="flex-shrink-0">
+                                                    <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                </div>
+                                                <h3 className="ml-3 text-lg font-semibold text-blue-900">Free Trial Available!</h3>
+                                            </div>
+                                            <p className="text-blue-800 mb-4">
+                                                Start with a {isAnnual ? '30-day' : '7-day'} free trial. Your card will be charged after the trial period.
+                                            </p>
+                                            <div className="space-y-3">
+                                                <div className="flex items-start text-sm text-blue-700">
+                                                    <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                    <span>Cancel anytime during the trial to avoid charges</span>
+                                                </div>
+                                                <div className="flex items-start text-sm text-blue-700">
+                                                    <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                    <span>Continue using all features until the trial ends, even after cancellation</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Plan Features */}
+                                <div className="border-t border-gray-200 pt-6">
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Plan Features</h3>
+                                    <ul className="space-y-3">
+                                        {t.plans[selectedPlan as keyof typeof t.plans].features.map((feature, index) => (
+                                            <li key={index} className="flex items-start">
+                                                <span className="mr-2 text-green-500 mt-1">
+                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M5 13l4 4L19 7"
+                                                        />
+                                                    </svg>
+                                                </span>
+                                                <span className="text-gray-600">{feature}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+
+                                {/* Annual Savings */}
+                                {isAnnual && (
                                     <div className="flex justify-between items-center text-green-600 bg-green-50 p-4 rounded-xl">
-                                        <span>Total Savings</span>
+                                        <div className="flex items-center">
+                                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                />
+                                            </svg>
+                                            <span>Annual Savings (20%)</span>
+                                        </div>
+                                        <span className="font-medium">{getTotalSavings()}</span>
+                                    </div>
+                                )}
+
+                                {(discount > 0) && (
+                                    <div className="flex justify-between items-center text-green-600 bg-green-50 p-4 rounded-xl">
+                                        <div className="flex items-center">
+                                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                />
+                                            </svg>
+                                            <span>Promo Code Savings</span>
+                                        </div>
                                         <span className="font-medium">{getTotalSavings()}</span>
                                     </div>
                                 )}
@@ -984,7 +1070,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                         </div>
                                     </div>
                                     <p className="mt-4 text-xs text-center text-gray-500">
-                                        By completing your purchase, you agree to our Terms of Service and Privacy Policy
+                                        By completing your purchase, you agree to our Terms of Service, Privacy Policy, and Refund Policy.
                                     </p>
                                 </div>
                             </div>
