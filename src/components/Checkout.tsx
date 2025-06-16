@@ -237,7 +237,7 @@ const Checkout: React.FC<CheckoutProps> = ({
             if (digitsOnly.length > 0) {
                 const month = digitsOnly.slice(0, 2);
                 const year = digitsOnly.slice(2, 4);
-                
+
                 // Validate month (01-12)
                 const monthNum = parseInt(month);
                 if (monthNum > 12) {
@@ -247,7 +247,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                 } else {
                     formattedValue = month;
                 }
-                
+
                 if (digitsOnly.length > 2) {
                     formattedValue += '/' + year;
                 }
@@ -297,49 +297,49 @@ const Checkout: React.FC<CheckoutProps> = ({
         const digitsOnly = cardNumber.replace(/\D/g, '');
         // Check if it's exactly 16 digits
         if (digitsOnly.length !== 16) return false;
-        
+
         // Luhn algorithm for card number validation
         let sum = 0;
         let isEven = false;
-        
+
         // Loop through values starting from the rightmost digit
         for (let i = digitsOnly.length - 1; i >= 0; i--) {
             let digit = parseInt(digitsOnly[i]);
-            
+
             if (isEven) {
                 digit *= 2;
                 if (digit > 9) {
                     digit -= 9;
                 }
             }
-            
+
             sum += digit;
             isEven = !isEven;
         }
-        
+
         return sum % 10 === 0;
     };
 
     const validateExpiryDate = (expiryDate: string): boolean => {
         // Check format MM/YY
         if (!/^\d{2}\/\d{2}$/.test(expiryDate)) return false;
-        
+
         const [month, year] = expiryDate.split('/');
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear() % 100; // Get last 2 digits
         const currentMonth = currentDate.getMonth() + 1; // getMonth() returns 0-11
-        
+
         const monthNum = parseInt(month);
         const yearNum = parseInt(year);
-        
+
         // Check if month is valid (1-12)
         if (monthNum < 1 || monthNum > 12) return false;
-        
+
         // Check if date is in the future
         if (yearNum < currentYear || (yearNum === currentYear && monthNum < currentMonth)) {
             return false;
         }
-        
+
         return true;
     };
 
@@ -380,11 +380,11 @@ const Checkout: React.FC<CheckoutProps> = ({
 
     const handleNextStep = () => {
         console.log('handleNextStep called, current step:', currentStep);
-        
+
         // Validate current step before proceeding
         if (currentStep === 1) {
             const billingErrors: Partial<BillingInfo> = {};
-            
+
             // Required fields validation
             if (!billingInfo.firstName.trim()) {
                 billingErrors.firstName = t.checkout.validation.required;
@@ -439,21 +439,21 @@ const Checkout: React.FC<CheckoutProps> = ({
             }
         } else if (currentStep === 2) {
             const paymentErrors: Partial<PaymentInfo> = {};
-            
+
             // Card number validation
             if (!paymentInfo.cardNumber.trim()) {
                 paymentErrors.cardNumber = t.checkout.validation.required;
             } else if (!validateCardNumber(paymentInfo.cardNumber)) {
                 paymentErrors.cardNumber = t.checkout.validation.invalid_card;
             }
-            
+
             // Expiry date validation
             if (!paymentInfo.expiryDate.trim()) {
                 paymentErrors.expiryDate = t.checkout.validation.required;
             } else if (!validateExpiryDate(paymentInfo.expiryDate)) {
                 paymentErrors.expiryDate = t.checkout.validation.invalid_expiry;
             }
-            
+
             // CVV validation
             if (!paymentInfo.cvv.trim()) {
                 paymentErrors.cvv = t.checkout.validation.required;
@@ -481,14 +481,14 @@ const Checkout: React.FC<CheckoutProps> = ({
     const handleStepSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         console.log('Form submitted, current step:', currentStep);
-        
+
         if (currentStep < 3) {
             handleNextStep();
         } else {
             // Validate billing address only on final submission
             if (!useSameAddress) {
                 const billingAddressErrors: Partial<BillingAddress> = {};
-                
+
                 if (!billingAddress.address.trim()) {
                     billingAddressErrors.address = t.checkout.validation.required;
                 }
@@ -774,27 +774,26 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     country="lb"
                                                     value={billingInfo.phone}
                                                     onChange={handlePhoneChange}
-                                                    inputClass={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.phone ? 'border-red-500' : 'border-gray-300'
+                                                    inputClass={`w-full px-4 py-3 ${isRTL ? 'text-right pr-12' : ''} border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.phone ? 'border-red-500' : 'border-gray-300'
                                                         }`}
-                                                    containerClass={`phone-input-container w-full ${errors.billing?.phone ? 'border-red-500' : ''}`}
-                                                    buttonClass={`phone-input-button !h-[50px] !min-h-[50px] !rounded-l-xl !border-r-0 ${errors.billing?.phone ? '!border-red-500' : ''}`}
-                                                    dropdownClass="phone-input-dropdown"
+                                                    buttonClass={`${isRTL ? 'rounded-l-none' : 'rounded-r-none'}`}
                                                     inputStyle={{
                                                         height: '50px',
                                                         width: '100%',
                                                         fontSize: '1rem',
-                                                        borderRadius: '0.75rem',
-                                                        borderLeft: 'none',
+                                                        borderRadius: '0.75rem !important',
                                                         borderColor: errors.billing?.phone ? '#EF4444' : '#D1D5DB'
                                                     }}
                                                     buttonStyle={{
-                                                        borderTopRightRadius: '0',
-                                                        borderBottomRightRadius: '0',
-                                                        borderTopLeftRadius: '0.75rem',
-                                                        borderBottomLeftRadius: '0.75rem',
+                                                        borderTopRightRadius: '0.75rem',
+                                                        borderBottomRightRadius: '0.75rem',
+                                                        borderTopLeftRadius: '0',
+                                                        borderBottomLeftRadius: '0',
                                                         borderColor: errors.billing?.phone ? '#EF4444' : '#D1D5DB'
                                                     }}
+                                                    containerClass={isRTL ? 'rtl-phone-input' : ''}
                                                 />
+
                                                 {errors.billing?.phone && (
                                                     <p className="text-sm text-red-600">{errors.billing.phone}</p>
                                                 )}
