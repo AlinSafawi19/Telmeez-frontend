@@ -253,6 +253,8 @@ const Landing: React.FC = () => {
         
         if (planId) {
             setSelectedPricingPlan(planId);
+            // Save the selected plan in localStorage
+            localStorage.setItem('selected_plan', planId);
             setIsScrolling(true);
             pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
             setTimeout(() => setIsScrolling(false), 1000);
