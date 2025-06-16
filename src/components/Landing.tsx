@@ -137,7 +137,7 @@ const Landing: React.FC = () => {
 
     useEffect(() => {
         setIsVisible(true);
-        //localStorage.clear();
+        localStorage.clear();
         if (import.meta.env.DEV) {
             const logKey = 'lastLocalStorageLog';
             const lastLog = localStorage.getItem(logKey);
@@ -305,33 +305,23 @@ const Landing: React.FC = () => {
     const handleSubscribeEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const email = e.target.value;
         setSubscribeEmail(email);
-        
-        if (!email.trim()) {
-            setSubscribeEmailError(t.newsletter.errors.email_required);
-        } else if (!validateEmail(email)) {
-            setSubscribeEmailError(t.newsletter.errors.invalid_email);
-        } else {
-            setSubscribeEmailError('');
-        }
+        setSubscribeEmailError(''); // Clear any existing error when user types
     };
 
     const handleUnsubscribeEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const email = e.target.value;
         setUnsubscribeEmail(email);
-        
-        if (!email.trim()) {
-            setUnsubscribeEmailError(t.newsletter.errors.email_required);
-        } else if (!validateEmail(email)) {
-            setUnsubscribeEmailError(t.newsletter.errors.invalid_email);
-        } else {
-            setUnsubscribeEmailError('');
-        }
     };
 
     // Update the newsletter subscription handler
     const handleNewsletterSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Validate email
+        if (!subscribeEmail.trim()) {
+            setSubscribeEmailError(t.newsletter.errors.email_required);
+            return;
+        }
         if (!validateEmail(subscribeEmail)) {
             setSubscribeEmailError(t.newsletter.errors.invalid_email);
             return;
@@ -355,14 +345,19 @@ const Landing: React.FC = () => {
             setSubscribeEmail('');
             setSubscribeEmailError('');
         } catch (error) {
-            
+            // Handle error case if needed
         }
     };
 
     // Update the unsubscribe handler
     const handleUnsubscribe = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
+        // Validate email
+        if (!unsubscribeEmail.trim()) {
+            setUnsubscribeEmailError(t.newsletter.errors.email_required);
+            return;
+        }
         if (!validateEmail(unsubscribeEmail)) {
             setUnsubscribeEmailError(t.newsletter.errors.invalid_email);
             return;
@@ -490,7 +485,7 @@ const Landing: React.FC = () => {
 
     const handleTestimonialSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (!validateTestimonialForm()) {
             return;
         }
@@ -1406,7 +1401,13 @@ const Landing: React.FC = () => {
                                 <h3 className="text-xl font-semibold text-gray-900">{translations[currentLanguage].newsletter.unsubscribe_title}</h3>
                                 <button
                                     type="button"
-                                    onClick={() => setIsUnsubscribeModalOpen(false)}
+                                    onClick={() => {
+                                        setIsUnsubscribeModalOpen(false);
+                                        setUnsubscribeEmailError('');
+                                        const cookieConsent = localStorage.getItem('cookieConsent');
+                                        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+                                        setUnsubscribeEmail(hasConsent ? localStorage.getItem('newsletterEmail') || '' : '');
+                                    }}
                                     className="text-gray-400 hover:text-gray-500 focus:outline-none"
                                     aria-label="Close unsubscribe modal"
                                 >
@@ -1452,7 +1453,13 @@ const Landing: React.FC = () => {
                                 <div className={`flex justify-end ${currentLanguage === 'ar' ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                                     <button
                                         type="button"
-                                        onClick={() => setIsUnsubscribeModalOpen(false)}
+                                        onClick={() => {
+                                            setIsUnsubscribeModalOpen(false);
+                                            setUnsubscribeEmailError('');
+                                            const cookieConsent = localStorage.getItem('cookieConsent');
+                                            const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+                                            setUnsubscribeEmail(hasConsent ? localStorage.getItem('newsletterEmail') || '' : '');
+                                        }}
                                         className="px-4 py-2 focus:outline-none text-gray-700 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {translations[currentLanguage].cancel}
