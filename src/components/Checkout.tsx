@@ -454,9 +454,22 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     inputClass={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${
                                                         errors.billing?.phone ? 'border-red-500' : 'border-gray-300'
                                                     }`}
-                                                    containerClass="phone-input-container"
-                                                    buttonClass="phone-input-button"
+                                                    containerClass="phone-input-container w-full"
+                                                    buttonClass="phone-input-button !h-[50px] !min-h-[50px] !rounded-l-xl !border-r-0"
                                                     dropdownClass="phone-input-dropdown"
+                                                    inputStyle={{
+                                                        height: '50px',
+                                                        width: '100%',
+                                                        fontSize: '1rem',
+                                                        borderRadius: '0.75rem',
+                                                        borderLeft: 'none'
+                                                    }}
+                                                    buttonStyle={{
+                                                        borderTopRightRadius: '0',
+                                                        borderBottomRightRadius: '0',
+                                                        borderTopLeftRadius: '0.75rem',
+                                                        borderBottomLeftRadius: '0.75rem'
+                                                    }}
                                                 />
                                                 {errors.billing?.phone && (
                                                     <p className="text-sm text-red-600">{errors.billing.phone}</p>
