@@ -75,23 +75,25 @@ button:focus-visible {
 }
 
 /* For RTL phone input */
-.rtl-phone-input .flag-dropdown {
+[dir="rtl"] .flag-dropdown {
   direction: rtl;
-  border-top-right-radius: 0.75rem !important;
-  border-bottom-right-radius: 0.75rem !important;
+  border-top-left-radius: 0.75rem !important;
+  border-bottom-left-radius: 0.75rem !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 
-.rtl-phone-input .flag-dropdown .arrow {
+[dir="rtl"] .flag-dropdown .arrow {
   right: auto;
   left: 0;
 }
 
-.rtl-phone-input .flag-dropdown .flag {
+[dir="rtl"] .flag-dropdown .flag {
   right: auto;
   left: 0;
 }
 
-.rtl-phone-input .flag-dropdown .selected-flag {
+[dir="rtl"] .flag-dropdown .selected-flag {
   padding: 0 !important;
 }
 
@@ -99,3 +101,4 @@ button:focus-visible {
   padding-right: 5px !important;
   margin-left: 5px !important;
 }
+

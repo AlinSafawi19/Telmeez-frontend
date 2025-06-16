@@ -5,6 +5,8 @@ import type { Language } from '../translations';
 import { countries } from 'countries-list';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import Select from 'react-select';
+import 'react-select/dist/react-select.min.css';
 import visa from "../assets/images/visa.png";
 import mastercard from "../assets/images/mastercard.png";
 import logo from "../assets/images/logo.png";
@@ -100,10 +102,10 @@ const Checkout: React.FC<CheckoutProps> = ({
     // Convert countries object to array and sort by name
     const countryOptions = Object.entries(countries)
         .map(([code, country]) => ({
-            code,
-            name: country.name
+            value: code,
+            label: country.name
         }))
-        .sort((a, b) => a.name.localeCompare(b.name));
+        .sort((a, b) => a.label.localeCompare(b.label));
 
     const [currentStep, setCurrentStep] = useState(1);
     const [billingInfo, setBillingInfo] = useState<BillingInfo>({
@@ -579,6 +581,46 @@ const Checkout: React.FC<CheckoutProps> = ({
         setPaymentMethod(method);
     };
 
+    const handleCountryChange = (selectedOption: any, isBillingAddress: boolean = false) => {
+        if (isBillingAddress) {
+            setBillingAddress(prev => ({
+                ...prev,
+                country: selectedOption.value
+            }));
+        } else {
+            setBillingInfo(prev => ({
+                ...prev,
+                country: selectedOption.value
+            }));
+        }
+    };
+
+    const customSelectStyles = {
+        control: (base: any, state: any) => ({
+            ...base,
+            minHeight: '50px',
+            borderRadius: '0.75rem',
+            borderColor: state.isFocused ? '#3B82F6' : '#D1D5DB',
+            boxShadow: state.isFocused ? '0 0 0 2px rgba(59, 130, 246, 0.1)' : 'none',
+            '&:hover': {
+                borderColor: '#3B82F6'
+            }
+        }),
+        option: (base: any, state: any) => ({
+            ...base,
+            backgroundColor: state.isSelected ? '#3B82F6' : state.isFocused ? '#EFF6FF' : 'white',
+            color: state.isSelected ? 'white' : '#1F2937',
+            '&:hover': {
+                backgroundColor: state.isSelected ? '#3B82F6' : '#EFF6FF'
+            }
+        }),
+        menu: (base: any) => ({
+            ...base,
+            borderRadius: '0.75rem',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+        })
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" dir={isRTL ? 'rtl' : 'ltr'}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -853,21 +895,17 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                 <label htmlFor="country" className="block text-sm font-medium text-gray-700">
                                                     {t.checkout.account_info.fields.country} <span className="text-red-500">*</span>
                                                 </label>
-                                                <select
+                                                <Select
                                                     id="country"
-                                                    name="country"
-                                                    value={billingInfo.country}
-                                                    onChange={handleBillingInfoChange}
-                                                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billing?.country ? 'border-red-500' : 'border-gray-300'
-                                                        }`}
-                                                >
-                                                    <option value="">Select a country</option>
-                                                    {countryOptions.map(({ code, name }) => (
-                                                        <option key={code} value={code}>
-                                                            {name}
-                                                        </option>
-                                                    ))}
-                                                </select>
+                                                    value={countryOptions.find(option => option.value === billingInfo.country)}
+                                                    onChange={(option) => handleCountryChange(option)}
+                                                    options={countryOptions}
+                                                    styles={customSelectStyles}
+                                                    placeholder="Select a country"
+                                                    isSearchable
+                                                    className="react-select-container"
+                                                    classNamePrefix="react-select"
+                                                />
                                                 {errors.billing?.country && (
                                                     <p className="text-sm text-red-600">{errors.billing.country}</p>
                                                 )}
@@ -1117,21 +1155,17 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     <label htmlFor="billingCountry" className="block text-sm font-medium text-gray-700">
                                                         {t.checkout.account_info.fields.country} <span className="text-red-500">*</span>
                                                     </label>
-                                                    <select
+                                                    <Select
                                                         id="billingCountry"
-                                                        name="country"
-                                                        value={billingAddress.country}
-                                                        onChange={handleBillingAddressChange}
-                                                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.country ? 'border-red-500' : 'border-gray-300'
-                                                            }`}
-                                                    >
-                                                        <option value="">Select a country</option>
-                                                        {countryOptions.map(({ code, name }) => (
-                                                            <option key={code} value={code}>
-                                                                {name}
-                                                            </option>
-                                                        ))}
-                                                    </select>
+                                                        value={countryOptions.find(option => option.value === billingAddress.country)}
+                                                        onChange={(option) => handleCountryChange(option, true)}
+                                                        options={countryOptions}
+                                                        styles={customSelectStyles}
+                                                        placeholder="Select a country"
+                                                        isSearchable
+                                                        className="react-select-container"
+                                                        classNamePrefix="react-select"
+                                                    />
                                                     {errors.billingAddress?.country && (
                                                         <p className="text-sm text-red-600">{errors.billingAddress.country}</p>
                                                     )}
