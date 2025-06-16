@@ -182,13 +182,23 @@ export const en = {
             description: "Innovation, integrity, and impact inspire all that we do. Excellence and constant improvement are what we're dedicated to."
         },
         press: {
-            title: "Press & Media",
-            description: "Stay updated with our latest news, press releases, and media coverage.",
-            latest_news: {
-                title: "Telmeez Announces Official Launch",
-                date: "Coming Soon",
-                source: "Telmeez Founder & CEO",
-                description: "Revolutionary educational management platform set to launch soon, poised to change how institutions approach administrative process management and enhance learning outcomes."
+            title: "Press & News",
+            description: "Stay updated with the latest news and announcements from Telmeez.",
+            whish_integration: {
+                title: "Telmeez Launches Whish Money Payment Integration",
+                date: "March 2026",
+                source: "Telmeez Official Announcement",
+                description: "Telmeez is excited to announce the integration of Whish Money as a new payment method. This partnership enhances our payment options, offering users a seamless and secure way to complete their transactions using the popular Whish Money platform. The integration supports both personal and business accounts, making it easier for our customers to manage their payments.",
+                new_feature: "New Feature",
+                payment_integration: "Payment Integration"
+            },
+            mobile_app: {
+                title: "Telmeez Mobile App Now Available",
+                date: "April 2026",
+                source: "Telmeez Product Update",
+                description: "We're thrilled to announce the launch of our mobile application, bringing Telmeez's powerful education management features to your fingertips. The app offers seamless access to all platform features, including real-time notifications, attendance tracking, and instant communication between administrators, teachers, parents, and students.",
+                new_feature: "Mobile App",
+                platform_update: "Platform Update"
             }
         }
     },

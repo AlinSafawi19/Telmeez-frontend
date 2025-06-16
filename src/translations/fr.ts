@@ -182,13 +182,23 @@ export const fr = {
             description: "L'innovation, l'intégrité et l'impact inspirent tout ce que nous faisons. L'excellence et l'amélioration constante sont ce à quoi nous nous consacrons."
         },
         press: {
-            title: "Presse & Médias",
-            description: "Restez informé de nos dernières nouvelles, communiqués de presse et couverture médiatique.",
-            latest_news: {
-                title: "Telmeez Annonce le Lancement Officiel",
-                date: "Bientôt Disponible",
-                source: "Fondateur et PDG de Telmeez",
-                description: "Plateforme révolutionnaire de gestion éducative sur le point d'être lancée, prête à changer la façon dont les institutions abordent la gestion des processus administratifs et améliorent les résultats d'apprentissage."
+            title: "Presse & Actualités",
+            description: "Restez informé des dernières nouvelles et annonces de Telmeez.",
+            whish_integration: {
+                title: "Telmeez Lance l'Intégration des Paiements Whish Money",
+                date: "Mars 2026",
+                source: "Annonce Officielle Telmeez",
+                description: "Telmeez est ravi d'annoncer l'intégration de Whish Money comme nouvelle méthode de paiement. Ce partenariat améliore nos options de paiement, offrant aux utilisateurs un moyen fluide et sécurisé de finaliser leurs transactions via la plateforme populaire Whish Money. L'intégration prend en charge les comptes personnels et professionnels, facilitant ainsi la gestion des paiements pour nos clients.",
+                new_feature: "Nouvelle Fonctionnalité",
+                payment_integration: "Intégration de Paiement"
+            },
+            mobile_app: {
+                title: "L'Application Mobile Telmeez est Maintenant Disponible",
+                date: "Avril 2026",
+                source: "Mise à Jour Produit Telmeez",
+                description: "Nous sommes ravis d'annoncer le lancement de notre application mobile, apportant les puissantes fonctionnalités de gestion de l'éducation de Telmeez au bout de vos doigts. L'application offre un accès fluide à toutes les fonctionnalités de la plateforme, y compris les notifications en temps réel, le suivi des présences et la communication instantanée entre les administrateurs, les enseignants, les parents et les étudiants.",
+                new_feature: "Application Mobile",
+                platform_update: "Mise à Jour de la Plateforme"
             }
         }
     },
