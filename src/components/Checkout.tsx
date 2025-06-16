@@ -144,21 +144,108 @@ const Checkout: React.FC<CheckoutProps> = ({
     });
 
     const [errors, setErrors] = useState<{
-        billing?: Partial<BillingInfo>;
-        billingAddress?: Partial<BillingAddress>;
-        payment?: Partial<PaymentInfo>;
+        billing?: Partial<Record<keyof BillingInfo, string>>;
+        billingAddress?: Partial<Record<keyof BillingAddress, string>>;
+        payment?: Partial<Record<keyof PaymentInfo, string>>;
     }>({});
+
+    const getErrorMessage = (errorKey: string) => {
+        switch (errorKey) {
+            case 'required':
+                return t.checkout.validation.required;
+            case 'invalid_email':
+                return t.checkout.validation.invalid_email;
+            case 'password_length':
+                return t.checkout.validation.password_length;
+            case 'password_mismatch':
+                return t.checkout.validation.password_mismatch;
+            case 'invalid_card':
+                return t.checkout.validation.invalid_card;
+            case 'invalid_expiry':
+                return t.checkout.validation.invalid_expiry;
+            case 'invalid_cvv':
+                return t.checkout.validation.invalid_cvv;
+            default:
+                return errorKey;
+        }
+    };
 
     const [promoCode, setPromoCode] = useState('');
     const [showPromoInput, setShowPromoInput] = useState(false);
     const [promoError, setPromoError] = useState('');
-    const [promoSuccess, setPromoSuccess] = useState('');
     const [discount, setDiscount] = useState(0);
 
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
 
     const [showCustomCountryInput, setShowCustomCountryInput] = useState(false);
     const [showBillingCustomCountryInput, setShowBillingCustomCountryInput] = useState(false);
+
+    useEffect(() => {
+        // Update billing errors
+        if (errors.billing) {
+            const updatedBillingErrors: Partial<Record<keyof BillingInfo, string>> = {};
+            Object.entries(errors.billing).forEach(([key, value]) => {
+                if (value) {
+                    const field = key as keyof BillingInfo;
+                    if (field === 'email' && value === t.checkout.validation.invalid_email) {
+                        updatedBillingErrors[field] = t.checkout.validation.invalid_email;
+                    } else if (field === 'password' && value === t.checkout.validation.password_length) {
+                        updatedBillingErrors[field] = t.checkout.validation.password_length;
+                    } else if (field === 'confirmPassword' && value === t.checkout.validation.password_mismatch) {
+                        updatedBillingErrors[field] = t.checkout.validation.password_mismatch;
+                    } else if (value === t.checkout.validation.required) {
+                        updatedBillingErrors[field] = t.checkout.validation.required;
+                    }
+                }
+            });
+            if (Object.keys(updatedBillingErrors).length > 0) {
+                setErrors(prev => ({ ...prev, billing: updatedBillingErrors }));
+            }
+        }
+
+        // Update payment errors
+        if (errors.payment) {
+            const updatedPaymentErrors: Partial<Record<keyof PaymentInfo, string>> = {};
+            Object.entries(errors.payment).forEach(([key, value]) => {
+                if (value) {
+                    const field = key as keyof PaymentInfo;
+                    if (field === 'cardNumber' && value === t.checkout.validation.invalid_card) {
+                        updatedPaymentErrors[field] = t.checkout.validation.invalid_card;
+                    } else if (field === 'expiryDate' && value === t.checkout.validation.invalid_expiry) {
+                        updatedPaymentErrors[field] = t.checkout.validation.invalid_expiry;
+                    } else if (field === 'cvv' && value === t.checkout.validation.invalid_cvv) {
+                        updatedPaymentErrors[field] = t.checkout.validation.invalid_cvv;
+                    } else if (value === t.checkout.validation.required) {
+                        updatedPaymentErrors[field] = t.checkout.validation.required;
+                    }
+                }
+            });
+            if (Object.keys(updatedPaymentErrors).length > 0) {
+                setErrors(prev => ({ ...prev, payment: updatedPaymentErrors }));
+            }
+        }
+
+        // Update billing address errors
+        if (errors.billingAddress) {
+            const updatedBillingAddressErrors: Partial<Record<keyof BillingAddress, string>> = {};
+            Object.entries(errors.billingAddress).forEach(([key, value]) => {
+                if (value === t.checkout.validation.required) {
+                    const field = key as keyof BillingAddress;
+                    updatedBillingAddressErrors[field] = t.checkout.validation.required;
+                }
+            });
+            if (Object.keys(updatedBillingAddressErrors).length > 0) {
+                setErrors(prev => ({ ...prev, billingAddress: updatedBillingAddressErrors }));
+            }
+        }
+
+        // Update promo code error
+        if (promoError) {
+            if (promoError === t.checkout.summary.promo_code_required) {
+                setPromoError(t.checkout.summary.promo_code_required);
+            }
+        }
+    }, [currentLanguage, t.checkout.validation, t.checkout.summary]);
 
     const handlePhoneChange = (value: string) => {
         setBillingInfo(prev => ({
@@ -355,7 +442,6 @@ const Checkout: React.FC<CheckoutProps> = ({
     const handlePromoCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPromoCode(e.target.value);
         setPromoError('');
-        setPromoSuccess('');
     };
 
     const handleApplyPromo = () => {
@@ -368,21 +454,16 @@ const Checkout: React.FC<CheckoutProps> = ({
         } as const;
 
         if (!promoCode.trim()) {
-            setPromoError('Please enter a promo code');
-            setPromoSuccess('');
+            setPromoError('promo_code_required');
             return;
         }
 
         const discountPercentage = testPromoCodes[promoCode.toUpperCase() as keyof typeof testPromoCodes];
 
         if (discountPercentage) {
-            setPromoSuccess(`Promo code applied successfully! ${discountPercentage * 100}% discount applied.`);
-            setPromoError('');
             setDiscount(discountPercentage);
             setPromoCode(''); // Clear the input
         } else {
-            setPromoError('Invalid promo code');
-            setPromoSuccess('');
             setDiscount(0);
         }
     };
@@ -392,53 +473,53 @@ const Checkout: React.FC<CheckoutProps> = ({
 
         // Validate current step before proceeding
         if (currentStep === 1) {
-            const billingErrors: Partial<BillingInfo> = {};
+            const billingErrors: Partial<Record<keyof BillingInfo, string>> = {};
 
             // Required fields validation
             if (!billingInfo.firstName.trim()) {
-                billingErrors.firstName = t.checkout.validation.required;
+                billingErrors.firstName = 'required';
             }
             if (!billingInfo.lastName.trim()) {
-                billingErrors.lastName = t.checkout.validation.required;
+                billingErrors.lastName = 'required';
             }
             if (!billingInfo.email.trim()) {
-                billingErrors.email = t.checkout.validation.required;
+                billingErrors.email = 'required';
             } else {
                 // Email format validation
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(billingInfo.email)) {
-                    billingErrors.email = t.checkout.validation.invalid_email;
+                    billingErrors.email = 'invalid_email';
                 }
             }
             if (!billingInfo.phone.trim()) {
-                billingErrors.phone = t.checkout.validation.required;
+                billingErrors.phone = 'required';
             }
             if (!billingInfo.address.trim()) {
-                billingErrors.address = t.checkout.validation.required;
+                billingErrors.address = 'required';
             }
             if (!billingInfo.city.trim()) {
-                billingErrors.city = t.checkout.validation.required;
+                billingErrors.city = 'required';
             }
             if (!billingInfo.state.trim()) {
-                billingErrors.state = t.checkout.validation.required;
+                billingErrors.state = 'required';
             }
             if (!billingInfo.zipCode.trim()) {
-                billingErrors.zipCode = t.checkout.validation.required;
+                billingErrors.zipCode = 'required';
             }
             if (!billingInfo.country) {
-                billingErrors.country = t.checkout.validation.required;
+                billingErrors.country = 'required';
             } else if (billingInfo.country === 'other' && !billingInfo.customCountry.trim()) {
-                billingErrors.customCountry = t.checkout.validation.required;
+                billingErrors.customCountry = 'required';
             }
             if (!billingInfo.password.trim()) {
-                billingErrors.password = t.checkout.validation.required;
+                billingErrors.password = 'required';
             } else if (billingInfo.password.length < 8) {
-                billingErrors.password = t.checkout.validation.password_length;
+                billingErrors.password = 'password_length';
             }
             if (!billingInfo.confirmPassword.trim()) {
-                billingErrors.confirmPassword = t.checkout.validation.required;
+                billingErrors.confirmPassword = 'required';
             } else if (billingInfo.password !== billingInfo.confirmPassword) {
-                billingErrors.confirmPassword = t.checkout.validation.password_mismatch;
+                billingErrors.confirmPassword = 'password_mismatch';
             }
 
             if (Object.keys(billingErrors).length > 0) {
@@ -449,27 +530,27 @@ const Checkout: React.FC<CheckoutProps> = ({
                 return;
             }
         } else if (currentStep === 2) {
-            const paymentErrors: Partial<PaymentInfo> = {};
+            const paymentErrors: Partial<Record<keyof PaymentInfo, string>> = {};
 
             // Card number validation
             if (!paymentInfo.cardNumber.trim()) {
-                paymentErrors.cardNumber = t.checkout.validation.required;
+                paymentErrors.cardNumber = 'required';
             } else if (!validateCardNumber(paymentInfo.cardNumber)) {
-                paymentErrors.cardNumber = t.checkout.validation.invalid_card;
+                paymentErrors.cardNumber = 'invalid_card';
             }
 
             // Expiry date validation
             if (!paymentInfo.expiryDate.trim()) {
-                paymentErrors.expiryDate = t.checkout.validation.required;
+                paymentErrors.expiryDate = 'required';
             } else if (!validateExpiryDate(paymentInfo.expiryDate)) {
-                paymentErrors.expiryDate = t.checkout.validation.invalid_expiry;
+                paymentErrors.expiryDate = 'invalid_expiry';
             }
 
             // CVV validation
             if (!paymentInfo.cvv.trim()) {
-                paymentErrors.cvv = t.checkout.validation.required;
+                paymentErrors.cvv = 'required';
             } else if (!/^\d{3,4}$/.test(paymentInfo.cvv)) {
-                paymentErrors.cvv = t.checkout.validation.invalid_cvv;
+                paymentErrors.cvv = 'invalid_cvv';
             }
 
             if (Object.keys(paymentErrors).length > 0) {
@@ -498,7 +579,7 @@ const Checkout: React.FC<CheckoutProps> = ({
         } else {
             // Validate billing address only on final submission
             if (!useSameAddress) {
-                const billingAddressErrors: Partial<BillingAddress> = {};
+                const billingAddressErrors: Partial<Record<keyof BillingAddress, string>> = {};
 
                 if (!billingAddress.address.trim()) {
                     billingAddressErrors.address = t.checkout.validation.required;
@@ -555,19 +636,31 @@ const Checkout: React.FC<CheckoutProps> = ({
     const getTotalSavings = () => {
         const plan = t.pricing.plans[selectedPlan as keyof typeof t.pricing.plans];
         const annualPrice = parseFloat(plan.annual_price.replace(/[^0-9.-]+/g, ''));
-        let savings = 0;
+        const monthlyPrice = parseFloat(plan.monthly_price.replace(/[^0-9.-]+/g, ''));
+        let annualSavings = 0;
+        let promoCodeSavings = 0;
 
         if (isAnnual) {
-            savings = annualPrice * 0.20; // 20% of the annual price
+            // Calculate annual savings (20% off annual price)
+            annualSavings = annualPrice * 0.20;
+            
+            // Calculate promo code savings on the discounted annual price
+            if (discount > 0) {
+                const discountedAnnualPrice = annualPrice * 0.80; // Price after annual discount
+                promoCodeSavings = discountedAnnualPrice * discount;
+            }
+        } else {
+            // For monthly plans, only calculate promo code savings
+            if (discount > 0) {
+                promoCodeSavings = monthlyPrice * discount;
+            }
         }
 
-        // Add promo code savings if exists
-        if (discount > 0) {
-            const price = isAnnual ? annualPrice * 0.80 : annualPrice;
-            savings += price * discount;
-        }
-
-        return `$${savings.toFixed(2)}`;
+        return {
+            annualSavings: annualSavings,
+            promoCodeSavings: promoCodeSavings,
+            totalSavings: annualSavings + promoCodeSavings
+        };
     };
 
     const getTotalPrice = () => {
@@ -624,18 +717,24 @@ const Checkout: React.FC<CheckoutProps> = ({
     const customSelectStyles = {
         control: (base: any, state: any) => ({
             ...base,
-            minHeight: '50px',
+            minHeight: '42px',
+            height: '42px',
             borderRadius: '0.75rem',
             borderColor: state.isFocused ? '#3B82F6' : '#D1D5DB',
             boxShadow: state.isFocused ? '0 0 0 2px rgba(59, 130, 246, 0.1)' : 'none',
             '&:hover': {
                 borderColor: '#3B82F6'
-            }
+            },
+            backgroundColor: 'white',
+            fontSize: '0.875rem',
+            padding: '0.25rem 0.5rem'
         }),
         option: (base: any, state: any) => ({
             ...base,
             backgroundColor: state.isSelected ? '#3B82F6' : state.isFocused ? '#EFF6FF' : 'white',
             color: state.isSelected ? 'white' : '#1F2937',
+            fontSize: '0.875rem',
+            padding: '0.5rem 0.75rem',
             '&:hover': {
                 backgroundColor: state.isSelected ? '#3B82F6' : '#EFF6FF'
             }
@@ -643,25 +742,47 @@ const Checkout: React.FC<CheckoutProps> = ({
         menu: (base: any) => ({
             ...base,
             borderRadius: '0.75rem',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+            zIndex: 50
+        }),
+        input: (base: any) => ({
+            ...base,
+            margin: 0,
+            padding: 0,
+            fontSize: '0.875rem'
+        }),
+        valueContainer: (base: any) => ({
+            ...base,
+            padding: 0,
+            margin: 0
+        }),
+        singleValue: (base: any) => ({
+            ...base,
+            fontSize: '0.875rem',
+            color: '#1F2937'
+        }),
+        placeholder: (base: any) => ({
+            ...base,
+            fontSize: '0.875rem',
+            color: '#6B7280'
         })
     };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" dir={isRTL ? 'rtl' : 'ltr'}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Header Section */}
-                <div className="flex items-center justify-between mb-12">
+                <div className="flex items-center justify-between mb-8">
                     <img
                         src={currentLanguage === 'ar' ? logoarb : logo}
                         alt="Company Logo"
-                        className="h-16 w-auto transition-transform hover:scale-105"
+                        className="h-12 w-auto transition-transform hover:scale-105"
                     />
-                    <div className="max-w-3xl mx-auto text-center">
-                        <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
+                    <div className="max-w-2xl mx-auto text-center">
+                        <h1 className="text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
                             {t.checkout.title}
                         </h1>
-                        <p className="text-lg text-gray-600">
+                        <p className="text-sm text-gray-600">
                             {t.checkout.subtitle}
                         </p>
                     </div>
@@ -725,40 +846,40 @@ const Checkout: React.FC<CheckoutProps> = ({
                     {/* Main Content - Left Side */}
                     <div className="lg:col-span-8 space-y-6">
                         {/* Progress Steps */}
-                        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+                        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
-                                    <div className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${currentStep >= 1
+                                    <div className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ${currentStep >= 1
                                         ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white scale-110'
                                         : 'bg-gray-100 text-gray-400'
                                         }`}>
-                                        <FaLock className="w-5 h-5" />
+                                        <FaLock className="w-4 h-4" />
                                     </div>
-                                    <span className={`${isRTL ? 'mr-3' : 'ml-3'} text-sm font-medium transition-colors duration-300 ${currentStep >= 1 ? 'text-gray-900' : 'text-gray-400'
+                                    <span className={`${isRTL ? 'mr-2' : 'ml-2'} text-xs font-medium transition-colors duration-300 ${currentStep >= 1 ? 'text-gray-900' : 'text-gray-400'
                                         }`}>{t.checkout.account_info.title}</span>
                                 </div>
                                 <div className={`flex-1 h-0.5 mx-4 transition-colors duration-300 ${currentStep >= 2 ? 'bg-gradient-to-r from-blue-600 to-indigo-600' : 'bg-gray-200'
                                     }`}></div>
                                 <div className="flex items-center">
-                                    <div className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${currentStep >= 2
+                                    <div className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ${currentStep >= 2
                                         ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white scale-110'
                                         : 'bg-gray-100 text-gray-400'
                                         }`}>
-                                        <FaCreditCard className="w-5 h-5" />
+                                        <FaCreditCard className="w-4 h-4" />
                                     </div>
-                                    <span className={`${isRTL ? 'mr-3' : 'ml-3'} text-sm font-medium transition-colors duration-300 ${currentStep >= 2 ? 'text-gray-900' : 'text-gray-400'
+                                    <span className={`${isRTL ? 'mr-2' : 'ml-2'} text-xs font-medium transition-colors duration-300 ${currentStep >= 2 ? 'text-gray-900' : 'text-gray-400'
                                         }`}>{t.checkout.payment_details.title}</span>
                                 </div>
                                 <div className={`flex-1 h-0.5 mx-4 transition-colors duration-300 ${currentStep >= 3 ? 'bg-gradient-to-r from-blue-600 to-indigo-600' : 'bg-gray-200'
                                     }`}></div>
                                 <div className="flex items-center">
-                                    <div className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${currentStep >= 3
+                                    <div className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ${currentStep >= 3
                                         ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white scale-110'
                                         : 'bg-gray-100 text-gray-400'
                                         }`}>
-                                        <FaMapMarkerAlt className="w-5 h-5" />
+                                        <FaMapMarkerAlt className="w-4 h-4" />
                                     </div>
-                                    <span className={`${isRTL ? 'mr-3' : 'ml-3'} text-sm font-medium transition-colors duration-300 ${currentStep >= 3 ? 'text-gray-900' : 'text-gray-400'
+                                    <span className={`${isRTL ? 'mr-2' : 'ml-2'} text-xs font-medium transition-colors duration-300 ${currentStep >= 3 ? 'text-gray-900' : 'text-gray-400'
                                         }`}>{t.checkout.billing_address.title}</span>
                                 </div>
                             </div>
@@ -772,16 +893,16 @@ const Checkout: React.FC<CheckoutProps> = ({
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, x: 20 }}
-                                    className="bg-white rounded-2xl shadow-lg overflow-hidden"
+                                    className="bg-white rounded-xl shadow-lg p-6 mb-6"
                                 >
                                     {/* Account Information Section */}
-                                    <div className="px-8 py-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-                                        <h2 className="text-2xl font-semibold text-gray-900">{t.checkout.account_info.title}</h2>
+                                    <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                                        <h2 className="text-lg font-semibold text-gray-900">{t.checkout.account_info.title}</h2>
                                     </div>
-                                    <div className="p-8 space-y-6">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="space-y-2">
-                                                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                                    <div className="p-6 space-y-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="space-y-1">
+                                                <label htmlFor="firstName" className="block text-xs font-medium text-gray-700">
                                                     {t.checkout.account_info.fields.first_name} <span className="text-red-500">*</span>
                                                 </label>
                                                 <input
@@ -790,15 +911,15 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     name="firstName"
                                                     value={billingInfo.firstName}
                                                     onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.firstName ? 'border-red-500' : 'border-gray-300'
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.firstName ? 'border-red-500' : 'border-gray-300'
                                                         }`}
                                                 />
                                                 {errors.billing?.firstName && (
-                                                    <p className="text-sm text-red-600">{errors.billing.firstName}</p>
+                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billing.firstName)}</p>
                                                 )}
                                             </div>
-                                            <div className="space-y-2">
-                                                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                                            <div className="space-y-1">
+                                                <label htmlFor="lastName" className="block text-xs font-medium text-gray-700">
                                                     {t.checkout.account_info.fields.last_name}<span className="text-red-500">*</span>
                                                 </label>
                                                 <input
@@ -807,18 +928,18 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     name="lastName"
                                                     value={billingInfo.lastName}
                                                     onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.lastName ? 'border-red-500' : 'border-gray-300'
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.lastName ? 'border-red-500' : 'border-gray-300'
                                                         }`}
                                                 />
                                                 {errors.billing?.lastName && (
-                                                    <p className="text-sm text-red-600">{errors.billing.lastName}</p>
+                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billing.lastName)}</p>
                                                 )}
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="space-y-2">
-                                                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="space-y-1">
+                                                <label htmlFor="email" className="block text-xs font-medium text-gray-700">
                                                     {t.checkout.account_info.fields.email} <span className="text-red-500">*</span>
                                                 </label>
                                                 <input
@@ -827,49 +948,63 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     name="email"
                                                     value={billingInfo.email}
                                                     onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.email ? 'border-red-500' : 'border-gray-300'
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.email ? 'border-red-500' : 'border-gray-300'
                                                         }`}
                                                 />
                                                 {errors.billing?.email && (
-                                                    <p className="text-sm text-red-600">{errors.billing.email}</p>
+                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billing.email)}</p>
                                                 )}
                                             </div>
-                                            <div className="space-y-2">
-                                                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                                            <div className="space-y-1">
+                                                <label htmlFor="phone" className="block text-xs font-medium text-gray-700">
                                                     {t.checkout.account_info.fields.phone} <span className="text-red-500">*</span>
                                                 </label>
                                                 <PhoneInput
                                                     country="lb"
                                                     value={billingInfo.phone}
                                                     onChange={handlePhoneChange}
-                                                    inputClass={`w-full px-4 py-3 ${isRTL ? 'text-right pr-12' : ''} border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.phone ? 'border-red-500' : 'border-gray-300'
-                                                        }`}
-                                                    buttonClass={`${isRTL ? 'rounded-l-none' : 'rounded-r-none'}`}
+                                                    inputClass={`w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.phone ? 'border-red-500' : 'border-gray-300'}`}
+                                                    buttonClass={`${isRTL ? 'rounded-l-none' : 'rounded-r-none'} border-r-0`}
                                                     inputStyle={{
-                                                        height: '50px',
+                                                        height: '38px',
                                                         width: '100%',
-                                                        fontSize: '1rem',
+                                                        fontSize: '0.875rem',
                                                         borderRadius: '0.75rem !important',
-                                                        borderColor: errors.billing?.phone ? '#EF4444' : '#D1D5DB'
+                                                        borderColor: errors.billing?.phone ? '#EF4444' : '#D1D5DB',
+                                                        backgroundColor: 'white'
                                                     }}
                                                     buttonStyle={{
+                                                        height: '38px',
                                                         borderTopRightRadius: '0.75rem',
                                                         borderBottomRightRadius: '0.75rem',
                                                         borderTopLeftRadius: '0',
                                                         borderBottomLeftRadius: '0',
-                                                        borderColor: errors.billing?.phone ? '#EF4444' : '#D1D5DB'
+                                                        borderColor: errors.billing?.phone ? '#EF4444' : '#D1D5DB',
+                                                        backgroundColor: 'white'
                                                     }}
-                                                    containerClass={isRTL ? 'rtl-phone-input' : ''}
+                                                    containerClass={`${isRTL ? 'rtl-phone-input' : ''} focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all duration-300`}
+                                                    dropdownStyle={{
+                                                        borderRadius: '0.75rem',
+                                                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                                                        zIndex: 50
+                                                    }}
+                                                    searchStyle={{
+                                                        height: '36px',
+                                                        fontSize: '0.875rem',
+                                                        borderRadius: '0.5rem',
+                                                        borderColor: '#D1D5DB'
+                                                    }}
+                                                    countryCodeEditable={false}
                                                 />
 
                                                 {errors.billing?.phone && (
-                                                    <p className="text-sm text-red-600">{errors.billing.phone}</p>
+                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billing.phone)}</p>
                                                 )}
                                             </div>
                                         </div>
 
-                                        <div className="space-y-2">
-                                            <label htmlFor="institutionName" className="block text-sm font-medium text-gray-700">
+                                        <div className="space-y-1">
+                                            <label htmlFor="institutionName" className="block text-xs font-medium text-gray-700">
                                                 {t.checkout.account_info.fields.institution}
                                             </label>
                                             <input
@@ -878,13 +1013,13 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                 name="institutionName"
                                                 value={billingInfo.institutionName}
                                                 onChange={handleBillingInfoChange}
-                                                className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.institutionName ? 'border-red-500' : 'border-gray-300'
+                                                className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.institutionName ? 'border-red-500' : 'border-gray-300'
                                                     }`}
                                             />
                                         </div>
 
-                                        <div className="space-y-2">
-                                            <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                                        <div className="space-y-1">
+                                            <label htmlFor="address" className="block text-xs font-medium text-gray-700">
                                                 {t.checkout.account_info.fields.address1} <span className="text-red-500">*</span>
                                             </label>
                                             <input
@@ -893,16 +1028,16 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                 name="address"
                                                 value={billingInfo.address}
                                                 onChange={handleBillingInfoChange}
-                                                className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.address ? 'border-red-500' : 'border-gray-300'
+                                                className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.address ? 'border-red-500' : 'border-gray-300'
                                                     }`}
                                             />
                                             {errors.billing?.address && (
-                                                <p className="text-sm text-red-600">{errors.billing.address}</p>
+                                                <p className="text-xs text-red-600">{getErrorMessage(errors.billing.address)}</p>
                                             )}
                                         </div>
 
-                                        <div className="space-y-2">
-                                            <label htmlFor="address2" className="block text-sm font-medium text-gray-700">
+                                        <div className="space-y-1">
+                                            <label htmlFor="address2" className="block text-xs font-medium text-gray-700">
                                                 {t.checkout.account_info.fields.address2}
                                             </label>
                                             <input
@@ -911,14 +1046,14 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                 name="address2"
                                                 value={billingInfo.address2}
                                                 onChange={handleBillingInfoChange}
-                                                className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.address2 ? 'border-red-500' : 'border-gray-300'
+                                                className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.address2 ? 'border-red-500' : 'border-gray-300'
                                                     }`}
                                             />
                                         </div>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="space-y-2">
-                                                <label htmlFor="country" className="block text-sm font-medium text-gray-700">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="space-y-1">
+                                                <label htmlFor="country" className="block text-xs font-medium text-gray-700">
                                                     {t.checkout.account_info.fields.country} <span className="text-red-500">*</span>
                                                 </label>
                                                 <Select
@@ -940,15 +1075,15 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                         value={billingInfo.country === 'other' ? '' : billingInfo.country}
                                                         onChange={(e) => setBillingInfo(prev => ({ ...prev, country: e.target.value }))}
                                                         placeholder={t.checkout.account_info.fields.enter_country}
-                                                        className="mt-2 focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 border-gray-300"
+                                                        className="mt-2 focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 border-gray-300"
                                                     />
                                                 )}
                                                 {errors.billing?.country && (
-                                                    <p className="text-sm text-red-600">{errors.billing.country}</p>
+                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billing.country)}</p>
                                                 )}
                                             </div>
-                                            <div className="space-y-2">
-                                                <label htmlFor="city" className="block text-sm font-medium text-gray-700">
+                                            <div className="space-y-1">
+                                                <label htmlFor="city" className="block text-xs font-medium text-gray-700">
                                                     {t.checkout.account_info.fields.city} <span className="text-red-500">*</span>
                                                 </label>
                                                 <input
@@ -957,18 +1092,18 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     name="city"
                                                     value={billingInfo.city}
                                                     onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.city ? 'border-red-500' : 'border-gray-300'
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.city ? 'border-red-500' : 'border-gray-300'
                                                         }`}
                                                 />
                                                 {errors.billing?.city && (
-                                                    <p className="text-sm text-red-600">{errors.billing.city}</p>
+                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billing.city)}</p>
                                                 )}
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="space-y-2">
-                                                <label htmlFor="state" className="block text-sm font-medium text-gray-700">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="space-y-1">
+                                                <label htmlFor="state" className="block text-xs font-medium text-gray-700">
                                                     {t.checkout.account_info.fields.state} <span className="text-red-500">*</span>
                                                 </label>
                                                 <input
@@ -977,15 +1112,15 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     name="state"
                                                     value={billingInfo.state}
                                                     onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.state ? 'border-red-500' : 'border-gray-300'
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.state ? 'border-red-500' : 'border-gray-300'
                                                         }`}
                                                 />
                                                 {errors.billing?.state && (
-                                                    <p className="text-sm text-red-600">{errors.billing.state}</p>
+                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billing.state)}</p>
                                                 )}
                                             </div>
-                                            <div className="space-y-2">
-                                                <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700">
+                                            <div className="space-y-1">
+                                                <label htmlFor="zipCode" className="block text-xs font-medium text-gray-700">
                                                     {t.checkout.account_info.fields.zip} <span className="text-red-500">*</span>
                                                 </label>
                                                 <input
@@ -994,20 +1129,20 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     name="zipCode"
                                                     value={billingInfo.zipCode}
                                                     onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.zipCode ? 'border-red-500' : 'border-gray-300'
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.zipCode ? 'border-red-500' : 'border-gray-300'
                                                         }`}
                                                 />
                                                 {errors.billing?.zipCode && (
-                                                    <p className="text-sm text-red-600">{errors.billing.zipCode}</p>
+                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billing.zipCode)}</p>
                                                 )}
                                             </div>
                                         </div>
 
-                                        <p className="text-sm text-gray-600"> {t.checkout.account_info.fields.passmsg}</p>
+                                        <p className="text-xs text-gray-600"> {t.checkout.account_info.fields.passmsg}</p>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="space-y-2">
-                                                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="space-y-1">
+                                                <label htmlFor="password" className="block text-xs font-medium text-gray-700">
                                                     {t.checkout.account_info.fields.password} <span className="text-red-500">*</span>
                                                 </label>
                                                 <input
@@ -1016,16 +1151,16 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     name="password"
                                                     value={billingInfo.password}
                                                     onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.password ? 'border-red-500' : 'border-gray-300'
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.password ? 'border-red-500' : 'border-gray-300'
                                                         }`}
                                                     placeholder={t.checkout.account_info.fields.password_placeholder}
                                                 />
                                                 {errors.billing?.password && (
-                                                    <p className="text-sm text-red-600">{errors.billing.password}</p>
+                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billing.password)}</p>
                                                 )}
                                             </div>
-                                            <div className="space-y-2">
-                                                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                                            <div className="space-y-1">
+                                                <label htmlFor="confirmPassword" className="block text-xs font-medium text-gray-700">
                                                     {t.checkout.account_info.fields.confirmpass} <span className="text-red-500">*</span>
                                                 </label>
                                                 <input
@@ -1034,12 +1169,12 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     name="confirmPassword"
                                                     value={billingInfo.confirmPassword}
                                                     onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.confirmPassword ? 'border-red-500' : 'border-gray-300'
                                                         }`}
                                                     placeholder={t.checkout.account_info.fields.password_confirm_placeholder}
                                                 />
                                                 {errors.billing?.confirmPassword && (
-                                                    <p className="text-sm text-red-600">{errors.billing.confirmPassword}</p>
+                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billing.confirmPassword)}</p>
                                                 )}
                                             </div>
                                         </div>
@@ -1053,16 +1188,16 @@ const Checkout: React.FC<CheckoutProps> = ({
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, x: 20 }}
-                                    className="bg-white rounded-2xl shadow-lg overflow-hidden"
+                                    className="bg-white rounded-xl shadow-lg p-6 mb-6"
                                 >
                                     {/* Payment Information Section */}
-                                    <div className="px-8 py-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-                                        <h2 className="text-2xl font-semibold text-gray-900"> {t.checkout.payment_details.section_title}</h2>
+                                    <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                                        <h2 className="text-lg font-semibold text-gray-900"> {t.checkout.payment_details.section_title}</h2>
                                     </div>
-                                    <div className="p-8 space-y-6">
+                                    <div className="p-6 space-y-4">
                                         {/* Payment Method Selection */}
-                                        <div className="space-y-4">
-                                            <h3 className="text-lg font-medium text-gray-900">{t.checkout.payment_details.section_subtitle}</h3>
+                                        <div className="space-y-3">
+                                            <h3 className="text-sm font-medium text-gray-900">{t.checkout.payment_details.section_subtitle}</h3>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <button
                                                     type="button"
@@ -1080,7 +1215,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                         </div>
                                                         <div className="text-left">
                                                             <h4 className="font-medium text-gray-900">{t.checkout.payment_details.payment_types.card.name}</h4>
-                                                            <p className="text-sm text-gray-500">{t.checkout.payment_details.payment_types.card.desc}</p>
+                                                            <p className="text-xs text-gray-500">{t.checkout.payment_details.payment_types.card.desc}</p>
                                                         </div>
                                                     </div>
                                                 </button>
@@ -1095,7 +1230,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                 </div>
 
                                                 <div className="space-y-2">
-                                                    <label htmlFor="cardNumber" className="block text-sm font-medium text-gray-700">
+                                                    <label htmlFor="cardNumber" className="block text-xs font-medium text-gray-700">
                                                         {t.checkout.payment_details.payment_types.card.card_nb} <span className="text-red-500">*</span>
                                                     </label>
                                                     <input
@@ -1106,16 +1241,16 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                         onChange={handlePaymentInfoChange}
                                                         placeholder="1234 5678 9012 3456"
                                                         dir="ltr"
-                                                        className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.payment?.cardNumber ? 'border-red-500' : 'border-gray-300'} ${isRTL ? 'text-right' : ''}`}
+                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.payment?.cardNumber ? 'border-red-500' : 'border-gray-300'} ${isRTL ? 'text-right' : ''}`}
                                                     />
                                                     {errors.payment?.cardNumber && (
-                                                        <p className="text-sm text-red-600">{errors.payment.cardNumber}</p>
+                                                        <p className="text-xs text-red-600">{getErrorMessage(errors.payment.cardNumber)}</p>
                                                     )}
                                                 </div>
 
-                                                <div className="grid grid-cols-2 gap-6">
+                                                <div className="grid grid-cols-2 gap-4">
                                                     <div className="space-y-2">
-                                                        <label htmlFor="expiryDate" className="block text-sm font-medium text-gray-700">
+                                                        <label htmlFor="expiryDate" className="block text-xs font-medium text-gray-700">
                                                             {t.checkout.payment_details.payment_types.card.expiration} <span className="text-red-500">*</span>
                                                         </label>
                                                         <input
@@ -1125,15 +1260,15 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                             value={paymentInfo.expiryDate}
                                                             onChange={handlePaymentInfoChange}
                                                             placeholder="MM/YY"
-                                                            className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.payment?.expiryDate ? 'border-red-500' : 'border-gray-300'
+                                                            className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.payment?.expiryDate ? 'border-red-500' : 'border-gray-300'
                                                                 }`}
                                                         />
                                                         {errors.payment?.expiryDate && (
-                                                            <p className="text-sm text-red-600">{errors.payment.expiryDate}</p>
+                                                            <p className="text-xs text-red-600">{getErrorMessage(errors.payment.expiryDate)}</p>
                                                         )}
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <label htmlFor="cvv" className="block text-sm font-medium text-gray-700">
+                                                        <label htmlFor="cvv" className="block text-xs font-medium text-gray-700">
                                                             {t.checkout.payment_details.payment_types.card.cvv} <span className="text-red-500">*</span>
                                                         </label>
                                                         <input
@@ -1143,11 +1278,11 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                             value={paymentInfo.cvv}
                                                             onChange={handlePaymentInfoChange}
                                                             placeholder="123"
-                                                            className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.payment?.cvv ? 'border-red-500' : 'border-gray-300'
+                                                            className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.payment?.cvv ? 'border-red-500' : 'border-gray-300'
                                                                 }`}
                                                         />
                                                         {errors.payment?.cvv && (
-                                                            <p className="text-sm text-red-600">{errors.payment.cvv}</p>
+                                                            <p className="text-xs text-red-600">{getErrorMessage(errors.payment.cvv)}</p>
                                                         )}
                                                     </div>
                                                 </div>
@@ -1165,14 +1300,14 @@ const Checkout: React.FC<CheckoutProps> = ({
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, x: 20 }}
-                                    className="bg-white rounded-2xl shadow-lg overflow-hidden"
+                                    className="bg-white rounded-xl shadow-lg p-6 mb-6"
                                 >
                                     {/* Billing Address Section */}
-                                    <div className="px-8 py-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-                                        <h2 className="text-2xl font-semibold text-gray-900">{t.checkout.billing_address.title}</h2>
+                                    <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                                        <h2 className="text-lg font-semibold text-gray-900">{t.checkout.billing_address.title}</h2>
                                     </div>
-                                    <div className="p-8">
-                                        <div className="mb-6">
+                                    <div className="p-6">
+                                        <div className="mb-4">
                                             <label className="flex items-center">
                                                 <input
                                                     type="checkbox"
@@ -1180,16 +1315,16 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     onChange={handleUseSameAddressChange}
                                                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                                 />
-                                                <span className={`text-sm font-medium text-gray-700 ${isRTL ? 'mr-2' : 'ml-2'}`}>
+                                                <span className={`text-xs font-medium text-gray-700 ${isRTL ? 'mr-2' : 'ml-2'}`}>
                                                     {t.checkout.billing_address.checbox}
                                                 </span>
                                             </label>
                                         </div>
 
                                         {!useSameAddress && (
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <div className="space-y-2">
-                                                    <label htmlFor="billingCountry" className="block text-sm font-medium text-gray-700">
+                                                    <label htmlFor="billingCountry" className="block text-xs font-medium text-gray-700">
                                                         {t.checkout.account_info.fields.country} <span className="text-red-500">*</span>
                                                     </label>
                                                     <Select
@@ -1211,15 +1346,15 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                             value={billingAddress.customCountry}
                                                             onChange={(e) => handleCustomCountryChange(e, true)}
                                                             placeholder={t.checkout.account_info.fields.enter_country || "Enter your country"}
-                                                            className={`mt-2 focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billingAddress?.customCountry ? 'border-red-500' : 'border-gray-300'}`}
+                                                            className={`mt-2 focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billingAddress?.customCountry ? 'border-red-500' : 'border-gray-300'}`}
                                                         />
                                                     )}
                                                     {errors.billingAddress?.country && (
-                                                        <p className="text-sm text-red-600">{errors.billingAddress.country}</p>
+                                                        <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.country)}</p>
                                                     )}
                                                 </div>
                                                 <div className="md:col-span-2 space-y-2">
-                                                    <label htmlFor="billingAddress" className="block text-sm font-medium text-gray-700">
+                                                    <label htmlFor="billingAddress" className="block text-xs font-medium text-gray-700">
                                                         {t.checkout.account_info.fields.address1}  <span className="text-red-500">*</span>
                                                     </label>
                                                     <input
@@ -1228,15 +1363,15 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                         name="address"
                                                         value={billingAddress.address}
                                                         onChange={handleBillingAddressChange}
-                                                        className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.address ? 'border-red-500' : 'border-gray-300'
+                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.address ? 'border-red-500' : 'border-gray-300'
                                                             }`}
                                                     />
                                                     {errors.billingAddress?.address && (
-                                                        <p className="text-sm text-red-600">{errors.billingAddress.address}</p>
+                                                        <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.address)}</p>
                                                     )}
                                                 </div>
                                                 <div className="md:col-span-2 space-y-2">
-                                                    <label htmlFor="billingAddress2" className="block text-sm font-medium text-gray-700">
+                                                    <label htmlFor="billingAddress2" className="block text-xs font-medium text-gray-700">
                                                         {t.checkout.account_info.fields.address2}
                                                     </label>
                                                     <input
@@ -1245,12 +1380,12 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                         name="address2"
                                                         value={billingAddress.address2}
                                                         onChange={handleBillingAddressChange}
-                                                        className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.address2 ? 'border-red-500' : 'border-gray-300'
+                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.address2 ? 'border-red-500' : 'border-gray-300'
                                                             }`}
                                                     />
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <label htmlFor="billingCity" className="block text-sm font-medium text-gray-700">
+                                                    <label htmlFor="billingCity" className="block text-xs font-medium text-gray-700">
                                                         {t.checkout.account_info.fields.city}  <span className="text-red-500">*</span>
                                                     </label>
                                                     <input
@@ -1259,15 +1394,15 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                         name="city"
                                                         value={billingAddress.city}
                                                         onChange={handleBillingAddressChange}
-                                                        className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.city ? 'border-red-500' : 'border-gray-300'
+                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.city ? 'border-red-500' : 'border-gray-300'
                                                             }`}
                                                     />
                                                     {errors.billingAddress?.city && (
-                                                        <p className="text-sm text-red-600">{errors.billingAddress.city}</p>
+                                                        <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.city)}</p>
                                                     )}
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <label htmlFor="billingState" className="block text-sm font-medium text-gray-700">
+                                                    <label htmlFor="billingState" className="block text-xs font-medium text-gray-700">
                                                         {t.checkout.account_info.fields.state}  <span className="text-red-500">*</span>
                                                     </label>
                                                     <input
@@ -1276,15 +1411,15 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                         name="state"
                                                         value={billingAddress.state}
                                                         onChange={handleBillingAddressChange}
-                                                        className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.state ? 'border-red-500' : 'border-gray-300'
+                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.state ? 'border-red-500' : 'border-gray-300'
                                                             }`}
                                                     />
                                                     {errors.billingAddress?.state && (
-                                                        <p className="text-sm text-red-600">{errors.billingAddress.state}</p>
+                                                        <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.state)}</p>
                                                     )}
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <label htmlFor="billingZipCode" className="block text-sm font-medium text-gray-700">
+                                                    <label htmlFor="billingZipCode" className="block text-xs font-medium text-gray-700">
                                                         {t.checkout.account_info.fields.zip}  <span className="text-red-500">*</span>
                                                     </label>
                                                     <input
@@ -1293,11 +1428,11 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                         name="zipCode"
                                                         value={billingAddress.zipCode}
                                                         onChange={handleBillingAddressChange}
-                                                        className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.zipCode ? 'border-red-500' : 'border-gray-300'
+                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.zipCode ? 'border-red-500' : 'border-gray-300'
                                                             }`}
                                                     />
                                                     {errors.billingAddress?.zipCode && (
-                                                        <p className="text-sm text-red-600">{errors.billingAddress.zipCode}</p>
+                                                        <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.zipCode)}</p>
                                                     )}
                                                 </div>
                                             </div>
@@ -1310,120 +1445,74 @@ const Checkout: React.FC<CheckoutProps> = ({
 
                     {/* Order Summary - Right Side */}
                     <div className="lg:col-span-4">
-                        <div className="bg-white rounded-2xl shadow-lg overflow-hidden sticky top-8">
-                            <div className="px-8 py-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-                                <h2 className="text-2xl font-semibold text-gray-900">{t.checkout.summary.title} </h2>
+                        <div className="bg-white rounded-xl shadow-lg overflow-hidden sticky top-8">
+                            <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                                <h2 className="text-lg font-semibold text-gray-900">{t.checkout.summary.title} </h2>
                             </div>
-                            <div className="p-8 space-y-6">
-                                <div className="space-y-4">
+                            <div className="p-6 space-y-4">
+                                <div className="space-y-3">
                                     <div className="flex justify-between items-center">
-                                        <span className="text-gray-600">{t.checkout.summary.plan}</span>
-                                        <span className="font-medium text-gray-900">{t.pricing.plans[selectedPlan as keyof typeof t.pricing.plans].name}</span>
+                                        <span className="text-sm text-gray-600">{t.checkout.summary.plan}</span>
+                                        <span className="text-sm font-medium text-gray-900">{t.pricing.plans[selectedPlan as keyof typeof t.pricing.plans].name}</span>
                                     </div>
                                     <div className="flex justify-between items-center">
-                                        <span className="text-gray-600">{t.checkout.summary.billing_period}</span>
-                                        <span className="font-medium text-gray-900">{isAnnual ? t.checkout.summary.annual : t.checkout.summary.monthly}</span>
+                                        <span className="text-sm text-gray-600">{t.checkout.summary.billing_period}</span>
+                                        <span className="text-sm font-medium text-gray-900">{isAnnual ? t.checkout.summary.annual : t.checkout.summary.monthly}</span>
                                     </div>
                                     <div className="flex justify-between items-center">
-                                        <span className="text-gray-600">{t.checkout.summary.price}</span>
-                                        <span className="font-medium text-gray-900">{getPlanPrice()}</span>
+                                        <span className="text-sm text-gray-600">{t.checkout.summary.price}</span>
+                                        <span className="text-sm font-medium text-gray-900">{getPlanPrice()}</span>
                                     </div>
+                                    {/* Annual Savings */}
+                                    {isAnnual && (
+                                        <div className="space-y-2">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-sm text-gray-600">{t.checkout.summary.annual_saving} (20%)</span>
+                                                <span className="text-sm font-medium text-green-600">-${getTotalSavings().annualSavings.toFixed(2)}</span>
+                                            </div>
+                                            {discount > 0 && (
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-sm text-gray-600">{t.checkout.summary.promo_code_savings}</span>
+                                                    <span className="text-sm font-medium text-green-600">-${getTotalSavings().promoCodeSavings.toFixed(2)}</span>
+                                                </div>
+                                            )}
+                                            <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+                                                <span className="text-sm font-semibold text-gray-900">{t.checkout.summary.total_savings}</span>
+                                                <span className="text-sm font-bold text-green-600">-${getTotalSavings().totalSavings.toFixed(2)}</span>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Free Trial Banner */}
                                 {selectedPlan === 'starter' && (
-                                    <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 p-6 border border-blue-100">
-                                        <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-16 -translate-y-16">
-                                            <div className="absolute inset-0 bg-blue-200 opacity-20 rounded-full"></div>
-                                        </div>
-                                        <div className="relative z-10">
-                                            <div className="flex items-center mb-3">
+                                    <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border border-blue-100">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center space-x-3">
                                                 <div className="flex-shrink-0">
-                                                    <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
+                                                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center rtl:ml-4">
+                                                        <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                    </div>
                                                 </div>
-                                                <h3 className="ml-3 text-lg font-semibold text-blue-900">{t.checkout.summary.free_trial.title}</h3>
-                                            </div>
-                                            <p className="text-blue-800 mb-4">
-                                                {t.checkout.summary.free_trial.subtitle1} {isAnnual ? t.checkout.summary.free_trial.subtitle2 : t.checkout.summary.free_trial.subtitle3} {t.checkout.summary.free_trial.subtitle4}
-                                            </p>
-                                            <div className="space-y-3">
-                                                <div className="flex items-start text-sm text-blue-700">
-                                                    <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                    <span>{t.checkout.summary.free_trial.note1}</span>
-                                                </div>
-                                                <div className="flex items-start text-sm text-blue-700">
-                                                    <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                    <span>{t.checkout.summary.free_trial.note2}</span>
+                                                <div>
+                                                    <h3 className="text-sm font-semibold text-blue-900">
+                                                        {isAnnual ? t.checkout.summary.free_trial.thirty_days : t.checkout.summary.free_trial.seven_days}
+                                                    </h3>
+                                                    <p className="text-xs text-blue-700">{t.checkout.summary.free_trial.try_before_you_buy}</p>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Plan Features */}
-                                <div className="border-t border-gray-200 pt-6">
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.checkout.summary.plan_features}</h3>
-                                    <ul className="space-y-3">
-                                        {t.pricing.plans[selectedPlan as keyof typeof t.pricing.plans].features.map((feature, index) => (
-                                            <li key={index} className="flex items-start">
-                                                <span className="mr-2 text-green-500 mt-1">
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth={2}
-                                                            d="M5 13l4 4L19 7"
-                                                        />
-                                                    </svg>
+                                            <div className="flex-shrink-0">
+                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    {isAnnual ? t.checkout.summary.free_trial.thirty_days_badge : t.checkout.summary.free_trial.seven_days_badge}
                                                 </span>
-                                                <span className="text-gray-600">{feature}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-
-                                {/* Annual Savings */}
-                                {isAnnual && (
-                                    <div className="flex justify-between items-center text-green-600 bg-green-50 p-4 rounded-xl">
-                                        <div className="flex items-center">
-                                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth={2}
-                                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                                />
-                                            </svg>
-                                            <span>{t.checkout.summary.annual_saving} (20%)</span>
+                                            </div>
                                         </div>
-                                        <span className="font-medium">{getTotalSavings()}</span>
                                     </div>
                                 )}
 
-                                {(discount > 0) && (
-                                    <div className="flex justify-between items-center text-green-600 bg-green-50 p-4 rounded-xl">
-                                        <div className="flex items-center">
-                                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth={2}
-                                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                                />
-                                            </svg>
-                                            <span>{t.checkout.summary.promo_code_savings}</span>
-                                        </div>
-                                        <span className="font-medium">{getTotalSavings()}</span>
-                                    </div>
-                                )}
-
-                                <div className="border-t border-gray-200 pt-6">
+                                <div className="border-t border-gray-200 pt-4">
                                     <button
                                         type="button"
                                         onClick={() => setShowPromoInput(!showPromoInput)}
@@ -1447,45 +1536,42 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     value={promoCode}
                                                     onChange={handlePromoCodeChange}
                                                     placeholder={t.checkout.summary.add_promo_placeholder}
-                                                    className="focus:outline-none flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                                />
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.zipCode ? 'border-red-500' : 'border-gray-300'
+                                                    }`}                                                />
                                                 <button
                                                     type="button"
                                                     onClick={handleApplyPromo}
-                                                    className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300"
+                                                    className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300"
                                                 >
                                                     {t.checkout.summary.apply}
                                                 </button>
                                             </div>
                                             {promoError && (
-                                                <p className="mt-2 text-sm text-red-600">{promoError}</p>
-                                            )}
-                                            {promoSuccess && (
-                                                <p className="mt-2 text-sm text-green-600">{promoSuccess}</p>
+                                                <p className="mt-2 text-sm text-red-600">{t.checkout.summary.promo_code_required}</p>
                                             )}
                                         </div>
                                     )}
                                 </div>
 
-                                <div className="border-t border-gray-200 pt-6">
-                                    <div className="flex justify-between items-center mb-6">
-                                        <span className="text-lg font-semibold text-gray-900">{t.checkout.summary.total}</span>
-                                        <span className="text-2xl font-bold text-gray-900">{getTotalPrice()}</span>
+                                <div className="border-t border-gray-200 pt-4">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <span className="text-base font-semibold text-gray-900">{t.checkout.summary.total}</span>
+                                        <span className="text-xl font-bold text-gray-900">{getTotalPrice()}</span>
                                     </div>
-                                    <div className="space-y-3">
-                                        <div className="flex gap-3">
+                                    <div className="space-y-2">
+                                        <div className="flex gap-2">
                                             {currentStep > 1 && (
                                                 <button
                                                     type="button"
                                                     onClick={handleBackStep}
-                                                    className="w-full py-4 px-6 rounded-xl font-semibold text-base bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 shadow-sm"
+                                                    className="w-full py-3 px-4 rounded-lg text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 shadow-sm"
                                                 >
                                                     {t.checkout.summary.back}
                                                 </button>
                                             )}
                                             <button
                                                 type="submit"
-                                                className="w-full py-4 px-6 rounded-xl font-semibold text-base bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm"
+                                                className="w-full py-3 px-4 rounded-lg text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm"
                                             >
                                                 {currentStep < 3 ? t.checkout.summary.continue : t.checkout.summary.activate}
                                             </button>

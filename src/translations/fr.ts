@@ -524,16 +524,16 @@ export const fr = {
             continue: "Continuer",
             activate: "Activer",
             free_trial: {
-                title: "Essai gratuit disponible !",
-                subtitle1: "Commencez avec un",
-                subtitle2: "30 jours",
-                subtitle3: "7 jours",
-                subtitle4: "d'essai gratuit. Votre carte sera débitée après la période d'essai.",
-                note1: "Annulez à tout moment pendant la période d'essai pour éviter les frais",
-                note2: "Continuez à utiliser toutes les fonctionnalités jusqu'à la fin de la période d'essai, même après l'annulation"
+                thirty_days: "30 Jours d'essai gratuit",
+                seven_days: "7 Jours d'essai gratuit",
+                try_before_you_buy: "Essayer avant d'acheter",
+                thirty_days_badge: "30 Jours",
+                seven_days_badge: "7 Jours"
             },
             annual_saving: "Économies annuelles",
             promo_code_savings: "Réduction du code promo",
+            promo_code_required: "Veuillez entrer un code promo",
+            total_savings: "Total des économies",
             apply: "Appliquer",
             annual: "Annuel",
             monthly: "Mensuel"

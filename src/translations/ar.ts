@@ -524,16 +524,16 @@ export const ar = {
             continue: "متابعة",
             activate: "تفعيل",
             free_trial: {
-                title: "تجربة مجانية متاحة!",
-                subtitle1: "ابدأ بـ",
-                subtitle2: "30 يوم",
-                subtitle3: "7 أيام",
-                subtitle4: "تجربة مجانية. سيتم خصم المبلغ من بطاقتك بعد انتهاء فترة التجربة.",
-                note1: "يمكنك الإلغاء في أي وقت خلال فترة التجربة لتجنب الرسوم",
-                note2: "استمر في استخدام جميع الميزات حتى نهاية فترة التجربة، حتى بعد الإلغاء",
+                thirty_days: "30 يوم تجربة مجانية",
+                seven_days: "7 يوم تجربة مجانية",
+                try_before_you_buy: "جرب قبل أن تشتري",
+                thirty_days_badge: "30 يوم",
+                seven_days_badge: "7 يوم"
             },
             annual_saving: "الوفورات السنوية",
             promo_code_savings: "توفير رمز الخصم",
+            total_savings: "التوفير الإجمالي",
+            promo_code_required: "يرجى إدخال رمز الخصم",
             apply: "تطبيق",
             annual: "سنوي",
             monthly: "شهري"
