@@ -14,6 +14,7 @@ const SignIn: React.FC = () => {
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
     const [isScrolling, setIsScrolling] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
+    const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
     const navigate = useNavigate();
     const { currentLanguage, setCurrentLanguage } = useLanguage();
     const t = translations[currentLanguage];
@@ -67,8 +68,34 @@ const SignIn: React.FC = () => {
         setIsLanguageDropdownOpen(false);
     };
 
+    // Update error messages when language changes
+    useEffect(() => {
+        if (errors.email) {
+            setErrors(prev => ({ ...prev, email: t.header.signin_errors.email_required }));
+        }
+        if (errors.password) {
+            setErrors(prev => ({ ...prev, password: t.header.signin_errors.password_required }));
+        }
+    }, [currentLanguage, t.header.signin_errors]);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Reset errors
+        setErrors({});
+
+        // Validate email
+        if (!email) {
+            setErrors(prev => ({ ...prev, email: t.header.signin_errors.email_required }));
+            return;
+        }
+
+        // Validate password
+        if (!password) {
+            setErrors(prev => ({ ...prev, password: t.header.signin_errors.password_required }));
+            return;
+        }
+
         // Save email if remember me is checked and user has given consent
         const cookieConsent = localStorage.getItem('cookieConsent');
         const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
@@ -169,14 +196,21 @@ const SignIn: React.FC = () => {
                                     <input
                                         id="email-address"
                                         name="email"
-                                        type="email"
+                                        type="text"
                                         autoComplete="email"
-                                        required
-                                        className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                        className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${errors.email ? 'border-red-500' : 'border-gray-300'} placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
                                         placeholder={t.header.email}
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        onChange={(e) => {
+                                            setEmail(e.target.value);
+                                            if (errors.email) {
+                                                setErrors(prev => ({ ...prev, email: undefined }));
+                                            }
+                                        }}
                                     />
+                                    {errors.email && (
+                                        <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                                    )}
                                 </div>
                                 <div>
                                     <label htmlFor="password" className="sr-only">
@@ -187,12 +221,19 @@ const SignIn: React.FC = () => {
                                         name="password"
                                         type="password"
                                         autoComplete="current-password"
-                                        required
-                                        className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                        className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${errors.password ? 'border-red-500' : 'border-gray-300'} placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
                                         placeholder={t.header.password}
                                         value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        onChange={(e) => {
+                                            setPassword(e.target.value);
+                                            if (errors.password) {
+                                                setErrors(prev => ({ ...prev, password: undefined }));
+                                            }
+                                        }}
                                     />
+                                    {errors.password && (
+                                        <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                                    )}
                                 </div>
                             </div>
 

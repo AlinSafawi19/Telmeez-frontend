@@ -56,7 +56,11 @@ export const en = {
         back_to_signin: "Back to Sign In",
         back_to_home: "Back to Home",
         dont_worry: "Don't worry!",
-        recover_password: "We'll help you recover your password in no time."
+        recover_password: "We'll help you recover your password in no time.",
+        signin_errors: {
+            email_required: "Email is required",
+            password_required: "Password is required"
+        }
     },
     hero: {
         title: "Empowering Educational Institutions",

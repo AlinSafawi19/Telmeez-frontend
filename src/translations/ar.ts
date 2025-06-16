@@ -56,7 +56,11 @@ export const ar = {
         back_to_signin: "العودة إلى تسجيل الدخول",
         back_to_home: "العودة إلى الرئيسية",
         dont_worry: "لا تقلق!",
-        recover_password: "سنقوم بمساعدتك في استعادة كلمة المرور في أسرع وقت."
+        recover_password: "سنقوم بمساعدتك في استعادة كلمة المرور في أسرع وقت.",
+        signin_errors: {
+            email_required: "البريد الإلكتروني مطلوب",
+            password_required: "كلمة المرور مطلوبة"
+        }
     },
     about: {
         our_story: {

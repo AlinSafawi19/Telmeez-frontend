@@ -56,7 +56,11 @@ export const fr = {
         back_to_signin: "Retour à la connexion",
         back_to_home: "Retour à l'accueil",
         dont_worry: "Ne vous inquiétez pas !",
-        recover_password: "Nous vous aiderons à récupérer votre mot de passe en un rien de temps."
+        recover_password: "Nous vous aiderons à récupérer votre mot de passe en un rien de temps.",
+        signin_errors: {
+            email_required: "L'email est requis",
+            password_required: "Le mot de passe est requis"
+        }
     },
     hero: {
         title: "Renforcer les Institutions Éducatives",
