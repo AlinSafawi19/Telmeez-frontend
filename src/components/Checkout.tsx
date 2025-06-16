@@ -6,7 +6,6 @@ import { countries } from 'countries-list';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import Select from 'react-select';
-import 'react-select/dist/react-select.min.css';
 import visa from "../assets/images/visa.png";
 import mastercard from "../assets/images/mastercard.png";
 import logo from "../assets/images/logo.png";
