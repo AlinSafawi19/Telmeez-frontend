@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { translations } from '../translations';
 import type { Language } from '../translations';
-import { countries } from 'countries-list';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import Select from 'react-select';
@@ -32,6 +31,7 @@ interface BillingInfo {
     country: string;
     password: string;
     confirmPassword: string;
+    customCountry: string;
 }
 
 interface BillingAddress {
@@ -41,6 +41,7 @@ interface BillingAddress {
     state: string;
     zipCode: string;
     country: string;
+    customCountry: string;
 }
 
 interface PaymentInfo {
@@ -71,6 +72,14 @@ const Checkout: React.FC<CheckoutProps> = ({
         { code: 'fr', label: 'Français' }
     ];
 
+    const countryOptions = [
+        ...Object.entries(t.countries).map(([value, label]) => ({
+            value,
+            label
+        })),
+        { value: 'other', label: t.checkout.account_info.fields.other_country }
+    ];
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -98,14 +107,6 @@ const Checkout: React.FC<CheckoutProps> = ({
         setIsLanguageDropdownOpen(false);
     };
 
-    // Convert countries object to array and sort by name
-    const countryOptions = Object.entries(countries)
-        .map(([code, country]) => ({
-            value: code,
-            label: country.name
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
     const [currentStep, setCurrentStep] = useState(1);
     const [billingInfo, setBillingInfo] = useState<BillingInfo>({
         firstName: '',
@@ -118,9 +119,10 @@ const Checkout: React.FC<CheckoutProps> = ({
         city: '',
         state: '',
         zipCode: '',
-        country: 'LB',
+        country: 'lebanon',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        customCountry: ''
     });
 
     const [billingAddress, setBillingAddress] = useState<BillingAddress>({
@@ -129,7 +131,8 @@ const Checkout: React.FC<CheckoutProps> = ({
         city: '',
         state: '',
         zipCode: '',
-        country: 'LB'
+        country: 'lebanon',
+        customCountry: ''
     });
 
     const [useSameAddress, setUseSameAddress] = useState(true);
@@ -153,6 +156,9 @@ const Checkout: React.FC<CheckoutProps> = ({
     const [discount, setDiscount] = useState(0);
 
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
+
+    const [showCustomCountryInput, setShowCustomCountryInput] = useState(false);
+    const [showBillingCustomCountryInput, setShowBillingCustomCountryInput] = useState(false);
 
     const handlePhoneChange = (value: string) => {
         setBillingInfo(prev => ({
@@ -198,7 +204,8 @@ const Checkout: React.FC<CheckoutProps> = ({
                 city: billingInfo.city,
                 state: billingInfo.state,
                 zipCode: billingInfo.zipCode,
-                country: billingInfo.country
+                country: billingInfo.country,
+                customCountry: billingInfo.customCountry
             });
             // Clear any billing address errors since we're using billing info
             setErrors(prev => ({
@@ -213,7 +220,8 @@ const Checkout: React.FC<CheckoutProps> = ({
                 city: '',
                 state: '',
                 zipCode: '',
-                country: ''
+                country: '',
+                customCountry: ''
             });
         }
     };
@@ -419,6 +427,8 @@ const Checkout: React.FC<CheckoutProps> = ({
             }
             if (!billingInfo.country) {
                 billingErrors.country = t.checkout.validation.required;
+            } else if (billingInfo.country === 'other' && !billingInfo.customCountry.trim()) {
+                billingErrors.customCountry = t.checkout.validation.required;
             }
             if (!billingInfo.password.trim()) {
                 billingErrors.password = t.checkout.validation.required;
@@ -504,6 +514,8 @@ const Checkout: React.FC<CheckoutProps> = ({
                 }
                 if (!billingAddress.country) {
                     billingAddressErrors.country = t.checkout.validation.required;
+                } else if (billingAddress.country === 'other' && !billingAddress.customCountry.trim()) {
+                    billingAddressErrors.customCountry = t.checkout.validation.required;
                 }
 
                 if (Object.keys(billingAddressErrors).length > 0) {
@@ -581,16 +593,31 @@ const Checkout: React.FC<CheckoutProps> = ({
     };
 
     const handleCountryChange = (selectedOption: any, isBillingAddress: boolean = false) => {
-        if (isBillingAddress) {
-            setBillingAddress(prev => ({
-                ...prev,
-                country: selectedOption.value
-            }));
+        if (selectedOption.value === 'other') {
+            if (isBillingAddress) {
+                setShowBillingCustomCountryInput(true);
+                setBillingAddress(prev => ({ ...prev, country: 'other' }));
+            } else {
+                setShowCustomCountryInput(true);
+                setBillingInfo(prev => ({ ...prev, country: 'other' }));
+            }
         } else {
-            setBillingInfo(prev => ({
-                ...prev,
-                country: selectedOption.value
-            }));
+            if (isBillingAddress) {
+                setShowBillingCustomCountryInput(false);
+                setBillingAddress(prev => ({ ...prev, country: selectedOption.value }));
+            } else {
+                setShowCustomCountryInput(false);
+                setBillingInfo(prev => ({ ...prev, country: selectedOption.value }));
+            }
+        }
+    };
+
+    const handleCustomCountryChange = (e: React.ChangeEvent<HTMLInputElement>, isBillingAddress: boolean = false) => {
+        const value = e.target.value;
+        if (isBillingAddress) {
+            setBillingAddress(prev => ({ ...prev, customCountry: value }));
+        } else {
+            setBillingInfo(prev => ({ ...prev, customCountry: value }));
         }
     };
 
@@ -900,11 +927,22 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     onChange={(option) => handleCountryChange(option)}
                                                     options={countryOptions}
                                                     styles={customSelectStyles}
-                                                    placeholder="Select a country"
+                                                    placeholder={t.checkout.account_info.fields.select_country}
                                                     isSearchable
                                                     className="react-select-container"
                                                     classNamePrefix="react-select"
                                                 />
+                                                {showCustomCountryInput && (
+                                                    <input
+                                                        type="text"
+                                                        id="customCountry"
+                                                        name="customCountry"
+                                                        value={billingInfo.country === 'other' ? '' : billingInfo.country}
+                                                        onChange={(e) => setBillingInfo(prev => ({ ...prev, country: e.target.value }))}
+                                                        placeholder={t.checkout.account_info.fields.enter_country}
+                                                        className="mt-2 focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 border-gray-300"
+                                                    />
+                                                )}
                                                 {errors.billing?.country && (
                                                     <p className="text-sm text-red-600">{errors.billing.country}</p>
                                                 )}
@@ -1067,8 +1105,8 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                         value={paymentInfo.cardNumber}
                                                         onChange={handlePaymentInfoChange}
                                                         placeholder="1234 5678 9012 3456"
-                                                        className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.payment?.cardNumber ? 'border-red-500' : 'border-gray-300'
-                                                            }`}
+                                                        dir="ltr"
+                                                        className={`focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.payment?.cardNumber ? 'border-red-500' : 'border-gray-300'} ${isRTL ? 'text-right' : ''}`}
                                                     />
                                                     {errors.payment?.cardNumber && (
                                                         <p className="text-sm text-red-600">{errors.payment.cardNumber}</p>
@@ -1160,11 +1198,22 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                         onChange={(option) => handleCountryChange(option, true)}
                                                         options={countryOptions}
                                                         styles={customSelectStyles}
-                                                        placeholder="Select a country"
+                                                        placeholder={t.checkout.account_info.fields.select_country}
                                                         isSearchable
                                                         className="react-select-container"
                                                         classNamePrefix="react-select"
                                                     />
+                                                    {showBillingCustomCountryInput && (
+                                                        <input
+                                                            type="text"
+                                                            id="billingCustomCountry"
+                                                            name="customCountry"
+                                                            value={billingAddress.customCountry}
+                                                            onChange={(e) => handleCustomCountryChange(e, true)}
+                                                            placeholder={t.checkout.account_info.fields.enter_country || "Enter your country"}
+                                                            className={`mt-2 focus:outline-none w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billingAddress?.customCountry ? 'border-red-500' : 'border-gray-300'}`}
+                                                        />
+                                                    )}
                                                     {errors.billingAddress?.country && (
                                                         <p className="text-sm text-red-600">{errors.billingAddress.country}</p>
                                                     )}
