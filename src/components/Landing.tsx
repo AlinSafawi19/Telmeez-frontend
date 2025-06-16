@@ -246,10 +246,17 @@ const Landing: React.FC = () => {
 
     const handlePricingDropdownItemClick = (e: React.MouseEvent, planLabel: string) => {
         e.preventDefault();
-        setSelectedPricingPlan(planLabel);
-        setIsScrolling(true);
-        pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-        setTimeout(() => setIsScrolling(false), 1000);
+        // Map the plan label to its corresponding ID
+        const planId = planLabel === t.header.pricing.starter ? 'starter' :
+                      planLabel === t.header.pricing.standard ? 'standard' :
+                      planLabel === t.header.pricing.enterprise ? 'enterprise' : null;
+        
+        if (planId) {
+            setSelectedPricingPlan(planId);
+            setIsScrolling(true);
+            pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => setIsScrolling(false), 1000);
+        }
         setActiveDropdown(null);
     };
 
