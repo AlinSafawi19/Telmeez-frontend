@@ -447,4 +447,93 @@ export const en = {
         save_preferences: "Save Preferences",
         preferences_saved: "Your cookie preferences have been saved.",
     },
+    checkout: {
+        title: "Complete Your Purchase",
+        subtitle: "You're just a few steps away from getting started",
+        validation: {
+            required: "This field is required",
+            invalid_email: "Please enter a valid email address",
+            password_length: "Password must be at least 8 characters long",
+            password_mismatch: "Passwords do not match",
+            invalid_card: "Please enter a valid card number",
+            invalid_expiry: "Please enter a valid expiry date (MM/YY)",
+            invalid_cvv: "Please enter a valid CVV"
+        },
+        account_info: {
+            title: "Account Information",
+            fields: {
+                first_name: "First Name",
+                last_name: "Last Name",
+                email: "Email Address",
+                phone: "Phone Number",
+                institution: "Institution Name",
+                address1: "Address Line 1",
+                address2: "Address Line 2",
+                country: "Country",
+                city: "City",
+                state: "State/Province/Region",
+                zip: "ZIP/Postal Code",
+                passmsg: "These credentials will be used to log in to your account",
+                password: "Password",
+                confirmpass: "Confirm Password",
+                password_placeholder: "Create a password",
+                password_confirm_placeholder: "Confirm your password"
+            }
+        },
+        payment_details: {
+            title: "Payment Details",
+            section_title: "Payment Information",
+            section_subtitle: "Select Payment Method",
+            payment_types: {
+                card: {
+                    name: "Credit/Debit Card",
+                    desc: "Pay securely with your card",
+                    card_nb: "Card Number",
+                    expiration: "Expiry Date",
+                    cvv: "CVV"
+                },
+                whish: {
+                    name: "Whish Payment",
+                    desc: "Pay using whish app",
+                    section_title: "Pay with whish App",
+                    section_subtitle: "Scan the QR code below using your whish app to complete the payment.",
+                    note: "QR Code will appear here",
+                    amount: "Amount to pay:",
+                    note2: "Please keep this page open until you complete the payment in your whish app. Your order will be processed automatically once the payment is confirmed."
+                }
+            },
+        },
+        billing_address: {
+            title: "Billing Address",
+            checbox: "Use same address as account information"
+        },
+        summary: {
+            title: "Order Summary",
+            plan: "Plan",
+            billing_period: "Billing Period",
+            price: "Price",
+            plan_features: "Plan Features",
+            add_promo: "Add Promo Code",
+            hide_promo: "Hide Promo Code",
+            add_promo_placeholder: "Enter Promo Code",
+            total: "Final Total Amount",
+            back: "Back",
+            continue: "Continue",
+            activate: "Activate",
+            free_trial: {
+                title: "Free Trial Available!",
+                subtitle1: "Start with a",
+                subtitle2: "30-day",
+                subtitle3: "7-day",
+                subtitle4: "free trial. Your card will be charged after the trial period.",
+                note1: "Cancel anytime during the trial to avoid charges",
+                note2: "Continue using all features until the trial ends, even after cancellation"
+            },
+            annual_saving: "Annual Savings",
+            promo_code_savings: "Promo Code Savings",
+            apply: "Apply",
+            annual: "Annual",
+            monthly: "Monthly"
+        }
+    }
 }; 

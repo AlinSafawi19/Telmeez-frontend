@@ -446,5 +446,94 @@ export const fr = {
         marketing_desc: "Utilisés pour suivre les visiteurs sur différents sites afin d'afficher des publicités pertinentes.",
         save_preferences: "Enregistrer les Préférences",
         preferences_saved: "Vos préférences de cookies ont été enregistrées."
+    },
+    checkout: {
+        title: "Finalisez votre achat",
+        subtitle: "Vous n'êtes qu'à quelques étapes du démarrage",
+        validation: {
+            required: "Ce champ est obligatoire",
+            invalid_email: "Veuillez entrer une adresse e-mail valide",
+            password_length: "Le mot de passe doit contenir au moins 8 caractères",
+            password_mismatch: "Les mots de passe ne correspondent pas",
+            invalid_card: "Veuillez entrer un numéro de carte valide",
+            invalid_expiry: "Veuillez entrer une date d'expiration valide (MM/AA)",
+            invalid_cvv: "Veuillez entrer un code CVV valide"
+        },
+        account_info: {
+            title: "Informations du compte",
+            fields: {
+                first_name: "Prénom",
+                last_name: "Nom",
+                email: "Adresse e-mail",
+                phone: "Numéro de téléphone",
+                institution: "Nom de l'institution",
+                address1: "Adresse ligne 1",
+                address2: "Adresse ligne 2",
+                country: "Pays",
+                city: "Ville",
+                state: "État/Province/Région",
+                zip: "Code postal",
+                passmsg: "Ces identifiants seront utilisés pour vous connecter à votre compte",
+                password: "Mot de passe",
+                confirmpass: "Confirmer le mot de passe",
+                password_placeholder: "Créer un mot de passe",
+                password_confirm_placeholder: "Confirmer votre mot de passe"
+            }
+        },
+        payment_details: {
+            title: "Détails du paiement",
+            section_title: "Informations de paiement",
+            section_subtitle: "Sélectionnez le mode de paiement",
+            payment_types: {
+                card: {
+                    name: "Carte de crédit/débit",
+                    desc: "Payez en toute sécurité avec votre carte",
+                    card_nb: "Numéro de carte",
+                    expiration: "Date d'expiration",
+                    cvv: "CVV"
+                },
+                whish: {
+                    name: "Paiement Whish",
+                    desc: "Payez en utilisant l'application whish",
+                    section_title: "Payez avec l'application Whish",
+                    section_subtitle: "Scannez le code QR ci-dessous avec votre application whish pour compléter le paiement.",
+                    note: "Le code QR apparaîtra ici",
+                    amount: "Montant à payer :",
+                    note2: "Veuillez garder cette page ouverte jusqu'à ce que vous ayez terminé le paiement dans votre application whish. Votre commande sera traitée automatiquement une fois le paiement confirmé."
+                }
+            }
+        },
+        billing_address: {
+            title: "Adresse de facturation",
+            checbox: "Utiliser la même adresse que les informations du compte"
+        },
+        summary: {
+            title: "Récapitulatif de la commande",
+            plan: "Forfait",
+            billing_period: "Période de facturation",
+            price: "Prix",
+            plan_features: "Fonctionnalités du forfait",
+            add_promo: "Ajouter un code promo",
+            hide_promo: "Masquer le code promo",
+            add_promo_placeholder: "Entrez le code promo",
+            total: "Montant total final",
+            back: "Retour",
+            continue: "Continuer",
+            activate: "Activer",
+            free_trial: {
+                title: "Essai gratuit disponible !",
+                subtitle1: "Commencez avec un",
+                subtitle2: "30 jours",
+                subtitle3: "7 jours",
+                subtitle4: "d'essai gratuit. Votre carte sera débitée après la période d'essai.",
+                note1: "Annulez à tout moment pendant la période d'essai pour éviter les frais",
+                note2: "Continuez à utiliser toutes les fonctionnalités jusqu'à la fin de la période d'essai, même après l'annulation"
+            },
+            annual_saving: "Économies annuelles",
+            promo_code_savings: "Réduction du code promo",
+            apply: "Appliquer",
+            annual: "Annuel",
+            monthly: "Mensuel"
+        }
     }
 };

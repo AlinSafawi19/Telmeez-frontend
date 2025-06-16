@@ -248,9 +248,9 @@ const Landing: React.FC = () => {
         e.preventDefault();
         // Map the plan label to its corresponding ID
         const planId = planLabel === t.header.pricing.starter ? 'starter' :
-                      planLabel === t.header.pricing.standard ? 'standard' :
-                      planLabel === t.header.pricing.enterprise ? 'enterprise' : null;
-        
+            planLabel === t.header.pricing.standard ? 'standard' :
+                planLabel === t.header.pricing.enterprise ? 'enterprise' : null;
+
         if (planId) {
             setSelectedPricingPlan(planId);
             // Save the selected plan in localStorage
@@ -1184,7 +1184,7 @@ const Landing: React.FC = () => {
                 <div className="absolute top-0 left-0 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
                 <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
                 <div className="absolute -bottom-8 left-20 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
-                
+
                 <div className="container mx-auto px-4 text-center relative">
                     <h2 className="text-4xl font-bold text-white mb-8">
                         {translations[currentLanguage].cta.title}
@@ -1346,13 +1346,7 @@ const Landing: React.FC = () => {
                                     <svg className={`w-5 h-5 text-gray-400 ${currentLanguage === 'ar' ? 'ml-2' : 'mr-2'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                     </svg>
-                                    <a href="mailto:info@telmeez.com" className="text-gray-400 hover:text-white transition-colors">info@telmeez.com</a>
-                                </li>
-                                <li className="flex items-center">
-                                    <svg className={`w-5 h-5 text-gray-400 ${currentLanguage === 'ar' ? 'ml-2' : 'mr-2'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                    </svg>
-                                    <a href="tel:+1234567890" className="text-gray-400 hover:text-white transition-colors" dir="ltr">+1 (234) 567-890</a>
+                                    <a href="mailto:contact@telmeezlb.com" className="text-gray-400 hover:text-white transition-colors">contact@telmeezlb.com</a>
                                 </li>
                             </ul>
                         </div>

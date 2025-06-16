@@ -446,5 +446,94 @@ export const ar = {
         marketing_desc: "تستخدم لتتبع الزوار عبر المواقع لعرض الإعلانات ذات الصلة.",
         save_preferences: "حفظ التفضيلات",
         preferences_saved: "تم حفظ تفضيلات ملفات تعريف الارتباط الخاصة بك."
+    },
+    checkout: {
+        title: "أكمل عملية الشراء",
+        subtitle: "أنت على بعد خطوات قليلة من البدء",
+        validation: {
+            required: "هذا الحقل مطلوب",
+            invalid_email: "يرجى إدخال عنوان بريد إلكتروني صالح",
+            password_length: "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+            password_mismatch: "كلمات المرور غير متطابقة",
+            invalid_card: "يرجى إدخال رقم بطاقة صالح",
+            invalid_expiry: "يرجى إدخال تاريخ انتهاء صالح (MM/YY)",
+            invalid_cvv: "يرجى إدخال رمز CVV صالح"
+        },
+        account_info: {
+            title: "معلومات الحساب",
+            fields: {
+                first_name: "الاسم الأول",
+                last_name: "الاسم الأخير",
+                email: "البريد الإلكتروني",
+                phone: "رقم الهاتف",
+                institution: "اسم المؤسسة",
+                address1: "عنوان السطر 1",
+                address2: "عنوان السطر 2",
+                country: "الدولة",
+                city: "المدينة",
+                state: "الولاية/المقاطعة/المنطقة",
+                zip: "الرمز البريدي",
+                passmsg: "سيتم استخدام هذه البيانات للدخول إلى حسابك",
+                password: "كلمة المرور",
+                confirmpass: "تأكيد كلمة المرور",
+                password_placeholder: "إنشاء كلمة مرور",
+                password_confirm_placeholder: "تأكيد كلمة المرور"
+            }
+        },
+        payment_details: {
+            title: "تفاصيل الدفع",
+            section_title: "معلومات الدفع",
+            section_subtitle: "اختر طريقة الدفع",
+            payment_types: {
+                card: {
+                    name: "بطاقة ائتمان/خصم",
+                    desc: "ادفع بأمان باستخدام بطاقتك",
+                    card_nb: "رقم البطاقة",
+                    expiration: "تاريخ الانتهاء",
+                    cvv: "رمز الأمان"
+                },
+                whish: {
+                    name: "دفع Whish",
+                    desc: "ادفع باستخدام تطبيق whish",
+                    section_title: "ادفع باستخدام تطبيق Whish",
+                    section_subtitle: "امسح رمز QR أدناه باستخدام تطبيق whish لإكمال الدفع.",
+                    note: "سيظهر رمز QR هنا",
+                    amount: "المبلغ المطلوب دفعه:",
+                    note2: "يرجى إبقاء هذه الصفحة مفتوحة حتى تكمل الدفع في تطبيق whish. سيتم معالجة طلبك تلقائياً بمجرد تأكيد الدفع."
+                }
+            }
+        },
+        billing_address: {
+            title: "عنوان الفواتير",
+            checbox: "استخدم نفس العنوان الموجود في معلومات الحساب"
+        },
+        summary: {
+            title: "ملخص الطلب",
+            plan: "الخطة",
+            billing_period: "فترة الفوترة",
+            price: "السعر",
+            plan_features: "مميزات الخطة",
+            add_promo: "إضافة رمز ترويجي",
+            hide_promo: "إخفاء رمز الخصم",
+            add_promo_placeholder: "أدخل الرمز الترويجي",
+            total: "المبلغ الإجمالي النهائي",
+            back: "رجوع",
+            continue: "متابعة",
+            activate: "تفعيل",
+            free_trial: {
+                title: "تجربة مجانية متاحة!",
+                subtitle1: "ابدأ بـ",
+                subtitle2: "30 يوم",
+                subtitle3: "7 أيام",
+                subtitle4: "تجربة مجانية. سيتم خصم المبلغ من بطاقتك بعد انتهاء فترة التجربة.",
+                note1: "يمكنك الإلغاء في أي وقت خلال فترة التجربة لتجنب الرسوم",
+                note2: "استمر في استخدام جميع الميزات حتى نهاية فترة التجربة، حتى بعد الإلغاء",
+            },
+            annual_saving: "الوفورات السنوية",
+            promo_code_savings: "توفير رمز الخصم",
+            apply: "تطبيق",
+            annual: "سنوي",
+            monthly: "شهري"
+        }
     }
 }; 
