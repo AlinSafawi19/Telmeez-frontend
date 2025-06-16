@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { translations } from '../translations';
 import type { Language } from '../translations';
 import { countries } from 'countries-list';
-import { parsePhoneNumber } from 'libphonenumber-js';
-import type { CountryCode } from 'libphonenumber-js';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import visa from "../assets/images/visa.png";
 import mastercard from "../assets/images/mastercard.png";
+import logo from "../assets/images/logo.png";
+import logoarb from "../assets/images/logo_arb.png";
+import { FaHome } from 'react-icons/fa';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface CheckoutProps {
     language?: Language;
@@ -51,6 +53,8 @@ const Checkout: React.FC<CheckoutProps> = ({
     language = 'en'
 }) => {
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
+    const { currentLanguage } = useLanguage();
     const selectedPlan = searchParams.get('plan') || 'standard';
     const isAnnual = searchParams.get('billing') === 'annual';
     const t = translations[language].pricing;
@@ -64,6 +68,7 @@ const Checkout: React.FC<CheckoutProps> = ({
         }))
         .sort((a, b) => a.name.localeCompare(b.name));
 
+    const [currentStep, setCurrentStep] = useState(1);
     const [billingInfo, setBillingInfo] = useState<BillingInfo>({
         firstName: '',
         lastName: '',
@@ -105,37 +110,17 @@ const Checkout: React.FC<CheckoutProps> = ({
         payment?: Partial<PaymentInfo>;
     }>({});
 
-    const [phoneError, setPhoneError] = useState<string>('');
-
     const [promoCode, setPromoCode] = useState('');
     const [showPromoInput, setShowPromoInput] = useState(false);
     const [promoError, setPromoError] = useState('');
     const [promoSuccess, setPromoSuccess] = useState('');
     const [discount, setDiscount] = useState(0);
 
-    const validatePhoneNumber = (phone: string, countryCode: CountryCode) => {
-        try {
-            const phoneNumber = parsePhoneNumber(phone, countryCode);
-            return phoneNumber.isValid();
-        } catch (error) {
-            return false;
-        }
-    };
-
-    const handlePhoneChange = (value: string, country: any) => {
-        const countryCode = country.countryCode.toUpperCase() as CountryCode;
-        const isValid = validatePhoneNumber(value, countryCode);
-
+    const handlePhoneChange = (value: string) => {
         setBillingInfo(prev => ({
             ...prev,
             phone: value
         }));
-
-        if (!isValid) {
-            setPhoneError('Please enter a valid phone number');
-        } else {
-            setPhoneError('');
-        }
     };
 
     const handleBillingInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -234,56 +219,29 @@ const Checkout: React.FC<CheckoutProps> = ({
         }
     };
 
-    const validateForm = () => {
-        const newErrors: {
-            billing?: Partial<BillingInfo>;
-            billingAddress?: Partial<BillingAddress>;
-            payment?: Partial<PaymentInfo>;
-        } = {};
-
-        // Validate billing info
-        if (!billingInfo.firstName) newErrors.billing = { ...newErrors.billing, firstName: 'First name is required' };
-        if (!billingInfo.lastName) newErrors.billing = { ...newErrors.billing, lastName: 'Last name is required' };
-        if (!billingInfo.email) newErrors.billing = { ...newErrors.billing, email: 'Email is required' };
-        if (!billingInfo.phone || phoneError) newErrors.billing = { ...newErrors.billing, phone: phoneError || 'Phone number is required' };
-        if (!billingInfo.address) newErrors.billing = { ...newErrors.billing, address: 'Address is required' };
-        if (!billingInfo.city) newErrors.billing = { ...newErrors.billing, city: 'City is required' };
-        if (!billingInfo.state) newErrors.billing = { ...newErrors.billing, state: 'State is required' };
-        if (!billingInfo.zipCode) newErrors.billing = { ...newErrors.billing, zipCode: 'ZIP code is required' };
-        if (!billingInfo.country) newErrors.billing = { ...newErrors.billing, country: 'Country is required' };
-        if (!billingInfo.password) newErrors.billing = { ...newErrors.billing, password: 'Password is required' };
-        if (!billingInfo.confirmPassword) newErrors.billing = { ...newErrors.billing, confirmPassword: 'Please confirm your password' };
-        if (billingInfo.password && billingInfo.confirmPassword && billingInfo.password !== billingInfo.confirmPassword) {
-            newErrors.billing = { ...newErrors.billing, confirmPassword: 'Passwords do not match' };
+    const handleNextStep = () => {
+        console.log('handleNextStep called, current step:', currentStep);
+        if (currentStep < 3) {
+            setCurrentStep(prev => {
+                console.log('Setting step to:', prev + 1);
+                return prev + 1;
+            });
         }
-        if (billingInfo.password && billingInfo.password.length < 8) {
-            newErrors.billing = { ...newErrors.billing, password: 'Password must be at least 8 characters long' };
-        }
-
-        // Validate billing address if not using same address
-        if (!useSameAddress) {
-            if (!billingAddress.firstName) newErrors.billingAddress = { ...newErrors.billingAddress, firstName: 'First name is required' };
-            if (!billingAddress.lastName) newErrors.billingAddress = { ...newErrors.billingAddress, lastName: 'Last name is required' };
-            if (!billingAddress.address) newErrors.billingAddress = { ...newErrors.billingAddress, address: 'Address is required' };
-            if (!billingAddress.city) newErrors.billingAddress = { ...newErrors.billingAddress, city: 'City is required' };
-            if (!billingAddress.state) newErrors.billingAddress = { ...newErrors.billingAddress, state: 'State is required' };
-            if (!billingAddress.zipCode) newErrors.billingAddress = { ...newErrors.billingAddress, zipCode: 'ZIP code is required' };
-            if (!billingAddress.country) newErrors.billingAddress = { ...newErrors.billingAddress, country: 'Country is required' };
-        }
-
-        // Validate payment info
-        if (!paymentInfo.cardNumber) newErrors.payment = { ...newErrors.payment, cardNumber: 'Card number is required' };
-        if (!paymentInfo.expiryDate) newErrors.payment = { ...newErrors.payment, expiryDate: 'Expiry date is required' };
-        if (!paymentInfo.cvv) newErrors.payment = { ...newErrors.payment, cvv: 'CVV is required' };
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleBackStep = () => {
+        if (currentStep > 1) {
+            setCurrentStep(prev => prev - 1);
+        }
+    };
+
+    const handleStepSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (validateForm()) {
-            // Handle successful submission
+        console.log('Form submitted, current step:', currentStep);
+        if (currentStep < 3) {
+            handleNextStep();
+        } else {
+            // Handle final submission
             console.log('Form submitted:', { billingInfo, paymentInfo });
             // Navigate to success page or handle the submission
         }
@@ -333,86 +291,137 @@ const Checkout: React.FC<CheckoutProps> = ({
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12" dir={isRTL ? 'rtl' : 'ltr'}>
-            <div className="container mx-auto px-4">
-                <div className="max-w-6xl mx-auto">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
+        <div className="min-h-screen bg-gray-50" dir={isRTL ? 'rtl' : 'ltr'}>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                {/* Add logo and back to home button */}
+                <div className="flex items-center justify-between mb-8">
+                    <img
+                        src={currentLanguage === 'ar' ? logoarb : logo}
+                        alt="Company Logo"
+                        className="h-16 w-auto transition-transform"
+                    />
+                    <div className="max-w-3xl mx-auto mb-8">
+                        <h1 className="text-5xl font-bold text-gray-900 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800 text-center">Complete Your Purchase</h1>
+                        <p className="text-md text-gray-600 text-center">You're just a few steps away from getting started</p>
+                    </div>
+                    <button
+                        onClick={() => navigate('/')}
+                        className="focus:outline-none flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-full hover:bg-indigo-50"
+                        aria-label="Back to home"
+                    >
+                        <FaHome className="w-5 h-5" />
+                        <span className="text-sm font-medium">Back to Home</span>
+                    </button>
+                </div>
 
-                    <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {/* Billing Information */}
-                        <div className="lg:col-span-2 space-y-8">
-                            <div className="bg-white rounded-lg shadow-sm p-6">
-                                <h2 className="text-xl font-semibold text-gray-900 mb-6">Billing Information</h2>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                                            First Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="firstName"
-                                            name="firstName"
-                                            value={billingInfo.firstName}
-                                            onChange={handleBillingInfoChange}
-                                            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billing?.firstName ? 'border-red-500' : 'border-gray-300'
-                                                }`}
-                                        />
-                                        {errors.billing?.firstName && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.billing.firstName}</p>
-                                        )}
+                <form onSubmit={handleStepSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    {/* Main Content - Left Side */}
+                    <div className="lg:col-span-8 space-y-6">
+                        {/* Progress Steps */}
+                        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center">
+                                    <div className={`flex items-center justify-center w-8 h-8 rounded-full ${currentStep >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'}`}>
+                                        1
                                     </div>
-                                    <div>
-                                        <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-                                            Last Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="lastName"
-                                            name="lastName"
-                                            value={billingInfo.lastName}
-                                            onChange={handleBillingInfoChange}
-                                            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billing?.lastName ? 'border-red-500' : 'border-gray-300'
-                                                }`}
-                                        />
-                                        {errors.billing?.lastName && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.billing.lastName}</p>
-                                        )}
+                                    <span className={`ml-3 text-sm font-medium ${currentStep >= 1 ? 'text-gray-900' : 'text-gray-500'}`}>Account Information</span>
+                                </div>
+                                <div className="flex-1 h-0.5 bg-gray-200 mx-4"></div>
+                                <div className="flex items-center">
+                                    <div className={`flex items-center justify-center w-8 h-8 rounded-full ${currentStep >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'}`}>
+                                        2
                                     </div>
-                                    <div>
-                                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                                            Email
-                                        </label>
-                                        <input
-                                            type="email"
-                                            id="email"
-                                            name="email"
-                                            value={billingInfo.email}
-                                            onChange={handleBillingInfoChange}
-                                            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billing?.email ? 'border-red-500' : 'border-gray-300'
-                                                }`}
-                                        />
-                                        {errors.billing?.email && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.billing.email}</p>
-                                        )}
+                                    <span className={`ml-3 text-sm font-medium ${currentStep >= 2 ? 'text-gray-900' : 'text-gray-500'}`}>Payment Details</span>
+                                </div>
+                                <div className="flex-1 h-0.5 bg-gray-200 mx-4"></div>
+                                <div className="flex items-center">
+                                    <div className={`flex items-center justify-center w-8 h-8 rounded-full ${currentStep >= 3 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'}`}>
+                                        3
                                     </div>
-                                    <div>
-                                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                                            Phone
-                                        </label>
-                                        <PhoneInput
-                                            country="lb"
-                                            value={billingInfo.phone}
-                                            onChange={handlePhoneChange}
-                                            inputClass={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billing?.phone ? 'border-red-500' : 'border-gray-300'
-                                                }`}
-                                            containerClass="phone-input-container"
-                                            buttonClass="phone-input-button"
-                                            dropdownClass="phone-input-dropdown"
-                                        />
-                                        {errors.billing?.phone && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.billing.phone}</p>
-                                        )}
+                                    <span className={`ml-3 text-sm font-medium ${currentStep >= 3 ? 'text-gray-900' : 'text-gray-500'}`}>Billing Address</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Show only current step content */}
+                        {currentStep === 1 && (
+                            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                                {/* Account Information Section */}
+                                <div className="px-6 py-4 border-b border-gray-200">
+                                    <h2 className="text-xl font-semibold text-gray-900">Account Information</h2>
+                                </div>
+                                <div className="p-6 space-y-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+                                                First Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="firstName"
+                                                name="firstName"
+                                                value={billingInfo.firstName}
+                                                onChange={handleBillingInfoChange}
+                                                className={`focus:outline-none w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.billing?.firstName ? 'border-red-500' : 'border-gray-300'}`}
+                                            />
+                                            {errors.billing?.firstName && (
+                                                <p className="mt-1 text-sm text-red-600">{errors.billing.firstName}</p>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+                                                Last Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="lastName"
+                                                name="lastName"
+                                                value={billingInfo.lastName}
+                                                onChange={handleBillingInfoChange}
+                                                className={`focus:outline-none w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.billing?.lastName ? 'border-red-500' : 'border-gray-300'}`}
+                                            />
+                                            {errors.billing?.lastName && (
+                                                <p className="mt-1 text-sm text-red-600">{errors.billing.lastName}</p>
+                                            )}
+                                        </div>
                                     </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                                                Email Address
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="email"
+                                                name="email"
+                                                value={billingInfo.email}
+                                                onChange={handleBillingInfoChange}
+                                                className={`focus:outline-none w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.billing?.email ? 'border-red-500' : 'border-gray-300'}`}
+                                            />
+                                            {errors.billing?.email && (
+                                                <p className="mt-1 text-sm text-red-600">{errors.billing.email}</p>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                                                Phone Number
+                                            </label>
+                                            <PhoneInput
+                                                country="lb"
+                                                value={billingInfo.phone}
+                                                onChange={handlePhoneChange}
+                                                inputClass={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.billing?.phone ? 'border-red-500' : 'border-gray-300'}`}
+                                                containerClass="phone-input-container"
+                                                buttonClass="phone-input-button"
+                                                dropdownClass="phone-input-dropdown"
+                                            />
+                                            {errors.billing?.phone && (
+                                                <p className="mt-1 text-sm text-red-600">{errors.billing.phone}</p>
+                                            )}
+                                        </div>
+                                    </div>
+
                                     <div>
                                         <label htmlFor="institutionName" className="block text-sm font-medium text-gray-700 mb-1">
                                             Institution Name (Optional)
@@ -423,12 +432,13 @@ const Checkout: React.FC<CheckoutProps> = ({
                                             name="institutionName"
                                             value={billingInfo.institutionName}
                                             onChange={handleBillingInfoChange}
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            className="focus:outline-none w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                         />
                                     </div>
-                                    <div className="md:col-span-2">
+
+                                    <div>
                                         <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
-                                            Address
+                                            Address Line 1
                                         </label>
                                         <input
                                             type="text"
@@ -436,14 +446,14 @@ const Checkout: React.FC<CheckoutProps> = ({
                                             name="address"
                                             value={billingInfo.address}
                                             onChange={handleBillingInfoChange}
-                                            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billing?.address ? 'border-red-500' : 'border-gray-300'
-                                                }`}
+                                            className={`focus:outline-none w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.billing?.address ? 'border-red-500' : 'border-gray-300'}`}
                                         />
                                         {errors.billing?.address && (
                                             <p className="mt-1 text-sm text-red-600">{errors.billing.address}</p>
                                         )}
                                     </div>
-                                    <div className="md:col-span-2">
+
+                                    <div>
                                         <label htmlFor="address2" className="block text-sm font-medium text-gray-700 mb-1">
                                             Address Line 2 (Optional)
                                         </label>
@@ -453,179 +463,63 @@ const Checkout: React.FC<CheckoutProps> = ({
                                             name="address2"
                                             value={billingInfo.address2}
                                             onChange={handleBillingInfoChange}
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            className="focus:outline-none w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                         />
                                     </div>
-                                    <div>
-                                        <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
-                                            City
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="city"
-                                            name="city"
-                                            value={billingInfo.city}
-                                            onChange={handleBillingInfoChange}
-                                            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billing?.city ? 'border-red-500' : 'border-gray-300'
-                                                }`}
-                                        />
-                                        {errors.billing?.city && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.billing.city}</p>
-                                        )}
-                                    </div>
-                                    <div>
-                                        <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
-                                            State/Province/Region
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="state"
-                                            name="state"
-                                            value={billingInfo.state}
-                                            onChange={handleBillingInfoChange}
-                                            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billing?.state ? 'border-red-500' : 'border-gray-300'
-                                                }`}
-                                        />
-                                        {errors.billing?.state && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.billing.state}</p>
-                                        )}
-                                    </div>
-                                    <div>
-                                        <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-1">
-                                            ZIP/Postal Code
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="zipCode"
-                                            name="zipCode"
-                                            value={billingInfo.zipCode}
-                                            onChange={handleBillingInfoChange}
-                                            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billing?.zipCode ? 'border-red-500' : 'border-gray-300'
-                                                }`}
-                                        />
-                                        {errors.billing?.zipCode && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.billing.zipCode}</p>
-                                        )}
-                                    </div>
-                                    <div>
-                                        <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
-                                            Country
-                                        </label>
-                                        <select
-                                            id="country"
-                                            name="country"
-                                            value={billingInfo.country}
-                                            onChange={handleBillingInfoChange}
-                                            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billing?.country ? 'border-red-500' : 'border-gray-300'
-                                                }`}
-                                        >
-                                            <option value="">Select a country</option>
-                                            {countryOptions.map(({ code, name }) => (
-                                                <option key={code} value={code}>
-                                                    {name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        {errors.billing?.country && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.billing.country}</p>
-                                        )}
-                                    </div>
-                                    <div>
-                                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                                            Password
-                                        </label>
-                                        <input
-                                            type="password"
-                                            id="password"
-                                            name="password"
-                                            value={billingInfo.password}
-                                            onChange={handleBillingInfoChange}
-                                            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billing?.password ? 'border-red-500' : 'border-gray-300'
-                                                }`}
-                                            placeholder="Enter your password"
-                                        />
-                                        {errors.billing?.password && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.billing.password}</p>
-                                        )}
-                                    </div>
-                                    <div>
-                                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                                            Confirm Password
-                                        </label>
-                                        <input
-                                            type="password"
-                                            id="confirmPassword"
-                                            name="confirmPassword"
-                                            value={billingInfo.confirmPassword}
-                                            onChange={handleBillingInfoChange}
-                                            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billing?.confirmPassword ? 'border-red-500' : 'border-gray-300'
-                                                }`}
-                                            placeholder="Confirm your password"
-                                        />
-                                        {errors.billing?.confirmPassword && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.billing.confirmPassword}</p>
-                                        )}
+                                    <p className="text-sm text-gray-600">These credentials will be used to log in to your account</p>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                                                Password
+                                            </label>
+                                            <input
+                                                type="password"
+                                                id="password"
+                                                name="password"
+                                                value={billingInfo.password}
+                                                onChange={handleBillingInfoChange}
+                                                className={`focus:outline-none w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.billing?.password ? 'border-red-500' : 'border-gray-300'}`}
+                                                placeholder="Create a password"
+                                            />
+                                            {errors.billing?.password && (
+                                                <p className="mt-1 text-sm text-red-600">{errors.billing.password}</p>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                                                Confirm Password
+                                            </label>
+                                            <input
+                                                type="password"
+                                                id="confirmPassword"
+                                                name="confirmPassword"
+                                                value={billingInfo.confirmPassword}
+                                                onChange={handleBillingInfoChange}
+                                                className={`focus:outline-none w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.billing?.confirmPassword ? 'border-red-500' : 'border-gray-300'}`}
+                                                placeholder="Confirm your password"
+                                            />
+                                            {errors.billing?.confirmPassword && (
+                                                <p className="mt-1 text-sm text-red-600">{errors.billing.confirmPassword}</p>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        )}
 
-                            {/* Account Information */}
-                            <div className="bg-white rounded-lg shadow-sm p-6">
-                                <h2 className="text-xl font-semibold text-gray-900 mb-6">Account Information</h2>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                                            Password
-                                        </label>
-                                        <input
-                                            type="password"
-                                            id="password"
-                                            name="password"
-                                            value={billingInfo.password}
-                                            onChange={handleBillingInfoChange}
-                                            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billing?.password ? 'border-red-500' : 'border-gray-300'
-                                                }`}
-                                            placeholder="Enter your password"
-                                        />
-                                        {errors.billing?.password && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.billing.password}</p>
-                                        )}
-                                    </div>
-                                    <div>
-                                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                                            Confirm Password
-                                        </label>
-                                        <input
-                                            type="password"
-                                            id="confirmPassword"
-                                            name="confirmPassword"
-                                            value={billingInfo.confirmPassword}
-                                            onChange={handleBillingInfoChange}
-                                            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billing?.confirmPassword ? 'border-red-500' : 'border-gray-300'
-                                                }`}
-                                            placeholder="Confirm your password"
-                                        />
-                                        {errors.billing?.confirmPassword && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.billing.confirmPassword}</p>
-                                        )}
-                                    </div>
+                        {currentStep === 2 && (
+                            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                                {/* Payment Information Section */}
+                                <div className="px-6 py-4 border-b border-gray-200">
+                                    <h2 className="text-xl font-semibold text-gray-900">Payment Information</h2>
                                 </div>
-                            </div>
-
-                            {/* Payment Information */}
-                            <div className="bg-white rounded-lg shadow-sm p-6">
-                                <h2 className="text-xl font-semibold text-gray-900 mb-6">Payment Information</h2>
-                                <div className="space-y-6">
-                                    <div className="flex items-center space-x-2 mb-4">
-                                        <label className="text-sm font-medium text-gray-700">
-                                            Pay with Credit Card
-                                        </label>
-                                    </div>
-
-                                    <div className="flex space-x-2 mb-4">
+                                <div className="p-6 space-y-6">
+                                    <div className="flex items-center space-x-4 mb-6">
                                         <img src={visa} alt="Visa" className="h-8" />
                                         <img src={mastercard} alt="Mastercard" className="h-8" />
                                     </div>
+
                                     <div>
                                         <label htmlFor="cardNumber" className="block text-sm font-medium text-gray-700 mb-1">
                                             Card Number
@@ -637,13 +531,13 @@ const Checkout: React.FC<CheckoutProps> = ({
                                             value={paymentInfo.cardNumber}
                                             onChange={handlePaymentInfoChange}
                                             placeholder="1234 5678 9012 3456"
-                                            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.payment?.cardNumber ? 'border-red-500' : 'border-gray-300'
-                                                }`}
+                                            className={`focus:outline-none w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.payment?.cardNumber ? 'border-red-500' : 'border-gray-300'}`}
                                         />
                                         {errors.payment?.cardNumber && (
                                             <p className="mt-1 text-sm text-red-600">{errors.payment.cardNumber}</p>
                                         )}
                                     </div>
+
                                     <div className="grid grid-cols-2 gap-6">
                                         <div>
                                             <label htmlFor="expiryDate" className="block text-sm font-medium text-gray-700 mb-1">
@@ -656,8 +550,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                 value={paymentInfo.expiryDate}
                                                 onChange={handlePaymentInfoChange}
                                                 placeholder="MM/YY"
-                                                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.payment?.expiryDate ? 'border-red-500' : 'border-gray-300'
-                                                    }`}
+                                                className={`focus:outline-none w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.payment?.expiryDate ? 'border-red-500' : 'border-gray-300'}`}
                                             />
                                             {errors.payment?.expiryDate && (
                                                 <p className="mt-1 text-sm text-red-600">{errors.payment.expiryDate}</p>
@@ -674,8 +567,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                 value={paymentInfo.cvv}
                                                 onChange={handlePaymentInfoChange}
                                                 placeholder="123"
-                                                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.payment?.cvv ? 'border-red-500' : 'border-gray-300'
-                                                    }`}
+                                                className={`focus:outline-none w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.payment?.cvv ? 'border-red-500' : 'border-gray-300'}`}
                                             />
                                             {errors.payment?.cvv && (
                                                 <p className="mt-1 text-sm text-red-600">{errors.payment.cvv}</p>
@@ -684,137 +576,147 @@ const Checkout: React.FC<CheckoutProps> = ({
                                     </div>
                                 </div>
                             </div>
+                        )}
 
-
-                            {/* Billing Address */}
-                            <div className="bg-white rounded-lg shadow-sm p-6">
-                                <h2 className="text-xl font-semibold text-gray-900 mb-6">Billing Address</h2>
-                                <div className="mb-6">
-                                    <label className="flex items-center space-x-2">
-                                        <input
-                                            type="checkbox"
-                                            checked={useSameAddress}
-                                            onChange={handleUseSameAddressChange}
-                                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                        />
-                                        <span className="text-sm font-medium text-gray-700">Same as account information</span>
-                                    </label>
+                        {currentStep === 3 && (
+                            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                                {/* Billing Address Section */}
+                                <div className="px-6 py-4 border-b border-gray-200">
+                                    <h2 className="text-xl font-semibold text-gray-900">Billing Address</h2>
                                 </div>
-                                {!useSameAddress && (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div>
-                                            <label htmlFor="billingCountry" className="block text-sm font-medium text-gray-700 mb-1">
-                                                Country
-                                            </label>
-                                            <select
-                                                id="billingCountry"
-                                                name="country"
-                                                value={billingAddress.country}
-                                                onChange={handleBillingAddressChange}
-                                                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.country ? 'border-red-500' : 'border-gray-300'
-                                                    }`}
-                                            >
-                                                <option value="">Select a country</option>
-                                                {countryOptions.map(({ code, name }) => (
-                                                    <option key={code} value={code}>
-                                                        {name}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            {errors.billingAddress?.country && (
-                                                <p className="mt-1 text-sm text-red-600">{errors.billingAddress.country}</p>
-                                            )}
-                                        </div>
-                                        <div className="md:col-span-2">
-                                            <label htmlFor="billingAddress" className="block text-sm font-medium text-gray-700 mb-1">
-                                                Address
-                                            </label>
+                                <div className="p-6">
+                                    <div className="mb-6">
+                                        <label className="flex items-center space-x-2">
                                             <input
-                                                type="text"
-                                                id="billingAddress"
-                                                name="address"
-                                                value={billingAddress.address}
-                                                onChange={handleBillingAddressChange}
-                                                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.address ? 'border-red-500' : 'border-gray-300'
-                                                    }`}
+                                                type="checkbox"
+                                                checked={useSameAddress}
+                                                onChange={handleUseSameAddressChange}
+                                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                             />
-                                            {errors.billingAddress?.address && (
-                                                <p className="mt-1 text-sm text-red-600">{errors.billingAddress.address}</p>
-                                            )}
-                                        </div>
-                                        <div className="md:col-span-2">
-                                            <label htmlFor="billingAddress2" className="block text-sm font-medium text-gray-700 mb-1">
-                                                Address Line 2 (Optional)
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="billingAddress2"
-                                                name="address2"
-                                                value={billingAddress.address2}
-                                                onChange={handleBillingAddressChange}
-                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="billingCity" className="block text-sm font-medium text-gray-700 mb-1">
-                                                City
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="billingCity"
-                                                name="city"
-                                                value={billingAddress.city}
-                                                onChange={handleBillingAddressChange}
-                                                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.city ? 'border-red-500' : 'border-gray-300'
-                                                    }`}
-                                            />
-                                            {errors.billingAddress?.city && (
-                                                <p className="mt-1 text-sm text-red-600">{errors.billingAddress.city}</p>
-                                            )}
-                                        </div>
-                                        <div>
-                                            <label htmlFor="billingState" className="block text-sm font-medium text-gray-700 mb-1">
-                                                State/Province/Region
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="billingState"
-                                                name="state"
-                                                value={billingAddress.state}
-                                                onChange={handleBillingAddressChange}
-                                                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.state ? 'border-red-500' : 'border-gray-300'
-                                                    }`}
-                                            />
-                                            {errors.billingAddress?.state && (
-                                                <p className="mt-1 text-sm text-red-600">{errors.billingAddress.state}</p>
-                                            )}
-                                        </div>
-                                        <div>
-                                            <label htmlFor="billingZipCode" className="block text-sm font-medium text-gray-700 mb-1">
-                                                ZIP/Postal Code
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="billingZipCode"
-                                                name="zipCode"
-                                                value={billingAddress.zipCode}
-                                                onChange={handleBillingAddressChange}
-                                                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.zipCode ? 'border-red-500' : 'border-gray-300'
-                                                    }`}
-                                            />
-                                            {errors.billingAddress?.zipCode && (
-                                                <p className="mt-1 text-sm text-red-600">{errors.billingAddress.zipCode}</p>
-                                            )}
-                                        </div>
+                                            <span className="text-sm font-medium text-gray-700">Use same address as account information</span>
+                                        </label>
                                     </div>
-                                )}
-                            </div>
-                        </div>
 
-                        {/* Order Summary */}
-                        <div className="lg:col-span-1">
-                            <div className="bg-white rounded-lg shadow-sm p-6 sticky top-8">
-                                <h2 className="text-xl font-semibold text-gray-900 mb-6">Order Summary</h2>
+                                    {!useSameAddress && (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div>
+                                                <label htmlFor="billingCountry" className="block text-sm font-medium text-gray-700 mb-1">
+                                                    Country
+                                                </label>
+                                                <select
+                                                    id="billingCountry"
+                                                    name="country"
+                                                    value={billingAddress.country}
+                                                    onChange={handleBillingAddressChange}
+                                                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.country ? 'border-red-500' : 'border-gray-300'
+                                                        }`}
+                                                >
+                                                    <option value="">Select a country</option>
+                                                    {countryOptions.map(({ code, name }) => (
+                                                        <option key={code} value={code}>
+                                                            {name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                {errors.billingAddress?.country && (
+                                                    <p className="mt-1 text-sm text-red-600">{errors.billingAddress.country}</p>
+                                                )}
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <label htmlFor="billingAddress" className="block text-sm font-medium text-gray-700 mb-1">
+                                                    Address
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="billingAddress"
+                                                    name="address"
+                                                    value={billingAddress.address}
+                                                    onChange={handleBillingAddressChange}
+                                                    className={`focus:outline-none w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.address ? 'border-red-500' : 'border-gray-300'
+                                                        }`}
+                                                />
+                                                {errors.billingAddress?.address && (
+                                                    <p className="mt-1 text-sm text-red-600">{errors.billingAddress.address}</p>
+                                                )}
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <label htmlFor="billingAddress2" className="block text-sm font-medium text-gray-700 mb-1">
+                                                    Address Line 2 (Optional)
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="billingAddress2"
+                                                    name="address2"
+                                                    value={billingAddress.address2}
+                                                    onChange={handleBillingAddressChange}
+                                                    className="focus:outline-none w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label htmlFor="billingCity" className="block text-sm font-medium text-gray-700 mb-1">
+                                                    City
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="billingCity"
+                                                    name="city"
+                                                    value={billingAddress.city}
+                                                    onChange={handleBillingAddressChange}
+                                                    className={`focus:outline-none w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.city ? 'border-red-500' : 'border-gray-300'
+                                                        }`}
+                                                />
+                                                {errors.billingAddress?.city && (
+                                                    <p className="mt-1 text-sm text-red-600">{errors.billingAddress.city}</p>
+                                                )}
+                                            </div>
+                                            <div>
+                                                <label htmlFor="billingState" className="block text-sm font-medium text-gray-700 mb-1">
+                                                    State/Province/Region
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="billingState"
+                                                    name="state"
+                                                    value={billingAddress.state}
+                                                    onChange={handleBillingAddressChange}
+                                                    className={`focus:outline-none w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.state ? 'border-red-500' : 'border-gray-300'
+                                                        }`}
+                                                />
+                                                {errors.billingAddress?.state && (
+                                                    <p className="mt-1 text-sm text-red-600">{errors.billingAddress.state}</p>
+                                                )}
+                                            </div>
+                                            <div>
+                                                <label htmlFor="billingZipCode" className="block text-sm font-medium text-gray-700 mb-1">
+                                                    ZIP/Postal Code
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="billingZipCode"
+                                                    name="zipCode"
+                                                    value={billingAddress.zipCode}
+                                                    onChange={handleBillingAddressChange}
+                                                    className={`focus:outline-none w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.zipCode ? 'border-red-500' : 'border-gray-300'
+                                                        }`}
+                                                />
+                                                {errors.billingAddress?.zipCode && (
+                                                    <p className="mt-1 text-sm text-red-600">{errors.billingAddress.zipCode}</p>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Order Summary - Right Side */}
+                    <div className="lg:col-span-4">
+                        <div className="bg-white rounded-xl shadow-sm overflow-hidden sticky top-8">
+                            <div className="px-6 py-4 border-b border-gray-200">
+                                <h2 className="text-xl font-semibold text-gray-900">Order Summary</h2>
+                            </div>
+                            <div className="p-6 space-y-6">
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center">
                                         <span className="text-gray-600">Plan</span>
@@ -828,72 +730,91 @@ const Checkout: React.FC<CheckoutProps> = ({
                                         <span className="text-gray-600">Price</span>
                                         <span className="font-medium text-gray-900">{getPlanPrice()}</span>
                                     </div>
-                                    {(isAnnual || discount > 0) && (
-                                        <div className="flex justify-between items-center text-green-600">
-                                            <span>Total Savings</span>
-                                            <span>{getTotalSavings()}</span>
+                                </div>
+
+                                {(isAnnual || discount > 0) && (
+                                    <div className="flex justify-between items-center text-green-600 bg-green-50 p-3 rounded-lg">
+                                        <span>Total Savings</span>
+                                        <span className="font-medium">{getTotalSavings()}</span>
+                                    </div>
+                                )}
+
+                                <div className="border-t border-gray-200 pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPromoInput(!showPromoInput)}
+                                        className="focus:outline-none text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center"
+                                    >
+                                        {showPromoInput ? 'Hide Promo Code' : 'Add Promo Code'}
+                                        <svg
+                                            className={`ml-1 h-4 w-4 transform transition-transform ${showPromoInput ? 'rotate-180' : ''}`}
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                        >
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </button>
+                                    {showPromoInput && (
+                                        <div className="mt-3">
+                                            <div className="flex gap-2">
+                                                <input
+                                                    type="text"
+                                                    value={promoCode}
+                                                    onChange={handlePromoCodeChange}
+                                                    placeholder="Enter promo code"
+                                                    className="focus:outline-none flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={handleApplyPromo}
+                                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                                >
+                                                    Apply
+                                                </button>
+                                            </div>
+                                            {promoError && (
+                                                <p className="mt-1 text-sm text-red-600">{promoError}</p>
+                                            )}
+                                            {promoSuccess && (
+                                                <p className="mt-1 text-sm text-green-600">{promoSuccess}</p>
+                                            )}
                                         </div>
                                     )}
-                                    <div className="border-t border-gray-200 pt-4">
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowPromoInput(!showPromoInput)}
-                                            className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center"
-                                        >
-                                            {showPromoInput ? 'Hide Promo Code' : 'Add Promo Code'}
-                                            <svg
-                                                className={`ml-1 h-4 w-4 transform transition-transform ${showPromoInput ? 'rotate-180' : ''}`}
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                            </svg>
-                                        </button>
-                                        {showPromoInput && (
-                                            <div className="mt-2">
-                                                <div className="flex gap-2">
-                                                    <input
-                                                        type="text"
-                                                        value={promoCode}
-                                                        onChange={handlePromoCodeChange}
-                                                        placeholder="Enter promo code"
-                                                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        onClick={handleApplyPromo}
-                                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                                    >
-                                                        Apply
-                                                    </button>
-                                                </div>
-                                                {promoError && (
-                                                    <p className="mt-1 text-sm text-red-600">{promoError}</p>
-                                                )}
-                                                {promoSuccess && (
-                                                    <p className="mt-1 text-sm text-green-600">{promoSuccess}</p>
-                                                )}
-                                            </div>
-                                        )}
+                                </div>
+
+                                <div className="border-t border-gray-200 pt-4">
+                                    <div className="flex justify-between items-center mb-6">
+                                        <span className="text-lg font-semibold text-gray-900">Final Total Amount</span>
+                                        <span className="text-2xl font-bold text-gray-900">{getTotalPrice()}</span>
                                     </div>
-                                    <div className="border-t border-gray-200 pt-4 mt-4">
-                                        <div className="flex justify-between items-center">
-                                            <span className="text-lg font-semibold text-gray-900">Total</span>
-                                            <span className="text-lg font-semibold text-gray-900">{getTotalPrice()}</span>
+                                    <div className="space-y-3">
+                                        <div className="flex gap-3">
+                                            {currentStep > 1 && (
+                                                <button
+                                                    type="button"
+                                                    onClick={handleBackStep}
+                                                    className="w-full py-3.5 px-4 rounded-lg font-semibold text-base bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 shadow-sm"
+                                                >
+                                                    Back
+                                                </button>
+                                            )}
+                                            <button
+                                                type="submit"
+                                                className="w-full py-3.5 px-4 rounded-lg font-semibold text-base bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-700 hover:to-blue-600 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm"
+                                            >
+                                                {currentStep < 3 ? 'Continue' : 'Activate'}
+                                            </button>
                                         </div>
                                     </div>
-                                    <button
-                                        type="submit"
-                                        className="w-full py-3 px-4 rounded-lg font-semibold text-base bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-700 hover:to-blue-600 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                    >
-                                        Complete Purchase
-                                    </button>
+                                    <p className="mt-3 text-xs text-center text-gray-500">
+                                        By completing your purchase, you agree to our Terms of Service and Privacy Policy
+                                    </p>
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     );
