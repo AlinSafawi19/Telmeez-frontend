@@ -77,8 +77,11 @@ button:focus-visible {
 /* For RTL phone input */
 [dir="rtl"] .flag-dropdown {
   direction: rtl;
-  border-top-left-radius: 0.75rem !important;
-  border-bottom-left-radius: 0.75rem !important;
+}
+
+.flag-dropdown {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }

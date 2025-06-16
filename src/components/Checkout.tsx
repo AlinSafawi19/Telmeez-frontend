@@ -80,6 +80,149 @@ const Checkout: React.FC<CheckoutProps> = ({
         { value: 'other', label: t.checkout.account_info.fields.other_country }
     ];
 
+    // Initialize all state with saved values if available
+    const [currentStep, setCurrentStep] = useState(() => {
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+        if (hasConsent) {
+            const savedStep = localStorage.getItem('checkoutCurrentStep');
+            return savedStep ? parseInt(savedStep) : 1;
+        }
+        return 1;
+    });
+
+    const [billingInfo, setBillingInfo] = useState<BillingInfo>(() => {
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+        if (hasConsent) {
+            const savedBillingInfo = localStorage.getItem('checkoutBillingInfo');
+            return savedBillingInfo ? JSON.parse(savedBillingInfo) : {
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: '',
+                institutionName: '',
+                address: '',
+                address2: '',
+                city: '',
+                state: '',
+                zipCode: '',
+                country: 'lebanon',
+                password: '',
+                confirmPassword: '',
+                customCountry: ''
+            };
+        }
+        return {
+            firstName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            institutionName: '',
+            address: '',
+            address2: '',
+            city: '',
+            state: '',
+            zipCode: '',
+            country: 'lebanon',
+            password: '',
+            confirmPassword: '',
+            customCountry: ''
+        };
+    });
+
+    const [billingAddress, setBillingAddress] = useState<BillingAddress>(() => {
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+        if (hasConsent) {
+            const savedBillingAddress = localStorage.getItem('checkoutBillingAddress');
+            return savedBillingAddress ? JSON.parse(savedBillingAddress) : {
+                address: '',
+                address2: '',
+                city: '',
+                state: '',
+                zipCode: '',
+                country: 'lebanon',
+                customCountry: ''
+            };
+        }
+        return {
+            address: '',
+            address2: '',
+            city: '',
+            state: '',
+            zipCode: '',
+            country: 'lebanon',
+            customCountry: ''
+        };
+    });
+
+    const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>(() => {
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+        if (hasConsent) {
+            const savedPaymentInfo = localStorage.getItem('checkoutPaymentInfo');
+            return savedPaymentInfo ? JSON.parse(savedPaymentInfo) : {
+                cardNumber: '',
+                expiryDate: '',
+                cvv: ''
+            };
+        }
+        return {
+            cardNumber: '',
+            expiryDate: '',
+            cvv: ''
+        };
+    });
+
+    const [useSameAddress, setUseSameAddress] = useState(() => {
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+        if (hasConsent) {
+            const savedUseSameAddress = localStorage.getItem('checkoutUseSameAddress');
+            return savedUseSameAddress ? JSON.parse(savedUseSameAddress) : true;
+        }
+        return true;
+    });
+
+    const [showCustomCountryInput, setShowCustomCountryInput] = useState(false);
+    const [showBillingCustomCountryInput, setShowBillingCustomCountryInput] = useState(false);
+    const [promoCode, setPromoCode] = useState('');
+    const [showPromoInput, setShowPromoInput] = useState(false);
+    const [promoError, setPromoError] = useState('');
+    const [discount, setDiscount] = useState(0);
+    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
+
+    const [errors, setErrors] = useState<{
+        billing?: Partial<Record<keyof BillingInfo, string>>;
+        billingAddress?: Partial<Record<keyof BillingAddress, string>>;
+        payment?: Partial<Record<keyof PaymentInfo, string>>;
+    }>({});
+
+    // Save form data to cookies when it changes
+    useEffect(() => {
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+
+        if (hasConsent) {
+            localStorage.setItem('checkoutBillingInfo', JSON.stringify(billingInfo));
+            localStorage.setItem('checkoutBillingAddress', JSON.stringify(billingAddress));
+            localStorage.setItem('checkoutPaymentInfo', JSON.stringify(paymentInfo));
+            localStorage.setItem('checkoutCurrentStep', currentStep.toString());
+            localStorage.setItem('checkoutUseSameAddress', JSON.stringify(useSameAddress));
+        }
+    }, [billingInfo, billingAddress, paymentInfo, currentStep, useSameAddress]);
+
+    // Set up custom country input visibility based on saved data
+    useEffect(() => {
+        if (billingInfo.country === 'other') {
+            setShowCustomCountryInput(true);
+        }
+        if (billingAddress.country === 'other') {
+            setShowBillingCustomCountryInput(true);
+        }
+    }, []);
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -107,48 +250,6 @@ const Checkout: React.FC<CheckoutProps> = ({
         setIsLanguageDropdownOpen(false);
     };
 
-    const [currentStep, setCurrentStep] = useState(1);
-    const [billingInfo, setBillingInfo] = useState<BillingInfo>({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        institutionName: '',
-        address: '',
-        address2: '',
-        city: '',
-        state: '',
-        zipCode: '',
-        country: 'lebanon',
-        password: '',
-        confirmPassword: '',
-        customCountry: ''
-    });
-
-    const [billingAddress, setBillingAddress] = useState<BillingAddress>({
-        address: '',
-        address2: '',
-        city: '',
-        state: '',
-        zipCode: '',
-        country: 'lebanon',
-        customCountry: ''
-    });
-
-    const [useSameAddress, setUseSameAddress] = useState(true);
-
-    const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
-        cardNumber: '',
-        expiryDate: '',
-        cvv: ''
-    });
-
-    const [errors, setErrors] = useState<{
-        billing?: Partial<Record<keyof BillingInfo, string>>;
-        billingAddress?: Partial<Record<keyof BillingAddress, string>>;
-        payment?: Partial<Record<keyof PaymentInfo, string>>;
-    }>({});
-
     const getErrorMessage = (errorKey: string) => {
         switch (errorKey) {
             case 'required':
@@ -169,16 +270,6 @@ const Checkout: React.FC<CheckoutProps> = ({
                 return errorKey;
         }
     };
-
-    const [promoCode, setPromoCode] = useState('');
-    const [showPromoInput, setShowPromoInput] = useState(false);
-    const [promoError, setPromoError] = useState('');
-    const [discount, setDiscount] = useState(0);
-
-    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
-
-    const [showCustomCountryInput, setShowCustomCountryInput] = useState(false);
-    const [showBillingCustomCountryInput, setShowBillingCustomCountryInput] = useState(false);
 
     useEffect(() => {
         // Update billing errors
@@ -614,6 +705,12 @@ const Checkout: React.FC<CheckoutProps> = ({
                 billingAddress: undefined
             }));
 
+            // Clear saved form data
+            localStorage.removeItem('checkoutBillingInfo');
+            localStorage.removeItem('checkoutBillingAddress');
+            localStorage.removeItem('checkoutPaymentInfo');
+            localStorage.removeItem('checkoutCurrentStep');
+
             // Handle final submission
             console.log('Form submitted:', { billingInfo, paymentInfo, billingAddress });
             // Navigate to success page or handle the submission
@@ -643,7 +740,7 @@ const Checkout: React.FC<CheckoutProps> = ({
         if (isAnnual) {
             // Calculate annual savings (20% off annual price)
             annualSavings = annualPrice * 0.20;
-            
+
             // Calculate promo code savings on the discounted annual price
             if (discount > 0) {
                 const discountedAnnualPrice = annualPrice * 0.80; // Price after annual discount
@@ -767,6 +864,36 @@ const Checkout: React.FC<CheckoutProps> = ({
             color: '#6B7280'
         })
     };
+
+    // Load saved form data from cookies if available
+    useEffect(() => {
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+
+        if (hasConsent) {
+            const savedBillingInfo = localStorage.getItem('checkoutBillingInfo');
+            const savedBillingAddress = localStorage.getItem('checkoutBillingAddress');
+            const savedPaymentInfo = localStorage.getItem('checkoutPaymentInfo');
+            const savedCurrentStep = localStorage.getItem('checkoutCurrentStep');
+            const savedUseSameAddress = localStorage.getItem('checkoutUseSameAddress');
+
+            if (savedBillingInfo) {
+                setBillingInfo(JSON.parse(savedBillingInfo));
+            }
+            if (savedBillingAddress) {
+                setBillingAddress(JSON.parse(savedBillingAddress));
+            }
+            if (savedPaymentInfo) {
+                setPaymentInfo(JSON.parse(savedPaymentInfo));
+            }
+            if (savedCurrentStep) {
+                setCurrentStep(parseInt(savedCurrentStep));
+            }
+            if (savedUseSameAddress) {
+                setUseSameAddress(JSON.parse(savedUseSameAddress));
+            }
+        }
+    }, []);
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" dir={isRTL ? 'rtl' : 'ltr'}>
@@ -1537,7 +1664,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     onChange={handlePromoCodeChange}
                                                     placeholder={t.checkout.summary.add_promo_placeholder}
                                                     className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.billingAddress?.zipCode ? 'border-red-500' : 'border-gray-300'
-                                                    }`}                                                />
+                                                        }`} />
                                                 <button
                                                     type="button"
                                                     onClick={handleApplyPromo}
