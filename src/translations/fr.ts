@@ -743,5 +743,9 @@ export const fr = {
         yemen: "Yémen",
         zambia: "Zambie",
         zimbabwe: "Zimbabwe"
+    },
+    comingSoon: {
+        title: "Bientôt Disponible",
+        description: "Telmeez est une plateforme éducative de nouvelle génération qui transforme l'apprentissage grâce à une communication fluide, des analyses intelligentes et une expérience intuitive pour les écoles, enseignants et étudiants. Soyez parmi les premiers à découvrir le futur de l'éducation."
     }
 };

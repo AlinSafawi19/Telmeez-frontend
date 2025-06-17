@@ -743,5 +743,9 @@ export const en = {
         yemen: "Yemen",
         zambia: "Zambia",
         zimbabwe: "Zimbabwe"
+    },
+    comingSoon: {
+        title: "Coming Soon",
+        description: "Telmeez is a next-gen platform transforming education with seamless communication, smart analytics, and an intuitive experience for schools, educators, and students. Be the first to experience the future of learning."
     }
 }; 

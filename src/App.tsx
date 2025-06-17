@@ -2,7 +2,7 @@
 //import axios from "axios";
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Landing from "./components/Landing";
+import ComingSoon from "./components/ComingSoon";
 import SignIn from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
 import SuperAdminDashboard from "./pages/demo-dashboard/SuperAdminDashboard";
@@ -13,6 +13,7 @@ import ParentDashboard from "./pages/demo-dashboard/ParentDashboard";
 import Checkout from './components/Checkout';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { CookieConsentProvider } from './contexts/CookieConsentContext';
+import Landing from './components/Landing';
 
 const App: React.FC = () => {
   //const [apiMessage, setApiMessage] = useState("");
@@ -31,7 +32,8 @@ const App: React.FC = () => {
             API says: {apiMessage}
           </div> */}
           <Routes>
-            <Route path="/" element={<Landing />} />
+            <Route path="/" element={<ComingSoon />} />
+            <Route path="/home" element={<Landing />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/checkout" element={<Checkout />} />
