@@ -1,0 +1,28 @@
+name: Deploy to HostGator via FTP
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  ftp-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: ftp.yourdomain.com
+          username: your-ftp-username
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: build
+          server-dir: public_html/
