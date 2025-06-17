@@ -2,6 +2,7 @@
 //import axios from "axios";
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ComingSoon from "./components/ComingSoon";
 import SignIn from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
 import SuperAdminDashboard from "./pages/demo-dashboard/SuperAdminDashboard";
@@ -31,7 +32,8 @@ const App: React.FC = () => {
             API says: {apiMessage}
           </div> */}
           <Routes>
-            <Route path="/" element={<Landing />} />
+            <Route path="/" element={<ComingSoon />} />
+            <Route path="/home" element={<Landing />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/checkout" element={<Checkout />} />
