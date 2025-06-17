@@ -184,22 +184,13 @@ export const fr = {
         press: {
             title: "Presse & Actualités",
             description: "Restez informé des dernières nouvelles et annonces de Telmeez.",
-            whish_integration: {
-                title: "Telmeez Lance l'Intégration des Paiements Whish Money",
-                date: "Mars 2026",
-                source: "Annonce Officielle Telmeez",
-                description: "Telmeez est ravi d'annoncer l'intégration de Whish Money comme nouvelle méthode de paiement. Ce partenariat améliore nos options de paiement, offrant aux utilisateurs un moyen fluide et sécurisé de finaliser leurs transactions via la plateforme populaire Whish Money. L'intégration prend en charge les comptes personnels et professionnels, facilitant ainsi la gestion des paiements pour nos clients.",
-                new_feature: "Nouvelle Fonctionnalité",
-                payment_integration: "Intégration de Paiement"
-            },
-            mobile_app: {
-                title: "L'Application Mobile Telmeez est Maintenant Disponible",
-                date: "Avril 2026",
-                source: "Mise à Jour Produit Telmeez",
-                description: "Nous sommes ravis d'annoncer le lancement de notre application mobile, apportant les puissantes fonctionnalités de gestion de l'éducation de Telmeez au bout de vos doigts. L'application offre un accès fluide à toutes les fonctionnalités de la plateforme, y compris les notifications en temps réel, le suivi des présences et la communication instantanée entre les administrateurs, les enseignants, les parents et les étudiants.",
-                new_feature: "Application Mobile",
-                platform_update: "Mise à Jour de la Plateforme"
-            }
+            announcements: [
+                {
+                    title: "Tableaux de Bord Interactifs et Vidéos Démo Bientôt Disponibles",
+                    description: "Nous sommes ravis d'annoncer le lancement prochain de nos tableaux de bord interactifs et de nos vidéos démo complètes. Ces nouvelles fonctionnalités vous aideront à mieux comprendre et utiliser les capacités de notre plateforme.",
+                    date: "Mars 2024"
+                }
+            ]
         }
     },
     cta: {

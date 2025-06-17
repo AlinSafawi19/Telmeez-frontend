@@ -3,6 +3,18 @@ import { motion } from 'framer-motion';
 import { translations } from '../translations';
 import type { Language } from '../translations';
 
+interface Announcement {
+    title: string;
+    description: string;
+    date: string;
+}
+
+interface PressSection {
+    title: string;
+    description: string;
+    announcements?: Announcement[];
+}
+
 interface AboutProps {
     language?: Language;
 }
@@ -95,52 +107,19 @@ const About: React.FC<AboutProps> = ({ language = 'en' }) => {
                         </motion.button>
                     </motion.div>
                     <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            className="bg-white p-8 rounded-xl shadow-lg transition-all duration-300 border border-gray-100 group hover:shadow-xl"
-                        >
-                            <div className="flex justify-between items-start mb-4">
-                                <h3 className="text-xl font-semibold text-gray-800">{t.press.whish_integration.title}</h3>
-                                <span className="text-gray-500 text-sm bg-gray-50 px-3 py-1 w-fit rounded-full whitespace-nowrap">
-                                    {t.press.whish_integration.date}
-                                </span>
-                            </div>
-                            <p className="text-blue-600 font-medium mb-4">{t.press.whish_integration.source}</p>
-                            <p className="text-gray-600 mb-6">{t.press.whish_integration.description}</p>
-                            <div className="flex items-center space-x-2">
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    {t.press.whish_integration.new_feature}
-                                </span>
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    {t.press.whish_integration.payment_integration}
-                                </span>
-                            </div>
-                        </motion.div>
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.4 }}
-                            className="bg-white p-8 rounded-xl shadow-lg transition-all duration-300 border border-gray-100 group hover:shadow-xl"
-                        >
-                            <div className="flex justify-between items-start mb-4">
-                                <h3 className="text-xl font-semibold text-gray-800">{t.press.mobile_app.title}</h3>
-                                <span className="text-gray-500 text-sm bg-gray-50 px-3 py-1 w-fit rounded-full whitespace-nowrap">
-                                    {t.press.mobile_app.date}
-                                </span>
-                            </div>
-                            <p className="text-blue-600 font-medium mb-4">{t.press.mobile_app.source}</p>
-                            <p className="text-gray-600 mb-6">{t.press.mobile_app.description}</p>
-                            <div className="flex items-center space-x-2">
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    {t.press.mobile_app.new_feature}
-                                </span>
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    {t.press.mobile_app.platform_update}
-                                </span>
-                            </div>
-                        </motion.div>
+                        {(t.press as PressSection).announcements?.map((announcement: Announcement, index: number) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: index * 0.2 }}
+                                className="bg-white p-8 rounded-xl shadow-lg transition-all duration-300 border border-gray-100"
+                            >
+                                <div className="text-blue-600 text-sm font-semibold mb-2">{announcement.date}</div>
+                                <h3 className="text-2xl font-semibold mb-4 text-gray-800">{announcement.title}</h3>
+                                <p className="text-gray-600 leading-relaxed">{announcement.description}</p>
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
             </section>
