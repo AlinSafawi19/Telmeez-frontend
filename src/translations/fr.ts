@@ -736,7 +736,10 @@ export const fr = {
         zimbabwe: "Zimbabwe"
     },
     comingSoon: {
-        title: "Bientôt Disponible",
-        description: "Telmeez est une plateforme éducative intelligente qui connecte écoles, enseignants, élèves et parents en un seul endroit."
-    }
+        title: "Bientôt Disponible"
+    },
+    days: "jours",
+    hours: "heures",
+    minutes: "minutes",
+    seconds: "secondes"
 };

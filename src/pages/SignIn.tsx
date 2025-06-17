@@ -108,7 +108,7 @@ const SignIn: React.FC = () => {
     };
 
     const handleCreateAccount = () => {
-        navigate('/');
+        navigate('/home');
         // Use setTimeout to ensure the navigation completes before scrolling
         setTimeout(() => {
             const pricingSection = document.querySelector('[data-section="pricing"]');
@@ -164,8 +164,8 @@ const SignIn: React.FC = () => {
                                     )}
                                 </div>
                                 <button
-                                    onClick={() => navigate('/')}
-                                    className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-full hover:bg-indigo-50"
+                                    onClick={() => navigate('/home')}
+                                    className="flex focus:outline-none items-center gap-2 px-4 py-2 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-full hover:bg-indigo-50"
                                     aria-label="Back to sign in"
                                 >
                                     <FaHome className="w-5 h-5" />

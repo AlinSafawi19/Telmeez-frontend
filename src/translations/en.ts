@@ -736,7 +736,10 @@ export const en = {
         zimbabwe: "Zimbabwe"
     },
     comingSoon: {
-        title: "Coming Soon",
-        description: "Telmeez is a smart educational platform that connects schools, teachers, students, and parents — all in one place."
-    }
+        title: "Coming Soon"
+    },
+    days: "days",
+    hours: "hours",
+    minutes: "minutes",
+    seconds: "seconds"
 }; 
