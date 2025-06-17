@@ -21,8 +21,8 @@ jobs:
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4
         with:
-          server: ftp.yourdomain.com
-          username: your-ftp-username
+          server: ftp.telmeezlb.com
+          username: telmeez-deploy@telmeezlb.com
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: build
+          local-dir: dist
           server-dir: public_html/
