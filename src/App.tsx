@@ -32,8 +32,8 @@ const App: React.FC = () => {
             API says: {apiMessage}
           </div> */}
           <Routes>
-            <Route path="/" element={<ComingSoon />} />
-            <Route path="/home" element={<Landing />} />
+            <Route path="/coming-soon" element={<ComingSoon />} />
+            <Route path="/" element={<Landing />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/checkout" element={<Checkout />} />
