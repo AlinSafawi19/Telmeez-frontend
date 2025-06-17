@@ -106,6 +106,9 @@ const ComingSoon: React.FC = () => {
                         <h1 className="text-6xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">
                             {t.comingSoon?.title}
                         </h1>
+                        <p className="text-lg text-gray-600 dark:text-gray-300 mb-4">
+                            {t.comingSoon?.description}
+                        </p>
                         <div className="w-24 h-1 bg-indigo-400 mx-auto rounded-full"></div>
                     </motion.div>
 
@@ -115,9 +118,9 @@ const ComingSoon: React.FC = () => {
                         transition={{ duration: 0.6, delay: 0.3 }}
                         className="mb-8"
                     >
-                        <img 
-                            src={comingsoon} 
-                            alt="Coming Soon Illustration" 
+                        <img
+                            src={comingsoon}
+                            alt="Coming Soon Illustration"
                             className="max-w-md mx-auto w-full h-auto"
                         />
                     </motion.div>

@@ -737,6 +737,6 @@ export const en = {
     },
     comingSoon: {
         title: "Coming Soon",
-        description: "Telmeez is a next-gen platform transforming education with seamless communication, smart analytics, and an intuitive experience for schools, educators, and students. Be the first to experience the future of learning."
+        description: "Telmeez is a smart educational platform that connects schools, teachers, students, and parents — all in one place."
     }
 }; 
