@@ -121,15 +121,6 @@ const ComingSoon: React.FC = () => {
                             className="max-w-md mx-auto w-full h-auto"
                         />
                     </motion.div>
-
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.4 }}
-                        className="text-xl text-gray-600 dark:text-gray-300 mb-12 max-w-2xl mx-auto"
-                    >
-                        {t.comingSoon?.description}
-                    </motion.p>
                 </motion.div>
             </div>
 
