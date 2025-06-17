@@ -115,12 +115,21 @@ const ComingSoon: React.FC = () => {
                         transition={{ duration: 0.6, delay: 0.3 }}
                         className="mb-8"
                     >
-                        <img
-                            src={comingsoon}
-                            alt="Coming Soon Illustration"
+                        <img 
+                            src={comingsoon} 
+                            alt="Coming Soon Illustration" 
                             className="max-w-md mx-auto w-full h-auto"
                         />
                     </motion.div>
+
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
+                        className="text-xl text-gray-600 dark:text-gray-300 mb-12 max-w-2xl mx-auto"
+                    >
+                        {t.comingSoon?.description}
+                    </motion.p>
                 </motion.div>
             </div>
 
