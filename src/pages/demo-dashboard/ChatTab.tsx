@@ -128,8 +128,8 @@ const ChatTab: React.FC = () => {
                 </div>
 
                 {/* Admin List */}
-                <div className="flex-1 overflow-y-auto p-2 chat-scrollbar" style={{ maxHeight: 'calc(100vh - 200px)' }}>
-                    {filteredAdmins.map((admin, index) => {
+                <div className="flex-1 overflow-y-auto p-2 chat-scrollbar max-h-screen">
+                    {filteredAdmins.map((admin) => {
                         const adminFullName = `${admin.firstName} ${admin.lastName}`;
                         const unreadCount = messages.filter(message => 
                             message.sender === 'admin' && 
@@ -152,7 +152,6 @@ const ChatTab: React.FC = () => {
                                         ? 'bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-200/50 shadow-lg' 
                                         : 'hover:bg-white/50 border border-transparent'
                                 }`}
-                                style={{ animationDelay: `${index * 0.1}s` }}
                             >
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center flex-1 min-w-0">
@@ -248,7 +247,7 @@ const ChatTab: React.FC = () => {
                         </div>
 
                         {/* Messages */}
-                        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-50/30 to-white/50 chat-scrollbar" style={{ maxHeight: 'calc(100vh - 350px)' }}>
+                        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-50/30 to-white/50 chat-scrollbar max-h-screen">
                             {selectedAdminMessages.map((message, index) => {
                                 const isFirstUnread = !message.read && 
                                     (index === 0 || selectedAdminMessages[index - 1].read);
@@ -345,8 +344,7 @@ const ChatTab: React.FC = () => {
                                             value={newMessage}
                                             onChange={(e) => setNewMessage(e.target.value)}
                                             placeholder="Type your message..."
-                                            className="w-full rounded-2xl border border-gray-200/50 px-6 py-4 pr-24 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent transition-all duration-300 bg-white/90 backdrop-blur-sm shadow-sm"
-                                            style={{ minHeight: '56px' }}
+                                            className="w-full rounded-2xl border border-gray-200/50 px-6 py-4 pr-24 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent transition-all duration-300 bg-white/90 backdrop-blur-sm shadow-sm min-h-[56px]"
                                         />
                                         <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
                                             <button
@@ -398,10 +396,10 @@ const ChatTab: React.FC = () => {
                                 <div className="p-3 rounded-full bg-gradient-to-r from-indigo-100 to-purple-100 animate-pulse">
                                     <FaSearch className="h-5 w-5 text-indigo-600" />
                                 </div>
-                                <div className="p-3 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 animate-pulse" style={{ animationDelay: '0.5s' }}>
+                                <div className="p-3 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 animate-pulse animation-delay-500">
                                     <FaUser className="h-5 w-5 text-purple-600" />
                                 </div>
-                                <div className="p-3 rounded-full bg-gradient-to-r from-pink-100 to-red-100 animate-pulse" style={{ animationDelay: '1s' }}>
+                                <div className="p-3 rounded-full bg-gradient-to-r from-pink-100 to-red-100 animate-pulse animation-delay-1000">
                                     <FaPaperPlane className="h-5 w-5 text-pink-600" />
                                 </div>
                             </div>

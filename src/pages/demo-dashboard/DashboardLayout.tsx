@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaBell, FaEnvelope, FaCog, FaUser, FaChevronDown, FaCreditCard, FaExclamationTriangle, FaInfoCircle, FaCog as FaSettings, FaCheckCircle, FaComments, FaRobot, FaSearch, FaPaperPlane, FaCheck, FaCheckDouble, FaPhone, FaVideo, FaEllipsisV, FaSmile, FaPaperclip, FaMicrophone } from 'react-icons/fa';
+import { FaBell, FaEnvelope, FaCog, FaUser, FaChevronDown, FaCreditCard, FaComments, FaSearch, FaPaperPlane, FaCheck, FaCheckDouble, FaPhone, FaVideo, FaEllipsisV, FaSmile, FaPaperclip, FaMicrophone } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import logo from '../../assets/images/logo.png';
 import logoarb from '../../assets/images/logo_arb.png';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { useNotifications, type Notification } from '../../contexts/NotificationsContext';
+import { useNotifications } from '../../contexts/NotificationsContext';
 import { useMessages } from '../../contexts/MessagesContext';
 import { useAdmin } from '../../contexts/AdminContext';
 
@@ -383,7 +383,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                         }}
                                                         className="focus:outline-none flex items-center text-gray-600 hover:text-indigo-600 transition-colors duration-200 bg-white/80 backdrop-blur-sm px-3 py-2 rounded-xl hover:bg-white shadow-sm"
                                                     >
-                                                        <FaChevronDown className="h-4 w-4 transform rotate-90" />
+                                                        <FaChevronDown className={`ml-1 h-4 w-4 transition-transform duration-200 ${isProfileDropdownOpen ? 'rotate-180' : 'rotate-0'}`} />
                                                         <span className="ml-2 text-sm font-medium">Back</span>
                                                     </button>
                                                     <div className="flex items-center">
@@ -440,7 +440,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
                                                 {/* Chat Area */}
                                                 <div className="flex-1 flex flex-col bg-gradient-to-b from-gray-50/30 to-white/50">
-                                                    <div className="flex-1 overflow-y-auto p-4 space-y-3" style={{ maxHeight: 'calc(100vh - 385px)' }}>
+                                                    <div className="flex-1 overflow-y-auto p-4 space-y-3 max-h-screen">
                                                         {messages
                                                             .filter(message => {
                                                                 const adminFullName = selectedAdminInfo ? `${selectedAdminInfo.firstName} ${selectedAdminInfo.lastName}` : '';
@@ -601,7 +601,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                             const email = admin.email.toLowerCase();
                                                             return fullName.includes(searchTerm) || email.includes(searchTerm);
                                                         })
-                                                        .map((admin, index) => {
+                                                        .map((admin) => {
                                                             const adminFullName = `${admin.firstName} ${admin.lastName}`;
                                                             const unreadCount = messages.filter(message => 
                                                                 message.sender === 'admin' && 
@@ -622,7 +622,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                                             ? 'bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-200/50 shadow-lg' 
                                                                             : 'hover:bg-white/50 border border-transparent'
                                                                     }`}
-                                                                    style={{ animationDelay: `${index * 0.1}s` }}
                                                                 >
                                                                     <div className="flex items-center justify-between">
                                                                         <div className="flex items-center flex-1 min-w-0">
@@ -723,7 +722,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                         <span className="ml-2 text-sm font-medium hidden md:block">
                                             {user.firstName} {user.lastName}
                                         </span>
-                                        <FaChevronDown className="ml-1 h-4 w-4 transition-transform duration-200" style={{ transform: isProfileDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                        <FaChevronDown className={`ml-1 h-4 w-4 transition-transform duration-200 ${isProfileDropdownOpen ? 'rotate-180' : 'rotate-0'}`} />
                                     </div>
                                 </button>
                                 <div className={`absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-1 z-50 transform transition-all duration-200 ease-in-out origin-top-right ${isProfileDropdownOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}>

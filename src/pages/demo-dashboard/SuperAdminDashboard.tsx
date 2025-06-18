@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardLayout from './DashboardLayout';
 import { motion } from 'framer-motion';
-import { FaUserPlus, FaUserShield, FaChalkboardTeacher, FaUserGraduate, FaUserFriends, FaTrash, FaSort, FaSortUp, FaSortDown, FaCreditCard, FaReceipt, FaTimes, FaCog, FaUser, FaGlobe, FaBell, FaLock, FaLanguage, FaComments, FaCheckCircle, FaExclamationTriangle, FaInfoCircle, FaCalendarAlt, FaBullhorn } from 'react-icons/fa'
+import { FaUserPlus, FaUserShield, FaChalkboardTeacher, FaUserGraduate, FaUserFriends, FaTrash, FaCreditCard, FaTimes, FaCog, FaUser, FaGlobe, FaBell, FaComments, FaExclamationTriangle, FaInfoCircle, FaCalendarAlt, FaBullhorn } from 'react-icons/fa'
 import type { Admin } from '../../contexts/AdminContext';
 import { useAdmin } from '../../contexts/AdminContext';
 import AdminModalComponent from '../../components/AdminModal';
@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import ChatTab from './ChatTab';
+import Select2 from '../../components/Select2';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -48,7 +49,7 @@ const SuperAdminDashboard: React.FC = () => {
     const [accountActive, setAccountActive] = useState(false);
     const [chatActive, setChatActive] = useState(false);
     const [notificationsActive, setNotificationsActive] = useState(false);
-    const { notifications, markAsRead, markAllAsRead, deleteNotification, clearAll } = useNotifications();
+    const { notifications, markAsRead, deleteNotification } = useNotifications();
     const [notificationTypeFilter, setNotificationTypeFilter] = useState<('info' | 'warning' | 'success')[]>([]);
     const [notificationReadFilter, setNotificationReadFilter] = useState<('read' | 'unread')[]>([]);
     const [notificationSearchQuery, setNotificationSearchQuery] = useState('');
@@ -66,7 +67,6 @@ const SuperAdminDashboard: React.FC = () => {
         selectedAdmins,
         searchQuery,
         statusFilter,
-        sortConfig,
         rowsPerPage,
         currentPage,
         setSearchQuery,
@@ -134,80 +134,6 @@ const SuperAdminDashboard: React.FC = () => {
         }
     ];
 
-    // Add billing related state
-    const [billingHistory] = useState([
-        {
-            id: 1,
-            date: '2024-03-15',
-            amount: '$99.00',
-            status: 'paid',
-            invoiceNumber: 'INV-2024-001',
-            plan: 'Standard Plan',
-            billingPeriod: 'Monthly'
-        },
-        {
-            id: 2,
-            date: '2024-02-15',
-            amount: '$99.00',
-            status: 'paid',
-            invoiceNumber: 'INV-2024-002',
-            plan: 'Standard Plan',
-            billingPeriod: 'Monthly'
-        },
-        {
-            id: 3,
-            date: '2024-01-15',
-            amount: '$99.00',
-            status: 'paid',
-            invoiceNumber: 'INV-2024-003',
-            plan: 'Standard Plan',
-            billingPeriod: 'Monthly'
-        }
-    ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
-
-    const [paymentMethods] = useState([
-        {
-            id: 1,
-            type: 'card',
-            last4: '4242',
-            expiry: '12/25',
-            isDefault: true
-        }
-    ]);
-
-    const [billingSortConfig, setBillingSortConfig] = useState<{
-        key: string;
-        direction: 'ascending' | 'descending';
-    }>({ key: 'date', direction: 'descending' });
-
-    // Add new state for recent activity
-    const [recentActivity] = useState([
-        {
-            id: 1,
-            type: 'admin',
-            action: 'created',
-            target: 'Sarah Wilson',
-            time: '2 hours ago',
-            icon: FaUserPlus
-        },
-        {
-            id: 2,
-            type: 'system',
-            action: 'updated',
-            target: 'System Settings',
-            time: '4 hours ago',
-            icon: FaCog
-        },
-        {
-            id: 3,
-            type: 'billing',
-            action: 'processed',
-            target: 'Monthly Payment',
-            time: '1 day ago',
-            icon: FaCreditCard
-        }
-    ]);
-
     const handleOpenAddModal = () => {
         setSelectedAdmin(undefined);
         setModalMode('add');
@@ -218,11 +144,6 @@ const SuperAdminDashboard: React.FC = () => {
         setSelectedAdmin(admin);
         setModalMode('edit');
         setIsModalOpen(true);
-    };
-
-    const handleUpgradePlan = () => {
-        // In a real application, this would redirect to a pricing/upgrade page
-        alert('Redirecting to upgrade page...');
     };
 
     const handleBillingClick = () => {
@@ -915,40 +836,62 @@ const SuperAdminDashboard: React.FC = () => {
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="space-y-8"
+                                    className="space-y-6"
                                 >
-                                    {/* Header Section */}
-                                    <div className="flex justify-between items-center">
-                                        <div>
-                                            <h2 className="text-2xl font-bold text-gray-900">Administrators</h2>
-                                            <p className="mt-1 text-sm text-gray-500">Manage your school administrators</p>
-                                        </div>
-                                        <div className="flex space-x-3">
-                                            {selectedAdmins.length > 0 && (
+                                    {/* Modern Header Section */}
+                                    <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 rounded-2xl p-8 text-white shadow-lg">
+                                        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                                            <div className="mb-6 lg:mb-0">
+                                                <h2 className="text-3xl font-bold mb-2">Administrators</h2>
+                                                <p className="text-indigo-100 text-lg">Manage your school administrators and their access</p>
+                                                <div className="flex items-center mt-4 space-x-6">
+                                                    <div className="flex items-center">
+                                                        <div className="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
+                                                        <span className="text-indigo-100 text-sm">
+                                                            {admins.filter(a => a.status === 'active').length} Active
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center">
+                                                        <div className="w-3 h-3 bg-red-400 rounded-full mr-2"></div>
+                                                        <span className="text-indigo-100 text-sm">
+                                                            {admins.filter(a => a.status === 'inactive').length} Inactive
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center">
+                                                        <div className="w-3 h-3 bg-yellow-400 rounded-full mr-2"></div>
+                                                        <span className="text-indigo-100 text-sm">
+                                                            {admins.filter(a => a.status === 'incomplete').length} Incomplete
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                                                {selectedAdmins.length > 0 && (
+                                                    <button
+                                                        onClick={handleBulkDelete}
+                                                        className="inline-flex items-center px-4 py-3 border border-red-300 text-sm font-medium rounded-xl text-red-700 bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200 shadow-sm"
+                                                    >
+                                                        <FaTrash className="h-4 w-4 mr-2" />
+                                                        Delete Selected ({selectedAdmins.length})
+                                                    </button>
+                                                )}
                                                 <button
-                                                    onClick={handleBulkDelete}
-                                                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                                                    onClick={handleOpenAddModal}
+                                                    className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-xl text-white bg-white bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all duration-200 backdrop-blur-sm shadow-lg"
                                                 >
-                                                    <FaTrash className="h-4 w-4 mr-2" />
-                                                    Delete Selected ({selectedAdmins.length})
+                                                    <FaUserPlus className="h-5 w-5 mr-2" />
+                                                    Add New Admin
                                                 </button>
-                                            )}
-                                            <button
-                                                onClick={handleOpenAddModal}
-                                                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                            >
-                                                <FaUserPlus className="h-4 w-4 mr-2" />
-                                                Add New Admin
-                                            </button>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* Search and Filters */}
-                                    <div className="mt-4 space-y-4">
-                                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                    {/* Enhanced Search and Filters */}
+                                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                                        <div className="space-y-6">
                                             {/* Search Bar */}
-                                            <div className="relative rounded-md shadow-sm flex-1">
-                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <div className="relative">
+                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                                     <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                         <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
                                                     </svg>
@@ -957,14 +900,14 @@ const SuperAdminDashboard: React.FC = () => {
                                                     type="text"
                                                     value={searchQuery}
                                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                                    className="focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 pr-3 py-2 sm:text-sm border-gray-300 rounded-md"
-                                                    placeholder="Search by name, email, or status..."
+                                                    className="block w-full pl-12 pr-12 py-4 text-base border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition-all duration-200"
+                                                    placeholder="Search administrators by name, email, or status..."
                                                 />
                                                 {searchQuery && (
-                                                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
                                                         <button
                                                             onClick={() => setSearchQuery('')}
-                                                            className="text-gray-400 hover:text-gray-500 focus:outline-none"
+                                                            className="text-gray-400 hover:text-gray-500 focus:outline-none p-1 rounded-full hover:bg-gray-100 transition-colors duration-200"
                                                             aria-label="Clear search"
                                                         >
                                                             <FaTimes className="h-4 w-4" />
@@ -973,198 +916,210 @@ const SuperAdminDashboard: React.FC = () => {
                                                 )}
                                             </div>
 
-                                            {/* Rows per page selector */}
-                                            <div className="flex items-center space-x-2">
-                                                <label htmlFor="rowsPerPage" className="text-sm text-gray-600">Rows per page:</label>
-                                                <select
-                                                    id="rowsPerPage"
-                                                    value={rowsPerPage}
-                                                    onChange={(e) => setRowsPerPage(Number(e.target.value))}
-                                                    className="focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-20 pl-3 pr-10 py-2 text-sm border-gray-300 rounded-md"
-                                                >
-                                                    <option value={5}>5</option>
-                                                    <option value={10}>10</option>
-                                                    <option value={25}>25</option>
-                                                    <option value={50}>50</option>
-                                                </select>
-                                            </div>
-                                        </div>
+                                            {/* Filters Row */}
+                                            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                                                {/* Status Filters */}
+                                                <div className="flex flex-wrap gap-3">
+                                                    <span className="text-sm font-medium text-gray-700 self-center">Filter by:</span>
+                                                    <button
+                                                        onClick={() => setStatusFilter('all')}
+                                                        className={`px-4 py-2 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 ${statusFilter === 'all'
+                                                            ? 'bg-indigo-100 text-indigo-800 ring-2 ring-indigo-200'
+                                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
+                                                            }`}
+                                                    >
+                                                        All ({admins.length})
+                                                    </button>
+                                                    <button
+                                                        onClick={() => setStatusFilter('active')}
+                                                        className={`px-4 py-2 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 ${statusFilter === 'active'
+                                                            ? 'bg-green-100 text-green-800 ring-2 ring-green-200'
+                                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
+                                                            }`}
+                                                    >
+                                                        Active ({admins.filter(a => a.status === 'active').length})
+                                                    </button>
+                                                    <button
+                                                        onClick={() => setStatusFilter('inactive')}
+                                                        className={`px-4 py-2 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200 ${statusFilter === 'inactive'
+                                                            ? 'bg-red-100 text-red-800 ring-2 ring-red-200'
+                                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
+                                                            }`}
+                                                    >
+                                                        Inactive ({admins.filter(a => a.status === 'inactive').length})
+                                                    </button>
+                                                    <button
+                                                        onClick={() => setStatusFilter('incomplete')}
+                                                        className={`px-4 py-2 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-all duration-200 ${statusFilter === 'incomplete'
+                                                            ? 'bg-yellow-100 text-yellow-800 ring-2 ring-yellow-200'
+                                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
+                                                            }`}
+                                                    >
+                                                        Incomplete ({admins.filter(a => a.status === 'incomplete').length})
+                                                    </button>
+                                                </div>
 
-                                        {/* Status Filters */}
-                                        <div className="flex flex-wrap gap-2">
-                                            <button
-                                                onClick={() => setStatusFilter('all')}
-                                                className={`px-3 py-1.5 rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${statusFilter === 'all'
-                                                    ? 'bg-indigo-100 text-indigo-800'
-                                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                                    }`}
-                                            >
-                                                All
-                                            </button>
-                                            <button
-                                                onClick={() => setStatusFilter('active')}
-                                                className={`px-3 py-1.5 rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${statusFilter === 'active'
-                                                    ? 'bg-green-100 text-green-800'
-                                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                                    }`}
-                                            >
-                                                Active
-                                            </button>
-                                            <button
-                                                onClick={() => setStatusFilter('inactive')}
-                                                className={`px-3 py-1.5 rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${statusFilter === 'inactive'
-                                                    ? 'bg-red-100 text-red-800'
-                                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                                    }`}
-                                            >
-                                                Inactive
-                                            </button>
-                                            <button
-                                                onClick={() => setStatusFilter('incomplete')}
-                                                className={`px-3 py-1.5 rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${statusFilter === 'incomplete'
-                                                    ? 'bg-yellow-100 text-yellow-800'
-                                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                                    }`}
-                                            >
-                                                Incomplete
-                                            </button>
+                                                {/* Rows per page selector */}
+                                                <div className="flex items-center space-x-3">
+                                                    <span className="text-sm font-medium text-gray-700">Show:</span>
+                                                    <Select2
+                                                        value={rowsPerPage}
+                                                        onChange={setRowsPerPage}
+                                                        options={[
+                                                            { value: 5, label: '5 per page' },
+                                                            { value: 10, label: '10 per page' },
+                                                            { value: 25, label: '25 per page' },
+                                                            { value: 50, label: '50 per page' }
+                                                        ]}
+                                                        className="w-32"
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* Admins Table */}
-                                    <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                                    {/* Enhanced Admins Table */}
+                                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                                         <div className="overflow-x-auto">
-                                            <table className="min-w-full divide-y divide-gray-200">
-                                                <thead className="bg-gray-50">
+                                            <table className="w-full divide-y divide-gray-200">
+                                                <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
                                                     <tr>
-                                                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
+                                                        <th scope="col" className="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-10">
                                                             <label className="sr-only">Select all administrators</label>
                                                             <input
                                                                 type="checkbox"
-                                                                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                                                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded transition-colors duration-200"
                                                                 checked={selectedAdmins.length === admins.length}
                                                                 onChange={(e) => handleSelectAll(e.target.checked)}
                                                                 aria-label="Select all administrators"
                                                             />
                                                         </th>
-                                                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
+                                                        <th scope="col" className="px-3 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-12">
                                                             #
                                                         </th>
-                                                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/5">
+                                                        <th scope="col" className="px-3 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-0">
                                                             <button
                                                                 onClick={() => handleSort('firstName')}
-                                                                className="flex items-center focus:outline-none border-none"
+                                                                className="flex items-center focus:outline-none border-none hover:text-gray-800 transition-colors duration-200"
                                                             >
-                                                                Name {getSortIcon('firstName')}
+                                                                Administrator {getSortIcon('firstName')}
                                                             </button>
                                                         </th>
-                                                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/5">
+                                                        <th scope="col" className="px-3 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-0">
                                                             <button
                                                                 onClick={() => handleSort('email')}
-                                                                className="flex items-center focus:outline-none border-none"
+                                                                className="flex items-center focus:outline-none border-none hover:text-gray-800 transition-colors duration-200"
                                                             >
                                                                 Email {getSortIcon('email')}
                                                             </button>
                                                         </th>
-                                                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">
+                                                        <th scope="col" className="px-3 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-20">
                                                             <button
                                                                 onClick={() => handleSort('status')}
-                                                                className="flex items-center focus:outline-none border-none"
+                                                                className="flex items-center focus:outline-none border-none hover:text-gray-800 transition-colors duration-200"
                                                             >
                                                                 Status {getSortIcon('status')}
                                                             </button>
                                                         </th>
-                                                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">
+                                                        <th scope="col" className="px-3 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-24">
                                                             <button
                                                                 onClick={() => handleSort('date')}
-                                                                className="flex items-center focus:outline-none border-none"
+                                                                className="flex items-center focus:outline-none border-none hover:text-gray-800 transition-colors duration-200"
                                                             >
-                                                                Date Added {getSortIcon('date')}
+                                                                Date {getSortIcon('date')}
                                                             </button>
                                                         </th>
-                                                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">
-                                                            Stats
+                                                        <th scope="col" className="px-3 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-32">
+                                                            Usage
                                                         </th>
-                                                        <th scope="col" className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">
+                                                        <th scope="col" className="px-3 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider w-20">
                                                             Actions
                                                         </th>
                                                     </tr>
                                                 </thead>
-                                                <tbody className="bg-white divide-y divide-gray-200">
+                                                <tbody className="bg-white divide-y divide-gray-100">
                                                     {getPaginatedData(sortData(admins)).map((admin, index) => (
-                                                        <tr key={admin.id} className="hover:bg-gray-50">
+                                                        <tr key={admin.id} className="hover:bg-gray-50 transition-colors duration-200 group">
                                                             <td className="px-4 py-4 whitespace-nowrap">
                                                                 <label className="sr-only">Select administrator {admin.firstName} {admin.lastName}</label>
                                                                 <input
                                                                     type="checkbox"
-                                                                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                                                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded transition-colors duration-200"
                                                                     checked={selectedAdmins.includes(admin.id)}
                                                                     onChange={() => handleSelectAdmin(admin.id)}
                                                                     aria-label={`Select administrator ${admin.firstName} ${admin.lastName}`}
                                                                 />
                                                             </td>
-                                                            <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                {index + 1}
+                                                            <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">
+                                                                {(currentPage - 1) * rowsPerPage + index + 1}
                                                             </td>
-                                                            <td className="px-4 py-4 whitespace-nowrap">
-                                                                <div className="flex items-center">
+                                                            <td className="px-3 py-4 whitespace-nowrap">
+                                                                <div className="flex items-center min-w-0">
                                                                     <div className="flex-shrink-0 h-10 w-10 relative">
                                                                         {admin.profileImage ? (
                                                                             <img
                                                                                 src={admin.profileImage}
                                                                                 alt={`${admin.firstName} ${admin.lastName}`}
-                                                                                className="h-10 w-10 rounded-full object-cover"
+                                                                                className="h-10 w-10 rounded-lg object-cover ring-2 ring-gray-100"
                                                                             />
                                                                         ) : (
-                                                                            <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                                                                                <span className="text-indigo-600 font-medium">
+                                                                            <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center ring-2 ring-gray-100">
+                                                                                <span className="text-white font-semibold text-sm">
                                                                                     {admin.firstName[0]}{admin.lastName[0]}
                                                                                 </span>
                                                                             </div>
                                                                         )}
                                                                         {/* Online/Offline indicator */}
-                                                                        <div className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white ${
-                                                                            admin.isOnline ? 'bg-green-400' : 'bg-gray-400'
+                                                                        <div className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white shadow-sm ${
+                                                                            admin.isOnline ? 'bg-green-500' : 'bg-gray-400'
                                                                         }`} />
                                                                     </div>
-                                                                    <div className="ml-4">
-                                                                        <div className="text-sm font-medium text-gray-900 truncate max-w-[120px]">
+                                                                    <div className="ml-3 min-w-0 flex-1">
+                                                                        <div className="text-sm font-semibold text-gray-900 truncate">
                                                                             {admin.firstName} {admin.lastName}
                                                                         </div>
-                                                                        <div className="text-xs text-gray-500">
-                                                                            {admin.isOnline ? 'Online' : 'Offline'}
+                                                                        <div className="flex items-center mt-1">
+                                                                            <div className={`w-2 h-2 rounded-full mr-2 ${
+                                                                                admin.isOnline ? 'bg-green-500' : 'bg-gray-400'
+                                                                            }`} />
+                                                                            <span className="text-xs text-gray-500 truncate">
+                                                                                {admin.isOnline ? 'Online' : 'Offline'}
+                                                                            </span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td className="px-4 py-4 whitespace-nowrap">
-                                                                <div className="text-sm text-gray-900 truncate max-w-[150px]">{admin.email}</div>
+                                                            <td className="px-3 py-4 whitespace-nowrap">
+                                                                <div className="text-sm text-gray-900 truncate font-medium max-w-[200px]">{admin.email}</div>
                                                             </td>
-                                                            <td className="px-4 py-4 whitespace-nowrap">
-                                                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                                    ${admin.status === 'active' ? 'bg-green-100 text-green-800' :
-                                                                        admin.status === 'inactive' ? 'bg-red-100 text-red-800' :
-                                                                            'bg-yellow-100 text-yellow-800'}`}>
+                                                            <td className="px-3 py-4 whitespace-nowrap">
+                                                                <span className={`px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full ${
+                                                                    admin.status === 'active' ? 'bg-green-100 text-green-800 ring-1 ring-green-200' :
+                                                                    admin.status === 'inactive' ? 'bg-red-100 text-red-800 ring-1 ring-red-200' :
+                                                                    'bg-yellow-100 text-yellow-800 ring-1 ring-yellow-200'
+                                                                }`}>
                                                                     {admin.status.charAt(0).toUpperCase() + admin.status.slice(1)}
                                                                 </span>
                                                             </td>
-                                                            <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                {new Date(admin.date).toLocaleDateString()}
+                                                            <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">
+                                                                {new Date(admin.date).toLocaleDateString('en-US', {
+                                                                    month: 'short',
+                                                                    day: 'numeric'
+                                                                })}
                                                             </td>
-                                                            <td className="px-4 py-4">
+                                                            <td className="px-3 py-4">
                                                                 <div className="space-y-2">
                                                                     <div>
                                                                         <div className="flex items-center justify-between mb-1">
                                                                             <div className="flex items-center">
                                                                                 <FaUserFriends className="h-3 w-3 text-pink-500 mr-1" />
-                                                                                <span className="text-xs text-gray-600">Parents</span>
+                                                                                <span className="text-xs text-gray-600 font-medium">P</span>
                                                                             </div>
-                                                                            <span className="text-xs font-medium text-gray-900">{admin.stats.parents}</span>
+                                                                            <span className="text-xs font-bold text-gray-900">{admin.stats.parents}</span>
                                                                         </div>
                                                                         <div className="w-full bg-gray-100 rounded-full h-1">
                                                                             <div
-                                                                                className="bg-pink-500 h-1 rounded-full"
-                                                                                style={{ width: `${Math.min((admin.stats.parents / planLimits.parent) * 100, 100)}%` }}
+                                                                                className="bg-gradient-to-r from-pink-500 to-rose-500 h-1 rounded-full transition-all duration-300"
                                                                             />
                                                                         </div>
                                                                     </div>
@@ -1172,14 +1127,13 @@ const SuperAdminDashboard: React.FC = () => {
                                                                         <div className="flex items-center justify-between mb-1">
                                                                             <div className="flex items-center">
                                                                                 <FaUserGraduate className="h-3 w-3 text-green-500 mr-1" />
-                                                                                <span className="text-xs text-gray-600">Students</span>
+                                                                                <span className="text-xs text-gray-600 font-medium">S</span>
                                                                             </div>
-                                                                            <span className="text-xs font-medium text-gray-900">{admin.stats.students}</span>
+                                                                            <span className="text-xs font-bold text-gray-900">{admin.stats.students}</span>
                                                                         </div>
                                                                         <div className="w-full bg-gray-100 rounded-full h-1">
                                                                             <div
-                                                                                className="bg-green-500 h-1 rounded-full"
-                                                                                style={{ width: `${Math.min((admin.stats.students / planLimits.student) * 100, 100)}%` }}
+                                                                                className="bg-gradient-to-r from-green-500 to-emerald-500 h-1 rounded-full transition-all duration-300"
                                                                             />
                                                                         </div>
                                                                     </div>
@@ -1187,32 +1141,37 @@ const SuperAdminDashboard: React.FC = () => {
                                                                         <div className="flex items-center justify-between mb-1">
                                                                             <div className="flex items-center">
                                                                                 <FaChalkboardTeacher className="h-3 w-3 text-blue-500 mr-1" />
-                                                                                <span className="text-xs text-gray-600">Teachers</span>
+                                                                                <span className="text-xs text-gray-600 font-medium">T</span>
                                                                             </div>
-                                                                            <span className="text-xs font-medium text-gray-900">{admin.stats.teachers}</span>
+                                                                            <span className="text-xs font-bold text-gray-900">{admin.stats.teachers}</span>
                                                                         </div>
                                                                         <div className="w-full bg-gray-100 rounded-full h-1">
                                                                             <div
-                                                                                className="bg-blue-500 h-1 rounded-full"
-                                                                                style={{ width: `${Math.min((admin.stats.teachers / planLimits.teacher) * 100, 100)}%` }}
+                                                                                className="bg-gradient-to-r from-blue-500 to-indigo-500 h-1 rounded-full transition-all duration-300"
                                                                             />
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <button
-                                                                    onClick={() => handleOpenEditModal(admin)}
-                                                                    className="text-indigo-600 hover:text-indigo-900 mr-2 focus:outline-none"
-                                                                >
-                                                                    Edit
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => handleDeleteAdmin(admin.id)}
-                                                                    className="text-red-600 hover:text-red-900 focus:outline-none"
-                                                                >
-                                                                    Delete
-                                                                </button>
+                                                            <td className="px-3 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                                <div className="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                                    <button
+                                                                        onClick={() => handleOpenEditModal(admin)}
+                                                                        className="text-indigo-600 hover:text-indigo-900 p-1.5 rounded-lg hover:bg-indigo-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                                        title="Edit administrator"
+                                                                    >
+                                                                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                                        </svg>
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => handleDeleteAdmin(admin.id)}
+                                                                        className="text-red-600 hover:text-red-900 p-1.5 rounded-lg hover:bg-red-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                                                        title="Delete administrator"
+                                                                    >
+                                                                        <FaTrash className="h-4 w-4" />
+                                                                    </button>
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                     ))}
@@ -1220,20 +1179,20 @@ const SuperAdminDashboard: React.FC = () => {
                                             </table>
                                         </div>
 
-                                        {/* Pagination */}
-                                        <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                                        {/* Enhanced Pagination */}
+                                        <div className="bg-white px-6 py-4 flex items-center justify-between border-t border-gray-100">
                                             <div className="flex-1 flex justify-between sm:hidden">
                                                 <button
                                                     onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
                                                     disabled={currentPage === 1}
-                                                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                                                 >
                                                     Previous
                                                 </button>
                                                 <button
                                                     onClick={() => setCurrentPage(Math.min(currentPage + 1, getTotalPages(filterAdmins(admins))))}
                                                     disabled={currentPage === getTotalPages(filterAdmins(admins))}
-                                                    className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                    className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                                                 >
                                                     Next
                                                 </button>
@@ -1242,24 +1201,24 @@ const SuperAdminDashboard: React.FC = () => {
                                                 <div>
                                                     <p className="text-sm text-gray-700">
                                                         Showing{' '}
-                                                        <span className="font-medium">
+                                                        <span className="font-semibold">
                                                             {(currentPage - 1) * rowsPerPage + 1}
                                                         </span>{' '}
                                                         to{' '}
-                                                        <span className="font-medium">
+                                                        <span className="font-semibold">
                                                             {Math.min(currentPage * rowsPerPage, filterAdmins(admins).length)}
                                                         </span>{' '}
                                                         of{' '}
-                                                        <span className="font-medium">{filterAdmins(admins).length}</span>{' '}
+                                                        <span className="font-semibold">{filterAdmins(admins).length}</span>{' '}
                                                         results
                                                     </p>
                                                 </div>
                                                 <div>
-                                                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                                    <nav className="relative z-0 inline-flex rounded-xl shadow-sm -space-x-px" aria-label="Pagination">
                                                         <button
                                                             onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
                                                             disabled={currentPage === 1}
-                                                            className="focus:outline-none relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                            className="focus:outline-none relative inline-flex items-center px-3 py-2 rounded-l-xl border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                                                         >
                                                             <span className="sr-only">Previous</span>
                                                             <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -1270,10 +1229,11 @@ const SuperAdminDashboard: React.FC = () => {
                                                             <button
                                                                 key={page}
                                                                 onClick={() => setCurrentPage(page)}
-                                                                className={`focus:outline-none relative inline-flex items-center px-4 py-2 border text-sm font-medium ${currentPage === page
-                                                                    ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
-                                                                    : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
-                                                                    }`}
+                                                                className={`focus:outline-none relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-all duration-200 ${
+                                                                    currentPage === page
+                                                                        ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600 ring-2 ring-indigo-200'
+                                                                        : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                                                                }`}
                                                             >
                                                                 {page}
                                                             </button>
@@ -1281,7 +1241,7 @@ const SuperAdminDashboard: React.FC = () => {
                                                         <button
                                                             onClick={() => setCurrentPage(Math.min(currentPage + 1, getTotalPages(filterAdmins(admins))))}
                                                             disabled={currentPage === getTotalPages(filterAdmins(admins))}
-                                                            className="focus:outline-none relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                            className="focus:outline-none relative inline-flex items-center px-3 py-2 rounded-r-xl border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                                                         >
                                                             <span className="sr-only">Next</span>
                                                             <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -1297,7 +1257,7 @@ const SuperAdminDashboard: React.FC = () => {
                             )}
 
                             {/* Notifications Tab Content */}
-                            {activeTab === 'notifications' && (
+                            {notificationsActive && (
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -1817,7 +1777,7 @@ const SuperAdminDashboard: React.FC = () => {
                             )}
 
                             {/* chat Tab Content */}
-                            {activeTab === 'chat' && (
+                            {chatActive && (
                                 <ChatTab />
                             )}
 

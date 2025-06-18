@@ -145,17 +145,6 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
     }, []);
 
     const handleAddAdmin = useCallback(async (adminData: Omit<Admin, 'id' | 'date' | 'stats' | 'status' | 'isOnline' | 'profileImage'>) => {
-        const profileImages = [
-            'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-            'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-            'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
-            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
-            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
-            'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&h=150&fit=crop&crop=face',
-            'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150&h=150&fit=crop&crop=face'
-        ];
-        
         const newAdmin: Admin = {
             id: Math.max(...admins.map(a => a.id)) + 1,
             ...adminData,
