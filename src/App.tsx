@@ -14,6 +14,7 @@ import Checkout from './components/Checkout';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { CookieConsentProvider } from './contexts/CookieConsentContext';
 import Landing from './components/Landing';
+import { NotificationsProvider } from './contexts/NotificationsContext';
 
 const App: React.FC = () => {
   //const [apiMessage, setApiMessage] = useState("");
@@ -27,23 +28,25 @@ const App: React.FC = () => {
   return (
     <CookieConsentProvider>
       <LanguageProvider>
-        <Router>
-          {/* <div className="text-xl font-medium text-green-600">
-            API says: {apiMessage}
-          </div> */}
-          <Routes>
-            <Route path="/" element={<ComingSoon />} />
-            <Route path="/home" element={<Landing />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/demo-dashboard/super-admin" element={<SuperAdminDashboard />} />
-            <Route path="/demo-dashboard/admin" element={<SchoolAdminDashboard />} />
-            <Route path="/demo-dashboard/teacher" element={<TeacherDashboard />} />
-            <Route path="/demo-dashboard/student" element={<StudentDashboard />} />
-            <Route path="/demo-dashboard/parent" element={<ParentDashboard />} />
-          </Routes>
-        </Router>
+        <NotificationsProvider>
+          <Router>
+            {/* <div className="text-xl font-medium text-green-600">
+              API says: {apiMessage}
+            </div> */}
+            <Routes>
+              <Route path="/" element={<ComingSoon />} />
+              <Route path="/home" element={<Landing />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/demo-dashboard/super-admin" element={<SuperAdminDashboard />} />
+              <Route path="/demo-dashboard/admin" element={<SchoolAdminDashboard />} />
+              <Route path="/demo-dashboard/teacher" element={<TeacherDashboard />} />
+              <Route path="/demo-dashboard/student" element={<StudentDashboard />} />
+              <Route path="/demo-dashboard/parent" element={<ParentDashboard />} />
+            </Routes>
+          </Router>
+        </NotificationsProvider>
       </LanguageProvider>
     </CookieConsentProvider>
   );

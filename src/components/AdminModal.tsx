@@ -31,7 +31,6 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave, admin,
         lastName: '',
         email: ''
     });
-    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
     // Update form data when admin prop changes
@@ -54,7 +53,6 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave, admin,
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-        setIsLoading(true);
 
         try {
             await onSave(formData);
@@ -62,7 +60,6 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave, admin,
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An error occurred');
         } finally {
-            setIsLoading(false);
         }
     };
 
@@ -77,7 +74,7 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave, admin,
                     </h2>
                     <button
                         onClick={onClose}
-                        className="text-gray-500 hover:text-gray-700"
+                        className="focus:outline-none text-gray-500 hover:text-gray-700"
                         aria-label="Close modal"
                     >
                         <FaTimes />
@@ -137,16 +134,15 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave, admin,
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                            className="focus:outline-none px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            disabled={isLoading}
                             className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
                         >
-                            {isLoading ? 'Saving...' : isBulkEdit ? `Save Changes (${selectedCount})` : 'Save'}
+                            {isBulkEdit ? `Save Changes (${selectedCount})` : 'Save'}
                         </button>
                     </div>
                 </form>

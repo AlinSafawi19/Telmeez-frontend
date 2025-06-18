@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaBell, FaEnvelope, FaCog, FaUser, FaChevronDown, FaCreditCard, FaExclamationTriangle, FaInfoCircle, FaCog as FaSettings, FaCheckCircle } from 'react-icons/fa';
+import { FaBell, FaEnvelope, FaCog, FaUser, FaChevronDown, FaCreditCard, FaExclamationTriangle, FaInfoCircle, FaCog as FaSettings, FaCheckCircle, FaComments } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 import logo from '../../assets/images/logo.png';
 import logoarb from '../../assets/images/logo_arb.png';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useNotifications, type Notification } from '../../contexts/NotificationsContext';
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -12,8 +14,8 @@ interface DashboardLayoutProps {
     onBillingClick?: () => void;
     onGeneralClick?: () => void;
     onAccountClick?: () => void;
-    onChatClick?: () => void;
     onNotificationsClick?: () => void;
+    onChatClick?: () => void;
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({
@@ -24,11 +26,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     onAccountClick,
     onChatClick,
     onNotificationsClick
-}) => {
+}): React.ReactElement => {
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
     const [isMessagesOpen, setIsMessagesOpen] = useState(false);
+    const [isSwalOpen, setIsSwalOpen] = useState(false);
     const { currentLanguage } = useLanguage();
+    const { notifications, markAsRead, deleteNotification } = useNotifications();
 
     const profileRef = useRef<HTMLDivElement>(null);
     const notificationsRef = useRef<HTMLDivElement>(null);
@@ -36,6 +40,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
+            if (isSwalOpen) return; // Don't close dropdowns if SweetAlert is open
+
             if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
                 setIsProfileDropdownOpen(false);
             }
@@ -51,7 +57,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [isSwalOpen]);
 
     // Mock data - in a real app, this would come from your backend
     const user = {
@@ -61,40 +67,16 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         avatar: null,
         role: role,
         subscriptionPlan: 'Standard',
-        unreadNotifications: 3,
+        unreadNotifications: 2,
         unreadMessages: 2
     };
 
-    // Mock notifications data
-    const notifications = [
-        {
-            id: 1,
-            type: 'success',
-            title: 'New admin account created',
-            message: 'A new admin account has been created successfully',
-            time: '2 minutes ago',
-            icon: FaCheckCircle,
-            read: false
-        },
-        {
-            id: 2,
-            type: 'warning',
-            title: 'System maintenance scheduled',
-            message: 'System maintenance is scheduled for tomorrow at 2 AM',
-            time: '1 hour ago',
-            icon: FaExclamationTriangle,
-            read: false
-        },
-        {
-            id: 3,
-            type: 'info',
-            title: 'New feature update available',
-            message: 'Check out our latest features and improvements',
-            time: '3 hours ago',
-            icon: FaInfoCircle,
-            read: false
-        }
-    ];
+    const handleNotificationsToggle = () => {
+        const newIsOpen = !isNotificationsOpen;
+        setIsNotificationsOpen(newIsOpen);
+        setIsMessagesOpen(false);
+        setIsProfileDropdownOpen(false);
+    };
 
     const handleBillingClick = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -120,26 +102,48 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         setIsProfileDropdownOpen(false);
     };
 
-    const handleMarkAllAsRead = (e: React.MouseEvent) => {
-        e.preventDefault();
-        // In a real app, this would update the backend
-        setIsNotificationsOpen(false);
+    const handleDeleteNotification = async (id: number) => {
+        setIsSwalOpen(true);
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#4F46E5',
+            cancelButtonColor: '#EF4444',
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel',
+            customClass: {
+                popup: 'rounded-xl shadow-lg',
+                title: 'text-lg font-medium text-gray-900',
+                htmlContainer: 'text-sm text-gray-500',
+                confirmButton: 'rounded-lg px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
+                cancelButton: 'rounded-lg px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500',
+                actions: 'mt-4 space-x-3'
+            },
+            buttonsStyling: false,
+            width: 'auto',
+            padding: '1.5rem'
+        });
+
+        if (result.isConfirmed) {
+            deleteNotification(id);
+        }
+        setIsSwalOpen(false);
     };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
             {/* Header */}
             <header className="bg-white/80 backdrop-blur-md shadow-sm fixed w-full top-0 z-50 border-b border-gray-100">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
                         {/* Logo */}
-                        <div className="flex-shrink-0">
-                            <img
-                                src={currentLanguage === 'ar' ? logoarb : logo}
-                                alt="Telmeez Logo"
-                                className="h-16 w-auto transition-transform hover:scale-105"
-                            />
-                        </div>
+                        <img
+                            src={currentLanguage === 'ar' ? logoarb : logo}
+                            alt="Telmeez Logo"
+                            className="h-16 w-auto transition-transform hover:scale-105"
+                        />
 
                         {/* Right side items */}
                         <div className="flex items-center space-x-6">
@@ -157,75 +161,122 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                             {/* Notifications */}
                             <div className="relative" ref={notificationsRef}>
                                 <button
-                                    onClick={() => {
-                                        setIsNotificationsOpen(!isNotificationsOpen);
-                                        setIsMessagesOpen(false);
-                                        setIsProfileDropdownOpen(false);
-                                    }}
+                                    onClick={handleNotificationsToggle}
                                     className="p-2 text-gray-600 hover:text-indigo-600 focus:outline-none relative transition-colors duration-200"
+                                    aria-label="Toggle notifications"
                                 >
                                     <FaBell className="h-5 w-5" />
-                                    {user.unreadNotifications > 0 && (
+                                    {notifications.filter(n => !n.read).length > 0 && (
                                         <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full animate-pulse">
-                                            {user.unreadNotifications}
+                                            {notifications.filter(n => !n.read).length}
                                         </span>
                                     )}
                                 </button>
                                 <div className={`absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-xl py-1 z-50 transform transition-all duration-200 ease-in-out origin-top-right ${isNotificationsOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
                                     <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center">
                                         <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
-                                        <button
-                                            onClick={handleMarkAllAsRead}
-                                            className="text-xs text-indigo-600 hover:text-indigo-800 transition-colors duration-200"
-                                        >
-                                            Mark all as read
-                                        </button>
                                     </div>
                                     <div className="max-h-96 overflow-y-auto">
-                                        {notifications.map((notification) => (
-                                            <div
-                                                key={notification.id}
-                                                className={`px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer border-l-4 ${notification.type === 'success' ? 'border-green-500' :
-                                                        notification.type === 'warning' ? 'border-yellow-500' :
-                                                            'border-blue-500'
-                                                    }`}
-                                            >
-                                                <div className="flex items-start">
-                                                    <div className={`flex-shrink-0 p-1 rounded-full ${notification.type === 'success' ? 'bg-green-100 text-green-600' :
-                                                            notification.type === 'warning' ? 'bg-yellow-100 text-yellow-600' :
-                                                                'bg-blue-100 text-blue-600'
-                                                        }`}>
-                                                        <notification.icon className="h-4 w-4" />
-                                                    </div>
-                                                    <div className="ml-3 flex-1">
-                                                        <p className="text-sm font-medium text-gray-900">{notification.title}</p>
-                                                        <p className="text-xs text-gray-500 mt-1">{notification.message}</p>
-                                                        <div className="mt-2 flex items-center justify-between">
-                                                            <span className="text-xs text-gray-400">{notification.time}</span>
-                                                            {!notification.read && (
-                                                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
-                                                                    New
-                                                                </span>
-                                                            )}
+                                        {[...notifications]
+                                            .filter(notification => {
+                                                const notificationDate = new Date(notification.time);
+                                                const today = new Date();
+                                                return notificationDate.toDateString() === today.toDateString();
+                                            })
+                                            .sort((a, b) => {
+                                                // First sort by read status (unread first)
+                                                if (a.read !== b.read) {
+                                                    return a.read ? 1 : -1;
+                                                }
+                                                // Then sort by time (newest first)
+                                                return new Date(b.time).getTime() - new Date(a.time).getTime();
+                                            })
+                                            .map((notification) => (
+                                                <div
+                                                    key={notification.id}
+                                                    className={`px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer border-l-4 ${notification.read ? 'border-transparent' : 'border-indigo-500'
+                                                        }`}
+                                                >
+                                                    <div className="flex items-start">
+                                                        <div className={`p-2 rounded-lg mr-3 ${notification.type === 'info' ? 'bg-blue-100 text-blue-600' :
+                                                                notification.type === 'warning' ? 'bg-yellow-100 text-yellow-600' :
+                                                                    'bg-green-100 text-green-600'
+                                                            }`}>
+                                                            <notification.icon className="h-4 w-4" />
+                                                        </div>
+                                                        <div className="flex-1">
+                                                            <div className="flex items-center justify-between">
+                                                                <p className="text-sm font-medium text-gray-900">{notification.title}</p>
+                                                                {!notification.read && (
+                                                                    <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full">
+                                                                        New
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            <p className="text-xs text-gray-500 mt-1">{notification.message}</p>
+                                                            <div className="flex items-center justify-between mt-2">
+                                                                <p className="text-xs text-gray-400">
+                                                                    {new Date(notification.time).toLocaleString('en-US', {
+                                                                        hour: '2-digit',
+                                                                        minute: '2-digit',
+                                                                        hour12: true
+                                                                    })}
+                                                                </p>
+                                                                <div className="flex space-x-2">
+                                                                    {!notification.read && (
+                                                                        <button
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                markAsRead(notification.id);
+                                                                            }}
+                                                                            className="focus:outline-none text-xs text-indigo-600 hover:text-indigo-800 font-medium"
+                                                                        >
+                                                                            Mark as read
+                                                                        </button>
+                                                                    )}
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            handleDeleteNotification(notification.id);
+                                                                        }}
+                                                                        className="focus:outline-none text-xs text-red-600 hover:text-red-800 font-medium"
+                                                                    >
+                                                                        Delete
+                                                                    </button>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            ))}
                                     </div>
                                     <div className="px-4 py-2 border-t border-gray-100">
-                                        <a
-                                            href="#"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                if (onNotificationsClick) onNotificationsClick();
-                                                setIsNotificationsOpen(false);
-                                            }}
-                                            className="text-sm text-indigo-600 hover:text-indigo-800 font-medium flex items-center justify-center"
-                                        >
-                                            View all notifications
-                                            <FaChevronDown className="ml-1 h-3 w-3 transform rotate-90" />
-                                        </a>
+                                        <div className="flex items-center justify-between">
+                                            <a
+                                                href="#"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    if (onNotificationsClick) onNotificationsClick();
+                                                    setIsNotificationsOpen(false);
+                                                }}
+                                                className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+                                            >
+                                                View all notifications
+                                            </a>
+                                            {notifications.filter(n => {
+                                                const notificationDate = new Date(n.time);
+                                                const today = new Date();
+                                                return !n.read && notificationDate.toDateString() !== today.toDateString();
+                                            }).length > 0 && (
+                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                                    {notifications.filter(n => {
+                                                        const notificationDate = new Date(n.time);
+                                                        const today = new Date();
+                                                        return !n.read && notificationDate.toDateString() !== today.toDateString();
+                                                    }).length} unread from previous days
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -237,10 +288,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                         setIsMessagesOpen(!isMessagesOpen);
                                         setIsNotificationsOpen(false);
                                         setIsProfileDropdownOpen(false);
-                                        if (onChatClick) onChatClick();
                                     }}
                                     className="p-2 text-gray-600 hover:text-indigo-600 focus:outline-none relative transition-colors duration-200"
-                                    aria-label="Open chat"
+                                    aria-label="Open messages"
                                 >
                                     <FaEnvelope className="h-5 w-5" />
                                     {user.unreadMessages > 0 && (
@@ -250,8 +300,18 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                     )}
                                 </button>
                                 <div className={`absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl py-1 z-50 transform transition-all duration-200 ease-in-out origin-top-right ${isMessagesOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
-                                    <div className="px-4 py-3 border-b border-gray-100">
+                                    <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center">
                                         <h3 className="text-sm font-semibold text-gray-900">Messages</h3>
+                                        <button
+                                            onClick={() => {
+                                                if (onChatClick) onChatClick();
+                                                setIsMessagesOpen(false);
+                                            }}
+                                            className="text-xs text-indigo-600 hover:text-indigo-800 transition-colors duration-200 flex items-center"
+                                        >
+                                            <FaComments className="h-3 w-3 mr-1" />
+                                            Open in Tab
+                                        </button>
                                     </div>
                                     <div className="max-h-96 overflow-y-auto">
                                         <div className="px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer">
