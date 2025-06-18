@@ -85,8 +85,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 if (adminInfo) {
                     const adminFullName = `${adminInfo.firstName} ${adminInfo.lastName}`;
                     messages.forEach(message => {
-                        if (message.sender === 'admin' && 
-                            message.adminName === adminFullName && 
+                        if (message.sender === 'admin' &&
+                            message.adminName === adminFullName &&
                             !message.read) {
                             markAsRead(message.id);
                         }
@@ -238,8 +238,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                 >
                                                     <div className="flex items-start">
                                                         <div className={`p-2 rounded-lg mr-3 ${notification.type === 'info' ? 'bg-blue-100 text-blue-600' :
-                                                                notification.type === 'warning' ? 'bg-yellow-100 text-yellow-600' :
-                                                                    'bg-green-100 text-green-600'
+                                                            notification.type === 'warning' ? 'bg-yellow-100 text-yellow-600' :
+                                                                'bg-green-100 text-green-600'
                                                             }`}>
                                                             <notification.icon className="h-4 w-4" />
                                                         </div>
@@ -307,14 +307,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                 const today = new Date();
                                                 return !n.read && notificationDate.toDateString() !== today.toDateString();
                                             }).length > 0 && (
-                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                                                    {notifications.filter(n => {
-                                                        const notificationDate = new Date(n.time);
-                                                        const today = new Date();
-                                                        return !n.read && notificationDate.toDateString() !== today.toDateString();
-                                                    }).length} unread from previous days
-                                                </span>
-                                            )}
+                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                                        {notifications.filter(n => {
+                                                            const notificationDate = new Date(n.time);
+                                                            const today = new Date();
+                                                            return !n.read && notificationDate.toDateString() !== today.toDateString();
+                                                        }).length} unread from previous days
+                                                    </span>
+                                                )}
                                         </div>
                                     </div>
                                 </div>
@@ -393,35 +393,33 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                                     </span>
                                                                 </div>
                                                             )}
-                                                            <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${
-                                                                selectedAdminInfo?.isOnline ? 'bg-green-500' : 'bg-gray-400'
-                                                            }`}></div>
+                                                            <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${selectedAdminInfo?.isOnline ? 'bg-green-500' : 'bg-gray-400'
+                                                                }`}></div>
                                                         </div>
                                                         <div>
                                                             <p className="text-sm font-semibold text-gray-900">
                                                                 {selectedAdminInfo?.firstName} {selectedAdminInfo?.lastName}
                                                             </p>
-                                                            <p className={`text-xs font-medium ${
-                                                                selectedAdminInfo?.isOnline ? 'text-green-600' : 'text-gray-500'
-                                                            }`}>
+                                                            <p className={`text-xs font-medium ${selectedAdminInfo?.isOnline ? 'text-green-600' : 'text-gray-500'
+                                                                }`}>
                                                                 • {selectedAdminInfo?.isOnline ? 'online' : 'offline'}
                                                             </p>
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center space-x-2">
-                                                        <button 
+                                                        <button
                                                             className="focus:outline-none p-2 rounded-xl hover:bg-gray-100 transition-all duration-200 hover:scale-110"
                                                             aria-label="Call admin"
                                                         >
                                                             <FaPhone className="h-4 w-4 text-gray-600" />
                                                         </button>
-                                                        <button 
+                                                        <button
                                                             className="focus:outline-none p-2 rounded-xl hover:bg-gray-100 transition-all duration-200 hover:scale-110"
                                                             aria-label="Video call admin"
                                                         >
                                                             <FaVideo className="h-4 w-4 text-gray-600" />
                                                         </button>
-                                                        <button 
+                                                        <button
                                                             className="focus:outline-none p-2 rounded-xl hover:bg-gray-100 transition-all duration-200 hover:scale-110"
                                                             aria-label="More options"
                                                         >
@@ -432,27 +430,27 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
                                                 {/* Chat Area */}
                                                 <div className="flex-1 flex flex-col bg-gradient-to-b from-gray-50/30 to-white/50">
-                                                    <div className="flex-1 overflow-y-auto p-4 space-y-3 max-h-screen">
+                                                    <div className="flex-1 overflow-y-auto p-4 space-y-3 max-h-[350px] min-h-[350px]">
                                                         {messages
                                                             .filter(message => {
                                                                 const adminFullName = selectedAdminInfo ? `${selectedAdminInfo.firstName} ${selectedAdminInfo.lastName}` : '';
-                                                                
+
                                                                 if (message.sender === 'admin') {
                                                                     return message.adminName === adminFullName;
                                                                 }
-                                                                
+
                                                                 if (message.sender === 'superadmin') {
                                                                     const messageIndex = messages.indexOf(message);
                                                                     const nextMessage = messages[messageIndex + 1];
                                                                     return nextMessage && nextMessage.sender === 'admin' && nextMessage.adminName === adminFullName;
                                                                 }
-                                                                
+
                                                                 return false;
                                                             })
                                                             .map((message, index, filteredMessages) => {
-                                                                const isFirstUnread = !message.read && 
+                                                                const isFirstUnread = !message.read &&
                                                                     (index === 0 || filteredMessages[index - 1].read);
-                                                                
+
                                                                 return (
                                                                     <React.Fragment key={message.id}>
                                                                         {isFirstUnread && (
@@ -469,30 +467,41 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                                             onClick={() => !message.read && markAsRead(message.id)}
                                                                         >
                                                                             <div
-                                                                                className={`flex items-end space-x-2 max-w-[85%] ${
-                                                                                    message.sender === 'superadmin' ? 'flex-row-reverse space-x-reverse' : ''
-                                                                                }`}
+                                                                                className={`flex items-end space-x-2 max-w-[85%] ${message.sender === 'superadmin' ? 'flex-row-reverse space-x-reverse' : ''
+                                                                                    }`}
                                                                             >
-                                                                                <div className={`p-2 rounded-xl ${
-                                                                                    message.sender === 'superadmin' 
-                                                                                        ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg' 
-                                                                                        : 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600'
-                                                                                }`}>
-                                                                                    <FaUser className="h-3 w-3" />
-                                                                                </div>
-                                                                                <div className={`rounded-2xl px-4 py-3 shadow-lg backdrop-blur-sm ${
-                                                                                    message.sender === 'superadmin'
+                                                                                {message.sender === 'admin' && selectedAdminInfo ? (
+                                                                                    <div className="relative">
+                                                                                        {selectedAdminInfo.profileImage ? (
+                                                                                            <img
+                                                                                                src={selectedAdminInfo.profileImage}
+                                                                                                alt={`${selectedAdminInfo.firstName} ${selectedAdminInfo.lastName}`}
+                                                                                                className="h-8 w-8 rounded-full object-cover shadow-lg"
+                                                                                            />
+                                                                                        ) : (
+                                                                                            <div className="h-8 w-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg flex items-center justify-center">
+                                                                                                <span className="text-xs font-medium">
+                                                                                                    {selectedAdminInfo.firstName[0]}{selectedAdminInfo.lastName[0]}
+                                                                                                </span>
+                                                                                            </div>
+                                                                                        )}
+                                                                                        <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${selectedAdminInfo.isOnline ? 'bg-green-500' : 'bg-gray-400'
+                                                                                            }`}></div>
+                                                                                    </div>
+                                                                                ) : (
+                                                                                    null
+                                                                                )}
+                                                                                <div className={`rounded-2xl px-4 py-3 shadow-lg backdrop-blur-sm ${message.sender === 'superadmin'
                                                                                         ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white'
                                                                                         : 'bg-white/90 text-gray-900 border border-gray-200/50'
-                                                                                }`}>
+                                                                                    }`}>
                                                                                     {message.sender === 'admin' && message.adminName && (
                                                                                         <p className="text-xs font-semibold mb-1 text-gray-600">{message.adminName}</p>
                                                                                     )}
                                                                                     <p className="text-sm leading-relaxed">{message.content}</p>
                                                                                     <div className="flex items-center justify-between mt-2">
-                                                                                        <p className={`text-xs ${
-                                                                                            message.sender === 'superadmin' ? 'text-indigo-200' : 'text-gray-400'
-                                                                                        }`}>
+                                                                                        <p className={`text-xs ${message.sender === 'superadmin' ? 'text-indigo-200' : 'text-gray-400'
+                                                                                            }`}>
                                                                                             {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                                                         </p>
                                                                                         {message.sender === 'superadmin' && (
@@ -595,9 +604,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                         })
                                                         .map((admin) => {
                                                             const adminFullName = `${admin.firstName} ${admin.lastName}`;
-                                                            const unreadCount = messages.filter(message => 
-                                                                message.sender === 'admin' && 
-                                                                message.adminName === adminFullName && 
+                                                            const unreadCount = messages.filter(message =>
+                                                                message.sender === 'admin' &&
+                                                                message.adminName === adminFullName &&
                                                                 !message.read
                                                             ).length;
 
@@ -609,11 +618,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                                 <button
                                                                     key={admin.id}
                                                                     onClick={() => setSelectedAdmin(admin.id)}
-                                                                    className={`focus:outline-none w-full p-4 text-left rounded-2xl transition-all duration-300 transform hover:scale-[1.02] hover-lift ${
-                                                                        selectedAdmin === admin.id 
-                                                                            ? 'bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-200/50 shadow-lg' 
+                                                                    className={`focus:outline-none w-full p-4 text-left rounded-2xl transition-all duration-300 transform hover:scale-[1.02] hover-lift ${selectedAdmin === admin.id
+                                                                            ? 'bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-200/50 shadow-lg'
                                                                             : 'hover:bg-white/50 border border-transparent'
-                                                                    }`}
+                                                                        }`}
                                                                 >
                                                                     <div className="flex items-center justify-between">
                                                                         <div className="flex items-center flex-1 min-w-0">
@@ -622,27 +630,24 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                                                     <img
                                                                                         src={admin.profileImage}
                                                                                         alt={`${admin.firstName} ${admin.lastName}`}
-                                                                                        className={`h-8 w-8 rounded-full object-cover ${
-                                                                                            selectedAdmin === admin.id 
-                                                                                                ? 'ring-2 ring-indigo-500' 
+                                                                                        className={`h-8 w-8 rounded-full object-cover ${selectedAdmin === admin.id
+                                                                                                ? 'ring-2 ring-indigo-500'
                                                                                                 : ''
-                                                                                        }`}
+                                                                                            }`}
                                                                                     />
                                                                                 ) : (
-                                                                                    <div className={`p-2.5 rounded-xl ${
-                                                                                        selectedAdmin === admin.id 
-                                                                                            ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg' 
+                                                                                    <div className={`p-2.5 rounded-xl ${selectedAdmin === admin.id
+                                                                                            ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg'
                                                                                             : 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600'
-                                                                                    }`}>
+                                                                                        }`}>
                                                                                         <span className="text-sm font-medium">
                                                                                             {admin.firstName[0]}{admin.lastName[0]}
                                                                                         </span>
                                                                                     </div>
                                                                                 )}
                                                                                 {/* Online indicator */}
-                                                                                <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${
-                                                                                    admin.isOnline ? 'bg-green-500' : 'bg-gray-400'
-                                                                                }`}></div>
+                                                                                <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${admin.isOnline ? 'bg-green-500' : 'bg-gray-400'
+                                                                                    }`}></div>
                                                                             </div>
                                                                             <div className="flex-1 min-w-0">
                                                                                 <div className="flex items-center gap-2">
@@ -675,13 +680,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                         const email = admin.email.toLowerCase();
                                                         return fullName.includes(searchTerm) || email.includes(searchTerm);
                                                     }).length === 0 && searchAdmin.trim() && (
-                                                        <div className="p-6 text-center">
-                                                            <div className="p-4 rounded-2xl bg-gradient-to-r from-gray-100/80 to-gray-200/80 backdrop-blur-sm inline-block mb-4">
-                                                                <FaSearch className="h-8 w-8 text-gray-400" />
+                                                            <div className="p-6 text-center">
+                                                                <div className="p-4 rounded-2xl bg-gradient-to-r from-gray-100/80 to-gray-200/80 backdrop-blur-sm inline-block mb-4">
+                                                                    <FaSearch className="h-8 w-8 text-gray-400" />
+                                                                </div>
+                                                                <p className="text-sm text-gray-500">No admins found matching "{searchAdmin}"</p>
                                                             </div>
-                                                            <p className="text-sm text-gray-500">No admins found matching "{searchAdmin}"</p>
-                                                        </div>
-                                                    )}
+                                                        )}
                                                 </div>
                                             </div>
                                         )}

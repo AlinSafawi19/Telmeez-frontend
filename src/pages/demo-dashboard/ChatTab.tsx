@@ -102,6 +102,52 @@ const ChatTab: React.FC = () => {
         return admin ? admin.isOnline : false;
     };
 
+    // Generate initials from name
+    const getInitials = (firstName: string, lastName: string) => {
+        return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+    };
+
+    // Profile image component with fallback
+    const ProfileImage: React.FC<{ admin: any; size?: 'sm' | 'md' | 'lg'; className?: string }> = ({ 
+        admin, 
+        size = 'md', 
+        className = '' 
+    }) => {
+        const sizeClasses = {
+            sm: 'w-8 h-8 text-xs',
+            md: 'w-12 h-12 text-sm',
+            lg: 'w-16 h-16 text-lg'
+        };
+
+        if (admin.profileImage) {
+            return (
+                <img
+                    src={admin.profileImage}
+                    alt={`${admin.firstName} ${admin.lastName}`}
+                    className={`rounded-full object-cover ${sizeClasses[size]} ${className}`}
+                    onError={(e) => {
+                        // Fallback to initials if image fails to load
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        const parent = target.parentElement;
+                        if (parent) {
+                            const initialsDiv = parent.querySelector('.initials-fallback') as HTMLElement;
+                            if (initialsDiv) {
+                                initialsDiv.style.display = 'flex';
+                            }
+                        }
+                    }}
+                />
+            );
+        }
+
+        return (
+            <div className={`rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white flex items-center justify-center font-semibold ${sizeClasses[size]} ${className}`}>
+                {getInitials(admin.firstName, admin.lastName)}
+            </div>
+        );
+    };
+
     return (
         <div className="flex bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
             {/* Admin List Sidebar */}
@@ -156,17 +202,21 @@ const ChatTab: React.FC = () => {
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center flex-1 min-w-0">
                                         <div className="relative mr-4">
-                                            <div className={`p-3 rounded-2xl ${
+                                            <div className={`relative ${
                                                 selectedAdmin === admin.id 
-                                                    ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg animate-pulse-glow' 
-                                                    : 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600'
+                                                    ? 'ring-2 ring-indigo-500 ring-offset-2' 
+                                                    : ''
                                             }`}>
-                                                <FaUser className="h-4 w-4" />
+                                                <ProfileImage 
+                                                    admin={admin} 
+                                                    size="md"
+                                                    className={selectedAdmin === admin.id ? 'shadow-lg' : ''}
+                                                />
+                                                {/* Online indicator */}
+                                                <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
+                                                    isOnline ? 'bg-green-500' : 'bg-gray-400'
+                                                }`}></div>
                                             </div>
-                                            {/* Online indicator */}
-                                            <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
-                                                isOnline ? 'bg-green-500' : 'bg-gray-400'
-                                            }`}></div>
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2">
@@ -204,12 +254,16 @@ const ChatTab: React.FC = () => {
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
                                     <div className="relative mr-4">
-                                        <div className="p-4 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg">
-                                            <FaUser className="h-5 w-5" />
+                                        <div className="relative">
+                                            <ProfileImage 
+                                                admin={selectedAdminInfo} 
+                                                size="lg"
+                                                className="shadow-lg"
+                                            />
+                                            <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
+                                                selectedAdminInfo && getOnlineStatus(selectedAdminInfo.id) ? 'bg-green-500' : 'bg-gray-400'
+                                            }`}></div>
                                         </div>
-                                        <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
-                                            selectedAdminInfo && getOnlineStatus(selectedAdminInfo.id) ? 'bg-green-500' : 'bg-gray-400'
-                                        }`}></div>
                                     </div>
                                     <div>
                                         <h3 className="text-xl font-bold text-gray-900">
@@ -274,12 +328,16 @@ const ChatTab: React.FC = () => {
                                                     message.sender === 'superadmin' ? 'flex-row-reverse space-x-reverse' : ''
                                                 }`}
                                             >
-                                                <div className={`p-3 rounded-2xl ${
-                                                    message.sender === 'superadmin' 
-                                                        ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg animate-pulse-glow' 
-                                                        : 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600'
-                                                }`}>
-                                                    <FaUser className="h-4 w-4" />
+                                                <div className="relative">
+                                                    {message.sender === 'admin' ? (
+                                                        <ProfileImage 
+                                                            admin={selectedAdminInfo} 
+                                                            size="sm"
+                                                            className="shadow-md"
+                                                        />
+                                                    ) : (
+                                                       null
+                                                    )}
                                                 </div>
                                                 <div className={`rounded-3xl px-6 py-4 shadow-lg backdrop-blur-sm message-bubble hover-lift ${
                                                     message.sender === 'superadmin'
@@ -317,8 +375,12 @@ const ChatTab: React.FC = () => {
                             {isTyping && (
                                 <div className="flex justify-start animate-fade-in">
                                     <div className="flex items-end space-x-3">
-                                        <div className="p-3 rounded-2xl bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600">
-                                            <FaUser className="h-4 w-4" />
+                                        <div className="relative">
+                                            <ProfileImage 
+                                                admin={selectedAdminInfo} 
+                                                size="sm"
+                                                className="shadow-md"
+                                            />
                                         </div>
                                         <div className="bg-white/90 rounded-3xl px-6 py-4 shadow-lg border border-gray-200/50">
                                             <div className="flex space-x-1">
