@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaBell, FaEnvelope, FaCog, FaUser, FaChevronDown, FaCreditCard, FaExclamationTriangle, FaInfoCircle, FaCog as FaSettings, FaCheckCircle, FaComments, FaRobot, FaSearch, FaPaperPlane, FaCheck, FaCheckDouble } from 'react-icons/fa';
+import { FaBell, FaEnvelope, FaCog, FaUser, FaChevronDown, FaCreditCard, FaExclamationTriangle, FaInfoCircle, FaCog as FaSettings, FaCheckCircle, FaComments, FaRobot, FaSearch, FaPaperPlane, FaCheck, FaCheckDouble, FaPhone, FaVideo, FaEllipsisV, FaSmile, FaPaperclip, FaMicrophone } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import logo from '../../assets/images/logo.png';
 import logoarb from '../../assets/images/logo_arb.png';
@@ -348,51 +348,80 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                         </span>
                                     )}
                                 </button>
-                                <div className={`absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl py-1 z-50 transform transition-all duration-200 ease-in-out origin-top-right ${isMessagesOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
-                                    <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center">
-                                        <h3 className="text-sm font-semibold text-gray-900">Messages</h3>
-                                        <button
-                                            onClick={() => {
-                                                if (onChatClick) onChatClick();
-                                                setIsMessagesOpen(false);
-                                            }}
-                                            className="text-xs text-indigo-600 hover:text-indigo-800 transition-colors duration-200 flex items-center"
-                                        >
-                                            <FaComments className="h-3 w-3 mr-1" />
-                                            Open in Tab
-                                        </button>
+                                <div className={`absolute right-0 mt-2 w-96 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl py-1 z-50 transform transition-all duration-300 ease-in-out origin-top-right border border-white/20 ${isMessagesOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
+                                    <div className="px-6 py-4 border-b border-white/20 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 relative overflow-hidden rounded-t-2xl">
+                                        <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent"></div>
+                                        <div className="relative z-10 flex justify-between items-center">
+                                            <h3 className="text-lg font-bold text-white flex items-center">
+                                                <span className="mr-2">💬</span>
+                                                Messages
+                                            </h3>
+                                            <button
+                                                onClick={() => {
+                                                    if (onChatClick) onChatClick();
+                                                    setIsMessagesOpen(false);
+                                                }}
+                                                className="focus:outline-none text-xs text-white/90 hover:text-white transition-colors duration-200 flex items-center bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full hover:bg-white/30"
+                                            >
+                                                <FaComments className="h-3 w-3 mr-1" />
+                                                Open in Tab
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="max-h-96 overflow-y-auto">
+                                    <div className="max-h-[600px] overflow-hidden">
                                         {selectedAdmin ? (
                                             <div className="flex flex-col h-[500px]">
                                                 {/* Chat Header */}
-                                                <div className="p-3 border-b border-gray-200 flex items-center justify-between bg-white">
+                                                <div className="p-4 border-b border-gray-100/50 flex items-center justify-between bg-gradient-to-r from-gray-50/50 to-white/50">
                                                     <button
                                                         onClick={() => {
                                                             setSelectedAdmin(null);
                                                             setSearchAdmin('');
                                                         }}
-                                                        className="flex items-center text-gray-600 hover:text-indigo-600 transition-colors duration-200"
+                                                        className="focus:outline-none flex items-center text-gray-600 hover:text-indigo-600 transition-colors duration-200 bg-white/80 backdrop-blur-sm px-3 py-2 rounded-xl hover:bg-white shadow-sm"
                                                     >
                                                         <FaChevronDown className="h-4 w-4 transform rotate-90" />
-                                                        <span className="ml-2 text-sm font-medium">Back to admins</span>
+                                                        <span className="ml-2 text-sm font-medium">Back</span>
                                                     </button>
                                                     <div className="flex items-center">
-                                                        <div className="p-1.5 rounded-full bg-gray-100 text-gray-600 mr-2">
-                                                            <FaUser className="h-3 w-3" />
+                                                        <div className="relative mr-3">
+                                                            <div className="p-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg">
+                                                                <FaUser className="h-3 w-3" />
+                                                            </div>
+                                                            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white bg-green-500"></div>
                                                         </div>
                                                         <div>
-                                                            <p className="text-xs font-medium text-gray-900">
+                                                            <p className="text-sm font-semibold text-gray-900">
                                                                 {admins.find(a => a.id === selectedAdmin)?.firstName} {admins.find(a => a.id === selectedAdmin)?.lastName}
                                                             </p>
-                                                            <p className="text-xs text-gray-500">{admins.find(a => a.id === selectedAdmin)?.email}</p>
+                                                            <p className="text-xs text-green-600 font-medium">• online</p>
                                                         </div>
+                                                    </div>
+                                                    <div className="flex items-center space-x-2">
+                                                        <button 
+                                                            className="focus:outline-none p-2 rounded-xl hover:bg-gray-100 transition-all duration-200 hover:scale-110"
+                                                            aria-label="Call admin"
+                                                        >
+                                                            <FaPhone className="h-4 w-4 text-gray-600" />
+                                                        </button>
+                                                        <button 
+                                                            className="focus:outline-none p-2 rounded-xl hover:bg-gray-100 transition-all duration-200 hover:scale-110"
+                                                            aria-label="Video call admin"
+                                                        >
+                                                            <FaVideo className="h-4 w-4 text-gray-600" />
+                                                        </button>
+                                                        <button 
+                                                            className="focus:outline-none p-2 rounded-xl hover:bg-gray-100 transition-all duration-200 hover:scale-110"
+                                                            aria-label="More options"
+                                                        >
+                                                            <FaEllipsisV className="h-4 w-4 text-gray-600" />
+                                                        </button>
                                                     </div>
                                                 </div>
 
                                                 {/* Chat Area */}
-                                                <div className="flex-1 flex flex-col">
-                                                    <div className="flex-1 overflow-y-auto p-3 space-y-3">
+                                                <div className="flex-1 flex flex-col bg-gradient-to-b from-gray-50/30 to-white/50">
+                                                    <div className="flex-1 overflow-y-auto p-4 space-y-3" style={{ maxHeight: 'calc(100vh - 385px)' }}>
                                                         {messages
                                                             .filter(message => {
                                                                 const selectedAdminInfo = admins.find(a => a.id === selectedAdmin);
@@ -417,42 +446,42 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                                 return (
                                                                     <React.Fragment key={message.id}>
                                                                         {isFirstUnread && (
-                                                                            <div className="flex items-center my-2">
-                                                                                <div className="flex-1 border-t border-gray-200"></div>
-                                                                                <span className="px-3 text-xs font-medium text-gray-500 bg-gray-50 rounded-full">
+                                                                            <div className="flex items-center my-3">
+                                                                                <div className="flex-1 border-t border-gray-200/50"></div>
+                                                                                <span className="px-4 py-1 text-xs font-medium text-gray-500 bg-white/80 backdrop-blur-sm rounded-full shadow-sm border border-gray-200/50">
                                                                                     New Messages
                                                                                 </span>
-                                                                                <div className="flex-1 border-t border-gray-200"></div>
+                                                                                <div className="flex-1 border-t border-gray-200/50"></div>
                                                                             </div>
                                                                         )}
                                                                         <div
                                                                             className={`flex ${message.sender === 'superadmin' ? 'justify-end' : 'justify-start'}`}
-                                                                            onClick={() => !message.read && markNotificationAsRead(message.id)}
+                                                                            onClick={() => !message.read && markAsRead(message.id)}
                                                                         >
                                                                             <div
-                                                                                className={`flex items-start space-x-2 max-w-[80%] ${
+                                                                                className={`flex items-end space-x-2 max-w-[85%] ${
                                                                                     message.sender === 'superadmin' ? 'flex-row-reverse space-x-reverse' : ''
                                                                                 }`}
                                                                             >
-                                                                                <div className={`p-1.5 rounded-full ${
+                                                                                <div className={`p-2 rounded-xl ${
                                                                                     message.sender === 'superadmin' 
-                                                                                        ? 'bg-indigo-100 text-indigo-600' 
-                                                                                        : 'bg-gray-100 text-gray-600'
+                                                                                        ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg' 
+                                                                                        : 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600'
                                                                                 }`}>
                                                                                     <FaUser className="h-3 w-3" />
                                                                                 </div>
-                                                                                <div className={`rounded-lg p-2 ${
+                                                                                <div className={`rounded-2xl px-4 py-3 shadow-lg backdrop-blur-sm ${
                                                                                     message.sender === 'superadmin'
-                                                                                        ? 'bg-indigo-600 text-white'
-                                                                                        : 'bg-gray-100 text-gray-900'
+                                                                                        ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white'
+                                                                                        : 'bg-white/90 text-gray-900 border border-gray-200/50'
                                                                                 }`}>
                                                                                     {message.sender === 'admin' && message.adminName && (
-                                                                                        <p className="text-xs font-semibold mb-0.5 text-gray-600">{message.adminName}</p>
+                                                                                        <p className="text-xs font-semibold mb-1 text-gray-600">{message.adminName}</p>
                                                                                     )}
-                                                                                    <p className="text-xs">{message.content}</p>
-                                                                                    <div className="flex items-center justify-between mt-0.5">
+                                                                                    <p className="text-sm leading-relaxed">{message.content}</p>
+                                                                                    <div className="flex items-center justify-between mt-2">
                                                                                         <p className={`text-xs ${
-                                                                                            message.sender === 'superadmin' ? 'text-indigo-200' : 'text-gray-500'
+                                                                                            message.sender === 'superadmin' ? 'text-indigo-200' : 'text-gray-400'
                                                                                         }`}>
                                                                                             {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                                                         </p>
@@ -473,21 +502,48 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                                 );
                                                             })}
                                                     </div>
-                                                    <form onSubmit={handleSendMessage} className="border-t border-gray-200 p-3">
-                                                        <div className="flex space-x-2">
-                                                            <input
-                                                                type="text"
-                                                                value={newMessage}
-                                                                onChange={(e) => setNewMessage(e.target.value)}
-                                                                placeholder="Type your message..."
-                                                                className="flex-1 text-sm rounded-lg border border-gray-300 px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                                            />
+                                                    <form onSubmit={handleSendMessage} className="border-t border-gray-100/50 p-4 bg-white/80 backdrop-blur-sm">
+                                                        <div className="flex items-end space-x-3">
+                                                            <div className="flex-1 relative">
+                                                                <div className="relative">
+                                                                    <input
+                                                                        type="text"
+                                                                        value={newMessage}
+                                                                        onChange={(e) => setNewMessage(e.target.value)}
+                                                                        placeholder="Type your message..."
+                                                                        className="w-full text-sm rounded-xl border border-gray-200/50 px-4 py-2.5 pr-24 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent bg-white/90 backdrop-blur-sm shadow-sm"
+                                                                    />
+                                                                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+                                                                        <button
+                                                                            type="button"
+                                                                            className="focus:outline-none p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                                                                            aria-label="Add emoji"
+                                                                        >
+                                                                            <FaSmile className="h-3.5 w-3.5 text-gray-500" />
+                                                                        </button>
+                                                                        <button
+                                                                            type="button"
+                                                                            className="focus:outline-none p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                                                                            aria-label="Attach file"
+                                                                        >
+                                                                            <FaPaperclip className="h-3.5 w-3.5 text-gray-500" />
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <button
+                                                                type="button"
+                                                                className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600 rounded-xl px-3 py-2.5 hover:from-gray-200 hover:to-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                                                                aria-label="Voice message"
+                                                            >
+                                                                <FaMicrophone className="h-3.5 w-3.5" />
+                                                            </button>
                                                             <button
                                                                 type="submit"
-                                                                className="bg-indigo-600 text-white rounded-lg px-3 py-1.5 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
+                                                                className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl px-4 py-2.5 hover:from-indigo-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                                                                 aria-label="Send message"
                                                             >
-                                                                <FaPaperPlane className="h-3 w-3" />
+                                                                <FaPaperPlane className="h-3.5 w-3.5" />
                                                             </button>
                                                         </div>
                                                     </form>
@@ -495,30 +551,30 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                             </div>
                                         ) : (
                                             <div className="h-[500px]">
-                                                <div className="p-3 border-b border-gray-200">
+                                                <div className="p-4 border-b border-gray-100/50">
                                                     <div className="relative">
                                                         <input
                                                             type="text"
                                                             value={searchAdmin}
                                                             onChange={(e) => setSearchAdmin(e.target.value)}
                                                             placeholder="Search admins..."
-                                                            className="w-full pl-8 pr-8 py-1.5 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                                            className="w-full pl-10 pr-4 py-3 text-sm rounded-xl border border-gray-200/50 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent bg-white/90 backdrop-blur-sm shadow-sm"
                                                         />
-                                                        <FaSearch className="absolute left-2.5 top-2.5 text-gray-400 h-3 w-3" />
+                                                        <FaSearch className="absolute left-3.5 top-3.5 text-gray-400 h-4 w-4" />
                                                         {searchAdmin && (
                                                             <button
                                                                 onClick={() => setSearchAdmin('')}
-                                                                className="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                                                                className="absolute right-3.5 top-3.5 text-gray-400 hover:text-gray-600 transition-colors duration-200"
                                                                 aria-label="Clear search"
                                                             >
-                                                                <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                                                 </svg>
                                                             </button>
                                                         )}
                                                     </div>
                                                 </div>
-                                                <div className="overflow-y-auto">
+                                                <div className="overflow-y-auto p-2">
                                                     {admins
                                                         .filter(admin => {
                                                             if (!searchAdmin.trim()) return true;
@@ -527,7 +583,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                             const email = admin.email.toLowerCase();
                                                             return fullName.includes(searchTerm) || email.includes(searchTerm);
                                                         })
-                                                        .map(admin => {
+                                                        .map((admin, index) => {
                                                             const adminFullName = `${admin.firstName} ${admin.lastName}`;
                                                             const unreadCount = messages.filter(message => 
                                                                 message.sender === 'admin' && 
@@ -535,24 +591,55 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                                 !message.read
                                                             ).length;
 
+                                                            const lastMessage = messages
+                                                                .filter(m => m.sender === 'admin' && m.adminName === adminFullName)
+                                                                .pop();
+
+                                                            const isOnline = admin.id % 3 !== 0; // Consistent online status
+
                                                             return (
                                                                 <button
                                                                     key={admin.id}
                                                                     onClick={() => setSelectedAdmin(admin.id)}
-                                                                    className="w-full p-3 text-left hover:bg-gray-50 transition-colors duration-150"
+                                                                    className={`focus:outline-none w-full p-4 text-left rounded-2xl transition-all duration-300 transform hover:scale-[1.02] hover-lift ${
+                                                                        selectedAdmin === admin.id 
+                                                                            ? 'bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-200/50 shadow-lg' 
+                                                                            : 'hover:bg-white/50 border border-transparent'
+                                                                    }`}
+                                                                    style={{ animationDelay: `${index * 0.1}s` }}
                                                                 >
                                                                     <div className="flex items-center justify-between">
-                                                                        <div className="flex items-center">
-                                                                            <div className="p-1.5 rounded-full bg-gray-100 text-gray-600 mr-2">
-                                                                                <FaUser className="h-3 w-3" />
+                                                                        <div className="flex items-center flex-1 min-w-0">
+                                                                            <div className="relative mr-4">
+                                                                                <div className={`p-2.5 rounded-xl ${
+                                                                                    selectedAdmin === admin.id 
+                                                                                        ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg' 
+                                                                                        : 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600'
+                                                                                }`}>
+                                                                                    <FaUser className="h-3 w-3" />
+                                                                                </div>
+                                                                                {/* Online indicator */}
+                                                                                <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${
+                                                                                    isOnline ? 'bg-green-500' : 'bg-gray-400'
+                                                                                }`}></div>
                                                                             </div>
-                                                                            <div>
-                                                                                <p className="text-xs font-medium text-gray-900">{admin.firstName} {admin.lastName}</p>
-                                                                                <p className="text-xs text-gray-500">{admin.email}</p>
+                                                                            <div className="flex-1 min-w-0">
+                                                                                <div className="flex items-center gap-2">
+                                                                                    <p className="font-semibold text-gray-900 truncate text-sm">{admin.firstName} {admin.lastName}</p>
+                                                                                    {isOnline && (
+                                                                                        <span className="text-xs text-green-600 font-medium">• online</span>
+                                                                                    )}
+                                                                                </div>
+                                                                                <p className="text-xs text-gray-500 truncate">{admin.email}</p>
+                                                                                {lastMessage && (
+                                                                                    <p className="text-xs text-gray-400 truncate mt-1">
+                                                                                        {lastMessage.content.substring(0, 30)}...
+                                                                                    </p>
+                                                                                )}
                                                                             </div>
                                                                         </div>
                                                                         {unreadCount > 0 && (
-                                                                            <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full">
+                                                                            <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full min-w-[20px] shadow-lg animate-pulse">
                                                                                 {unreadCount}
                                                                             </span>
                                                                         )}
@@ -567,7 +654,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                         const email = admin.email.toLowerCase();
                                                         return fullName.includes(searchTerm) || email.includes(searchTerm);
                                                     }).length === 0 && searchAdmin.trim() && (
-                                                        <div className="p-4 text-center">
+                                                        <div className="p-6 text-center">
+                                                            <div className="p-4 rounded-2xl bg-gradient-to-r from-gray-100/80 to-gray-200/80 backdrop-blur-sm inline-block mb-4">
+                                                                <FaSearch className="h-8 w-8 text-gray-400" />
+                                                            </div>
                                                             <p className="text-sm text-gray-500">No admins found matching "{searchAdmin}"</p>
                                                         </div>
                                                     )}

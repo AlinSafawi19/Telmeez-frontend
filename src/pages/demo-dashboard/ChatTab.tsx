@@ -227,19 +227,19 @@ const ChatTab: React.FC = () => {
                                 </div>
                                 <div className="flex items-center space-x-3">
                                     <button 
-                                        className="p-3 rounded-2xl hover:bg-gray-100 transition-all duration-200 hover:scale-110"
+                                        className="focus:outline-none p-3 rounded-2xl hover:bg-gray-100 transition-all duration-200 hover:scale-110"
                                         aria-label="Call admin"
                                     >
                                         <FaPhone className="h-5 w-5 text-gray-600" />
                                     </button>
                                     <button 
-                                        className="p-3 rounded-2xl hover:bg-gray-100 transition-all duration-200 hover:scale-110"
+                                        className="focus:outline-none p-3 rounded-2xl hover:bg-gray-100 transition-all duration-200 hover:scale-110"
                                         aria-label="Video call admin"
                                     >
                                         <FaVideo className="h-5 w-5 text-gray-600" />
                                     </button>
                                     <button 
-                                        className="p-3 rounded-2xl hover:bg-gray-100 transition-all duration-200 hover:scale-110"
+                                        className="focus:outline-none p-3 rounded-2xl hover:bg-gray-100 transition-all duration-200 hover:scale-110"
                                         aria-label="More options"
                                     >
                                         <FaEllipsisV className="h-5 w-5 text-gray-600" />
@@ -249,7 +249,7 @@ const ChatTab: React.FC = () => {
                         </div>
 
                         {/* Messages */}
-                        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-50/30 to-white/50 chat-scrollbar" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+                        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-50/30 to-white/50 chat-scrollbar" style={{ maxHeight: 'calc(100vh - 350px)' }}>
                             {selectedAdminMessages.map((message, index) => {
                                 const isFirstUnread = !message.read && 
                                     (index === 0 || selectedAdminMessages[index - 1].read);
@@ -352,14 +352,14 @@ const ChatTab: React.FC = () => {
                                         <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
                                             <button
                                                 type="button"
-                                                className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                                                className="focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
                                                 aria-label="Add emoji"
                                             >
                                                 <FaSmile className="h-4 w-4 text-gray-500" />
                                             </button>
                                             <button
                                                 type="button"
-                                                className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                                                className="focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
                                                 aria-label="Attach file"
                                             >
                                                 <FaPaperclip className="h-4 w-4 text-gray-500" />
