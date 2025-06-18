@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import DashboardLayout from './DashboardLayout';
 import { motion } from 'framer-motion';
 import { FaUserPlus, FaUserShield, FaChalkboardTeacher, FaUserGraduate, FaUserFriends, FaTrash, FaSort, FaSortUp, FaSortDown, FaCreditCard, FaReceipt, FaTimes, FaCog, FaUser, FaGlobe, FaBell, FaLock, FaLanguage, FaComments, FaCheckCircle, FaExclamationTriangle, FaInfoCircle, FaCalendarAlt, FaBullhorn } from 'react-icons/fa'
-import type { Admin } from '../../components/AdminModal';
+import type { Admin } from '../../contexts/AdminContext';
+import { useAdmin } from '../../contexts/AdminContext';
 import AdminModalComponent from '../../components/AdminModal';
 import { useNotifications, type Notification } from '../../contexts/NotificationsContext';
 import Swal from 'sweetalert2';
@@ -42,7 +43,6 @@ ChartJS.register(
 
 const SuperAdminDashboard: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'overview' | 'admins' | 'billing' | 'general' | 'account' | 'notifications' | 'chat' | 'calendar'>('overview');
-    const [selectedAdmins, setSelectedAdmins] = useState<number[]>([]);
     const [billingActive, setBillingActive] = useState(false);
     const [generalActive, setGeneralActive] = useState(false);
     const [accountActive, setAccountActive] = useState(false);
@@ -53,87 +53,39 @@ const SuperAdminDashboard: React.FC = () => {
     const [notificationReadFilter, setNotificationReadFilter] = useState<('read' | 'unread')[]>([]);
     const [notificationSearchQuery, setNotificationSearchQuery] = useState('');
     const [tabOrder, setTabOrder] = useState<string[]>(['overview', 'admins', 'calendar']);
-    const [sortConfig, setSortConfig] = useState<{
-        key: string;
-        direction: 'ascending' | 'descending';
-    }>({ key: 'date', direction: 'descending' });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
     const [selectedAdmin, setSelectedAdmin] = useState<Admin | undefined>();
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive' | 'incomplete'>('all');
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [currentPage, setCurrentPage] = useState(1);
     const [expandedDates, setExpandedDates] = useState<Set<string>>(new Set(['Today', 'Yesterday']));
     const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
     const [startDate, endDate] = dateRange;
 
-    const [admins, setAdmins] = useState<Admin[]>([
-        {
-            id: 1,
-            firstName: 'Alin',
-            lastName: 'Safawi',
-            email: 'alin@safawi.com',
-            status: 'active',
-            date: '2024-03-15',
-            stats: { parents: 45, students: 120, teachers: 12 }
-        },
-        {
-            id: 2,
-            firstName: 'Sarah',
-            lastName: 'Wilson',
-            email: 'sarah@example.com',
-            status: 'active',
-            date: '2024-03-14',
-            stats: { parents: 52, students: 110, teachers: 15 }
-        },
-        {
-            id: 3,
-            firstName: 'Michael',
-            lastName: 'Brown',
-            email: 'michael@example.com',
-            status: 'incomplete',
-            date: '2024-03-13',
-            stats: { parents: 0, students: 0, teachers: 0 }
-        },
-        {
-            id: 4,
-            firstName: 'Emily',
-            lastName: 'Davis',
-            email: 'emily@example.com',
-            status: 'active',
-            date: '2024-03-12',
-            stats: { parents: 48, students: 90, teachers: 13 }
-        },
-        {
-            id: 5,
-            firstName: 'David',
-            lastName: 'Miller',
-            email: 'david@example.com',
-            status: 'inactive',
-            date: '2024-03-11',
-            stats: { parents: 20, students: 25, teachers: 4 }
-        },
-        {
-            id: 6,
-            firstName: 'Lisa',
-            lastName: 'Anderson',
-            email: 'lisa@example.com',
-            status: 'active',
-            date: '2024-03-10',
-            stats: { parents: 15, students: 20, teachers: 1 }
-        },
-        {
-            id: 7,
-            firstName: 'Robert',
-            lastName: 'Taylor',
-            email: 'robert@example.com',
-            status: 'incomplete',
-            date: '2024-03-09',
-            stats: { parents: 0, students: 0, teachers: 0 }
-        }
-    ]);
+    const {
+        admins,
+        selectedAdmins,
+        searchQuery,
+        statusFilter,
+        sortConfig,
+        rowsPerPage,
+        currentPage,
+        setSearchQuery,
+        setStatusFilter,
+        setRowsPerPage,
+        setCurrentPage,
+        handleSelectAll,
+        handleSelectAdmin,
+        handleAddAdmin,
+        handleEditAdmin,
+        handleDeleteAdmin,
+        handleBulkDelete,
+        handleSort,
+        getSortIcon,
+        filterAdmins,
+        sortData,
+        getPaginatedData,
+        getTotalPages,
+    } = useAdmin();
 
     // Standard plan limits
     const planLimits = {
@@ -143,12 +95,12 @@ const SuperAdminDashboard: React.FC = () => {
         parent: 750
     };
 
-    // Current usage (this would come from your backend in a real implementation)
+    // Calculate current usage from admin stats
     const currentUsage = {
-        admin: 3,
-        teacher: 45,
-        student: 320,
-        parent: 180
+        admin: admins.length,
+        teacher: admins.reduce((sum, admin) => sum + admin.stats.teachers, 0),
+        student: admins.reduce((sum, admin) => sum + admin.stats.students, 0),
+        parent: admins.reduce((sum, admin) => sum + admin.stats.parents, 0)
     };
 
     const stats = [
@@ -227,6 +179,7 @@ const SuperAdminDashboard: React.FC = () => {
         key: string;
         direction: 'ascending' | 'descending';
     }>({ key: 'date', direction: 'descending' });
+
     // Add new state for recent activity
     const [recentActivity] = useState([
         {
@@ -255,98 +208,6 @@ const SuperAdminDashboard: React.FC = () => {
         }
     ]);
 
-    const handleSelectAll = (checked: boolean) => {
-        if (checked) {
-            setSelectedAdmins(admins.map(admin => admin.id));
-        } else {
-            setSelectedAdmins([]);
-        }
-    };
-
-    const handleSelectAdmin = (id: number) => {
-        if (selectedAdmins.includes(id)) {
-            setSelectedAdmins(selectedAdmins.filter(adminId => adminId !== id));
-        } else {
-            setSelectedAdmins([...selectedAdmins, id]);
-        }
-    };
-
-    const handleAddAdmin = async (adminData: Omit<Admin, 'id' | 'date' | 'stats' | 'status'>) => {
-        // In a real application, this would be an API call
-        const newAdmin: Admin = {
-            id: Math.max(...admins.map(a => a.id)) + 1,
-            ...adminData,
-            status: 'incomplete', // New admins start as incomplete
-            date: new Date().toISOString().split('T')[0],
-            stats: { parents: 0, students: 0, teachers: 0 }
-        };
-        setAdmins([...admins, newAdmin]);
-    };
-
-    const handleEditAdmin = async (adminData: Omit<Admin, 'id' | 'date' | 'stats' | 'status'>) => {
-        if (!selectedAdmin) return;
-
-        // In a real application, this would be an API call
-        const updatedAdmin = admins.map(admin => {
-            if (admin.id === selectedAdmin.id) {
-                // Determine status based on activity
-                const totalActivity = admin.stats.parents + admin.stats.students + admin.stats.teachers;
-                let newStatus: 'active' | 'inactive' | 'incomplete';
-
-                if (totalActivity > 0) {
-                    newStatus = 'active';
-                } else {
-                    newStatus = 'inactive';
-                }
-
-                return {
-                    ...admin,
-                    ...adminData,
-                    status: newStatus
-                };
-            }
-            return admin;
-        });
-
-        setAdmins(updatedAdmin);
-    };
-
-    const handleDeleteAdmin = async (id: number) => {
-        const result = await Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#4F46E5',
-            cancelButtonColor: '#EF4444',
-            confirmButtonText: 'Delete',
-            cancelButtonText: 'Cancel',
-            customClass: {
-                popup: 'rounded-xl shadow-lg',
-                title: 'text-lg font-medium text-gray-900',
-                htmlContainer: 'text-sm text-gray-500',
-                confirmButton: 'rounded-lg px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
-                cancelButton: 'rounded-lg px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500',
-                actions: 'mt-4 space-x-3'
-            },
-            buttonsStyling: false,
-            width: 'auto',
-            padding: '1.5rem'
-        });
-
-        if (result.isConfirmed) {
-            // In a real application, this would be an API call
-            setAdmins(admins.filter(admin => admin.id !== id));
-            setSelectedAdmins(selectedAdmins.filter(adminId => adminId !== id));
-        }
-    };
-
-    const handleBulkDelete = async () => {
-        // In a real application, this would be an API call
-        setAdmins(admins.filter(admin => !selectedAdmins.includes(admin.id)));
-        setSelectedAdmins([]);
-    };
-
     const handleOpenAddModal = () => {
         setSelectedAdmin(undefined);
         setModalMode('add');
@@ -357,66 +218,6 @@ const SuperAdminDashboard: React.FC = () => {
         setSelectedAdmin(admin);
         setModalMode('edit');
         setIsModalOpen(true);
-    };
-
-    const handleSort = (key: string) => {
-        let direction: 'ascending' | 'descending' = 'ascending';
-        if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-            direction = 'descending';
-        }
-        setSortConfig({ key, direction });
-    };
-
-    const getSortIcon = (columnKey: string) => {
-        if (sortConfig.key !== columnKey) {
-            return <FaSort className="ml-1 inline-block" />;
-        }
-        return sortConfig.direction === 'ascending'
-            ? <FaSortUp className="ml-1 inline-block" />
-            : <FaSortDown className="ml-1 inline-block" />;
-    };
-
-    const filterAdmins = (admins: Admin[]) => {
-        let filtered = admins;
-
-        // Apply status filter
-        if (statusFilter !== 'all') {
-            filtered = filtered.filter(admin => admin.status === statusFilter);
-        }
-
-        // Apply search filter
-        if (searchQuery) {
-            const query = searchQuery.toLowerCase();
-            filtered = filtered.filter(admin =>
-                admin.firstName.toLowerCase().includes(query) ||
-                admin.lastName.toLowerCase().includes(query) ||
-                admin.email.toLowerCase().includes(query) ||
-                admin.status.toLowerCase().includes(query)
-            );
-        }
-
-        return filtered;
-    };
-
-    const sortData = (data: Admin[]) => {
-        const filteredData = filterAdmins(data);
-        return [...filteredData].sort((a, b) => {
-            if (sortConfig.key === 'date') {
-                return sortConfig.direction === 'ascending'
-                    ? new Date(a.date).getTime() - new Date(b.date).getTime()
-                    : new Date(b.date).getTime() - new Date(a.date).getTime();
-            }
-            if (sortConfig.key.startsWith('stats.')) {
-                const statKey = sortConfig.key.split('.')[1] as keyof typeof a.stats;
-                return sortConfig.direction === 'ascending'
-                    ? a.stats[statKey] - b.stats[statKey]
-                    : b.stats[statKey] - a.stats[statKey];
-            }
-            const key = sortConfig.key as keyof Admin;
-            return sortConfig.direction === 'ascending'
-                ? String(a[key]).localeCompare(String(b[key]))
-                : String(b[key]).localeCompare(String(a[key]));
-        });
     };
 
     const handleUpgradePlan = () => {
@@ -441,49 +242,6 @@ const SuperAdminDashboard: React.FC = () => {
         const previousTab = tabOrder[currentIndex - 1] || 'overview';
         setActiveTab(previousTab as any);
         setTabOrder(prev => prev.filter(tab => tab !== 'billing'));
-    };
-
-    const handleCancelPlan = () => {
-        // In a real application, this would make an API call to cancel the plan
-        alert('Plan cancellation request submitted. Your plan will remain active until the end of the current billing period.');
-        setIsCancelModalOpen(false);
-    };
-
-    const handleBillingSort = (key: string) => {
-        let direction: 'ascending' | 'descending' = 'ascending';
-        if (billingSortConfig.key === key && billingSortConfig.direction === 'ascending') {
-            direction = 'descending';
-        }
-        setBillingSortConfig({ key, direction });
-    };
-
-    const getBillingSortIcon = (columnKey: string) => {
-        if (billingSortConfig.key !== columnKey) {
-            return <FaSort className="ml-1 inline-block" />;
-        }
-        return billingSortConfig.direction === 'ascending'
-            ? <FaSortUp className="ml-1 inline-block" />
-            : <FaSortDown className="ml-1 inline-block" />;
-    };
-
-    const sortBillingData = (data: any[]) => {
-        return [...data].sort((a, b) => {
-            if (billingSortConfig.key === 'date') {
-                return billingSortConfig.direction === 'ascending'
-                    ? new Date(a.date).getTime() - new Date(b.date).getTime()
-                    : new Date(b.date).getTime() - new Date(a.date).getTime();
-            }
-            if (billingSortConfig.key === 'amount') {
-                const amountA = parseFloat(a.amount.replace('$', ''));
-                const amountB = parseFloat(b.amount.replace('$', ''));
-                return billingSortConfig.direction === 'ascending'
-                    ? amountA - amountB
-                    : amountB - amountA;
-            }
-            return billingSortConfig.direction === 'ascending'
-                ? a[billingSortConfig.key].localeCompare(b[billingSortConfig.key])
-                : b[billingSortConfig.key].localeCompare(a[billingSortConfig.key]);
-        });
     };
 
     const handleGeneralClick = () => {
@@ -562,21 +320,10 @@ const SuperAdminDashboard: React.FC = () => {
         }
     };
 
-    // Add pagination functions
-    const getPaginatedData = (data: Admin[]) => {
-        const startIndex = (currentPage - 1) * rowsPerPage;
-        const endIndex = startIndex + rowsPerPage;
-        return data.slice(startIndex, endIndex);
-    };
-
-    const getTotalPages = (data: Admin[]) => {
-        return Math.ceil(data.length / rowsPerPage);
-    };
-
     // Reset to first page when filters change
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchQuery, statusFilter, rowsPerPage]);
+    }, [searchQuery, statusFilter, rowsPerPage, setCurrentPage]);
 
     const toggleDateGroup = (date: string) => {
         setExpandedDates(prev => {
@@ -665,10 +412,16 @@ const SuperAdminDashboard: React.FC = () => {
         ],
     };
 
+    const handleCancelPlan = () => {
+        // In a real application, this would make an API call to cancel the plan
+        alert('Plan cancellation request submitted. Your plan will remain active until the end of the current billing period.');
+        setIsCancelModalOpen(false);
+    };
+
     return (
         <DashboardLayout
             role="Super Admin"
-            roleColor="bg-purple-600"
+            roleColor="text-purple-600"
             roleGradient="from-purple-600 to-indigo-600"
             onBillingClick={handleBillingClick}
             onGeneralClick={handleGeneralClick}
@@ -1429,14 +1182,14 @@ const SuperAdminDashboard: React.FC = () => {
                                         <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
                                             <div className="flex-1 flex justify-between sm:hidden">
                                                 <button
-                                                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                                    onClick={() => setCurrentPage((prev: number) => Math.max(prev - 1, 1))}
                                                     disabled={currentPage === 1}
                                                     className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                                                 >
                                                     Previous
                                                 </button>
                                                 <button
-                                                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, getTotalPages(filterAdmins(admins))))}
+                                                    onClick={() => setCurrentPage((prev: number) => Math.min(prev + 1, getTotalPages(filterAdmins(admins))))}
                                                     disabled={currentPage === getTotalPages(filterAdmins(admins))}
                                                     className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                                                 >
@@ -1462,7 +1215,7 @@ const SuperAdminDashboard: React.FC = () => {
                                                 <div>
                                                     <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                                                         <button
-                                                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                                            onClick={() => setCurrentPage((prev: number) => Math.max(prev - 1, 1))}
                                                             disabled={currentPage === 1}
                                                             className="focus:outline-none relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                                                         >
@@ -1484,7 +1237,7 @@ const SuperAdminDashboard: React.FC = () => {
                                                             </button>
                                                         ))}
                                                         <button
-                                                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, getTotalPages(filterAdmins(admins))))}
+                                                            onClick={() => setCurrentPage((prev: number) => Math.min(prev + 1, getTotalPages(filterAdmins(admins))))}
                                                             disabled={currentPage === getTotalPages(filterAdmins(admins))}
                                                             className="focus:outline-none relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                                                         >

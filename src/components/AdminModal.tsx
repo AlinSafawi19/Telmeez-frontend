@@ -1,19 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
-
-export interface Admin {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    status: 'active' | 'inactive' | 'incomplete';
-    date: string;
-    stats: {
-        parents: number;
-        students: number;
-        teachers: number;
-    };
-}
+import type { Admin } from '../contexts/AdminContext';
 
 interface AdminModalProps {
     isOpen: boolean;
@@ -59,7 +46,6 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave, admin,
             onClose();
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An error occurred');
-        } finally {
         }
     };
 
@@ -127,22 +113,24 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave, admin,
                     </div>
 
                     {error && (
-                        <div className="text-red-600 text-sm">{error}</div>
+                        <div className="text-red-500 text-sm mt-2">
+                            {error}
+                        </div>
                     )}
 
-                    <div className="flex justify-end space-x-3">
+                    <div className="flex justify-end space-x-3 mt-6">
                         <button
                             type="button"
                             onClick={onClose}
-                            className="focus:outline-none px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
-                            {isBulkEdit ? `Save Changes (${selectedCount})` : 'Save'}
+                            {mode === 'add' ? 'Add Admin' : 'Save Changes'}
                         </button>
                     </div>
                 </form>
