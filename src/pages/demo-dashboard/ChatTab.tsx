@@ -202,11 +202,7 @@ const ChatTab: React.FC = () => {
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center flex-1 min-w-0">
                                         <div className="relative mr-4">
-                                            <div className={`relative ${
-                                                selectedAdmin === admin.id 
-                                                    ? 'ring-2 ring-indigo-500 ring-offset-2' 
-                                                    : ''
-                                            }`}>
+                                            <div className={`relative`}>
                                                 <ProfileImage 
                                                     admin={admin} 
                                                     size="md"
