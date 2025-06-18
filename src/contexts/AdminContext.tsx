@@ -38,7 +38,7 @@ interface AdminContextType {
     handleDeleteAdmin: (id: number) => Promise<void>;
     handleBulkDelete: () => Promise<void>;
     handleSort: (key: string) => void;
-    getSortIcon: (columnKey: string) => JSX.Element;
+    getSortIcon: (columnKey: string) => React.JSX.Element;
     filterAdmins: (admins: Admin[]) => Admin[];
     sortData: (data: Admin[]) => Admin[];
     getPaginatedData: (data: Admin[]) => Admin[];

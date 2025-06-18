@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaBell, FaEnvelope, FaCog, FaUser, FaChevronDown, FaCreditCard, FaExclamationTriangle, FaInfoCircle, FaCog as FaSettings, FaCheckCircle, FaComments, FaRobot } from 'react-icons/fa';
+import { FaBell, FaEnvelope, FaCog, FaUser, FaChevronDown, FaCreditCard, FaExclamationTriangle, FaInfoCircle, FaCog as FaSettings, FaCheckCircle, FaComments, FaRobot, FaSearch, FaPaperPlane, FaCheck, FaCheckDouble } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import logo from '../../assets/images/logo.png';
 import logoarb from '../../assets/images/logo_arb.png';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useNotifications, type Notification } from '../../contexts/NotificationsContext';
 import { useMessages } from '../../contexts/MessagesContext';
+import { useAdmin } from '../../contexts/AdminContext';
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -33,8 +34,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     const [isMessagesOpen, setIsMessagesOpen] = useState(false);
     const [isSwalOpen, setIsSwalOpen] = useState(false);
     const { currentLanguage } = useLanguage();
-    const { notifications, markAsRead, deleteNotification } = useNotifications();
-    const { messages, unreadCount } = useMessages();
+    const { notifications, markAsRead: markNotificationAsRead, deleteNotification } = useNotifications();
+    const { messages, unreadCount, markAsRead } = useMessages();
+    const { admins } = useAdmin();
+    const [selectedAdmin, setSelectedAdmin] = useState<number | null>(null);
+    const [newMessage, setNewMessage] = useState('');
+    const [searchAdmin, setSearchAdmin] = useState('');
+    const readTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     const profileRef = useRef<HTMLDivElement>(null);
     const notificationsRef = useRef<HTMLDivElement>(null);
@@ -60,6 +66,37 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [isSwalOpen]);
+
+    useEffect(() => {
+        if (selectedAdmin && isMessagesOpen) {
+            // Clear any existing timeout
+            if (readTimeoutRef.current) {
+                clearTimeout(readTimeoutRef.current);
+            }
+
+            // Set new timeout to mark messages as read
+            readTimeoutRef.current = setTimeout(() => {
+                const adminInfo = admins.find(a => a.id === selectedAdmin);
+                if (adminInfo) {
+                    const adminFullName = `${adminInfo.firstName} ${adminInfo.lastName}`;
+                    messages.forEach(message => {
+                        if (message.sender === 'admin' && 
+                            message.adminName === adminFullName && 
+                            !message.read) {
+                            markAsRead(message.id);
+                        }
+                    });
+                }
+            }, 1000);
+        }
+
+        // Cleanup timeout on unmount or when selectedAdmin changes
+        return () => {
+            if (readTimeoutRef.current) {
+                clearTimeout(readTimeoutRef.current);
+            }
+        };
+    }, [selectedAdmin, isMessagesOpen, admins, messages, markAsRead]);
 
     // Mock data - in a real app, this would come from your backend
     const user = {
@@ -130,6 +167,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             deleteNotification(id);
         }
         setIsSwalOpen(false);
+    };
+
+    const handleSendMessage = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Handle sending a new message
+        console.log('Sending message:', newMessage);
+        setNewMessage('');
     };
 
     return (
@@ -227,7 +271,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                                         <button
                                                                             onClick={(e) => {
                                                                                 e.stopPropagation();
-                                                                                markAsRead(notification.id);
+                                                                                markNotificationAsRead(notification.id);
                                                                             }}
                                                                             className="focus:outline-none text-xs text-indigo-600 hover:text-indigo-800 font-medium"
                                                                         >
@@ -285,9 +329,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                             <div className="relative" ref={messagesRef}>
                                 <button
                                     onClick={() => {
-                                        setIsMessagesOpen(!isMessagesOpen);
+                                        const newIsOpen = !isMessagesOpen;
+                                        setIsMessagesOpen(newIsOpen);
                                         setIsNotificationsOpen(false);
                                         setIsProfileDropdownOpen(false);
+                                        if (!newIsOpen) {
+                                            setSearchAdmin('');
+                                            setSelectedAdmin(null);
+                                        }
                                     }}
                                     className="p-2 text-gray-600 hover:text-indigo-600 focus:outline-none relative transition-colors duration-200"
                                     aria-label="Open messages"
@@ -314,30 +363,217 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                         </button>
                                     </div>
                                     <div className="max-h-96 overflow-y-auto">
-                                        {messages.slice().reverse().map((message) => (
-                                            <div
-                                                key={message.id}
-                                                className={`px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer border-l-4 ${
-                                                    message.read ? 'border-transparent' : 'border-indigo-500'
-                                                }`}
-                                            >
-                                                <div className="flex items-start">
-                                                    <div className={`p-2 rounded-lg mr-3 ${
-                                                        message.sender === 'user' 
-                                                            ? 'bg-indigo-100 text-indigo-600' 
-                                                            : 'bg-gray-100 text-gray-600'
-                                                    }`}>
-                                                        {message.sender === 'user' ? <FaUser className="h-4 w-4" /> : <FaRobot className="h-4 w-4" />}
-                                                    </div>
-                                                    <div className="flex-1">
-                                                        <p className="text-sm text-gray-900">{message.content}</p>
-                                                        <p className="text-xs text-gray-500 mt-1">
-                                                            {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                        </p>
+                                        {selectedAdmin ? (
+                                            <div className="flex flex-col h-[500px]">
+                                                {/* Chat Header */}
+                                                <div className="p-3 border-b border-gray-200 flex items-center justify-between bg-white">
+                                                    <button
+                                                        onClick={() => {
+                                                            setSelectedAdmin(null);
+                                                            setSearchAdmin('');
+                                                        }}
+                                                        className="flex items-center text-gray-600 hover:text-indigo-600 transition-colors duration-200"
+                                                    >
+                                                        <FaChevronDown className="h-4 w-4 transform rotate-90" />
+                                                        <span className="ml-2 text-sm font-medium">Back to admins</span>
+                                                    </button>
+                                                    <div className="flex items-center">
+                                                        <div className="p-1.5 rounded-full bg-gray-100 text-gray-600 mr-2">
+                                                            <FaUser className="h-3 w-3" />
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-xs font-medium text-gray-900">
+                                                                {admins.find(a => a.id === selectedAdmin)?.firstName} {admins.find(a => a.id === selectedAdmin)?.lastName}
+                                                            </p>
+                                                            <p className="text-xs text-gray-500">{admins.find(a => a.id === selectedAdmin)?.email}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
+
+                                                {/* Chat Area */}
+                                                <div className="flex-1 flex flex-col">
+                                                    <div className="flex-1 overflow-y-auto p-3 space-y-3">
+                                                        {messages
+                                                            .filter(message => {
+                                                                const selectedAdminInfo = admins.find(a => a.id === selectedAdmin);
+                                                                const adminFullName = selectedAdminInfo ? `${selectedAdminInfo.firstName} ${selectedAdminInfo.lastName}` : '';
+                                                                
+                                                                if (message.sender === 'admin') {
+                                                                    return message.adminName === adminFullName;
+                                                                }
+                                                                
+                                                                if (message.sender === 'superadmin') {
+                                                                    const messageIndex = messages.indexOf(message);
+                                                                    const nextMessage = messages[messageIndex + 1];
+                                                                    return nextMessage && nextMessage.sender === 'admin' && nextMessage.adminName === adminFullName;
+                                                                }
+                                                                
+                                                                return false;
+                                                            })
+                                                            .map((message, index, filteredMessages) => {
+                                                                const isFirstUnread = !message.read && 
+                                                                    (index === 0 || filteredMessages[index - 1].read);
+                                                                
+                                                                return (
+                                                                    <React.Fragment key={message.id}>
+                                                                        {isFirstUnread && (
+                                                                            <div className="flex items-center my-2">
+                                                                                <div className="flex-1 border-t border-gray-200"></div>
+                                                                                <span className="px-3 text-xs font-medium text-gray-500 bg-gray-50 rounded-full">
+                                                                                    New Messages
+                                                                                </span>
+                                                                                <div className="flex-1 border-t border-gray-200"></div>
+                                                                            </div>
+                                                                        )}
+                                                                        <div
+                                                                            className={`flex ${message.sender === 'superadmin' ? 'justify-end' : 'justify-start'}`}
+                                                                            onClick={() => !message.read && markNotificationAsRead(message.id)}
+                                                                        >
+                                                                            <div
+                                                                                className={`flex items-start space-x-2 max-w-[80%] ${
+                                                                                    message.sender === 'superadmin' ? 'flex-row-reverse space-x-reverse' : ''
+                                                                                }`}
+                                                                            >
+                                                                                <div className={`p-1.5 rounded-full ${
+                                                                                    message.sender === 'superadmin' 
+                                                                                        ? 'bg-indigo-100 text-indigo-600' 
+                                                                                        : 'bg-gray-100 text-gray-600'
+                                                                                }`}>
+                                                                                    <FaUser className="h-3 w-3" />
+                                                                                </div>
+                                                                                <div className={`rounded-lg p-2 ${
+                                                                                    message.sender === 'superadmin'
+                                                                                        ? 'bg-indigo-600 text-white'
+                                                                                        : 'bg-gray-100 text-gray-900'
+                                                                                }`}>
+                                                                                    {message.sender === 'admin' && message.adminName && (
+                                                                                        <p className="text-xs font-semibold mb-0.5 text-gray-600">{message.adminName}</p>
+                                                                                    )}
+                                                                                    <p className="text-xs">{message.content}</p>
+                                                                                    <div className="flex items-center justify-between mt-0.5">
+                                                                                        <p className={`text-xs ${
+                                                                                            message.sender === 'superadmin' ? 'text-indigo-200' : 'text-gray-500'
+                                                                                        }`}>
+                                                                                            {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                                        </p>
+                                                                                        {message.sender === 'superadmin' && (
+                                                                                            <span className="ml-1">
+                                                                                                {message.read ? (
+                                                                                                    <FaCheckDouble className="h-2.5 w-2.5 text-indigo-200" />
+                                                                                                ) : (
+                                                                                                    <FaCheck className="h-2.5 w-2.5 text-indigo-200" />
+                                                                                                )}
+                                                                                            </span>
+                                                                                        )}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </React.Fragment>
+                                                                );
+                                                            })}
+                                                    </div>
+                                                    <form onSubmit={handleSendMessage} className="border-t border-gray-200 p-3">
+                                                        <div className="flex space-x-2">
+                                                            <input
+                                                                type="text"
+                                                                value={newMessage}
+                                                                onChange={(e) => setNewMessage(e.target.value)}
+                                                                placeholder="Type your message..."
+                                                                className="flex-1 text-sm rounded-lg border border-gray-300 px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                                            />
+                                                            <button
+                                                                type="submit"
+                                                                className="bg-indigo-600 text-white rounded-lg px-3 py-1.5 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
+                                                                aria-label="Send message"
+                                                            >
+                                                                <FaPaperPlane className="h-3 w-3" />
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
-                                        ))}
+                                        ) : (
+                                            <div className="h-[500px]">
+                                                <div className="p-3 border-b border-gray-200">
+                                                    <div className="relative">
+                                                        <input
+                                                            type="text"
+                                                            value={searchAdmin}
+                                                            onChange={(e) => setSearchAdmin(e.target.value)}
+                                                            placeholder="Search admins..."
+                                                            className="w-full pl-8 pr-8 py-1.5 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                                        />
+                                                        <FaSearch className="absolute left-2.5 top-2.5 text-gray-400 h-3 w-3" />
+                                                        {searchAdmin && (
+                                                            <button
+                                                                onClick={() => setSearchAdmin('')}
+                                                                className="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                                                                aria-label="Clear search"
+                                                            >
+                                                                <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                                </svg>
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div className="overflow-y-auto">
+                                                    {admins
+                                                        .filter(admin => {
+                                                            if (!searchAdmin.trim()) return true;
+                                                            const searchTerm = searchAdmin.toLowerCase();
+                                                            const fullName = `${admin.firstName} ${admin.lastName}`.toLowerCase();
+                                                            const email = admin.email.toLowerCase();
+                                                            return fullName.includes(searchTerm) || email.includes(searchTerm);
+                                                        })
+                                                        .map(admin => {
+                                                            const adminFullName = `${admin.firstName} ${admin.lastName}`;
+                                                            const unreadCount = messages.filter(message => 
+                                                                message.sender === 'admin' && 
+                                                                message.adminName === adminFullName && 
+                                                                !message.read
+                                                            ).length;
+
+                                                            return (
+                                                                <button
+                                                                    key={admin.id}
+                                                                    onClick={() => setSelectedAdmin(admin.id)}
+                                                                    className="w-full p-3 text-left hover:bg-gray-50 transition-colors duration-150"
+                                                                >
+                                                                    <div className="flex items-center justify-between">
+                                                                        <div className="flex items-center">
+                                                                            <div className="p-1.5 rounded-full bg-gray-100 text-gray-600 mr-2">
+                                                                                <FaUser className="h-3 w-3" />
+                                                                            </div>
+                                                                            <div>
+                                                                                <p className="text-xs font-medium text-gray-900">{admin.firstName} {admin.lastName}</p>
+                                                                                <p className="text-xs text-gray-500">{admin.email}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        {unreadCount > 0 && (
+                                                                            <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full">
+                                                                                {unreadCount}
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    {admins.filter(admin => {
+                                                        if (!searchAdmin.trim()) return false;
+                                                        const searchTerm = searchAdmin.toLowerCase();
+                                                        const fullName = `${admin.firstName} ${admin.lastName}`.toLowerCase();
+                                                        const email = admin.email.toLowerCase();
+                                                        return fullName.includes(searchTerm) || email.includes(searchTerm);
+                                                    }).length === 0 && searchAdmin.trim() && (
+                                                        <div className="p-4 text-center">
+                                                            <p className="text-sm text-gray-500">No admins found matching "{searchAdmin}"</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

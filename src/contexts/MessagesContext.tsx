@@ -4,15 +4,16 @@ import { FaUser, FaRobot } from 'react-icons/fa';
 
 export interface Message {
     id: number;
-    sender: 'user' | 'admin';
+    sender: 'superadmin' | 'admin';
     content: string;
     timestamp: Date;
     read: boolean;
+    adminName?: string; // Name of the admin if sender is admin
 }
 
 interface MessagesContextType {
     messages: Message[];
-    addMessage: (content: string, sender: 'user' | 'admin') => void;
+    addMessage: (content: string, sender: 'superadmin' | 'admin', adminName?: string) => void;
     markAsRead: (id: number) => void;
     deleteMessage: (id: number) => void;
     unreadCount: number;
@@ -37,33 +38,51 @@ export const MessagesProvider: React.FC<MessagesProviderProps> = ({ children }) 
         {
             id: 1,
             sender: 'admin',
-            content: 'Welcome to Telmeez! How can I help you today?',
+            adminName: 'Sarah Wilson',
+            content: 'Good morning! I have a question about the new admin onboarding process.',
             timestamp: new Date(Date.now() - 3600000), // 1 hour ago
             read: true
         },
         {
             id: 2,
-            sender: 'user',
-            content: 'I need help with my subscription plan.',
+            sender: 'superadmin',
+            content: 'Hello Sarah! I\'d be happy to help you with that. What specific questions do you have?',
             timestamp: new Date(Date.now() - 1800000), // 30 minutes ago
             read: true
         },
         {
             id: 3,
             sender: 'admin',
-            content: 'I\'d be happy to help you with that. What specific questions do you have about your subscription?',
+            adminName: 'Sarah Wilson',
+            content: 'I\'m not sure about the new permission settings for user management.',
             timestamp: new Date(Date.now() - 900000), // 15 minutes ago
             read: false
+        },
+        {
+            id: 4,
+            sender: 'admin',
+            adminName: 'Michael Brown',
+            content: 'Hi, I need help with setting up new teacher accounts.',
+            timestamp: new Date(Date.now() - 7200000), // 2 hours ago
+            read: false
+        },
+        {
+            id: 5,
+            sender: 'superadmin',
+            content: 'Sure, I can help you with that. What specific issues are you facing?',
+            timestamp: new Date(Date.now() - 3600000), // 1 hour ago
+            read: true
         }
     ]);
 
-    const addMessage = (content: string, sender: 'user' | 'admin') => {
+    const addMessage = (content: string, sender: 'superadmin' | 'admin', adminName?: string) => {
         const newMessage: Message = {
             id: Date.now(),
             sender,
             content,
             timestamp: new Date(),
-            read: sender === 'user' // Messages from user are automatically marked as read
+            read: sender === 'superadmin', // Messages from superadmin are automatically marked as read
+            adminName
         };
         setMessages(prev => [...prev, newMessage]);
     };
