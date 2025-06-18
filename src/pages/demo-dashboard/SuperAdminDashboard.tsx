@@ -8,6 +8,7 @@ import { useNotifications, type Notification } from '../../contexts/Notification
 import Swal from 'sweetalert2';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import ChatTab from './ChatTab';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -71,9 +72,9 @@ const SuperAdminDashboard: React.FC = () => {
     const [admins, setAdmins] = useState<Admin[]>([
         {
             id: 1,
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'john@example.com',
+            firstName: 'Alin',
+            lastName: 'Safawi',
+            email: 'alin@safawi.com',
             status: 'active',
             date: '2024-03-15',
             stats: { parents: 45, students: 120, teachers: 12 }
@@ -1214,8 +1215,8 @@ const SuperAdminDashboard: React.FC = () => {
                                             <button
                                                 onClick={() => setStatusFilter('all')}
                                                 className={`px-3 py-1.5 rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${statusFilter === 'all'
-                                                        ? 'bg-indigo-100 text-indigo-800'
-                                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                                    ? 'bg-indigo-100 text-indigo-800'
+                                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                                     }`}
                                             >
                                                 All
@@ -1223,8 +1224,8 @@ const SuperAdminDashboard: React.FC = () => {
                                             <button
                                                 onClick={() => setStatusFilter('active')}
                                                 className={`px-3 py-1.5 rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${statusFilter === 'active'
-                                                        ? 'bg-green-100 text-green-800'
-                                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                                    ? 'bg-green-100 text-green-800'
+                                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                                     }`}
                                             >
                                                 Active
@@ -1232,8 +1233,8 @@ const SuperAdminDashboard: React.FC = () => {
                                             <button
                                                 onClick={() => setStatusFilter('inactive')}
                                                 className={`px-3 py-1.5 rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${statusFilter === 'inactive'
-                                                        ? 'bg-red-100 text-red-800'
-                                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                                    ? 'bg-red-100 text-red-800'
+                                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                                     }`}
                                             >
                                                 Inactive
@@ -1241,8 +1242,8 @@ const SuperAdminDashboard: React.FC = () => {
                                             <button
                                                 onClick={() => setStatusFilter('incomplete')}
                                                 className={`px-3 py-1.5 rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${statusFilter === 'incomplete'
-                                                        ? 'bg-yellow-100 text-yellow-800'
-                                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                                    ? 'bg-yellow-100 text-yellow-800'
+                                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                                     }`}
                                             >
                                                 Incomplete
@@ -1475,8 +1476,8 @@ const SuperAdminDashboard: React.FC = () => {
                                                                 key={page}
                                                                 onClick={() => setCurrentPage(page)}
                                                                 className={`focus:outline-none relative inline-flex items-center px-4 py-2 border text-sm font-medium ${currentPage === page
-                                                                        ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
-                                                                        : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                                                                    ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                                                                    : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
                                                                     }`}
                                                             >
                                                                 {page}
@@ -1539,7 +1540,7 @@ const SuperAdminDashboard: React.FC = () => {
                                                             // Apply search filter
                                                             if (notificationSearchQuery) {
                                                                 const searchLower = notificationSearchQuery.toLowerCase();
-                                                                const matchesSearch = 
+                                                                const matchesSearch =
                                                                     notification.title.toLowerCase().includes(searchLower) ||
                                                                     notification.message.toLowerCase().includes(searchLower);
                                                                 if (!matchesSearch) return false;
@@ -1588,7 +1589,7 @@ const SuperAdminDashboard: React.FC = () => {
                                                             // Apply search filter
                                                             if (notificationSearchQuery) {
                                                                 const searchLower = notificationSearchQuery.toLowerCase();
-                                                                const matchesSearch = 
+                                                                const matchesSearch =
                                                                     notification.title.toLowerCase().includes(searchLower) ||
                                                                     notification.message.toLowerCase().includes(searchLower);
                                                                 if (!matchesSearch) return false;
@@ -1675,8 +1676,8 @@ const SuperAdminDashboard: React.FC = () => {
                                                                 }
                                                             }}
                                                             className={`px-3 py-1.5 text-sm font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${notificationTypeFilter.includes('info')
-                                                                    ? 'bg-blue-100 text-blue-800'
-                                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                                ? 'bg-blue-100 text-blue-800'
+                                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                                                 }`}
                                                         >
                                                             Info
@@ -1690,8 +1691,8 @@ const SuperAdminDashboard: React.FC = () => {
                                                                 }
                                                             }}
                                                             className={`px-3 py-1.5 text-sm font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 ${notificationTypeFilter.includes('warning')
-                                                                    ? 'bg-yellow-100 text-yellow-800'
-                                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                                ? 'bg-yellow-100 text-yellow-800'
+                                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                                                 }`}
                                                         >
                                                             Warning
@@ -1705,8 +1706,8 @@ const SuperAdminDashboard: React.FC = () => {
                                                                 }
                                                             }}
                                                             className={`px-3 py-1.5 text-sm font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ${notificationTypeFilter.includes('success')
-                                                                    ? 'bg-green-100 text-green-800'
-                                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                                ? 'bg-green-100 text-green-800'
+                                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                                                 }`}
                                                         >
                                                             Success
@@ -1723,8 +1724,8 @@ const SuperAdminDashboard: React.FC = () => {
                                                         <button
                                                             onClick={() => setNotificationReadFilter([])}
                                                             className={`px-3 py-1.5 text-sm font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 ${notificationReadFilter.length === 0
-                                                                    ? 'bg-gray-200 text-gray-900 ring-2 ring-gray-300'
-                                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                                ? 'bg-gray-200 text-gray-900 ring-2 ring-gray-300'
+                                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                                                 }`}
                                                         >
                                                             All
@@ -1732,8 +1733,8 @@ const SuperAdminDashboard: React.FC = () => {
                                                         <button
                                                             onClick={() => setNotificationReadFilter(['read'])}
                                                             className={`px-3 py-1.5 text-sm font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 ${notificationReadFilter.includes('read')
-                                                                    ? 'bg-gray-200 text-gray-900 ring-2 ring-gray-300'
-                                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                                ? 'bg-gray-200 text-gray-900 ring-2 ring-gray-300'
+                                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                                                 }`}
                                                         >
                                                             Read
@@ -1741,8 +1742,8 @@ const SuperAdminDashboard: React.FC = () => {
                                                         <button
                                                             onClick={() => setNotificationReadFilter(['unread'])}
                                                             className={`px-3 py-1.5 text-sm font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 ${notificationReadFilter.includes('unread')
-                                                                    ? 'bg-indigo-200 text-indigo-900 ring-2 ring-indigo-300'
-                                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                                ? 'bg-indigo-200 text-indigo-900 ring-2 ring-indigo-300'
+                                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                                                 }`}
                                                         >
                                                             Unread
@@ -1808,13 +1809,12 @@ const SuperAdminDashboard: React.FC = () => {
                                                         sevenDaysAgo.setDate(today.getDate() - 7);
                                                         setDateRange([sevenDaysAgo, today]);
                                                     }}
-                                                    className={`px-3 py-1.5 text-sm font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 ${
-                                                        startDate && endDate && 
-                                                        new Date(startDate).getTime() === new Date(new Date().setDate(new Date().getDate() - 7)).getTime() &&
-                                                        new Date(endDate).toDateString() === new Date().toDateString()
+                                                    className={`px-3 py-1.5 text-sm font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 ${startDate && endDate &&
+                                                            new Date(startDate).getTime() === new Date(new Date().setDate(new Date().getDate() - 7)).getTime() &&
+                                                            new Date(endDate).toDateString() === new Date().toDateString()
                                                             ? 'bg-green-200 text-green-900 ring-2 ring-green-300'
                                                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                                    }`}
+                                                        }`}
                                                 >
                                                     Last 7 Days
                                                 </button>
@@ -1837,7 +1837,7 @@ const SuperAdminDashboard: React.FC = () => {
                                                     // Apply search filter
                                                     if (notificationSearchQuery) {
                                                         const searchLower = notificationSearchQuery.toLowerCase();
-                                                        const matchesSearch = 
+                                                        const matchesSearch =
                                                             notification.title.toLowerCase().includes(searchLower) ||
                                                             notification.message.toLowerCase().includes(searchLower);
                                                         if (!matchesSearch) return false;
@@ -1950,8 +1950,8 @@ const SuperAdminDashboard: React.FC = () => {
                                                                     >
                                                                         <div className="flex items-start">
                                                                             <div className={`p-2 rounded-lg mr-4 ${notification.type === 'info' ? 'bg-blue-100 text-blue-600' :
-                                                                                    notification.type === 'warning' ? 'bg-yellow-100 text-yellow-600' :
-                                                                                        'bg-green-100 text-green-600'
+                                                                                notification.type === 'warning' ? 'bg-yellow-100 text-yellow-600' :
+                                                                                    'bg-green-100 text-green-600'
                                                                                 }`}>
                                                                                 <notification.icon className="h-5 w-5" />
                                                                             </div>
@@ -2024,7 +2024,7 @@ const SuperAdminDashboard: React.FC = () => {
                             {/* chat Tab Content */}
                             {activeTab === 'chat' && (
                                 <div className="bg-white rounded-lg shadow-sm p-6">
-
+                                    <ChatTab />
                                 </div>
                             )}
 

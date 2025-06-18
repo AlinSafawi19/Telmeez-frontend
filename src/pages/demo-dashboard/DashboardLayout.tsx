@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaBell, FaEnvelope, FaCog, FaUser, FaChevronDown, FaCreditCard, FaExclamationTriangle, FaInfoCircle, FaCog as FaSettings, FaCheckCircle, FaComments } from 'react-icons/fa';
+import { FaBell, FaEnvelope, FaCog, FaUser, FaChevronDown, FaCreditCard, FaExclamationTriangle, FaInfoCircle, FaCog as FaSettings, FaCheckCircle, FaComments, FaRobot } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import logo from '../../assets/images/logo.png';
 import logoarb from '../../assets/images/logo_arb.png';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useNotifications, type Notification } from '../../contexts/NotificationsContext';
+import { useMessages } from '../../contexts/MessagesContext';
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -33,6 +34,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     const [isSwalOpen, setIsSwalOpen] = useState(false);
     const { currentLanguage } = useLanguage();
     const { notifications, markAsRead, deleteNotification } = useNotifications();
+    const { messages, unreadCount } = useMessages();
 
     const profileRef = useRef<HTMLDivElement>(null);
     const notificationsRef = useRef<HTMLDivElement>(null);
@@ -66,9 +68,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         email: 'john@example.com',
         avatar: null,
         role: role,
-        subscriptionPlan: 'Standard',
-        unreadNotifications: 2,
-        unreadMessages: 2
+        subscriptionPlan: 'Standard'
     };
 
     const handleNotificationsToggle = () => {
@@ -293,9 +293,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                     aria-label="Open messages"
                                 >
                                     <FaEnvelope className="h-5 w-5" />
-                                    {user.unreadMessages > 0 && (
+                                    {unreadCount > 0 && (
                                         <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full animate-pulse">
-                                            {user.unreadMessages}
+                                            {unreadCount}
                                         </span>
                                     )}
                                 </button>
@@ -314,14 +314,30 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                         </button>
                                     </div>
                                     <div className="max-h-96 overflow-y-auto">
-                                        <div className="px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer">
-                                            <p className="text-sm font-medium text-gray-900">New message from Sarah</p>
-                                            <p className="text-xs text-gray-500 mt-1">5 minutes ago</p>
-                                        </div>
-                                        <div className="px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer">
-                                            <p className="text-sm font-medium text-gray-900">Meeting reminder from Team Lead</p>
-                                            <p className="text-xs text-gray-500 mt-1">30 minutes ago</p>
-                                        </div>
+                                        {messages.slice().reverse().map((message) => (
+                                            <div
+                                                key={message.id}
+                                                className={`px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer border-l-4 ${
+                                                    message.read ? 'border-transparent' : 'border-indigo-500'
+                                                }`}
+                                            >
+                                                <div className="flex items-start">
+                                                    <div className={`p-2 rounded-lg mr-3 ${
+                                                        message.sender === 'user' 
+                                                            ? 'bg-indigo-100 text-indigo-600' 
+                                                            : 'bg-gray-100 text-gray-600'
+                                                    }`}>
+                                                        {message.sender === 'user' ? <FaUser className="h-4 w-4" /> : <FaRobot className="h-4 w-4" />}
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <p className="text-sm text-gray-900">{message.content}</p>
+                                                        <p className="text-xs text-gray-500 mt-1">
+                                                            {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
