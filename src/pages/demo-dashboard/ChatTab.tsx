@@ -5,13 +5,16 @@ import { FaUser, FaPaperPlane, FaSearch, FaCheck, FaCheckDouble, FaEllipsisV, Fa
 
 const ChatTab: React.FC = () => {
     const { messages, addMessage, markAsRead } = useMessages();
-    const { admins } = useAdmin();
+    const { admins, selectedChatAdmin, setSelectedChatAdmin } = useAdmin();
     const [newMessage, setNewMessage] = useState('');
-    const [selectedAdmin, setSelectedAdmin] = useState<number | null>(null);
     const [adminSearchQuery, setAdminSearchQuery] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const readTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+    // Use selectedChatAdmin from context instead of local state
+    const selectedAdmin = selectedChatAdmin;
+    const setSelectedAdmin = setSelectedChatAdmin;
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -31,9 +34,10 @@ const ChatTab: React.FC = () => {
                 const adminInfo = admins.find(a => a.id === selectedAdmin);
                 if (adminInfo) {
                     const adminFullName = `${adminInfo.firstName} ${adminInfo.lastName}`;
+                    const conversationId = adminFullName.toLowerCase().replace(/\s+/g, '-');
                     messages.forEach(message => {
-                        if (message.sender === 'admin' && 
-                            message.adminName === adminFullName && 
+                        if (((message.sender === 'admin' && message.adminName === adminFullName) ||
+                             (message.sender === 'superadmin' && message.conversationId === conversationId)) &&
                             !message.read) {
                             markAsRead(message.id);
                         }
@@ -54,20 +58,10 @@ const ChatTab: React.FC = () => {
         if (newMessage.trim() && selectedAdmin) {
             const admin = admins.find(a => a.id === selectedAdmin);
             if (admin) {
-                addMessage(newMessage.trim(), 'superadmin');
+                const adminFullName = `${admin.firstName} ${admin.lastName}`;
+                const conversationId = adminFullName.toLowerCase().replace(/\s+/g, '-');
+                addMessage(newMessage.trim(), 'superadmin', undefined, conversationId);
                 setNewMessage('');
-                
-                // Show typing indicator
-                setIsTyping(true);
-                
-                setTimeout(() => {
-                    setIsTyping(false);
-                    addMessage(
-                        `Thank you for your message. I will get back to you shortly.`,
-                        'admin',
-                        `${admin.firstName} ${admin.lastName}`
-                    );
-                }, 2000);
             }
         }
     };
@@ -80,15 +74,14 @@ const ChatTab: React.FC = () => {
     const selectedAdminMessages = messages.filter(message => {
         const selectedAdminInfo = admins.find(a => a.id === selectedAdmin);
         const adminFullName = selectedAdminInfo ? `${selectedAdminInfo.firstName} ${selectedAdminInfo.lastName}` : '';
+        const conversationId = adminFullName.toLowerCase().replace(/\s+/g, '-');
         
         if (message.sender === 'admin') {
             return message.adminName === adminFullName;
         }
         
-        if (message.sender === 'superadmin') {
-            const messageIndex = messages.indexOf(message);
-            const nextMessage = messages[messageIndex + 1];
-            return nextMessage && nextMessage.sender === 'admin' && nextMessage.adminName === adminFullName;
+        if (message.sender === 'superadmin') {            
+            return message.conversationId === conversationId;
         }
         
         return false;
@@ -177,14 +170,16 @@ const ChatTab: React.FC = () => {
                 <div className="flex-1 overflow-y-auto p-2 chat-scrollbar max-h-screen">
                     {filteredAdmins.map((admin) => {
                         const adminFullName = `${admin.firstName} ${admin.lastName}`;
+                        const conversationId = adminFullName.toLowerCase().replace(/\s+/g, '-');
                         const unreadCount = messages.filter(message => 
-                            message.sender === 'admin' && 
-                            message.adminName === adminFullName && 
+                            ((message.sender === 'admin' && message.adminName === adminFullName) ||
+                             (message.sender === 'superadmin' && message.conversationId === conversationId)) &&
                             !message.read
                         ).length;
 
                         const lastMessage = messages
-                            .filter(m => m.sender === 'admin' && m.adminName === adminFullName)
+                            .filter(m => (m.sender === 'admin' && m.adminName === adminFullName) ||
+                                       (m.sender === 'superadmin' && m.conversationId === conversationId))
                             .pop();
 
                         const isOnline = getOnlineStatus(admin.id);
@@ -297,7 +292,7 @@ const ChatTab: React.FC = () => {
                         </div>
 
                         {/* Messages */}
-                        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-50/30 to-white/50 chat-scrollbar max-h-screen">
+                        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-50/30 to-white/50 chat-scrollbar max-h-[calc(100vh-355px)]">
                             {selectedAdminMessages.map((message, index) => {
                                 const isFirstUnread = !message.read && 
                                     (index === 0 || selectedAdminMessages[index - 1].read);

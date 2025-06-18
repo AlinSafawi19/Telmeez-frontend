@@ -61,6 +61,7 @@ const SuperAdminDashboard: React.FC = () => {
     const [expandedDates, setExpandedDates] = useState<Set<string>>(new Set(['Today', 'Yesterday']));
     const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
     const [startDate, endDate] = dateRange;
+    // const [selectedChatAdmin, setSelectedChatAdmin] = useState<Admin | null>(null); // Using context instead
 
     const {
         admins,
@@ -85,6 +86,7 @@ const SuperAdminDashboard: React.FC = () => {
         sortData,
         getPaginatedData,
         getTotalPages,
+        setSelectedChatAdmin,
     } = useAdmin();
 
     // Standard plan limits
@@ -210,6 +212,8 @@ const SuperAdminDashboard: React.FC = () => {
         const previousTab = tabOrder[currentIndex - 1] || 'overview';
         setActiveTab(previousTab as any);
         setTabOrder(prev => prev.filter(tab => tab !== 'chat'));
+        // Clear the selected chat admin when closing the tab
+        setSelectedChatAdmin(null);
     };
 
     const handleNotificationsClick = () => {

@@ -36,8 +36,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     const [isSwalOpen, setIsSwalOpen] = useState(false);
     const { currentLanguage } = useLanguage();
     const { notifications, markAsRead: markNotificationAsRead, deleteNotification } = useNotifications();
-    const { messages, unreadCount, markAsRead } = useMessages();
-    const { admins } = useAdmin();
+    const { messages, unreadCount, markAsRead, addMessage } = useMessages();
+    const { admins, setSelectedChatAdmin } = useAdmin();
     const { user } = useUser();
     const [selectedAdmin, setSelectedAdmin] = useState<number | null>(null);
     const [newMessage, setNewMessage] = useState('');
@@ -47,6 +47,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     const profileRef = useRef<HTMLDivElement>(null);
     const notificationsRef = useRef<HTMLDivElement>(null);
     const messagesRef = useRef<HTMLDivElement>(null);
+    const chatAreaRef = useRef<HTMLDivElement>(null);
 
     // Get selected admin info
     const selectedAdminInfo = selectedAdmin ? admins.find(a => a.id === selectedAdmin) : null;
@@ -102,6 +103,17 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             }
         };
     }, [selectedAdmin, isMessagesOpen, admins, messages, markAsRead]);
+
+    // Auto-scroll to bottom when messages change
+    useEffect(() => {
+        if (chatAreaRef.current && selectedAdmin) {
+            setTimeout(() => {
+                if (chatAreaRef.current) {
+                    chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
+                }
+            }, 100);
+        }
+    }, [messages, selectedAdmin]);
 
     const handleNotificationsToggle = () => {
         const newIsOpen = !isNotificationsOpen;
@@ -166,9 +178,22 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
     const handleSendMessage = (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle sending a new message
-        console.log('Sending message:', newMessage);
-        setNewMessage('');
+        if (newMessage.trim() && selectedAdmin) {
+            const adminFullName = selectedAdminInfo ? `${selectedAdminInfo.firstName} ${selectedAdminInfo.lastName}` : '';
+            const conversationId = adminFullName.toLowerCase().replace(/\s+/g, '-');
+            
+            // Add the message to the chat
+            addMessage(newMessage.trim(), 'superadmin', undefined, conversationId);
+            // Clear the input field
+            setNewMessage('');
+            
+            // Scroll to bottom of chat area
+            setTimeout(() => {
+                if (chatAreaRef.current) {
+                    chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
+                }
+            }, 100);
+        }
     };
 
     return (
@@ -354,6 +379,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                             <button
                                                 onClick={() => {
                                                     if (onChatClick) onChatClick();
+                                                    // Set the selected chat admin if there's one selected in the messages dropdown
+                                                    if (selectedAdmin) {
+                                                        setSelectedChatAdmin(selectedAdmin);
+                                                    }
                                                     setIsMessagesOpen(false);
                                                 }}
                                                 className="focus:outline-none text-xs text-white/90 hover:text-white transition-colors duration-200 flex items-center bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full hover:bg-white/30"
@@ -430,19 +459,19 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
                                                 {/* Chat Area */}
                                                 <div className="flex-1 flex flex-col bg-gradient-to-b from-gray-50/30 to-white/50">
-                                                    <div className="flex-1 overflow-y-auto p-4 space-y-3 max-h-[350px] min-h-[350px]">
+                                                    <div ref={chatAreaRef} className="flex-1 overflow-y-auto p-4 space-y-3 max-h-[350px] min-h-[350px]">
                                                         {messages
                                                             .filter(message => {
                                                                 const adminFullName = selectedAdminInfo ? `${selectedAdminInfo.firstName} ${selectedAdminInfo.lastName}` : '';
+                                                                const conversationId = adminFullName.toLowerCase().replace(/\s+/g, '-');
 
                                                                 if (message.sender === 'admin') {
                                                                     return message.adminName === adminFullName;
                                                                 }
 
                                                                 if (message.sender === 'superadmin') {
-                                                                    const messageIndex = messages.indexOf(message);
-                                                                    const nextMessage = messages[messageIndex + 1];
-                                                                    return nextMessage && nextMessage.sender === 'admin' && nextMessage.adminName === adminFullName;
+                                                                    // Show superadmin messages that belong to this specific conversation
+                                                                    return message.conversationId === conversationId;
                                                                 }
 
                                                                 return false;
@@ -604,14 +633,16 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                         })
                                                         .map((admin) => {
                                                             const adminFullName = `${admin.firstName} ${admin.lastName}`;
+                                                            const conversationId = adminFullName.toLowerCase().replace(/\s+/g, '-');
                                                             const unreadCount = messages.filter(message =>
-                                                                message.sender === 'admin' &&
-                                                                message.adminName === adminFullName &&
+                                                                ((message.sender === 'admin' && message.adminName === adminFullName) ||
+                                                                 (message.sender === 'superadmin' && message.conversationId === conversationId)) &&
                                                                 !message.read
                                                             ).length;
 
                                                             const lastMessage = messages
-                                                                .filter(m => m.sender === 'admin' && m.adminName === adminFullName)
+                                                                .filter(m => (m.sender === 'admin' && m.adminName === adminFullName) ||
+                                                                           (m.sender === 'superadmin' && m.conversationId === conversationId))
                                                                 .pop();
 
                                                             return (

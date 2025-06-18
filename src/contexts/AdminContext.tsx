@@ -1,15 +1,22 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import Swal from 'sweetalert2';
+import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaClock, FaCheckCircle, FaTimesCircle, FaExclamationTriangle } from 'react-icons/fa';
 
 export interface Admin {
     id: number;
     firstName: string;
     lastName: string;
     email: string;
-    status: 'active' | 'inactive' | 'incomplete';
-    isOnline: boolean;
+    phone: string;
+    status: 'active' | 'inactive' | 'pending' | 'incomplete';
+    joinDate: Date;
+    lastActive: Date;
     profileImage?: string;
+    isOnline: boolean;
+    school?: string;
+    department?: string;
+    permissions: string[];
     date: string;
     stats: {
         parents: number;
@@ -29,6 +36,7 @@ interface AdminContextType {
     };
     rowsPerPage: number;
     currentPage: number;
+    selectedChatAdmin: number | null;
     setSearchQuery: (query: string) => void;
     setStatusFilter: (filter: 'all' | 'active' | 'inactive' | 'incomplete') => void;
     setRowsPerPage: (rows: number) => void;
@@ -45,6 +53,7 @@ interface AdminContextType {
     sortData: (data: Admin[]) => Admin[];
     getPaginatedData: (data: Admin[]) => Admin[];
     getTotalPages: (data: Admin[]) => number;
+    setSelectedChatAdmin: (adminId: number | null) => void;
 }
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
@@ -68,52 +77,102 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
             firstName: 'Alin',
             lastName: 'Safawi',
             email: 'alin@safawi.com',
+            phone: '+1-555-1234',
             status: 'active',
-            isOnline: false,
+            joinDate: new Date('2024-03-15'),
+            lastActive: new Date('2024-03-15'),
             profileImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+            isOnline: false,
+            school: 'ABC School',
+            department: 'Mathematics',
+            permissions: ['view', 'edit'],
             date: '2024-03-15',
-            stats: { parents: 45, students: 120, teachers: 12 }
+            stats: {
+                parents: 0,
+                students: 0,
+                teachers: 0
+            }
         },
         {
             id: 2,
             firstName: 'Sarah',
             lastName: 'Wilson',
             email: 'sarah@example.com',
+            phone: '+1-555-5678',
             status: 'active',
+            joinDate: new Date('2024-03-14'),
+            lastActive: new Date('2024-03-15'),
             isOnline: true,
+            school: 'XYZ School',
+            department: 'Science',
+            permissions: ['view'],
             date: '2024-03-14',
-            stats: { parents: 52, students: 110, teachers: 15 }
+            stats: {
+                parents: 0,
+                students: 0,
+                teachers: 0
+            }
         },
         {
             id: 3,
             firstName: 'Michael',
             lastName: 'Brown',
             email: 'michael@example.com',
+            phone: '+1-555-9012',
             status: 'incomplete',
-            isOnline: true,
+            joinDate: new Date('2024-03-13'),
+            lastActive: new Date('2024-03-13'),
             profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+            isOnline: true,
+            school: 'ABC School',
+            department: 'Mathematics',
+            permissions: ['view'],
             date: '2024-03-13',
-            stats: { parents: 0, students: 0, teachers: 0 }
+            stats: {
+                parents: 0,
+                students: 0,
+                teachers: 0
+            }
         },
         {
             id: 4,
             firstName: 'Emily',
             lastName: 'Davis',
             email: 'emily@example.com',
+            phone: '+1-555-3456',
             status: 'active',
+            joinDate: new Date('2024-03-12'),
+            lastActive: new Date('2024-03-15'),
             isOnline: false,
+            school: 'XYZ School',
+            department: 'Science',
+            permissions: ['view', 'edit'],
             date: '2024-03-12',
-            stats: { parents: 48, students: 90, teachers: 13 }
+            stats: {
+                parents: 0,
+                students: 0,
+                teachers: 0
+            }
         },
         {
             id: 5,
             firstName: 'David',
             lastName: 'Miller',
             email: 'david@example.com',
+            phone: '+1-555-7890',
             status: 'inactive',
+            joinDate: new Date('2024-03-11'),
+            lastActive: new Date('2024-03-11'),
             isOnline: true,
+            school: 'ABC School',
+            department: 'Mathematics',
+            permissions: ['view'],
             date: '2024-03-11',
-            stats: { parents: 20, students: 25, teachers: 4 }
+            stats: {
+                parents: 0,
+                students: 0,
+                teachers: 0
+            }
         }
     ]);
     const [selectedAdmins, setSelectedAdmins] = useState<number[]>([]);
@@ -125,6 +184,7 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
     }>({ key: 'date', direction: 'descending' });
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedChatAdmin, setSelectedChatAdmin] = useState<number | null>(null);
 
     const handleSelectAll = useCallback((checked: boolean) => {
         if (checked) {
@@ -149,8 +209,15 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
             ...adminData,
             status: 'incomplete',
             isOnline: Math.random() > 0.5, // Random online status
+            joinDate: new Date(),
+            lastActive: new Date(),
+            permissions: [],
             date: new Date().toISOString().split('T')[0],
-            stats: { parents: 0, students: 0, teachers: 0 }
+            stats: {
+                parents: 0,
+                students: 0,
+                teachers: 0
+            }
         };
         setAdmins(prev => [...prev, newAdmin]);
     }, [admins]);
@@ -299,6 +366,7 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
         sortConfig,
         rowsPerPage,
         currentPage,
+        selectedChatAdmin,
         setSearchQuery,
         setStatusFilter,
         setRowsPerPage,
@@ -315,6 +383,7 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
         sortData,
         getPaginatedData,
         getTotalPages,
+        setSelectedChatAdmin,
     };
 
     return (
