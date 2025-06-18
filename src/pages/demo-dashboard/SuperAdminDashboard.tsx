@@ -320,6 +320,22 @@ const SuperAdminDashboard: React.FC = () => {
         }
     };
 
+    // Function to handle clicking on admin name in recent admins table
+    const handleAdminNameClick = (admin: Admin) => {
+        // Navigate to admins tab
+        setActiveTab('admins');
+        
+        // Select the specific admin
+        handleSelectAdmin(admin.id);
+        
+        // Clear any existing search to make sure the admin is visible
+        setSearchQuery('');
+        setStatusFilter('all');
+        
+        // Reset to first page to ensure the admin is visible
+        setCurrentPage(1);
+    };
+
     // Reset to first page when filters change
     useEffect(() => {
         setCurrentPage(1);
@@ -846,9 +862,12 @@ const SuperAdminDashboard: React.FC = () => {
                                                                                     )}
                                                                                 </div>
                                                                                 <div className="ml-3">
-                                                                                    <div className="text-sm font-medium text-gray-900 truncate max-w-[120px]">
+                                                                                    <button
+                                                                                        onClick={() => handleAdminNameClick(admin)}
+                                                                                        className="text-sm font-medium text-gray-900 truncate max-w-[120px] hover:text-indigo-600 hover:underline focus:outline-none border-none bg-transparent"
+                                                                                    >
                                                                                         {admin.firstName} {admin.lastName}
-                                                                                    </div>
+                                                                                    </button>
                                                                                 </div>
                                                                             </div>
                                                                         </td>
