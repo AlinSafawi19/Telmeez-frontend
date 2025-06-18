@@ -8,6 +8,36 @@ import { useNotifications, type Notification } from '../../contexts/Notification
 import Swal from 'sweetalert2';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarElement,
+    ArcElement,
+    RadialLinearScale,
+    Title,
+    Tooltip,
+    Legend,
+    Filler,
+} from 'chart.js';
+import { Line, Bar, Doughnut, Radar } from 'react-chartjs-2';
+
+// Register ChartJS components
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarElement,
+    ArcElement,
+    RadialLinearScale,
+    Title,
+    Tooltip,
+    Legend,
+    Filler
+);
 
 const SuperAdminDashboard: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'overview' | 'admins' | 'billing' | 'general' | 'account' | 'notifications' | 'chat' | 'calendar'>('overview');
@@ -20,6 +50,7 @@ const SuperAdminDashboard: React.FC = () => {
     const { notifications, markAsRead, markAllAsRead, deleteNotification, clearAll } = useNotifications();
     const [notificationTypeFilter, setNotificationTypeFilter] = useState<('info' | 'warning' | 'success')[]>([]);
     const [notificationReadFilter, setNotificationReadFilter] = useState<('read' | 'unread')[]>([]);
+    const [notificationSearchQuery, setNotificationSearchQuery] = useState('');
     const [tabOrder, setTabOrder] = useState<string[]>(['overview', 'admins', 'calendar']);
     const [sortConfig, setSortConfig] = useState<{
         key: string;
@@ -558,6 +589,81 @@ const SuperAdminDashboard: React.FC = () => {
         });
     };
 
+    // Add these chart data configurations before the return statement
+    const userGrowthData = {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [
+            {
+                label: 'Total Users',
+                data: [150, 230, 320, 410, 480, 550],
+                borderColor: 'rgb(99, 102, 241)',
+                backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                fill: true,
+                tension: 0.4,
+            },
+        ],
+    };
+
+    const userComparisonData = {
+        labels: ['Administrators', 'Teachers', 'Students', 'Parents'],
+        datasets: [
+            {
+                label: 'Current Users',
+                data: [currentUsage.admin, currentUsage.teacher, currentUsage.student, currentUsage.parent],
+                backgroundColor: [
+                    'rgba(147, 51, 234, 0.8)',
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(16, 185, 129, 0.8)',
+                    'rgba(236, 72, 153, 0.8)',
+                ],
+            },
+        ],
+    };
+
+    const userStatusData = {
+        labels: ['Active', 'Inactive', 'Incomplete'],
+        datasets: [
+            {
+                data: [
+                    admins.filter(a => a.status === 'active').length,
+                    admins.filter(a => a.status === 'inactive').length,
+                    admins.filter(a => a.status === 'incomplete').length,
+                ],
+                backgroundColor: [
+                    'rgba(16, 185, 129, 0.8)',
+                    'rgba(239, 68, 68, 0.8)',
+                    'rgba(245, 158, 11, 0.8)',
+                ],
+            },
+        ],
+    };
+
+    const schoolPerformanceData = {
+        labels: ['Attendance', 'Academic Progress', 'Teacher Engagement', 'Parent Involvement', 'Resource Utilization'],
+        datasets: [
+            {
+                label: 'Current Month',
+                data: [94.5, 87.2, 92.0, 78.5, 85.0],
+                backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                borderColor: 'rgb(99, 102, 241)',
+                pointBackgroundColor: 'rgb(99, 102, 241)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(99, 102, 241)',
+            },
+            {
+                label: 'Last Month',
+                data: [92.2, 85.7, 90.5, 75.0, 82.5],
+                backgroundColor: 'rgba(147, 51, 234, 0.2)',
+                borderColor: 'rgb(147, 51, 234)',
+                pointBackgroundColor: 'rgb(147, 51, 234)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(147, 51, 234)',
+            },
+        ],
+    };
+
     return (
         <DashboardLayout
             role="Super Admin"
@@ -708,6 +814,101 @@ const SuperAdminDashboard: React.FC = () => {
                                                 </div>
                                             </motion.div>
                                         ))}
+                                    </div>
+
+                                    {/* Charts Section */}
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        {/* User Growth Chart */}
+                                        <div className="bg-white rounded-lg shadow-sm p-6">
+                                            <h2 className="text-lg font-medium text-gray-900 mb-4">User Growth</h2>
+                                            <div className="h-64">
+                                                <Line
+                                                    data={userGrowthData}
+                                                    options={{
+                                                        responsive: true,
+                                                        maintainAspectRatio: false,
+                                                        plugins: {
+                                                            legend: {
+                                                                position: 'top' as const,
+                                                            },
+                                                        },
+                                                        scales: {
+                                                            y: {
+                                                                beginAtZero: true,
+                                                            },
+                                                        },
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* User Comparison Chart */}
+                                        <div className="bg-white rounded-lg shadow-sm p-6">
+                                            <h2 className="text-lg font-medium text-gray-900 mb-4">User Distribution</h2>
+                                            <div className="h-64">
+                                                <Bar
+                                                    data={userComparisonData}
+                                                    options={{
+                                                        responsive: true,
+                                                        maintainAspectRatio: false,
+                                                        plugins: {
+                                                            legend: {
+                                                                display: false,
+                                                            },
+                                                        },
+                                                        scales: {
+                                                            y: {
+                                                                beginAtZero: true,
+                                                            },
+                                                        },
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* User Status Chart */}
+                                        <div className="bg-white rounded-lg shadow-sm p-6">
+                                            <h2 className="text-lg font-medium text-gray-900 mb-4">Admin Status</h2>
+                                            <div className="h-64">
+                                                <Doughnut
+                                                    data={userStatusData}
+                                                    options={{
+                                                        responsive: true,
+                                                        maintainAspectRatio: false,
+                                                        plugins: {
+                                                            legend: {
+                                                                position: 'right' as const,
+                                                            },
+                                                        },
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* School Performance Chart */}
+                                        <div className="bg-white rounded-lg shadow-sm p-6">
+                                            <h2 className="text-lg font-medium text-gray-900 mb-4">School Performance</h2>
+                                            <div className="h-64">
+                                                <Radar
+                                                    data={schoolPerformanceData}
+                                                    options={{
+                                                        responsive: true,
+                                                        maintainAspectRatio: false,
+                                                        plugins: {
+                                                            legend: {
+                                                                position: 'top' as const,
+                                                            },
+                                                        },
+                                                        scales: {
+                                                            r: {
+                                                                beginAtZero: true,
+                                                                max: 100,
+                                                            },
+                                                        },
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
 
                                     {/* Quick Links Section */}
@@ -1313,10 +1514,36 @@ const SuperAdminDashboard: React.FC = () => {
                                                 <p className="mt-1 text-sm text-gray-500">View and manage your notifications</p>
                                             </div>
                                             <div className="flex space-x-3">
+                                                <div className="relative">
+                                                    <input
+                                                        type="text"
+                                                        value={notificationSearchQuery}
+                                                        onChange={(e) => setNotificationSearchQuery(e.target.value)}
+                                                        placeholder="Search notifications..."
+                                                        className="w-64 px-4 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                                    />
+                                                    {notificationSearchQuery && (
+                                                        <button
+                                                            onClick={() => setNotificationSearchQuery('')}
+                                                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                                            aria-label="Clear search"
+                                                        >
+                                                            <FaTimes className="h-4 w-4" />
+                                                        </button>
+                                                    )}
+                                                </div>
                                                 <button
                                                     onClick={() => {
                                                         // Get filtered notifications
                                                         const filteredNotifications = notifications.filter(notification => {
+                                                            // Apply search filter
+                                                            if (notificationSearchQuery) {
+                                                                const searchLower = notificationSearchQuery.toLowerCase();
+                                                                const matchesSearch = 
+                                                                    notification.title.toLowerCase().includes(searchLower) ||
+                                                                    notification.message.toLowerCase().includes(searchLower);
+                                                                if (!matchesSearch) return false;
+                                                            }
                                                             // Apply type filter
                                                             if (notificationTypeFilter.length > 0 && !notificationTypeFilter.includes(notification.type)) {
                                                                 return false;
@@ -1358,6 +1585,14 @@ const SuperAdminDashboard: React.FC = () => {
                                                     onClick={async () => {
                                                         // Get filtered notifications count
                                                         const filteredNotifications = notifications.filter(notification => {
+                                                            // Apply search filter
+                                                            if (notificationSearchQuery) {
+                                                                const searchLower = notificationSearchQuery.toLowerCase();
+                                                                const matchesSearch = 
+                                                                    notification.title.toLowerCase().includes(searchLower) ||
+                                                                    notification.message.toLowerCase().includes(searchLower);
+                                                                if (!matchesSearch) return false;
+                                                            }
                                                             // Apply type filter
                                                             if (notificationTypeFilter.length > 0 && !notificationTypeFilter.includes(notification.type)) {
                                                                 return false;
@@ -1599,6 +1834,14 @@ const SuperAdminDashboard: React.FC = () => {
                                         <div className="space-y-4">
                                             {Object.entries([...notifications]
                                                 .filter(notification => {
+                                                    // Apply search filter
+                                                    if (notificationSearchQuery) {
+                                                        const searchLower = notificationSearchQuery.toLowerCase();
+                                                        const matchesSearch = 
+                                                            notification.title.toLowerCase().includes(searchLower) ||
+                                                            notification.message.toLowerCase().includes(searchLower);
+                                                        if (!matchesSearch) return false;
+                                                    }
                                                     // Apply type filter
                                                     if (notificationTypeFilter.length > 0 && !notificationTypeFilter.includes(notification.type)) {
                                                         return false;
