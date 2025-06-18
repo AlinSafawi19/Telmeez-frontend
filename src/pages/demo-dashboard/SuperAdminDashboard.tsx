@@ -1261,7 +1261,7 @@ const SuperAdminDashboard: React.FC = () => {
                             )}
 
                             {/* Notifications Tab Content */}
-                            {notificationsActive && (
+                            {activeTab === 'notifications' && (
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -1781,8 +1781,14 @@ const SuperAdminDashboard: React.FC = () => {
                             )}
 
                             {/* chat Tab Content */}
-                            {chatActive && (
-                                <ChatTab />
+                            {activeTab === 'chat' && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="space-y-6"
+                                >
+                                    <ChatTab />
+                                </motion.div>
                             )}
 
                             {/* Calendar Tab Content */}

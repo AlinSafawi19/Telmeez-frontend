@@ -87,7 +87,7 @@ export const MessagesProvider: React.FC<MessagesProviderProps> = ({ children }) 
             sender,
             content,
             timestamp: new Date(),
-            read: sender === 'superadmin', // Messages from superadmin are automatically marked as read
+            read: false, // All messages are unread by default
             adminName,
             conversationId
         };
