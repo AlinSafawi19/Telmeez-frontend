@@ -7,6 +7,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import { useNotifications } from '../../contexts/NotificationsContext';
 import { useMessages } from '../../contexts/MessagesContext';
 import { useAdmin } from '../../contexts/AdminContext';
+import { useUser } from '../../contexts/UserContext';
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -37,6 +38,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     const { notifications, markAsRead: markNotificationAsRead, deleteNotification } = useNotifications();
     const { messages, unreadCount, markAsRead } = useMessages();
     const { admins } = useAdmin();
+    const { user } = useUser();
     const [selectedAdmin, setSelectedAdmin] = useState<number | null>(null);
     const [newMessage, setNewMessage] = useState('');
     const [searchAdmin, setSearchAdmin] = useState('');
@@ -100,16 +102,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             }
         };
     }, [selectedAdmin, isMessagesOpen, admins, messages, markAsRead]);
-
-    // Mock data - in a real app, this would come from your backend
-    const user = {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john@example.com',
-        avatar: null,
-        role: role,
-        subscriptionPlan: 'Standard'
-    };
 
     const handleNotificationsToggle = () => {
         const newIsOpen = !isNotificationsOpen;
@@ -196,7 +188,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                         <div className="flex items-center space-x-6">
                             {/* Subscription Plan */}
                             <div className="hidden md:flex flex-col items-center">
-                                <span className="text-sm font-semibold text-gray-700">{user.subscriptionPlan}</span>
+                                <span className="text-sm font-semibold text-gray-700">{user?.subscriptionPlan || 'Free'}</span>
                                 <a
                                     href="/settings/billing"
                                     className="text-xs text-indigo-600 hover:text-indigo-800 transition-colors duration-200"
@@ -708,10 +700,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                     className="flex items-center space-x-2 p-2 text-gray-600 hover:text-indigo-600 focus:outline-none transition-colors duration-200"
                                 >
                                     <div className="flex items-center">
-                                        {user.avatar ? (
+                                        {user?.profileImage ? (
                                             <img
-                                                src={user.avatar}
-                                                alt={`${user.firstName} ${user.lastName}`}
+                                                src={user.profileImage}
+                                                alt={user ? `${user.firstName} ${user.lastName}` : 'User Avatar'}
                                                 className="h-8 w-8 rounded-full ring-2 ring-gray-100 transition-transform hover:scale-105"
                                             />
                                         ) : (
@@ -720,15 +712,15 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                             </div>
                                         )}
                                         <span className="ml-2 text-sm font-medium hidden md:block">
-                                            {user.firstName} {user.lastName}
+                                            {user ? `${user.firstName} ${user.lastName}` : 'Guest User'}
                                         </span>
                                         <FaChevronDown className={`ml-1 h-4 w-4 transition-transform duration-200 ${isProfileDropdownOpen ? 'rotate-180' : 'rotate-0'}`} />
                                     </div>
                                 </button>
                                 <div className={`absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-1 z-50 transform transition-all duration-200 ease-in-out origin-top-right ${isProfileDropdownOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
                                     <div className="px-4 py-3 border-b border-gray-100">
-                                        <p className="text-sm font-semibold text-gray-900">{user.firstName} {user.lastName}</p>
-                                        <p className="text-xs text-gray-500">{user.email}</p>
+                                        <p className="text-sm font-semibold text-gray-900">{user ? `${user.firstName} ${user.lastName}` : 'Guest User'}</p>
+                                        <p className="text-xs text-gray-500">{user?.email || 'No email'}</p>
                                     </div>
                                     <a href="#" onClick={handleGeneralClick} className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150">
                                         <div className="flex items-center">

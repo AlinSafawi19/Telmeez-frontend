@@ -112,7 +112,6 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
             email: 'david@example.com',
             status: 'inactive',
             isOnline: true,
-            profileImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
             date: '2024-03-11',
             stats: { parents: 20, students: 25, teachers: 4 }
         }
