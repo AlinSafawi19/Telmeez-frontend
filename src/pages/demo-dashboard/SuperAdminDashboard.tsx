@@ -1563,10 +1563,10 @@ const SuperAdminDashboard: React.FC = () => {
                                                         setDateRange([sevenDaysAgo, today]);
                                                     }}
                                                     className={`px-3 py-1.5 text-sm font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 ${startDate && endDate &&
-                                                            new Date(startDate).getTime() === new Date(new Date().setDate(new Date().getDate() - 7)).getTime() &&
-                                                            new Date(endDate).toDateString() === new Date().toDateString()
-                                                            ? 'bg-green-200 text-green-900 ring-2 ring-green-300'
-                                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                        new Date(startDate).getTime() === new Date(new Date().setDate(new Date().getDate() - 7)).getTime() &&
+                                                        new Date(endDate).toDateString() === new Date().toDateString()
+                                                        ? 'bg-green-200 text-green-900 ring-2 ring-green-300'
+                                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                                         }`}
                                                 >
                                                     Last 7 Days
@@ -1776,9 +1776,7 @@ const SuperAdminDashboard: React.FC = () => {
 
                             {/* chat Tab Content */}
                             {activeTab === 'chat' && (
-                                <div className="bg-white rounded-lg shadow-sm p-6">
-                                    <ChatTab />
-                                </div>
+                                <ChatTab />
                             )}
 
                             {/* Calendar Tab Content */}
