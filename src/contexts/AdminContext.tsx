@@ -8,6 +8,8 @@ export interface Admin {
     lastName: string;
     email: string;
     status: 'active' | 'inactive' | 'incomplete';
+    isOnline: boolean;
+    profileImage?: string;
     date: string;
     stats: {
         parents: number;
@@ -33,7 +35,7 @@ interface AdminContextType {
     setCurrentPage: (page: number) => void;
     handleSelectAll: (checked: boolean) => void;
     handleSelectAdmin: (id: number) => void;
-    handleAddAdmin: (adminData: Omit<Admin, 'id' | 'date' | 'stats' | 'status'>) => Promise<void>;
+    handleAddAdmin: (adminData: Omit<Admin, 'id' | 'date' | 'stats' | 'status' | 'isOnline' | 'profileImage'>) => Promise<void>;
     handleEditAdmin: (adminData: Omit<Admin, 'id' | 'date' | 'stats' | 'status'>) => Promise<void>;
     handleDeleteAdmin: (id: number) => Promise<void>;
     handleBulkDelete: () => Promise<void>;
@@ -67,6 +69,8 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
             lastName: 'Safawi',
             email: 'alin@safawi.com',
             status: 'active',
+            isOnline: false,
+            profileImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
             date: '2024-03-15',
             stats: { parents: 45, students: 120, teachers: 12 }
         },
@@ -76,6 +80,7 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
             lastName: 'Wilson',
             email: 'sarah@example.com',
             status: 'active',
+            isOnline: true,
             date: '2024-03-14',
             stats: { parents: 52, students: 110, teachers: 15 }
         },
@@ -85,6 +90,8 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
             lastName: 'Brown',
             email: 'michael@example.com',
             status: 'incomplete',
+            isOnline: true,
+            profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
             date: '2024-03-13',
             stats: { parents: 0, students: 0, teachers: 0 }
         },
@@ -94,6 +101,7 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
             lastName: 'Davis',
             email: 'emily@example.com',
             status: 'active',
+            isOnline: false,
             date: '2024-03-12',
             stats: { parents: 48, students: 90, teachers: 13 }
         },
@@ -103,6 +111,8 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
             lastName: 'Miller',
             email: 'david@example.com',
             status: 'inactive',
+            isOnline: true,
+            profileImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
             date: '2024-03-11',
             stats: { parents: 20, students: 25, teachers: 4 }
         }
@@ -134,11 +144,23 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
         });
     }, []);
 
-    const handleAddAdmin = useCallback(async (adminData: Omit<Admin, 'id' | 'date' | 'stats' | 'status'>) => {
+    const handleAddAdmin = useCallback(async (adminData: Omit<Admin, 'id' | 'date' | 'stats' | 'status' | 'isOnline' | 'profileImage'>) => {
+        const profileImages = [
+            'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+            'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+            'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
+            'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&h=150&fit=crop&crop=face',
+            'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150&h=150&fit=crop&crop=face'
+        ];
+        
         const newAdmin: Admin = {
             id: Math.max(...admins.map(a => a.id)) + 1,
             ...adminData,
             status: 'incomplete',
+            isOnline: Math.random() > 0.5, // Random online status
             date: new Date().toISOString().split('T')[0],
             stats: { parents: 0, students: 0, teachers: 0 }
         };

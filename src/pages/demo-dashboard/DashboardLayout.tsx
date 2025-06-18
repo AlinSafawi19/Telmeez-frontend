@@ -46,6 +46,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     const notificationsRef = useRef<HTMLDivElement>(null);
     const messagesRef = useRef<HTMLDivElement>(null);
 
+    // Get selected admin info
+    const selectedAdminInfo = selectedAdmin ? admins.find(a => a.id === selectedAdmin) : null;
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (isSwalOpen) return; // Don't close dropdowns if SweetAlert is open
@@ -385,16 +388,32 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                     </button>
                                                     <div className="flex items-center">
                                                         <div className="relative mr-3">
-                                                            <div className="p-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg">
-                                                                <FaUser className="h-3 w-3" />
-                                                            </div>
-                                                            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white bg-green-500"></div>
+                                                            {selectedAdminInfo?.profileImage ? (
+                                                                <img
+                                                                    src={selectedAdminInfo.profileImage}
+                                                                    alt={`${selectedAdminInfo.firstName} ${selectedAdminInfo.lastName}`}
+                                                                    className="h-8 w-8 rounded-full object-cover"
+                                                                />
+                                                            ) : (
+                                                                <div className="p-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg">
+                                                                    <span className="text-sm font-medium">
+                                                                        {selectedAdminInfo?.firstName[0]}{selectedAdminInfo?.lastName[0]}
+                                                                    </span>
+                                                                </div>
+                                                            )}
+                                                            <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${
+                                                                selectedAdminInfo?.isOnline ? 'bg-green-500' : 'bg-gray-400'
+                                                            }`}></div>
                                                         </div>
                                                         <div>
                                                             <p className="text-sm font-semibold text-gray-900">
-                                                                {admins.find(a => a.id === selectedAdmin)?.firstName} {admins.find(a => a.id === selectedAdmin)?.lastName}
+                                                                {selectedAdminInfo?.firstName} {selectedAdminInfo?.lastName}
                                                             </p>
-                                                            <p className="text-xs text-green-600 font-medium">• online</p>
+                                                            <p className={`text-xs font-medium ${
+                                                                selectedAdminInfo?.isOnline ? 'text-green-600' : 'text-gray-500'
+                                                            }`}>
+                                                                • {selectedAdminInfo?.isOnline ? 'online' : 'offline'}
+                                                            </p>
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center space-x-2">
@@ -424,7 +443,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                     <div className="flex-1 overflow-y-auto p-4 space-y-3" style={{ maxHeight: 'calc(100vh - 385px)' }}>
                                                         {messages
                                                             .filter(message => {
-                                                                const selectedAdminInfo = admins.find(a => a.id === selectedAdmin);
                                                                 const adminFullName = selectedAdminInfo ? `${selectedAdminInfo.firstName} ${selectedAdminInfo.lastName}` : '';
                                                                 
                                                                 if (message.sender === 'admin') {
@@ -550,8 +568,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                 </div>
                                             </div>
                                         ) : (
-                                            <div className="h-[500px]">
-                                                <div className="p-4 border-b border-gray-100/50">
+                                            <div className="h-[500px] flex flex-col">
+                                                <div className="p-4 border-b border-gray-100/50 flex-shrink-0">
                                                     <div className="relative">
                                                         <input
                                                             type="text"
@@ -574,7 +592,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                         )}
                                                     </div>
                                                 </div>
-                                                <div className="overflow-y-auto p-2">
+                                                <div className="flex-1 overflow-y-auto p-2">
                                                     {admins
                                                         .filter(admin => {
                                                             if (!searchAdmin.trim()) return true;
@@ -595,8 +613,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                                 .filter(m => m.sender === 'admin' && m.adminName === adminFullName)
                                                                 .pop();
 
-                                                            const isOnline = admin.id % 3 !== 0; // Consistent online status
-
                                                             return (
                                                                 <button
                                                                     key={admin.id}
@@ -611,22 +627,36 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                                                     <div className="flex items-center justify-between">
                                                                         <div className="flex items-center flex-1 min-w-0">
                                                                             <div className="relative mr-4">
-                                                                                <div className={`p-2.5 rounded-xl ${
-                                                                                    selectedAdmin === admin.id 
-                                                                                        ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg' 
-                                                                                        : 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600'
-                                                                                }`}>
-                                                                                    <FaUser className="h-3 w-3" />
-                                                                                </div>
+                                                                                {admin.profileImage ? (
+                                                                                    <img
+                                                                                        src={admin.profileImage}
+                                                                                        alt={`${admin.firstName} ${admin.lastName}`}
+                                                                                        className={`h-8 w-8 rounded-full object-cover ${
+                                                                                            selectedAdmin === admin.id 
+                                                                                                ? 'ring-2 ring-indigo-500' 
+                                                                                                : ''
+                                                                                        }`}
+                                                                                    />
+                                                                                ) : (
+                                                                                    <div className={`p-2.5 rounded-xl ${
+                                                                                        selectedAdmin === admin.id 
+                                                                                            ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg' 
+                                                                                            : 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600'
+                                                                                    }`}>
+                                                                                        <span className="text-sm font-medium">
+                                                                                            {admin.firstName[0]}{admin.lastName[0]}
+                                                                                        </span>
+                                                                                    </div>
+                                                                                )}
                                                                                 {/* Online indicator */}
                                                                                 <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${
-                                                                                    isOnline ? 'bg-green-500' : 'bg-gray-400'
+                                                                                    admin.isOnline ? 'bg-green-500' : 'bg-gray-400'
                                                                                 }`}></div>
                                                                             </div>
                                                                             <div className="flex-1 min-w-0">
                                                                                 <div className="flex items-center gap-2">
                                                                                     <p className="font-semibold text-gray-900 truncate text-sm">{admin.firstName} {admin.lastName}</p>
-                                                                                    {isOnline && (
+                                                                                    {admin.isOnline && (
                                                                                         <span className="text-xs text-green-600 font-medium">• online</span>
                                                                                     )}
                                                                                 </div>

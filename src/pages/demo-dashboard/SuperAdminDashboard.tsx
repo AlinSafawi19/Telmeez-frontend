@@ -831,11 +831,19 @@ const SuperAdminDashboard: React.FC = () => {
                                                                         <td className="px-4 py-4 whitespace-nowrap">
                                                                             <div className="flex items-center">
                                                                                 <div className="flex-shrink-0 h-8 w-8">
-                                                                                    <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
-                                                                                        <span className="text-indigo-600 font-medium text-sm">
-                                                                                            {admin.firstName[0]}{admin.lastName[0]}
-                                                                                        </span>
-                                                                                    </div>
+                                                                                    {admin.profileImage ? (
+                                                                                        <img
+                                                                                            src={admin.profileImage}
+                                                                                            alt={`${admin.firstName} ${admin.lastName}`}
+                                                                                            className="h-8 w-8 rounded-full object-cover"
+                                                                                        />
+                                                                                    ) : (
+                                                                                        <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
+                                                                                            <span className="text-indigo-600 font-medium text-sm">
+                                                                                                {admin.firstName[0]}{admin.lastName[0]}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    )}
                                                                                 </div>
                                                                                 <div className="ml-3">
                                                                                     <div className="text-sm font-medium text-gray-900 truncate max-w-[120px]">
@@ -1081,16 +1089,31 @@ const SuperAdminDashboard: React.FC = () => {
                                                             </td>
                                                             <td className="px-4 py-4 whitespace-nowrap">
                                                                 <div className="flex items-center">
-                                                                    <div className="flex-shrink-0 h-10 w-10">
-                                                                        <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                                                                            <span className="text-indigo-600 font-medium">
-                                                                                {admin.firstName[0]}{admin.lastName[0]}
-                                                                            </span>
-                                                                        </div>
+                                                                    <div className="flex-shrink-0 h-10 w-10 relative">
+                                                                        {admin.profileImage ? (
+                                                                            <img
+                                                                                src={admin.profileImage}
+                                                                                alt={`${admin.firstName} ${admin.lastName}`}
+                                                                                className="h-10 w-10 rounded-full object-cover"
+                                                                            />
+                                                                        ) : (
+                                                                            <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                                                                                <span className="text-indigo-600 font-medium">
+                                                                                    {admin.firstName[0]}{admin.lastName[0]}
+                                                                                </span>
+                                                                            </div>
+                                                                        )}
+                                                                        {/* Online/Offline indicator */}
+                                                                        <div className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white ${
+                                                                            admin.isOnline ? 'bg-green-400' : 'bg-gray-400'
+                                                                        }`} />
                                                                     </div>
                                                                     <div className="ml-4">
                                                                         <div className="text-sm font-medium text-gray-900 truncate max-w-[120px]">
                                                                             {admin.firstName} {admin.lastName}
+                                                                        </div>
+                                                                        <div className="text-xs text-gray-500">
+                                                                            {admin.isOnline ? 'Online' : 'Offline'}
                                                                         </div>
                                                                     </div>
                                                                 </div>

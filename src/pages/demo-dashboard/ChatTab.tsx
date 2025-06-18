@@ -96,11 +96,10 @@ const ChatTab: React.FC = () => {
 
     const selectedAdminInfo = admins.find(a => a.id === selectedAdmin);
 
-    // Get online status (mock data) - make it consistent per admin
+    // Get online status from admin context
     const getOnlineStatus = (adminId: number) => {
-        // Use adminId to generate consistent online status
-        // This ensures the same admin always has the same status
-        return adminId % 3 !== 0; // 2/3 chance of being online (adminId 1,2,4,5,7,8... will be online)
+        const admin = admins.find(a => a.id === adminId);
+        return admin ? admin.isOnline : false;
     };
 
     return (
