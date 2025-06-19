@@ -725,25 +725,31 @@ const Checkout: React.FC<CheckoutProps> = ({
 
     const getPlanPrice = () => {
         const plan = t.pricing.plans[selectedPlan as keyof typeof t.pricing.plans];
-        const price = isAnnual ? plan.annual_price : plan.monthly_price;
-        const priceValue = parseFloat(price.replace(/[^0-9.-]+/g, ''));
-        return `$${priceValue.toFixed(2)}`;
+        const monthlyPrice = parseFloat(plan.monthly_price.replace(/[^0-9.-]+/g, ''));
+        
+        if (isAnnual) {
+            // Calculate annual price: monthly price × 12 months × 0.8 (20% discount)
+            const annualPrice = monthlyPrice * 12 * 0.8;
+            return `$${annualPrice.toFixed(2)}`;
+        } else {
+            return `$${monthlyPrice.toFixed(2)}`;
+        }
     };
 
     const getTotalSavings = () => {
         const plan = t.pricing.plans[selectedPlan as keyof typeof t.pricing.plans];
-        const annualPrice = parseFloat(plan.annual_price.replace(/[^0-9.-]+/g, ''));
         const monthlyPrice = parseFloat(plan.monthly_price.replace(/[^0-9.-]+/g, ''));
         let annualSavings = 0;
         let promoCodeSavings = 0;
 
         if (isAnnual) {
-            // Calculate annual savings (20% off annual price)
-            annualSavings = annualPrice * 0.20;
+            // Calculate annual savings: full annual price - discounted annual price
+            const fullAnnualPrice = monthlyPrice * 12; // $49 × 12 = $588
+            const discountedAnnualPrice = monthlyPrice * 12 * 0.8; // $49 × 12 × 0.8 = $470.40
+            annualSavings = fullAnnualPrice - discountedAnnualPrice; // $588 - $470.40 = $117.60
 
             // Calculate promo code savings on the discounted annual price
             if (discount > 0) {
-                const discountedAnnualPrice = annualPrice * 0.80; // Price after annual discount
                 promoCodeSavings = discountedAnnualPrice * discount;
             }
         } else {
@@ -762,12 +768,14 @@ const Checkout: React.FC<CheckoutProps> = ({
 
     const getTotalPrice = () => {
         const plan = t.pricing.plans[selectedPlan as keyof typeof t.pricing.plans];
-        const price = isAnnual ? plan.annual_price : plan.monthly_price;
-        const priceValue = parseFloat(price.replace(/[^0-9.-]+/g, ''));
-        let finalPrice = priceValue;
+        const monthlyPrice = parseFloat(plan.monthly_price.replace(/[^0-9.-]+/g, ''));
+        let finalPrice = 0;
 
         if (isAnnual) {
-            finalPrice = priceValue * 0.80; // 80% of the annual price (20% discount)
+            // Calculate discounted annual price
+            finalPrice = monthlyPrice * 12 * 0.8; // $49 × 12 × 0.8 = $470.40
+        } else {
+            finalPrice = monthlyPrice; // $49
         }
 
         // Apply promo code discount if exists
@@ -903,7 +911,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                     <img
                         src={currentLanguage === 'ar' ? logoarb : logo}
                         alt="Company Logo"
-                        className="h-12 w-auto transition-transform hover:scale-105"
+                        className="h-20 w-auto transition-transform hover:scale-105"
                     />
                     <div className="max-w-2xl mx-auto text-center">
                         <h1 className="text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
