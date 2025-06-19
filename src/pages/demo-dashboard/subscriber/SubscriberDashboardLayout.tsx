@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { useSubscriber } from '../../../contexts/SubscriberContext';
+import { useUser } from '../../../contexts/UserContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import logo2 from '../../../assets/images/logo2.png';
 import {
@@ -35,7 +35,7 @@ interface SubscriberDashboardLayoutProps {
 const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
     children
 }): React.ReactElement => {
-    const { subscriber, logout, isDemoMode, setDemoMode, isLoading } = useSubscriber();
+    const { subscriber, logout, isDemoMode, setDemoMode, isLoading } = useUser();
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
         'administration': false,
@@ -209,7 +209,7 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                     className="w-16 h-16 object-contain"
                                 />
                                 <div>
-                                    <h1 className="text-lg font-bold text-white">{subscriber?.first_name} {subscriber?.last_name}</h1>
+                                    <h1 className="text-lg font-bold text-white">{subscriber?.user?.first_name} {subscriber?.user?.last_name}</h1>
                                     <p className="text-xs text-gray-400">Dashboard</p>
                                 </div>
                             </div>
@@ -383,7 +383,7 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                         {subscriber?.profileImage?.file_url ? (
                                             <img
                                                 src={subscriber.profileImage.file_url}
-                                                alt={`${subscriber.first_name} ${subscriber.last_name}`}
+                                                alt={`${subscriber.user?.first_name} ${subscriber.user?.last_name}`}
                                                 className="w-full h-full object-cover"
                                                 onError={(e) => {
                                                     console.log('Profile image failed to load:', subscriber.profileImage?.file_url);
@@ -394,15 +394,15 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                         ) : null}
                                         <div className={`w-full h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center ${subscriber?.profileImage?.file_url ? 'hidden' : ''}`}>
                                             <span className="text-white font-semibold text-sm">
-                                                {subscriber?.first_name?.[0]}{subscriber?.last_name?.[0]}
+                                                {subscriber?.user?.first_name?.[0]}{subscriber?.user?.last_name?.[0]}
                                             </span>
                                         </div>
                                     </div>
                                     <div className="hidden md:block text-left">
                                         <p className="text-sm font-medium text-gray-900">
-                                            {subscriber?.first_name} {subscriber?.last_name}
+                                            {subscriber?.user?.first_name} {subscriber?.user?.last_name}
                                         </p>
-                                        <p className="text-xs text-gray-500">Super Administrator</p>
+                                        <p className="text-xs text-gray-500">{subscriber?.role?.name}</p>
                                     </div>
                                     <ChevronDownIcon className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${userDropdownOpen ? 'rotate-180' : ''}`} />
                                 </button>

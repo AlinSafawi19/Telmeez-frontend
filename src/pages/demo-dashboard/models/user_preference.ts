@@ -3,5 +3,6 @@ export interface UserPreference {
     language: string;
     user_id: string;
     timezone: string;
-    updated_at: Date;
+    updatedAt: Date;
+    createdAt: Date;
 }

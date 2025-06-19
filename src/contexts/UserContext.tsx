@@ -1,24 +1,36 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { Subscriber } from '../pages/demo-dashboard/models/Subscriber';
-import type { SubscriberPreference } from '../pages/demo-dashboard/models/subscriber_preference';
-import type { InstitutionType } from '../pages/demo-dashboard/models/institution_type';
 import type { ProfileImage } from '../pages/demo-dashboard/models/profile_image';
+import type { Payment } from '../pages/demo-dashboard/models/payment';
+import type { PaymentMethod } from '../pages/demo-dashboard/models/payment_method';
+import type { Plan } from '../pages/demo-dashboard/models/plan';
+import type { PaymentStatus } from '../pages/demo-dashboard/models/payment_status';
+import type { BillingAddress } from '../pages/demo-dashboard/models/billing_address';
+import type { User } from '../pages/demo-dashboard/models/user';
+import type { UserPreference } from '../pages/demo-dashboard/models/user_preference';
+import type { Role } from '../pages/demo-dashboard/models/role';
 
-// Extended subscriber interface with related data
-export interface SubscriberWithDetails extends Subscriber {
-    preferences?: SubscriberPreference;
-    institutionType?: InstitutionType;
+// Extended user interface with related data
+export interface UserWithDetails extends Subscriber {
+    preferences?: UserPreference;
     profileImage?: ProfileImage;
+    payment?: Payment;
+    paymentMethod?: PaymentMethod;
+    plan?: Plan;
+    paymentStatus?: PaymentStatus;
+    billingAddress?: BillingAddress;
+    user?: User;
+    role?: Role;
 }
 
-interface SubscriberContextType {
-    subscriber: SubscriberWithDetails | null;
+interface UserContextType {
+    subscriber: UserWithDetails | null;
     isLoading: boolean;
     error: string | null;
     isDemoMode: boolean;
     setDemoMode: (isDemo: boolean) => void;
-    updateSubscriber: (updates: Partial<SubscriberWithDetails>) => void;
+    updateSubscriber: (updates: Partial<UserWithDetails>) => void;
     fetchSubscriber: (subscriberId: string) => Promise<void>;
     clearSubscriber: () => void;
     login: (email: string, password: string) => Promise<boolean>;
@@ -27,7 +39,7 @@ interface SubscriberContextType {
     generateNewProfileImage: () => void;
 }
 
-const SubscriberContext = createContext<SubscriberContextType | undefined>(undefined);
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
 // More reliable profile image URL
 const getProfileImageUrl = (): string => {
@@ -36,37 +48,47 @@ const getProfileImageUrl = (): string => {
 };
 
 // Dummy data for demo purposes
-const dummySubscriberData: SubscriberWithDetails = {
+const dummySubscriberData: UserWithDetails = {
     id: 'demo-subscriber-001',
-    first_name: 'John',
-    last_name: 'Doe',
-    email: 'john.doe@demo.edu',
-    phone: '+1-555-0123',
-    password: 'hashed_password_here',
+    last_payment_id: 'pay_001',
     institution_name: 'Demo University',
-    primary_address: '123 Demo Street',
-    secondary_address: 'Suite 456',
-    profile_image_id: 'demo-profile-001',
-    city: 'Demo City',
-    state: 'Demo State',
-    zip: '12345',
-    country: 'United States',
-    subscriber_preference_id: 'demo-pref-001',
-    institution_type_id: 'demo-inst-type-001',
-    updated_at: new Date(),
     createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-01'),
+    user: {
+        id: 'demo-user-001',
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'john.doe@demo.edu',
+        phone: '+1-555-0123',
+        password: 'hashed_password_here',
+        subscriber_id: 'demo-subscriber-001',
+        user_status_id: 'status_001',
+        role_id: 'role_001',
+        department_id: 'dept_001',
+        course_id: 'course_001',
+        user_preference_id: 'pref_001',
+        is_online: true,
+        is_verified: true,
+        last_login: new Date(),
+        primary_address: '123 Demo Street',
+        secondary_address: 'Suite 456',
+        city: 'Demo City',
+        state: 'Demo State',
+        zip: '12345',
+        country: 'United States',
+        profile_image_id: 'demo-profile-001',
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-01'),
+        createdBy: 'demo-user-001',
+        updatedBy: 'demo-user-001'
+    },
     preferences: {
         id: 'demo-pref-001',
         language: 'en',
-        is_auto_renewed: true,
-        subscriber_id: 'demo-subscriber-001',
+        user_id: 'demo-user-001',
         timezone: 'America/New_York',
-        updated_at: new Date(),
+        updatedAt: new Date('2024-01-01'),
         createdAt: new Date('2024-01-01')
-    },
-    institutionType: {
-        id: 'demo-inst-type-001',
-        name: 'University'
     },
     profileImage: {
         id: 'demo-profile-001',
@@ -77,11 +99,74 @@ const dummySubscriberData: SubscriberWithDetails = {
         uploaded_at: new Date(),
         uploaded_by: 'demo-subscriber-001',
         is_active: true
+    },
+    payment: {
+        id: "pay_001",
+        payment_method_id: "pm_001",
+        plan_id: "plan_001",
+        final_price: "760.00",
+        next_payment_date: new Date("2025-07-20"),
+        payment_status_id: 'status_001',
+        promo_code_id: '',
+        subscriber_id: 'demo-subscriber-001',
+        billing_address_id: 'addr_001',
+        createdAt: new Date("2025-06-20")
+    },
+    paymentMethod: {
+        id: "pm_001",
+        card_number: "1234567890123456",
+        expiry_month: 12,
+        expiry_year: 2025,
+        cvv: "123",
+        subscriber_id: "demo-subscriber-001",
+        card_type_id: "card_visa",
+        is_default: true,
+        updated_at: new Date(),
+        createdAt: new Date("2025-06-20")
+    },
+    plan: {
+        id: "plan_001",
+        name: "Standard Plan",
+        price: "950",
+        description: "Perfect for growing educational institutions",
+        is_annual: true,
+        discount: 20,
+        free_trial_days: 0,
+        max_admin: 10,
+        max_teacher: 150,
+        max_student: 1500,
+        max_parent: 750,
+        createdAt: new Date("2025-06-20"),
+        updatedAt: new Date("2025-06-20")
+    },
+    paymentStatus: {
+        id: "status_001",
+        name: "Completed",
+        createdAt: new Date("2025-06-20"),
+        updated_at: new Date("2025-06-20"),
+    },
+    billingAddress: {
+        id: "addr_001",
+        subscriber_id: 'demo-subscriber-001',
+        primary_address: '123 Demo Street',
+        secondary_address: 'Suite 456',
+        city: 'Demo City',
+        state: 'Demo State',
+        zip: '12345',
+        country: 'United States',
+        createdAt: new Date("2025-06-20"),
+        updatedAt: new Date("2025-06-20"),
+    },
+    role: {
+        id: "role_001",
+        name: "SuperAdmin",
+        createdAt: new Date("2025-06-20"),
+        updatedAt: new Date("2025-06-20"),
     }
 };
 
-export const SubscriberProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [subscriber, setSubscriber] = useState<SubscriberWithDetails | null>(null);
+export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [loggedInUser, setLoggedInUser] = useState<UserWithDetails | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isDemoMode, setIsDemoMode] = useState(false);
@@ -111,22 +196,22 @@ export const SubscriberProvider: React.FC<{ children: ReactNode }> = ({ children
                 }
             };
             console.log('Setting demo subscriber with profile image:', freshDummyData.profileImage?.file_url);
-            setSubscriber(freshDummyData);
+            setLoggedInUser(freshDummyData);
             setError(null);
         } else {
-            setSubscriber(null);
+            setLoggedInUser(null);
         }
     };
 
-    const updateSubscriber = (updates: Partial<SubscriberWithDetails>) => {
-        if (subscriber) {
-            setSubscriber({ ...subscriber, ...updates });
+    const updateSubscriber = (updates: Partial<UserWithDetails>) => {
+        if (loggedInUser) {
+            setLoggedInUser({ ...loggedInUser, ...updates });
         }
     };
 
     const fetchSubscriber = async (_subscriberId: string) => {
         if (isDemoMode) {
-            setSubscriber(dummySubscriberData);
+            setLoggedInUser(dummySubscriberData);
             return;
         }
 
@@ -141,7 +226,7 @@ export const SubscriberProvider: React.FC<{ children: ReactNode }> = ({ children
 
             // For now, simulate API call
             await new Promise(resolve => setTimeout(resolve, 1000));
-            setSubscriber(dummySubscriberData);
+            setLoggedInUser(dummySubscriberData);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to fetch subscriber');
         } finally {
@@ -150,7 +235,7 @@ export const SubscriberProvider: React.FC<{ children: ReactNode }> = ({ children
     };
 
     const clearSubscriber = () => {
-        setSubscriber(null);
+        setLoggedInUser(null);
         setError(null);
     };
 
@@ -163,7 +248,7 @@ export const SubscriberProvider: React.FC<{ children: ReactNode }> = ({ children
                 // Demo login - accept any credentials
                 await new Promise(resolve => setTimeout(resolve, 500));
                 console.log('Demo login successful, setting subscriber:', dummySubscriberData.profileImage?.file_url);
-                setSubscriber(dummySubscriberData);
+                setLoggedInUser(dummySubscriberData);
                 return true;
             }
 
@@ -180,7 +265,7 @@ export const SubscriberProvider: React.FC<{ children: ReactNode }> = ({ children
             // For now, simulate login
             await new Promise(resolve => setTimeout(resolve, 1000));
             if (email === 'demo@example.com' && password === 'demo123') {
-                setSubscriber(dummySubscriberData);
+                setLoggedInUser(dummySubscriberData);
                 return true;
             } else {
                 setError('Invalid credentials');
@@ -195,7 +280,7 @@ export const SubscriberProvider: React.FC<{ children: ReactNode }> = ({ children
     };
 
     const logout = () => {
-        setSubscriber(null);
+        setLoggedInUser(null);
         setError(null);
         if (isDemoMode) {
             setIsDemoMode(false);
@@ -203,12 +288,12 @@ export const SubscriberProvider: React.FC<{ children: ReactNode }> = ({ children
     };
 
     const updateProfileImage = () => {
-        if (subscriber && subscriber.profileImage) {
+        if (loggedInUser && loggedInUser.profileImage) {
             const newImageUrl = getProfileImageUrl();
-            setSubscriber({
-                ...subscriber,
+            setLoggedInUser({
+                ...loggedInUser,
                 profileImage: {
-                    ...subscriber.profileImage,
+                    ...loggedInUser.profileImage,
                     file_url: newImageUrl
                 }
             });
@@ -216,28 +301,31 @@ export const SubscriberProvider: React.FC<{ children: ReactNode }> = ({ children
     };
 
     const generateNewProfileImage = () => {
-        if (subscriber) {
+        if (loggedInUser) {
             const newImageId = `profile-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             const newImageUrl = getProfileImageUrl();
-            setSubscriber({
-                ...subscriber,
-                profile_image_id: newImageId,
+            setLoggedInUser({
+                ...loggedInUser,
+                user: {
+                    ...loggedInUser.user!,
+                    profile_image_id: newImageId
+                },
                 profileImage: {
                     id: newImageId,
-                    user_id: subscriber.id,
+                    user_id: loggedInUser.id,
                     file_name: `unsplash-profile-${Date.now()}.jpg`,
                     file_type: 'image/jpeg',
                     file_url: newImageUrl,
                     uploaded_at: new Date(),
-                    uploaded_by: subscriber.id,
+                    uploaded_by: loggedInUser.id,
                     is_active: true
                 }
             });
         }
     };
 
-    const value: SubscriberContextType = {
-        subscriber,
+    const value: UserContextType = {
+        subscriber: loggedInUser,
         isLoading,
         error,
         isDemoMode,
@@ -252,16 +340,16 @@ export const SubscriberProvider: React.FC<{ children: ReactNode }> = ({ children
     };
 
     return (
-        <SubscriberContext.Provider value={value}>
+        <UserContext.Provider value={value}>
             {children}
-        </SubscriberContext.Provider>
+        </UserContext.Provider>
     );
 };
 
-export const useSubscriber = () => {
-    const context = useContext(SubscriberContext);
+export const useUser = () => {
+    const context = useContext(UserContext);
     if (context === undefined) {
-        throw new Error('useSubscriber must be used within a SubscriberProvider');
+        throw new Error('useUser must be used within a UserProvider');
     }
     return context;
 }; 

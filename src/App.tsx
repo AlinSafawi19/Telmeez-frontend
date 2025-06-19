@@ -28,7 +28,7 @@ import ParentDashboard from "./pages/demo-dashboard/ParentDashboard";
 import Checkout from './components/Checkout';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { CookieConsentProvider } from './contexts/CookieConsentContext';
-import { SubscriberProvider } from './contexts/SubscriberContext';
+import { UserProvider } from './contexts/UserContext';
 import Landing from './components/Landing';
 
 const App: React.FC = () => {
@@ -43,7 +43,7 @@ const App: React.FC = () => {
   return (
     <CookieConsentProvider>
       <LanguageProvider>
-        <SubscriberProvider>
+        <UserProvider>
           <Router>
             {/* <div className="text-xl font-medium text-green-600">
                         API says: {apiMessage}
@@ -76,7 +76,7 @@ const App: React.FC = () => {
               <Route path="/demo-dashboard/parent" element={<ParentDashboard />} />
             </Routes>
           </Router>
-        </SubscriberProvider>
+        </UserProvider>
       </LanguageProvider>
     </CookieConsentProvider>
   );

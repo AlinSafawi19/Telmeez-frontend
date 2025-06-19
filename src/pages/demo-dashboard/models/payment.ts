@@ -1,4 +1,4 @@
-export interface PaymentMethod {
+export interface Payment {
     id: string;
     payment_method_id: string;
     plan_id: string;
