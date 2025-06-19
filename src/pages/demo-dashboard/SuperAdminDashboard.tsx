@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import DashboardLayout from './DashboardLayout';
+import SubscriberDashboardLayout from './SubscriberDashboardLayout';
 import { motion } from 'framer-motion';
 import Swal from 'sweetalert2';
 import DatePicker from 'react-datepicker';
@@ -39,11 +39,7 @@ ChartJS.register(
 
 const SuperAdminDashboard: React.FC = () => {
     return (
-        <DashboardLayout
-            role="teacher"
-            roleColor="from-green-500 to-emerald-600"
-            roleGradient="bg-gradient-to-br from-green-500 to-emerald-600"
-        >
+        <SubscriberDashboardLayout>
             <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -68,7 +64,7 @@ const SuperAdminDashboard: React.FC = () => {
                     The Super Admin dashboard is currently under development. Stay tuned for powerful Super Admin tools!
                 </motion.p>
             </div>
-        </DashboardLayout>
+        </SubscriberDashboardLayout>
     );
 };
 

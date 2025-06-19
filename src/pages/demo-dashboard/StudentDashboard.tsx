@@ -4,11 +4,7 @@ import { motion } from 'framer-motion';
 
 const StudentDashboard: React.FC = () => {
     return (
-        <DashboardLayout
-            role="student"
-            roleColor="from-orange-500 to-amber-600"
-            roleGradient="bg-gradient-to-br from-orange-500 to-amber-600"
-        >
+        <DashboardLayout>
             <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
