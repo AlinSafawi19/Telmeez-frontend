@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import DashboardLayout from './DashboardLayout';
 import { motion } from 'framer-motion';
-import { FaUserPlus, FaUserShield, FaChalkboardTeacher, FaUserGraduate, FaUserFriends, FaTrash, FaCreditCard, FaTimes, FaCog, FaUser, FaGlobe, FaBell, FaComments, FaInfoCircle, FaCalendarAlt, FaBullhorn } from 'react-icons/fa'
+import { FaUserPlus, FaUserShield, FaChalkboardTeacher, FaUserGraduate, FaUserFriends, FaTrash, FaCreditCard, FaTimes, FaCog, FaUser, FaGlobe, FaBell, FaComments, FaInfoCircle, FaCalendarAlt, FaBullhorn, FaCheck } from 'react-icons/fa'
 import type { Admin } from '../../contexts/AdminContext';
 import { useAdmin } from '../../contexts/AdminContext';
 import AdminModalComponent from '../../components/AdminModal';
@@ -249,14 +249,14 @@ const SuperAdminDashboard: React.FC = () => {
     const handleAdminNameClick = (admin: Admin) => {
         // Navigate to admins tab
         setActiveTab('admins');
-        
+
         // Select the specific admin
         handleSelectAdmin(admin.id);
-        
+
         // Clear any existing search to make sure the admin is visible
         setSearchQuery('');
         setStatusFilter('all');
-        
+
         // Reset to first page to ensure the admin is visible
         setCurrentPage(1);
     };
@@ -1074,18 +1074,16 @@ const SuperAdminDashboard: React.FC = () => {
                                                                             </div>
                                                                         )}
                                                                         {/* Online/Offline indicator */}
-                                                                        <div className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white shadow-sm ${
-                                                                            admin.isOnline ? 'bg-green-500' : 'bg-gray-400'
-                                                                        }`} />
+                                                                        <div className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white shadow-sm ${admin.isOnline ? 'bg-green-500' : 'bg-gray-400'
+                                                                            }`} />
                                                                     </div>
                                                                     <div className="ml-3 min-w-0 flex-1">
                                                                         <div className="text-sm font-semibold text-gray-900 truncate">
                                                                             {admin.firstName} {admin.lastName}
                                                                         </div>
                                                                         <div className="flex items-center mt-1">
-                                                                            <div className={`w-2 h-2 rounded-full mr-2 ${
-                                                                                admin.isOnline ? 'bg-green-500' : 'bg-gray-400'
-                                                                            }`} />
+                                                                            <div className={`w-2 h-2 rounded-full mr-2 ${admin.isOnline ? 'bg-green-500' : 'bg-gray-400'
+                                                                                }`} />
                                                                             <span className="text-xs text-gray-500 truncate">
                                                                                 {admin.isOnline ? 'Online' : 'Offline'}
                                                                             </span>
@@ -1097,11 +1095,10 @@ const SuperAdminDashboard: React.FC = () => {
                                                                 <div className="text-sm text-gray-900 truncate font-medium max-w-[200px]">{admin.email}</div>
                                                             </td>
                                                             <td className="px-3 py-4 whitespace-nowrap">
-                                                                <span className={`px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full ${
-                                                                    admin.status === 'active' ? 'bg-green-100 text-green-800 ring-1 ring-green-200' :
+                                                                <span className={`px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full ${admin.status === 'active' ? 'bg-green-100 text-green-800 ring-1 ring-green-200' :
                                                                     admin.status === 'inactive' ? 'bg-red-100 text-red-800 ring-1 ring-red-200' :
-                                                                    'bg-yellow-100 text-yellow-800 ring-1 ring-yellow-200'
-                                                                }`}>
+                                                                        'bg-yellow-100 text-yellow-800 ring-1 ring-yellow-200'
+                                                                    }`}>
                                                                     {admin.status.charAt(0).toUpperCase() + admin.status.slice(1)}
                                                                 </span>
                                                             </td>
@@ -1233,11 +1230,10 @@ const SuperAdminDashboard: React.FC = () => {
                                                             <button
                                                                 key={page}
                                                                 onClick={() => setCurrentPage(page)}
-                                                                className={`focus:outline-none relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-all duration-200 ${
-                                                                    currentPage === page
-                                                                        ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600 ring-2 ring-indigo-200'
-                                                                        : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hover:text-gray-700'
-                                                                }`}
+                                                                className={`focus:outline-none relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-all duration-200 ${currentPage === page
+                                                                    ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600 ring-2 ring-indigo-200'
+                                                                    : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                                                                    }`}
                                                             >
                                                                 {page}
                                                             </button>
@@ -1797,6 +1793,661 @@ const SuperAdminDashboard: React.FC = () => {
 
                                 </div>
                             )}
+
+                            {/* Billing Tab Content */}
+                            {activeTab === 'billing' && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="space-y-8"
+                                >
+                                    {/* Current Plan Header */}
+                                    <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 rounded-2xl p-8 text-white shadow-lg">
+                                        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                                            <div className="mb-6 lg:mb-0">
+                                                <div className="flex items-center mb-4">
+                                                    <div className="p-3 bg-white/20 rounded-xl mr-4">
+                                                        <FaCreditCard className="h-8 w-8" />
+                                                    </div>
+                                                    <div>
+                                                        <h2 className="text-3xl font-bold mb-2">Standard Plan</h2>
+                                                        <div className="flex items-center space-x-4">
+                                                            <span className="text-indigo-100 text-lg">$99/month</span>
+                                                            <span className="px-3 py-1 bg-green-500/20 text-green-200 rounded-full text-sm font-medium">
+                                                                Active
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center space-x-6">
+                                                    <div className="flex items-center">
+                                                        <div className="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
+                                                        <span className="text-indigo-100 text-sm">Next payment: Dec 15, 2024</span>
+                                                    </div>
+                                                    <div className="flex items-center">
+                                                        <div className="w-3 h-3 bg-blue-400 rounded-full mr-2"></div>
+                                                        <span className="text-indigo-100 text-sm">Auto-renewal enabled</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                                                <button
+                                                    onClick={() => setIsCancelModalOpen(true)}
+                                                    className="inline-flex items-center px-4 py-3 border border-red-300 text-sm font-medium rounded-xl text-red-200 bg-red-500/20 hover:bg-red-500/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
+                                                >
+                                                    <FaTimes className="h-4 w-4 mr-2" />
+                                                    Cancel Plan
+                                                </button>
+                                                <button
+                                                    onClick={() => {/* Handle upgrade */ }}
+                                                    className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-xl text-indigo-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all duration-200 shadow-lg"
+                                                >
+                                                    <FaUserPlus className="h-5 w-5 mr-2" />
+                                                    Upgrade Plan
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Usage Trends and Payment Methods */}
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        {/* Usage Analytics */}
+                                        <div className="bg-white rounded-xl shadow-sm p-6">
+                                            <div className="flex items-center justify-between mb-6">
+                                                <h3 className="text-lg font-semibold text-gray-900">Usage Analytics</h3>
+                                                <div className="flex items-center space-x-2">
+                                                    <span className="text-sm text-gray-500">Last 30 days</span>
+                                                    <button className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                                        View Details
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-6">
+                                                {/* Usage Progress Bars */}
+                                                <div className="space-y-4">
+                                                    <div>
+                                                        <div className="flex items-center justify-between mb-2">
+                                                            <div className="flex items-center">
+                                                                <FaUserShield className="h-4 w-4 text-purple-600 mr-2" />
+                                                                <span className="text-sm font-medium text-gray-700">Administrators</span>
+                                                            </div>
+                                                            <span className="text-sm font-semibold text-gray-900">{currentUsage.admin}/{planLimits.admin}</span>
+                                                        </div>
+                                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                                            <div
+                                                                className="bg-gradient-to-r from-purple-500 to-indigo-600 h-2 rounded-full transition-all duration-300"
+                                                                style={{ width: `${Math.min((currentUsage.admin / planLimits.admin) * 100, 100)}%` }}
+                                                            />
+                                                        </div>
+                                                        <div className="flex justify-between text-xs text-gray-500 mt-1">
+                                                            <span>{Math.round((currentUsage.admin / planLimits.admin) * 100)}% used</span>
+                                                            <span>{planLimits.admin - currentUsage.admin} remaining</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <div className="flex items-center justify-between mb-2">
+                                                            <div className="flex items-center">
+                                                                <FaChalkboardTeacher className="h-4 w-4 text-blue-600 mr-2" />
+                                                                <span className="text-sm font-medium text-gray-700">Teachers</span>
+                                                            </div>
+                                                            <span className="text-sm font-semibold text-gray-900">{currentUsage.teacher}/{planLimits.teacher}</span>
+                                                        </div>
+                                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                                            <div
+                                                                className="bg-gradient-to-r from-blue-500 to-cyan-600 h-2 rounded-full transition-all duration-300"
+                                                                style={{ width: `${Math.min((currentUsage.teacher / planLimits.teacher) * 100, 100)}%` }}
+                                                            />
+                                                        </div>
+                                                        <div className="flex justify-between text-xs text-gray-500 mt-1">
+                                                            <span>{Math.round((currentUsage.teacher / planLimits.teacher) * 100)}% used</span>
+                                                            <span>{planLimits.teacher - currentUsage.teacher} remaining</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <div className="flex items-center justify-between mb-2">
+                                                            <div className="flex items-center">
+                                                                <FaUserGraduate className="h-4 w-4 text-green-600 mr-2" />
+                                                                <span className="text-sm font-medium text-gray-700">Students</span>
+                                                            </div>
+                                                            <span className="text-sm font-semibold text-gray-900">{currentUsage.student}/{planLimits.student}</span>
+                                                        </div>
+                                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                                            <div
+                                                                className="bg-gradient-to-r from-green-500 to-emerald-600 h-2 rounded-full transition-all duration-300"
+                                                                style={{ width: `${Math.min((currentUsage.student / planLimits.student) * 100, 100)}%` }}
+                                                            />
+                                                        </div>
+                                                        <div className="flex justify-between text-xs text-gray-500 mt-1">
+                                                            <span>{Math.round((currentUsage.student / planLimits.student) * 100)}% used</span>
+                                                            <span>{planLimits.student - currentUsage.student} remaining</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <div className="flex items-center justify-between mb-2">
+                                                            <div className="flex items-center">
+                                                                <FaUserFriends className="h-4 w-4 text-pink-600 mr-2" />
+                                                                <span className="text-sm font-medium text-gray-700">Parents</span>
+                                                            </div>
+                                                            <span className="text-sm font-semibold text-gray-900">{currentUsage.parent}/{planLimits.parent}</span>
+                                                        </div>
+                                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                                            <div
+                                                                className="bg-gradient-to-r from-pink-500 to-rose-600 h-2 rounded-full transition-all duration-300"
+                                                                style={{ width: `${Math.min((currentUsage.parent / planLimits.parent) * 100, 100)}%` }}
+                                                            />
+                                                        </div>
+                                                        <div className="flex justify-between text-xs text-gray-500 mt-1">
+                                                            <span>{Math.round((currentUsage.parent / planLimits.parent) * 100)}% used</span>
+                                                            <span>{planLimits.parent - currentUsage.parent} remaining</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Usage Alerts */}
+                                                <div className="space-y-3">
+                                                    {currentUsage.admin / planLimits.admin > 0.8 && (
+                                                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                                                            <div className="flex items-center">
+                                                                <div className="flex-shrink-0">
+                                                                    <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                                                                    </svg>
+                                                                </div>
+                                                                <div className="ml-3">
+                                                                    <p className="text-sm font-medium text-yellow-800">
+                                                                        Administrator limit approaching
+                                                                    </p>
+                                                                    <p className="text-sm text-yellow-700 mt-1">
+                                                                        Consider upgrading to add more administrators
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {currentUsage.student / planLimits.student > 0.9 && (
+                                                        <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                                                            <div className="flex items-center">
+                                                                <div className="flex-shrink-0">
+                                                                    <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                                                    </svg>
+                                                                </div>
+                                                                <div className="ml-3">
+                                                                    <p className="text-sm font-medium text-red-800">
+                                                                        Student limit nearly reached
+                                                                    </p>
+                                                                    <p className="text-sm text-red-700 mt-1">
+                                                                        Upgrade immediately to avoid service interruption
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Payment Methods */}
+                                        <div className="bg-white rounded-xl shadow-sm p-6">
+                                            <div className="flex items-center justify-between mb-6">
+                                                <h3 className="text-lg font-semibold text-gray-900">Payment Methods</h3>
+                                                <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-lg text-indigo-600 bg-indigo-50 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                                                    <FaUserPlus className="h-4 w-4 mr-2" />
+                                                    Add New
+                                                </button>
+                                            </div>
+                                            <div className="space-y-4">
+                                                {/* Primary Card */}
+                                                <div className="relative bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-4 text-white">
+                                                    <div className="flex items-center justify-between mb-4">
+                                                        <div className="flex items-center">
+                                                            <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center mr-3">
+                                                                <FaCreditCard className="h-4 w-4" />
+                                                            </div>
+                                                            <div>
+                                                                <p className="font-semibold">Visa ending in 4242</p>
+                                                                <p className="text-indigo-100 text-sm">Expires 12/25</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <span className="px-2 py-1 bg-green-500/20 text-green-200 rounded-full text-xs font-medium">
+                                                                Primary
+                                                            </span>
+                                                            <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+                                                                <FaCheck className="h-3 w-3" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center space-x-2">
+                                                            <div className="w-8 h-6 bg-white/20 rounded"></div>
+                                                            <div className="w-8 h-6 bg-white/20 rounded"></div>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <p className="text-xs text-indigo-100">Card Number</p>
+                                                            <p className="font-mono text-sm">•••• •••• •••• 4242</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Secondary Card */}
+                                                <div className="relative bg-gradient-to-r from-gray-100 to-gray-200 rounded-xl p-4">
+                                                    <div className="flex items-center justify-between mb-4">
+                                                        <div className="flex items-center">
+                                                            <div className="w-8 h-8 bg-gray-300 rounded-lg flex items-center justify-center mr-3">
+                                                                <FaCreditCard className="h-4 w-4 text-gray-600" />
+                                                            </div>
+                                                            <div>
+                                                                <p className="font-semibold text-gray-900">Mastercard ending in 8888</p>
+                                                                <p className="text-gray-500 text-sm">Expires 08/26</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <button className="text-gray-400 hover:text-gray-600 transition-colors duration-200" aria-label="Remove payment method">
+                                                                <FaTimes className="h-4 w-4" />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center space-x-2">
+                                                            <div className="w-8 h-6 bg-gray-300 rounded"></div>
+                                                            <div className="w-8 h-6 bg-gray-300 rounded"></div>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <p className="text-xs text-gray-500">Card Number</p>
+                                                            <p className="font-mono text-sm text-gray-700">•••• •••• •••• 8888</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Plan Comparison */}
+                                    <div className="grid grid-cols-1 gap-6">
+                                        {/* Available Plans */}
+                                        <div className="bg-white rounded-xl shadow-sm p-6">
+                                            <div className="flex items-center justify-between mb-6">
+                                                <h3 className="text-lg font-semibold text-gray-900">Available Plans</h3>
+                                                <button className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                                    Compare All
+                                                </button>
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                                {/* Current Plan - Standard */}
+                                                <div className="relative bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-200 rounded-lg p-4">
+                                                    <div className="absolute top-3 right-3">
+                                                        <span className="px-2 py-1 bg-indigo-600 text-white text-xs font-medium rounded-full">
+                                                            Current
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex flex-col justify-between h-full">
+                                                        <div>
+                                                            <div className="mb-3">
+                                                                <h4 className="font-semibold text-gray-900">Standard Plan</h4>
+                                                                <p className="text-sm text-gray-600">Perfect for small to medium schools</p>
+                                                            </div>
+                                                            <div className="text-center mb-4">
+                                                                <p className="text-2xl font-bold text-gray-900">$99</p>
+                                                                <p className="text-sm text-gray-500">per month</p>
+                                                            </div>
+                                                            <div className="space-y-2 text-sm text-gray-600">
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Up to 10 Administrators
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Up to 150 Teachers
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Up to 1,500 Students
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Up to 750 Parents
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Basic Support
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Premium Plan */}
+                                                <div className="bg-white border border-gray-200 rounded-lg p-4 hover:border-indigo-300 transition-colors duration-200">
+                                                    <div className="flex flex-col justify-between h-full">
+                                                        <div>
+                                                            <div className="mb-3">
+                                                                <h4 className="font-semibold text-gray-900">Premium Plan</h4>
+                                                                <p className="text-sm text-gray-600">For larger educational institutions</p>
+                                                            </div>
+                                                            <div className="text-center mb-4">
+                                                                <p className="text-2xl font-bold text-gray-900">$199</p>
+                                                                <p className="text-sm text-gray-500">per month</p>
+                                                            </div>
+                                                            <div className="space-y-2 text-sm text-gray-600">
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Up to 25 Administrators
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Up to 500 Teachers
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Up to 5,000 Students
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Up to 2,500 Parents
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Priority Support
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Advanced Analytics
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <button className="w-full mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200">
+                                                            Upgrade to Premium
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                {/* Enterprise Plan */}
+                                                <div className="bg-white border border-gray-200 rounded-lg p-4 hover:border-indigo-300 transition-colors duration-200">
+                                                    <div className="flex flex-col justify-between h-full">
+                                                        <div>
+                                                            <div className="mb-3">
+                                                                <h4 className="font-semibold text-gray-900">Enterprise Plan</h4>
+                                                                <p className="text-sm text-gray-600">Custom solutions for large districts</p>
+                                                            </div>
+                                                            <div className="text-center mb-4">
+                                                                <p className="text-2xl font-bold text-gray-900">Custom</p>
+                                                                <p className="text-sm text-gray-500">contact sales</p>
+                                                            </div>
+                                                            <div className="space-y-2 text-sm text-gray-600">
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Unlimited Users
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Custom Integrations
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Dedicated Support
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    SLA Guarantee
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    On-premise Option
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <button className="w-full mt-4 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                                                            Contact Sales
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Enhanced Billing Alerts and Notifications */}
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        {/* Billing Alerts */}
+                                        <div className="bg-white rounded-xl shadow-sm p-6">
+                                            <div className="flex items-center justify-between mb-6">
+                                                <h3 className="text-lg font-semibold text-gray-900">Billing Alerts</h3>
+                                                <button className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                                    Manage Alerts
+                                                </button>
+                                            </div>
+                                            <div className="space-y-4">
+                                                {/* Active Alerts */}
+                                                <div className="space-y-3">
+                                                    <h4 className="text-sm font-medium text-gray-700">Active Alerts</h4>
+
+                                                    {/* Payment Due Alert */}
+                                                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                                                        <div className="flex items-start">
+                                                            <div className="flex-shrink-0 mt-0.5">
+                                                                <svg className="h-4 w-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                </svg>
+                                                            </div>
+                                                            <div className="ml-3 flex-1">
+                                                                <h5 className="text-sm font-medium text-red-900">Payment Due Soon</h5>
+                                                                <p className="text-sm text-red-700 mt-1">Next payment of $99.00 due on Dec 15, 2024</p>
+                                                                <div className="mt-2 flex items-center space-x-3">
+                                                                    <button className="text-xs font-medium text-red-600 hover:text-red-800">
+                                                                        Pay Now
+                                                                    </button>
+                                                                    <button className="text-xs font-medium text-red-600 hover:text-red-800">
+                                                                        Set Reminder
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Usage Warning */}
+                                                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                                                        <div className="flex items-start">
+                                                            <div className="flex-shrink-0 mt-0.5">
+                                                                <svg className="h-4 w-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                                                </svg>
+                                                            </div>
+                                                            <div className="ml-3 flex-1">
+                                                                <h5 className="text-sm font-medium text-yellow-900">High Usage Warning</h5>
+                                                                <p className="text-sm text-yellow-700 mt-1">Student usage at 85% of limit</p>
+                                                                <div className="mt-2 flex items-center space-x-3">
+                                                                    <button className="text-xs font-medium text-yellow-600 hover:text-yellow-800">
+                                                                        View Usage
+                                                                    </button>
+                                                                    <button className="text-xs font-medium text-yellow-600 hover:text-yellow-800">
+                                                                        Upgrade Plan
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Alert Preferences */}
+                                                <div className="border-t border-gray-200 pt-4">
+                                                    <h4 className="text-sm font-medium text-gray-700 mb-3">Alert Preferences</h4>
+                                                    <div className="space-y-3">
+                                                        <label className="flex items-center">
+                                                            <input type="checkbox" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" defaultChecked />
+                                                            <span className="ml-2 text-sm text-gray-700">Payment due reminders</span>
+                                                        </label>
+                                                        <label className="flex items-center">
+                                                            <input type="checkbox" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" defaultChecked />
+                                                            <span className="ml-2 text-sm text-gray-700">Usage limit warnings</span>
+                                                        </label>
+                                                        <label className="flex items-center">
+                                                            <input type="checkbox" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+                                                            <span className="ml-2 text-sm text-gray-700">Price change notifications</span>
+                                                        </label>
+                                                        <label className="flex items-center">
+                                                            <input type="checkbox" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" defaultChecked />
+                                                            <span className="ml-2 text-sm text-gray-700">New feature announcements</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Subscription Management */}
+                                        <div className="bg-white rounded-xl shadow-sm p-6">
+                                            <div className="flex items-center justify-between mb-6">
+                                                <h3 className="text-lg font-semibold text-gray-900">Subscription Management</h3>
+                                                <button className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                                    Manage
+                                                </button>
+                                            </div>
+                                            <div className="space-y-6">
+                                                {/* Current Subscription Details */}
+                                                <div className="bg-gray-50 rounded-lg p-4">
+                                                    <h4 className="font-medium text-gray-900 mb-3">Current Subscription</h4>
+                                                    <div className="space-y-2 text-sm">
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-600">Plan:</span>
+                                                            <span className="font-medium text-gray-900">Standard</span>
+                                                        </div>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-600">Billing Cycle:</span>
+                                                            <span className="font-medium text-gray-900">Monthly</span>
+                                                        </div>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-600">Next Billing:</span>
+                                                            <span className="font-medium text-gray-900">Dec 15, 2024</span>
+                                                        </div>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-600">Auto-renewal:</span>
+                                                            <span className="font-medium text-green-600">Enabled</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Quick Actions */}
+                                                <div className="space-y-3">
+                                                    <h4 className="font-medium text-gray-900">Quick Actions</h4>
+                                                    <div className="grid grid-cols-2 gap-3">
+                                                        <button className="px-3 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors duration-200">
+                                                            Change Plan
+                                                        </button>
+                                                        <button className="px-3 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                                                            Pause Billing
+                                                        </button>
+                                                        <button className="px-3 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                                                            Download Invoice
+                                                        </button>
+                                                        <button className="px-3 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors duration-200">
+                                                            Cancel Plan
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                {/* Billing History Summary */}
+                                                <div className="border-t border-gray-200 pt-4">
+                                                    <h4 className="font-medium text-gray-900 mb-3">Billing History</h4>
+                                                    <div className="space-y-2">
+                                                        <div className="flex justify-between text-sm">
+                                                            <span className="text-gray-600">Total Paid (2024):</span>
+                                                            <span className="font-medium text-gray-900">$1,188.00</span>
+                                                        </div>
+                                                        <div className="flex justify-between text-sm">
+                                                            <span className="text-gray-600">Average Monthly:</span>
+                                                            <span className="font-medium text-gray-900">$99.00</span>
+                                                        </div>
+                                                        <div className="flex justify-between text-sm">
+                                                            <span className="text-gray-600">On-time Payments:</span>
+                                                            <span className="font-medium text-green-600">100%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Payment History Table */}
+                                    <div className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6">
+                                        <div className="flex items-center justify-between mb-6">
+                                            <h3 className="text-lg font-semibold text-gray-900">Payment History</h3>
+                                            <div className="flex items-center space-x-3">
+                                                <select className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Select time period for payment history">
+                                                    <option>Last 12 months</option>
+                                                    <option>Last 6 months</option>
+                                                    <option>Last 3 months</option>
+                                                    <option>All time</option>
+                                                </select>
+                                                <button className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                                    Export
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className="overflow-x-auto">
+                                            <table className="w-full">
+                                                <thead className="bg-gray-50">
+                                                    <tr>
+                                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice</th>
+                                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
+                                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="bg-white divide-y divide-gray-200">
+                                                    {[
+                                                        { date: 'Nov 15, 2024', invoice: 'INV-2024-011', amount: '$99.00', status: 'Paid', method: 'Visa ****4242', download: true },
+                                                        { date: 'Oct 15, 2024', invoice: 'INV-2024-010', amount: '$99.00', status: 'Paid', method: 'Visa ****4242', download: true },
+                                                        { date: 'Sep 15, 2024', invoice: 'INV-2024-009', amount: '$99.00', status: 'Paid', method: 'Visa ****4242', download: true },
+                                                        { date: 'Aug 15, 2024', invoice: 'INV-2024-008', amount: '$99.00', status: 'Paid', method: 'Visa ****4242', download: true },
+                                                        { date: 'Jul 15, 2024', invoice: 'INV-2024-007', amount: '$99.00', status: 'Paid', method: 'Visa ****4242', download: true },
+                                                        { date: 'Jun 15, 2024', invoice: 'INV-2024-006', amount: '$99.00', status: 'Paid', method: 'Visa ****4242', download: true },
+                                                    ].map((payment, index) => (
+                                                        <tr key={index} className="hover:bg-gray-50">
+                                                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{payment.date}</td>
+                                                            <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">{payment.invoice}</td>
+                                                            <td className="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-900">{payment.amount}</td>
+                                                            <td className="px-4 py-3 whitespace-nowrap">
+                                                                <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
+                                                                    {payment.status}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{payment.method}</td>
+                                                            <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
+                                                                {payment.download && (
+                                                                    <button className="text-indigo-600 hover:text-indigo-900">
+                                                                        Download
+                                                                    </button>
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {/* General Tab Content */}
+                            {activeTab === 'general' && (
+                                <div className="bg-white rounded-lg shadow-sm p-6">
+                                    <h2 className="text-2xl font-bold text-gray-900 mb-4">General Settings</h2>
+                                    <p className="text-gray-600">General settings and configuration options will be displayed here.</p>
+                                </div>
+                            )}
+
+                            {/* Account Tab Content */}
+                            {activeTab === 'account' && (
+                                <div className="bg-white rounded-lg shadow-sm p-6">
+                                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Account Settings</h2>
+                                    <p className="text-gray-600">Account management and profile settings will be displayed here.</p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -1835,7 +2486,7 @@ const SuperAdminDashboard: React.FC = () => {
                                     <div className="flex">
                                         <div className="flex-shrink-0">
                                             <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
                                             </svg>
                                         </div>
                                         <div className="ml-3">
