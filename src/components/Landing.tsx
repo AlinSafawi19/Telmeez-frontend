@@ -280,7 +280,7 @@ const Landing: React.FC = () => {
                 label: t.header.pricing.starter,
                 href: '#',
                 monthlyPrice: '$49',
-                annualPrice: '$470',
+                annualPrice: '$39',
                 description: t.header.pricing.starter_desc,
                 details: t.header.pricing.starter_details,
                 savings: t.header.pricing.savings
@@ -289,7 +289,7 @@ const Landing: React.FC = () => {
                 label: t.header.pricing.standard,
                 href: '#',
                 monthlyPrice: '$99',
-                annualPrice: '$950',
+                annualPrice: '$79',
                 description: t.header.pricing.standard_desc,
                 details: t.header.pricing.standard_details,
                 savings: t.header.pricing.savings
@@ -298,7 +298,7 @@ const Landing: React.FC = () => {
                 label: t.header.pricing.enterprise,
                 href: '#',
                 monthlyPrice: '$299',
-                annualPrice: '$2,870',
+                annualPrice: '$239',
                 description: t.header.pricing.enterprise_desc,
                 details: t.header.pricing.enterprise_details,
                 savings: t.header.pricing.savings
@@ -610,17 +610,17 @@ const Landing: React.FC = () => {
                                                     <div className="text-sm text-gray-600">{item.annualPrice}{t.header.pricing.peryear}</div>
                                                 </div>
                                             </div>
-                                            <p className="text-sm text-gray-600">{item.description}</p>
-                                            <p className="text-xs text-gray-500 mt-1">{item.details}</p>
-                                            <p className="text-xs text-green-600 mt-1">{item.savings}</p>
+                                            <p className="text-xs text-green-600">{item.savings}</p>
                                             {item.label === t.header.pricing.starter && (
-                                                <div className="mt-2">
+                                                <div className="mb-2">
                                                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                         <span className="mr-1">✨</span>
                                                         {t.header.pricing.free_trial}
                                                     </span>
                                                 </div>
                                             )}
+                                            <p className="text-sm text-gray-600">{item.description}</p>
+                                            <p className="text-xs text-gray-500 mt-1">{item.details}</p>
                                         </a>
                                     ))}
                                 </div>

@@ -29,7 +29,7 @@ export const en = {
             enterprise_details: "Unlimited Admin, Teacher, and Student Accounts",
             free_trial: "Free Trial",
             permonth: "/mo",
-            peryear: "/yr"
+            peryear: "/mo billed annually"
         },
         about: {
             about: "About",

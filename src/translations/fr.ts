@@ -29,7 +29,7 @@ export const fr = {
             enterprise_details: "Comptes Admin, Enseignants et Étudiants illimités",
             free_trial: "Essai Gratuit",
             permonth: "/mois",
-            peryear: "/an"
+            peryear: "/mois facturé annuellement"
         },
         about: {
             about: "À Propos",

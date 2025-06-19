@@ -29,7 +29,7 @@ export const ar = {
             enterprise_details: "حسابات غير محدودة للمشرفين والمعلمين والطلاب",
             free_trial: "تجربة مجانية",
             permonth: "/شهرياً",
-            peryear: "/سنوياً"
+            peryear: "/شهرياً عند الدفع السنوي"
         },
         about: {
             about: "من نحن",
