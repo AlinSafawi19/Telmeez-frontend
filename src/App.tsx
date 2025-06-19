@@ -19,6 +19,8 @@ import Billings from "./pages/demo-dashboard/subscriber/Billings";
 import Account from "./pages/demo-dashboard/subscriber/Account";
 import Documents from "./pages/demo-dashboard/subscriber/Documents";
 import AuditLogs from "./pages/demo-dashboard/subscriber/AuditLogs";
+import Help from './pages/demo-dashboard/subscriber/Help';
+import About from './pages/demo-dashboard/subscriber/About';
 import SchoolAdminDashboard from "./pages/demo-dashboard/SchoolAdminDashboard";
 import TeacherDashboard from "./pages/demo-dashboard/TeacherDashboard";
 import StudentDashboard from "./pages/demo-dashboard/StudentDashboard";
@@ -66,6 +68,8 @@ const App: React.FC = () => {
               <Route path="/demo-dashboard/subscriber/account" element={<Account />} />
               <Route path="/demo-dashboard/subscriber/documents" element={<Documents />} />
               <Route path="/demo-dashboard/subscriber/audit-logs" element={<AuditLogs />} />
+              <Route path="/demo-dashboard/subscriber/help" element={<Help />} />
+              <Route path="/demo-dashboard/subscriber/about" element={<About />} />
               <Route path="/demo-dashboard/admin" element={<SchoolAdminDashboard />} />
               <Route path="/demo-dashboard/teacher" element={<TeacherDashboard />} />
               <Route path="/demo-dashboard/student" element={<StudentDashboard />} />

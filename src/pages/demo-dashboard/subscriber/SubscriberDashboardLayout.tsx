@@ -24,7 +24,8 @@ import {
     DocumentTextIcon,
     ShieldCheckIcon,
     BuildingOfficeIcon,
-    ExclamationTriangleIcon
+    ExclamationTriangleIcon,
+    ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline';
 
 interface SubscriberDashboardLayoutProps {
@@ -222,7 +223,7 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                         </div>
 
                         {/* Navigation */}
-                        <nav className="flex-1 overflow-y-auto mt-6 px-4 space-y-2 pb-6">
+                        <nav className="flex-1 overflow-y-auto mt-6 px-4 space-y-2 pb-6 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 hover:scrollbar-thumb-gray-500">
                             {navigationItems.map((item) => {
                                 const isActive = item.href ? isActiveLink(item.href) : false;
                                 const hasActiveChild = item.children ? shouldExpandSection(item.children) : false;
@@ -293,6 +294,29 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                 );
                             })}
                         </nav>
+
+                        {/* Footer Section */}
+                        <div className="border-t border-gray-700 p-4 mt-auto">
+                            <div className="space-y-2">
+                                <Link
+                                    to="/demo-dashboard/subscriber/help"
+                                    className={`flex items-center space-x-3 px-3 py-2 text-sm rounded-md transition-colors ${isActiveLink('/demo-dashboard/subscriber/help')
+                                        ? 'bg-gray-700 text-white'
+                                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                                        }`}
+                                >
+                                    <AcademicCapIcon className="w-4 h-4 text-green-400" />
+                                    <span>Need help? Contact support</span>
+                                </Link>
+                                <button
+                                    onClick={handleLogout}
+                                    className="flex items-center space-x-3 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition-colors w-full text-left border-none bg-transparent focus:outline-none"
+                                >
+                                    <ArrowRightOnRectangleIcon className="w-4 h-4 text-red-400" />
+                                    <span>Sign out</span>
+                                </button>
+                            </div>
+                        </div>
                     </motion.aside>
                 )}
             </AnimatePresence>
@@ -392,31 +416,25 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                             className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200"
                                         >
                                             <Link
-                                                to="/demo-dashboard/subscriber/command-center"
+                                                to="/demo-dashboard/subscriber/help"
                                                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                             >
-                                                <AcademicCapIcon className="w-4 h-4 mr-3 text-indigo-500" />
-                                                Command Center
+                                                <AcademicCapIcon className="w-4 h-4 mr-3 text-green-500" />
+                                                Help & Support
                                             </Link>
                                             <Link
-                                                to="/demo-dashboard/subscriber/power-tools"
+                                                to="/demo-dashboard/subscriber/about"
                                                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                             >
-                                                <BuildingLibraryIcon className="w-4 h-4 mr-3 text-orange-500" />
-                                                Power Tools
-                                            </Link>
-                                            <Link
-                                                to="/demo-dashboard/subscriber/mission-control"
-                                                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            >
-                                                <MegaphoneIcon className="w-4 h-4 mr-3 text-red-500" />
-                                                Mission Control
+                                                <BuildingLibraryIcon className="w-4 h-4 mr-3 text-purple-500" />
+                                                About System
                                             </Link>
                                             <div className="border-t border-gray-100"></div>
                                             <button
                                                 onClick={handleLogout}
-                                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none border-none"
+                                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none border-none"
                                             >
+                                                <ArrowRightOnRectangleIcon className="w-4 h-4 mr-3 text-red-500" />
                                                 Sign out
                                             </button>
                                         </motion.div>
