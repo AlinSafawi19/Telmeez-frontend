@@ -14,7 +14,6 @@ import Checkout from './components/Checkout';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { CookieConsentProvider } from './contexts/CookieConsentContext';
 import { SubscriberProvider } from './contexts/SubscriberContext';
-import { ThemeProvider } from './contexts/ThemeContext';
 import Landing from './components/Landing';
 
 const App: React.FC = () => {
@@ -29,27 +28,25 @@ const App: React.FC = () => {
   return (
     <CookieConsentProvider>
       <LanguageProvider>
-        <ThemeProvider>
-          <SubscriberProvider>
-            <Router>
-              {/* <div className="text-xl font-medium text-green-600">
+        <SubscriberProvider>
+          <Router>
+            {/* <div className="text-xl font-medium text-green-600">
                         API says: {apiMessage}
                       </div> */}
-              <Routes>
-                <Route path="/" element={<ComingSoon />} />
-                <Route path="/home" element={<Landing />} />
-                <Route path="/signin" element={<SignIn />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/demo-dashboard/super-admin" element={<SuperAdminDashboard />} />
-                <Route path="/demo-dashboard/admin" element={<SchoolAdminDashboard />} />
-                <Route path="/demo-dashboard/teacher" element={<TeacherDashboard />} />
-                <Route path="/demo-dashboard/student" element={<StudentDashboard />} />
-                <Route path="/demo-dashboard/parent" element={<ParentDashboard />} />
-              </Routes>
-            </Router>
-          </SubscriberProvider>
-        </ThemeProvider>
+            <Routes>
+              <Route path="/" element={<ComingSoon />} />
+              <Route path="/home" element={<Landing />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/demo-dashboard/super-admin" element={<SuperAdminDashboard />} />
+              <Route path="/demo-dashboard/admin" element={<SchoolAdminDashboard />} />
+              <Route path="/demo-dashboard/teacher" element={<TeacherDashboard />} />
+              <Route path="/demo-dashboard/student" element={<StudentDashboard />} />
+              <Route path="/demo-dashboard/parent" element={<ParentDashboard />} />
+            </Routes>
+          </Router>
+        </SubscriberProvider>
       </LanguageProvider>
     </CookieConsentProvider>
   );
