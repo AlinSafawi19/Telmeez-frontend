@@ -32,7 +32,7 @@ const SubscriberContext = createContext<SubscriberContextType | undefined>(undef
 // More reliable profile image URL
 const getProfileImageUrl = (): string => {
     const seed = Math.floor(Math.random() * 1000);
-    return `https://randomuser.me/api/portraits/men/${seed % 100}.jpg`; 
+    return `https://randomuser.me/api/portraits/men/${seed % 100}.jpg`;
 };
 
 // Dummy data for demo purposes

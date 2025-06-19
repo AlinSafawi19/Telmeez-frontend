@@ -8,7 +8,7 @@ interface DemoProps {
 }
 
 const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
-    const [activeRole, setActiveRole] = useState<string>('super-admin');
+    const [activeRole, setActiveRole] = useState<string>('subscriber');
     const [isHovered, setIsHovered] = useState<string | null>(null);
     type TabType = 'features' | 'getting_started' | 'mobile_preview' | 'videos_tutorials';
     const [activeTab, setActiveTab] = useState<TabType>('features');
@@ -16,15 +16,15 @@ const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
 
     const roles = [
         {
-            id: 'super-admin',
-            title: t.roles.super_admin.title,
-            description: t.roles.super_admin.description,
+            id: 'subscriber',
+            title: t.roles.subscriber.title,
+            description: t.roles.subscriber.description,
             features: [
-                t.roles.super_admin.features.feature1,
-                t.roles.super_admin.features.feature2,
-                t.roles.super_admin.features.feature3,
-                t.roles.super_admin.features.feature4,
-                t.roles.super_admin.features.feature5
+                t.roles.subscriber.features.feature1,
+                t.roles.subscriber.features.feature2,
+                t.roles.subscriber.features.feature3,
+                t.roles.subscriber.features.feature4,
+                t.roles.subscriber.features.feature5
             ],
             icon: '👑',
             color: 'from-purple-500 to-indigo-600',
@@ -295,47 +295,47 @@ const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
                                         </div>
 
                                         <div className="space-y-4">
-                                            {(activeRole === 'super-admin' ? [
+                                            {(activeRole === 'subscriber' ? [
                                                 {
                                                     step: 1,
-                                                    title: t.getting_started_steps.super_admin.step1.title,
-                                                    description: t.getting_started_steps.super_admin.step1.description
+                                                    title: t.getting_started_steps.subscriber.step1.title,
+                                                    description: t.getting_started_steps.subscriber.step1.description
                                                 },
                                                 {
                                                     step: 2,
-                                                    title: t.getting_started_steps.super_admin.step2.title,
-                                                    description: t.getting_started_steps.super_admin.step2.description
+                                                    title: t.getting_started_steps.subscriber.step2.title,
+                                                    description: t.getting_started_steps.subscriber.step2.description
                                                 },
                                                 {
                                                     step: 3,
-                                                    title: t.getting_started_steps.super_admin.step3.title,
-                                                    description: t.getting_started_steps.super_admin.step3.description
+                                                    title: t.getting_started_steps.subscriber.step3.title,
+                                                    description: t.getting_started_steps.subscriber.step3.description
                                                 },
                                                 {
                                                     step: 4,
-                                                    title: t.getting_started_steps.super_admin.step4.title,
-                                                    description: t.getting_started_steps.super_admin.step4.description
+                                                    title: t.getting_started_steps.subscriber.step4.title,
+                                                    description: t.getting_started_steps.subscriber.step4.description
                                                 }
                                             ] : [
                                                 {
                                                     step: 1,
-                                                    title: t.getting_started_steps.other_roles.step1.title,
-                                                    description: t.getting_started_steps.other_roles.step1.description
+                                                    title: t.getting_started_steps.subscriber.step1.title,
+                                                    description: t.getting_started_steps.subscriber.step1.description
                                                 },
                                                 {
                                                     step: 2,
-                                                    title: t.getting_started_steps.other_roles.step2.title,
-                                                    description: t.getting_started_steps.other_roles.step2.description
+                                                    title: t.getting_started_steps.subscriber.step2.title,
+                                                    description: t.getting_started_steps.subscriber.step2.description
                                                 },
                                                 {
                                                     step: 3,
-                                                    title: t.getting_started_steps.other_roles.step3.title,
-                                                    description: t.getting_started_steps.other_roles.step3.description
+                                                    title: t.getting_started_steps.subscriber.step3.title,
+                                                    description: t.getting_started_steps.subscriber.step3.description
                                                 },
                                                 {
                                                     step: 4,
-                                                    title: t.getting_started_steps.other_roles.step4.title,
-                                                    description: t.getting_started_steps.other_roles.step4.description
+                                                    title: t.getting_started_steps.subscriber.step4.title,
+                                                    description: t.getting_started_steps.subscriber.step4.description
                                                 }
                                             ]).map((item, index) => (
                                                 <motion.div
@@ -422,7 +422,7 @@ const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                         className={`w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-300 ${roles.find(r => r.id === activeRole)?.gradient} focus:outline-none shadow-lg hover:shadow-xl`}
-                                        onClick={() => window.open(`/demo-dashboard/${activeRole}`, '_blank')}
+                                        onClick={() => window.open(`/demo-dashboard/${activeRole}/overview`, '_blank')}
                                     >
                                         {t.try} {roles.find(r => r.id === activeRole)?.title} {t.dashboard}
                                     </motion.button>

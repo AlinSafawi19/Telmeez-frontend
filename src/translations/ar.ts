@@ -241,8 +241,8 @@ export const ar = {
     close: "إغلاق",
     demo: {
         roles: {
-            super_admin: {
-                title: "المشرف الرئيسي",
+            subscriber: {
+                title: "المشترك",
                 description: "التحكم الكامل في النظام وإدارته",
                 features: {
                     feature1: "إدارة جميع المدارس والمؤسسات",
@@ -308,7 +308,7 @@ export const ar = {
         },
         guide_title: "دليل البدء السريع",
         getting_started_steps: {
-            super_admin: {
+            subscriber: {
                 step1: {
                     title: "اختر خطتك",
                     description: "حدد خطة الاشتراك التي تناسب احتياجات مؤسستك"
@@ -326,7 +326,7 @@ export const ar = {
                     description: "إنشاء وتكوين الأدوار لمشرفي المدارس والمعلمين والمستخدمين الآخرين"
                 }
             },
-            other_roles: {
+            admin: {
                 step1: {
                     title: "استلام بيانات الاعتماد",
                     description: "احصل على بيانات تسجيل الدخول من المشرف الرئيسي"

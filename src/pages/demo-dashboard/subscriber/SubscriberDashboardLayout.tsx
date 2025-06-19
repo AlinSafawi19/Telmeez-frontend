@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { useSubscriber } from '../../contexts/SubscriberContext';
+import { useSubscriber } from '../../../contexts/SubscriberContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import logo2 from '../../assets/images/logo2.png';
+import logo2 from '../../../assets/images/logo2.png';
 import {
     HomeIcon,
     UsersIcon,
@@ -22,7 +22,9 @@ import {
     AcademicCapIcon,
     BuildingLibraryIcon,
     DocumentTextIcon,
-    ShieldCheckIcon
+    ShieldCheckIcon,
+    BuildingOfficeIcon,
+    ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
 
 interface SubscriberDashboardLayoutProps {
@@ -107,7 +109,7 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
             id: 'overview',
             name: 'Overview',
             icon: HomeIcon,
-            href: '/demo-dashboard/overview',
+            href: '/demo-dashboard/subscriber/overview',
             color: 'text-blue-500'
         },
         {
@@ -116,9 +118,8 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
             icon: ShieldCheckIcon,
             color: 'text-purple-500',
             children: [
-                { name: 'Admins', icon: UsersIcon, href: '/demo-dashboard/admins', color: 'text-purple-400' },
-                { name: 'Institutions', icon: BuildingLibraryIcon, href: '/demo-dashboard/institutions', color: 'text-purple-400' },
-                { name: 'Roles & Permissions', icon: AcademicCapIcon, href: '/demo-dashboard/roles', color: 'text-purple-400' }
+                { name: 'Admins', icon: UsersIcon, href: '/demo-dashboard/subscriber/admins', color: 'text-purple-400' },
+                { name: 'Incident Reports', icon: ExclamationTriangleIcon, href: '/demo-dashboard/subscriber/incident-reports', color: 'text-purple-400' },
             ]
         },
         {
@@ -127,23 +128,30 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
             icon: ChatBubbleLeftRightIcon,
             color: 'text-green-500',
             children: [
-                { name: 'Messages', icon: ChatBubbleLeftRightIcon, href: '/demo-dashboard/messages', color: 'text-green-400' },
-                { name: 'Announcements', icon: MegaphoneIcon, href: '/demo-dashboard/announcements', color: 'text-green-400' },
-                { name: 'Notifications', icon: BellIcon, href: '/demo-dashboard/notifications', color: 'text-green-400' }
+                { name: 'Messages', icon: ChatBubbleLeftRightIcon, href: '/demo-dashboard/subscriber/messages', color: 'text-green-400' },
+                { name: 'Announcements', icon: MegaphoneIcon, href: '/demo-dashboard/subscriber/announcements', color: 'text-green-400' },
+                { name: 'Notifications', icon: BellIcon, href: '/demo-dashboard/subscriber/notifications', color: 'text-green-400' }
             ]
+        },
+        {
+            id: 'departments',
+            name: 'Departments',
+            icon: BuildingOfficeIcon,
+            href: '/demo-dashboard/subscriber/departments',
+            color: 'text-teal-500'
         },
         {
             id: 'events',
             name: 'Events & Calendar',
             icon: CalendarDaysIcon,
-            href: '/demo-dashboard/events',
+            href: '/demo-dashboard/subscriber/events',
             color: 'text-orange-500'
         },
         {
             id: 'analytics',
             name: 'Analytics & Reports',
             icon: ChartBarIcon,
-            href: '/demo-dashboard/analytics',
+            href: '/demo-dashboard/subscriber/analytics',
             color: 'text-indigo-500'
         },
         {
@@ -152,17 +160,17 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
             icon: Cog6ToothIcon,
             color: 'text-gray-500',
             children: [
-                { name: 'General Settings', icon: Cog6ToothIcon, href: '/demo-dashboard/settings', color: 'text-gray-400' },
-                { name: 'Billing', icon: CreditCardIcon, href: '/demo-dashboard/billing', color: 'text-gray-400' },
-                { name: 'Account', icon: UserCircleIcon, href: '/demo-dashboard/account', color: 'text-gray-400' },
-                { name: 'Documents', icon: DocumentTextIcon, href: '/demo-dashboard/documents', color: 'text-gray-400' }
+                { name: 'General Settings', icon: Cog6ToothIcon, href: '/demo-dashboard/subscriber/settings', color: 'text-gray-400' },
+                { name: 'Billing', icon: CreditCardIcon, href: '/demo-dashboard/subscriber/billing', color: 'text-gray-400' },
+                { name: 'Account', icon: UserCircleIcon, href: '/demo-dashboard/subscriber/account', color: 'text-gray-400' },
+                { name: 'Documents', icon: DocumentTextIcon, href: '/demo-dashboard/subscriber/documents', color: 'text-gray-400' }
             ]
         },
         {
             id: 'audit-logs',
             name: 'Audit Logs',
             icon: DocumentTextIcon,
-            href: '/demo-dashboard/audit-logs',
+            href: '/demo-dashboard/subscriber/audit-logs',
             color: 'text-yellow-500'
         },
     ];
@@ -227,8 +235,8 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                                 <button
                                                     onClick={() => toggleSection(item.id)}
                                                     className={`w-full flex items-center justify-between px-3 bg-transparent text-gray-300 py-2 text-sm font-medium rounded-md transition-colors border-none focus:outline-none ${hasActiveChild
-                                                            ? 'bg-gray-700 text-white'
-                                                            : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                                                        ? ''
+                                                        : 'hover:bg-gray-700 hover:text-white'
                                                         }`}
                                                 >
                                                     <div className="flex items-center space-x-3">
@@ -256,8 +264,8 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                                                         key={index}
                                                                         to={child.href}
                                                                         className={`flex items-center space-x-3 px-3 py-2 text-sm rounded-md transition-colors ${isChildActive
-                                                                                ? 'bg-gray-700 text-white'
-                                                                                : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+                                                                            ? 'bg-gray-700 text-white'
+                                                                            : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                                                                             }`}
                                                                     >
                                                                         <child.icon className={`w-4 h-4 ${child.color}`} />
@@ -273,8 +281,8 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                             <Link
                                                 to={item.href}
                                                 className={`flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md transition-colors ${isActive
-                                                        ? 'bg-gray-700 text-white'
-                                                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                                                    ? 'bg-gray-700 text-white'
+                                                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                                                     }`}
                                             >
                                                 <item.icon className={`w-5 h-5 ${item.color}`} />
@@ -384,21 +392,21 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                             className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200"
                                         >
                                             <Link
-                                                to="/demo-dashboard/command-center"
+                                                to="/demo-dashboard/subscriber/command-center"
                                                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                             >
                                                 <AcademicCapIcon className="w-4 h-4 mr-3 text-indigo-500" />
                                                 Command Center
                                             </Link>
                                             <Link
-                                                to="/demo-dashboard/power-tools"
+                                                to="/demo-dashboard/subscriber/power-tools"
                                                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                             >
                                                 <BuildingLibraryIcon className="w-4 h-4 mr-3 text-orange-500" />
                                                 Power Tools
                                             </Link>
                                             <Link
-                                                to="/demo-dashboard/mission-control"
+                                                to="/demo-dashboard/subscriber/mission-control"
                                                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                             >
                                                 <MegaphoneIcon className="w-4 h-4 mr-3 text-red-500" />

@@ -241,8 +241,8 @@ export const fr = {
     close: "Fermer",
     demo: {
         roles: {
-            super_admin: {
-                title: "Super Administrateur",
+            subscriber: {
+                title: "Abonné",
                 description: "Contrôle et gestion complets du système",
                 features: {
                     feature1: "Gérer toutes les écoles et institutions",
@@ -308,7 +308,7 @@ export const fr = {
         },
         guide_title: "Guide de Démarrage Rapide",
         getting_started_steps: {
-            super_admin: {
+            subscriber: {
                 step1: {
                     title: "Choisissez Votre Plan",
                     description: "Sélectionnez le plan d'abonnement qui correspond aux besoins de votre institution"

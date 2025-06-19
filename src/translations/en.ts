@@ -241,8 +241,8 @@ export const en = {
     close: "Close",
     demo: {
         roles: {
-            super_admin: {
-                title: "Super Admin",
+            subscriber: {
+                title: "Subscriber",
                 description: "Complete system control and management",
                 features: {
                     feature1: "Manage all schools and institutions",
@@ -308,7 +308,7 @@ export const en = {
         },
         guide_title: "Quick Start Guide",
         getting_started_steps: {
-            super_admin: {
+            subscriber: {
                 step1: {
                     title: "Choose Your Plan",
                     description: "Select the subscription plan that best fits your institution's needs"
