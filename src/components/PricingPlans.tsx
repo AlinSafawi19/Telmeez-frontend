@@ -47,6 +47,27 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
     const t = translations[language].pricing;
     const isRTL = language === 'ar'; // Only Arabic is RTL in our supported languages
 
+    // Helper function to extract numeric value from price string
+    const extractPrice = (priceString: string): number => {
+        return parseInt(priceString.replace(/[^0-9]/g, ''), 10);
+    };
+
+    // Helper function to calculate discounted monthly price for annual billing
+    const getDiscountedMonthlyPrice = (monthlyPrice: string): string => {
+        const monthlyValue = extractPrice(monthlyPrice);
+        const discountedMonthly = Math.round(monthlyValue * 0.8); // 20% discount
+        return `$${discountedMonthly}`;
+    };
+
+    // Helper function to format price display
+    const formatPriceDisplay = (plan: Plan): string => {
+        if (isAnnual) {
+            const discountedMonthly = getDiscountedMonthlyPrice(plan.monthlyPrice);
+            return discountedMonthly;
+        }
+        return plan.monthlyPrice;
+    };
+
     useEffect(() => {
         if (initialSelectedPlan) {
             setSelectedPlan(initialSelectedPlan);
@@ -165,13 +186,18 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
                             </div>
                             <div className="text-center mb-6">
                                 <div className="text-4xl font-bold text-gray-900 mb-1">
-                                    {isAnnual ? plan.annualPrice : plan.monthlyPrice}
+                                    {formatPriceDisplay(plan)}
                                     <span className="text-base font-normal text-gray-600">
-                                        /{isAnnual ? t.annual.toLowerCase() : t.monthly.toLowerCase()}
+                                        /{t.monthly.toLowerCase()}
                                     </span>
                                 </div>
                                 {isAnnual && (
-                                    <p className="text-xs text-green-600 font-medium">{t.save_20}</p>
+                                    <div className="flex flex-col items-center space-y-1">
+                                        <p className="text-xs text-green-600 font-medium">{t.save_20}</p>
+                                        <p className="text-xs text-gray-500 line-through">
+                                            {plan.monthlyPrice}/{t.monthly.toLowerCase()}
+                                        </p>
+                                    </div>
                                 )}
                                 {plan.id === 'starter' && (
                                     <div className="mt-2">
