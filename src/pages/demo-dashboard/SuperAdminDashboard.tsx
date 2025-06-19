@@ -44,11 +44,6 @@ ChartJS.register(
 
 const SuperAdminDashboard: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'overview' | 'admins' | 'billing' | 'general' | 'account' | 'notifications' | 'chat' | 'calendar'>('overview');
-    const [billingActive, setBillingActive] = useState(false);
-    const [generalActive, setGeneralActive] = useState(false);
-    const [accountActive, setAccountActive] = useState(false);
-    const [chatActive, setChatActive] = useState(false);
-    const [notificationsActive, setNotificationsActive] = useState(false);
     const { notifications, markAsRead, deleteNotification } = useNotifications();
     const [notificationTypeFilter, setNotificationTypeFilter] = useState<('info' | 'warning' | 'success')[]>([]);
     const [notificationReadFilter, setNotificationReadFilter] = useState<('read' | 'unread')[]>([]);
@@ -150,7 +145,6 @@ const SuperAdminDashboard: React.FC = () => {
 
     const handleBillingClick = () => {
         if (!tabOrder.includes('billing')) {
-            setBillingActive(true);
             setActiveTab('billing');
             setTabOrder(prev => [...prev, 'billing']);
         } else {
@@ -160,7 +154,6 @@ const SuperAdminDashboard: React.FC = () => {
 
     const handleCloseBilling = (e: React.MouseEvent) => {
         e.stopPropagation();
-        setBillingActive(false);
         const currentIndex = tabOrder.indexOf('billing');
         const previousTab = tabOrder[currentIndex - 1] || 'overview';
         setActiveTab(previousTab as any);
@@ -169,7 +162,6 @@ const SuperAdminDashboard: React.FC = () => {
 
     const handleGeneralClick = () => {
         if (!tabOrder.includes('general')) {
-            setGeneralActive(true);
             setActiveTab('general');
             setTabOrder(prev => [...prev, 'general']);
         } else {
@@ -179,7 +171,6 @@ const SuperAdminDashboard: React.FC = () => {
 
     const handleCloseGeneral = (e: React.MouseEvent) => {
         e.stopPropagation();
-        setGeneralActive(false);
         const currentIndex = tabOrder.indexOf('general');
         const previousTab = tabOrder[currentIndex - 1] || 'overview';
         setActiveTab(previousTab as any);
@@ -188,7 +179,6 @@ const SuperAdminDashboard: React.FC = () => {
 
     const handleAccountClick = () => {
         if (!tabOrder.includes('account')) {
-            setAccountActive(true);
             setActiveTab('account');
             setTabOrder(prev => [...prev, 'account']);
         } else {
@@ -198,7 +188,6 @@ const SuperAdminDashboard: React.FC = () => {
 
     const handleCloseAccount = (e: React.MouseEvent) => {
         e.stopPropagation();
-        setAccountActive(false);
         const currentIndex = tabOrder.indexOf('account');
         const previousTab = tabOrder[currentIndex - 1] || 'overview';
         setActiveTab(previousTab as any);
@@ -207,7 +196,6 @@ const SuperAdminDashboard: React.FC = () => {
 
     const handleCloseChat = (e: React.MouseEvent) => {
         e.stopPropagation();
-        setChatActive(false);
         const currentIndex = tabOrder.indexOf('chat');
         const previousTab = tabOrder[currentIndex - 1] || 'overview';
         setActiveTab(previousTab as any);
@@ -218,7 +206,6 @@ const SuperAdminDashboard: React.FC = () => {
 
     const handleNotificationsClick = () => {
         if (!tabOrder.includes('notifications')) {
-            setNotificationsActive(true);
             setActiveTab('notifications');
             setTabOrder(prev => [...prev, 'notifications']);
         } else {
@@ -228,7 +215,6 @@ const SuperAdminDashboard: React.FC = () => {
 
     const handleCloseNotifications = (e: React.MouseEvent) => {
         e.stopPropagation();
-        setNotificationsActive(false);
         const currentIndex = tabOrder.indexOf('notifications');
         const previousTab = tabOrder[currentIndex - 1] || 'overview';
         setActiveTab(previousTab as any);
@@ -237,7 +223,6 @@ const SuperAdminDashboard: React.FC = () => {
 
     const handleChatClick = () => {
         if (!tabOrder.includes('chat')) {
-            setChatActive(true);
             setActiveTab('chat');
             setTabOrder(prev => [...prev, 'chat']);
         } else {
@@ -1118,9 +1103,9 @@ const SuperAdminDashboard: React.FC = () => {
                                                                             </div>
                                                                             <span className="text-xs font-bold text-gray-900">{admin.stats.parents}</span>
                                                                         </div>
-                                                                        <div className="w-full bg-gray-100 rounded-full h-1">
+                                                                        <div className="w-full bg-gray-200 rounded-full h-2">
                                                                             <div
-                                                                                className="bg-gradient-to-r from-pink-500 to-rose-500 h-1 rounded-full transition-all duration-300"
+                                                                                className={`bg-gradient-to-r from-pink-500 to-rose-600 h-2 rounded-full transition-all duration-300 ${Math.min((currentUsage.parent / planLimits.parent) * 100, 100) === 100 ? 'w-full' : Math.min((currentUsage.parent / planLimits.parent) * 100, 100) >= 80 ? 'w-4/5' : Math.min((currentUsage.parent / planLimits.parent) * 100, 100) >= 60 ? 'w-3/5' : Math.min((currentUsage.parent / planLimits.parent) * 100, 100) >= 40 ? 'w-2/5' : Math.min((currentUsage.parent / planLimits.parent) * 100, 100) >= 20 ? 'w-1/5' : 'w-0'}`}
                                                                             />
                                                                         </div>
                                                                     </div>
@@ -1824,10 +1809,6 @@ const SuperAdminDashboard: React.FC = () => {
                                                         <div className="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
                                                         <span className="text-indigo-100 text-sm">Next payment: Dec 15, 2024</span>
                                                     </div>
-                                                    <div className="flex items-center">
-                                                        <div className="w-3 h-3 bg-blue-400 rounded-full mr-2"></div>
-                                                        <span className="text-indigo-100 text-sm">Auto-renewal enabled</span>
-                                                    </div>
                                                 </div>
                                             </div>
                                             <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
@@ -1856,7 +1837,6 @@ const SuperAdminDashboard: React.FC = () => {
                                             <div className="flex items-center justify-between mb-6">
                                                 <h3 className="text-lg font-semibold text-gray-900">Usage Analytics</h3>
                                                 <div className="flex items-center space-x-2">
-                                                    <span className="text-sm text-gray-500">Last 30 days</span>
                                                     <button className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
                                                         View Details
                                                     </button>
@@ -1875,8 +1855,7 @@ const SuperAdminDashboard: React.FC = () => {
                                                         </div>
                                                         <div className="w-full bg-gray-200 rounded-full h-2">
                                                             <div
-                                                                className="bg-gradient-to-r from-purple-500 to-indigo-600 h-2 rounded-full transition-all duration-300"
-                                                                style={{ width: `${Math.min((currentUsage.admin / planLimits.admin) * 100, 100)}%` }}
+                                                                className={`bg-gradient-to-r from-purple-500 to-indigo-600 h-2 rounded-full transition-all duration-300 ${Math.min((currentUsage.admin / planLimits.admin) * 100, 100) === 100 ? 'w-full' : Math.min((currentUsage.admin / planLimits.admin) * 100, 100) >= 80 ? 'w-4/5' : Math.min((currentUsage.admin / planLimits.admin) * 100, 100) >= 60 ? 'w-3/5' : Math.min((currentUsage.admin / planLimits.admin) * 100, 100) >= 40 ? 'w-2/5' : Math.min((currentUsage.admin / planLimits.admin) * 100, 100) >= 20 ? 'w-1/5' : 'w-0'}`}
                                                             />
                                                         </div>
                                                         <div className="flex justify-between text-xs text-gray-500 mt-1">
@@ -1895,8 +1874,7 @@ const SuperAdminDashboard: React.FC = () => {
                                                         </div>
                                                         <div className="w-full bg-gray-200 rounded-full h-2">
                                                             <div
-                                                                className="bg-gradient-to-r from-blue-500 to-cyan-600 h-2 rounded-full transition-all duration-300"
-                                                                style={{ width: `${Math.min((currentUsage.teacher / planLimits.teacher) * 100, 100)}%` }}
+                                                                className={`bg-gradient-to-r from-blue-500 to-cyan-600 h-2 rounded-full transition-all duration-300 ${Math.min((currentUsage.teacher / planLimits.teacher) * 100, 100) === 100 ? 'w-full' : Math.min((currentUsage.teacher / planLimits.teacher) * 100, 100) >= 80 ? 'w-4/5' : Math.min((currentUsage.teacher / planLimits.teacher) * 100, 100) >= 60 ? 'w-3/5' : Math.min((currentUsage.teacher / planLimits.teacher) * 100, 100) >= 40 ? 'w-2/5' : Math.min((currentUsage.teacher / planLimits.teacher) * 100, 100) >= 20 ? 'w-1/5' : 'w-0'}`}
                                                             />
                                                         </div>
                                                         <div className="flex justify-between text-xs text-gray-500 mt-1">
@@ -1915,8 +1893,7 @@ const SuperAdminDashboard: React.FC = () => {
                                                         </div>
                                                         <div className="w-full bg-gray-200 rounded-full h-2">
                                                             <div
-                                                                className="bg-gradient-to-r from-green-500 to-emerald-600 h-2 rounded-full transition-all duration-300"
-                                                                style={{ width: `${Math.min((currentUsage.student / planLimits.student) * 100, 100)}%` }}
+                                                                className={`bg-gradient-to-r from-green-500 to-emerald-600 h-2 rounded-full transition-all duration-300 ${Math.min((currentUsage.student / planLimits.student) * 100, 100) === 100 ? 'w-full' : Math.min((currentUsage.student / planLimits.student) * 100, 100) >= 80 ? 'w-4/5' : Math.min((currentUsage.student / planLimits.student) * 100, 100) >= 60 ? 'w-3/5' : Math.min((currentUsage.student / planLimits.student) * 100, 100) >= 40 ? 'w-2/5' : Math.min((currentUsage.student / planLimits.student) * 100, 100) >= 20 ? 'w-1/5' : 'w-0'}`}
                                                             />
                                                         </div>
                                                         <div className="flex justify-between text-xs text-gray-500 mt-1">
@@ -1935,8 +1912,7 @@ const SuperAdminDashboard: React.FC = () => {
                                                         </div>
                                                         <div className="w-full bg-gray-200 rounded-full h-2">
                                                             <div
-                                                                className="bg-gradient-to-r from-pink-500 to-rose-600 h-2 rounded-full transition-all duration-300"
-                                                                style={{ width: `${Math.min((currentUsage.parent / planLimits.parent) * 100, 100)}%` }}
+                                                                className={`bg-gradient-to-r from-pink-500 to-rose-600 h-2 rounded-full transition-all duration-300 ${Math.min((currentUsage.parent / planLimits.parent) * 100, 100) === 100 ? 'w-full' : Math.min((currentUsage.parent / planLimits.parent) * 100, 100) >= 80 ? 'w-4/5' : Math.min((currentUsage.parent / planLimits.parent) * 100, 100) >= 60 ? 'w-3/5' : Math.min((currentUsage.parent / planLimits.parent) * 100, 100) >= 40 ? 'w-2/5' : Math.min((currentUsage.parent / planLimits.parent) * 100, 100) >= 20 ? 'w-1/5' : 'w-0'}`}
                                                             />
                                                         </div>
                                                         <div className="flex justify-between text-xs text-gray-500 mt-1">
@@ -2073,44 +2049,58 @@ const SuperAdminDashboard: React.FC = () => {
                                         <div className="bg-white rounded-xl shadow-sm p-6">
                                             <div className="flex items-center justify-between mb-6">
                                                 <h3 className="text-lg font-semibold text-gray-900">Available Plans</h3>
-                                                <button className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
-                                                    Compare All
-                                                </button>
-                                            </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                                {/* Current Plan - Standard */}
-                                                <div className="relative bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-200 rounded-lg p-4">
-                                                    <div className="absolute top-3 right-3">
-                                                        <span className="px-2 py-1 bg-indigo-600 text-white text-xs font-medium rounded-full">
-                                                            Current
-                                                        </span>
+                                                <div className="flex items-center space-x-4">
+                                                    <div className="flex items-center bg-gray-100 rounded-lg p-1">
+                                                        <button className="px-3 py-1.5 text-sm font-medium text-gray-600 bg-white rounded-md shadow-sm">
+                                                            Monthly
+                                                        </button>
+                                                        <button className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900">
+                                                            Annual
+                                                        </button>
                                                     </div>
+                                                    <button className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                                        Compare All
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                                {/* Starter Plan */}
+                                                <div className="bg-white border border-gray-200 rounded-lg p-4 hover:border-indigo-300 transition-colors duration-200">
                                                     <div className="flex flex-col justify-between h-full">
                                                         <div>
                                                             <div className="mb-3">
-                                                                <h4 className="font-semibold text-gray-900">Standard Plan</h4>
-                                                                <p className="text-sm text-gray-600">Perfect for small to medium schools</p>
+                                                                <h4 className="font-semibold text-gray-900">Starter</h4>
+                                                                <p className="text-sm text-gray-600">Perfect for tutoring centers and small schools</p>
                                                             </div>
                                                             <div className="text-center mb-4">
-                                                                <p className="text-2xl font-bold text-gray-900">$99</p>
-                                                                <p className="text-sm text-gray-500">per month</p>
+                                                                <div className="flex items-center justify-center mb-1">
+                                                                    <span className="text-2xl font-bold text-gray-900">$49</span>
+                                                                    <span className="text-sm text-gray-500 ml-1">/monthly</span>
+                                                                </div>
+                                                                <div className="flex items-center justify-center mb-2">
+                                                                    <span className="text-lg font-bold text-gray-900">$470</span>
+                                                                    <span className="text-sm text-gray-500 ml-1">/annual</span>
+                                                                    <span className="ml-2 px-2 py-0.5 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                                                                        Save 20%
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                             <div className="space-y-2 text-sm text-gray-600">
                                                                 <div className="flex items-center">
                                                                     <FaCheck className="h-4 w-4 text-green-500 mr-2" />
-                                                                    Up to 10 Administrators
+                                                                    3 Admin Accounts
                                                                 </div>
                                                                 <div className="flex items-center">
                                                                     <FaCheck className="h-4 w-4 text-green-500 mr-2" />
-                                                                    Up to 150 Teachers
+                                                                    25 Teacher Accounts
                                                                 </div>
                                                                 <div className="flex items-center">
                                                                     <FaCheck className="h-4 w-4 text-green-500 mr-2" />
-                                                                    Up to 1,500 Students
+                                                                    250 Student Accounts
                                                                 </div>
                                                                 <div className="flex items-center">
                                                                     <FaCheck className="h-4 w-4 text-green-500 mr-2" />
-                                                                    Up to 750 Parents
+                                                                    125 Parent Accounts
                                                                 </div>
                                                                 <div className="flex items-center">
                                                                     <FaCheck className="h-4 w-4 text-green-500 mr-2" />
@@ -2118,37 +2108,54 @@ const SuperAdminDashboard: React.FC = () => {
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <button className="w-full mt-4 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                                                            Downgrade to Starter
+                                                        </button>
                                                     </div>
                                                 </div>
 
-                                                {/* Premium Plan */}
-                                                <div className="bg-white border border-gray-200 rounded-lg p-4 hover:border-indigo-300 transition-colors duration-200">
+                                                {/* Current Plan - Standard */}
+                                                <div className="relative bg-gradient-to-r from-indigo-100 to-purple-100 border-2 border-indigo-400 rounded-lg p-4 shadow-lg transform scale-105">
+                                                    <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                                                        <div className="bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-medium shadow-sm">
+                                                            Selected
+                                                        </div>
+                                                    </div>
                                                     <div className="flex flex-col justify-between h-full">
                                                         <div>
                                                             <div className="mb-3">
-                                                                <h4 className="font-semibold text-gray-900">Premium Plan</h4>
-                                                                <p className="text-sm text-gray-600">For larger educational institutions</p>
+                                                                <h4 className="font-semibold text-gray-900">Standard</h4>
+                                                                <p className="text-sm text-gray-600">Perfect for growing educational institutions</p>
                                                             </div>
                                                             <div className="text-center mb-4">
-                                                                <p className="text-2xl font-bold text-gray-900">$199</p>
-                                                                <p className="text-sm text-gray-500">per month</p>
+                                                                <div className="flex items-center justify-center mb-1">
+                                                                    <span className="text-2xl font-bold text-gray-900">$99</span>
+                                                                    <span className="text-sm text-gray-500 ml-1">/monthly</span>
+                                                                </div>
+                                                                <div className="flex items-center justify-center mb-2">
+                                                                    <span className="text-lg font-bold text-gray-900">$950</span>
+                                                                    <span className="text-sm text-gray-500 ml-1">/annual</span>
+                                                                    <span className="ml-2 px-2 py-0.5 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                                                                        Save 20%
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                             <div className="space-y-2 text-sm text-gray-600">
                                                                 <div className="flex items-center">
                                                                     <FaCheck className="h-4 w-4 text-green-500 mr-2" />
-                                                                    Up to 25 Administrators
+                                                                    10 Admin Accounts
                                                                 </div>
                                                                 <div className="flex items-center">
                                                                     <FaCheck className="h-4 w-4 text-green-500 mr-2" />
-                                                                    Up to 500 Teachers
+                                                                    150 Teacher Accounts
                                                                 </div>
                                                                 <div className="flex items-center">
                                                                     <FaCheck className="h-4 w-4 text-green-500 mr-2" />
-                                                                    Up to 5,000 Students
+                                                                    1,500 Student Accounts
                                                                 </div>
                                                                 <div className="flex items-center">
                                                                     <FaCheck className="h-4 w-4 text-green-500 mr-2" />
-                                                                    Up to 2,500 Parents
+                                                                    750 Parent Accounts
                                                                 </div>
                                                                 <div className="flex items-center">
                                                                     <FaCheck className="h-4 w-4 text-green-500 mr-2" />
@@ -2160,32 +2167,51 @@ const SuperAdminDashboard: React.FC = () => {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <button className="w-full mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200">
-                                                            Upgrade to Premium
-                                                        </button>
+                                                        <div className="mt-4">
+                                                            <div className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg text-center font-medium">
+                                                                ✓ Current Plan
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
 
-                                                {/* Enterprise Plan */}
+                                                {/* Enterprise Plan - Monthly */}
                                                 <div className="bg-white border border-gray-200 rounded-lg p-4 hover:border-indigo-300 transition-colors duration-200">
                                                     <div className="flex flex-col justify-between h-full">
                                                         <div>
                                                             <div className="mb-3">
-                                                                <h4 className="font-semibold text-gray-900">Enterprise Plan</h4>
-                                                                <p className="text-sm text-gray-600">Custom solutions for large districts</p>
+                                                                <h4 className="font-semibold text-gray-900">Enterprise</h4>
+                                                                <p className="text-sm text-gray-600">For institutions big in size and high in demands</p>
                                                             </div>
                                                             <div className="text-center mb-4">
-                                                                <p className="text-2xl font-bold text-gray-900">Custom</p>
-                                                                <p className="text-sm text-gray-500">contact sales</p>
+                                                                <div className="flex items-center justify-center mb-1">
+                                                                    <span className="text-2xl font-bold text-gray-900">$299</span>
+                                                                    <span className="text-sm text-gray-500 ml-1">/monthly</span>
+                                                                </div>
+                                                                <div className="flex items-center justify-center mb-2">
+                                                                    <span className="text-lg font-bold text-gray-900">$2,870</span>
+                                                                    <span className="text-sm text-gray-500 ml-1">/annual</span>
+                                                                    <span className="ml-2 px-2 py-0.5 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                                                                        Save 20%
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                             <div className="space-y-2 text-sm text-gray-600">
                                                                 <div className="flex items-center">
                                                                     <FaCheck className="h-4 w-4 text-green-500 mr-2" />
-                                                                    Unlimited Users
+                                                                    Unlimited Admin Accounts
                                                                 </div>
                                                                 <div className="flex items-center">
                                                                     <FaCheck className="h-4 w-4 text-green-500 mr-2" />
-                                                                    Custom Integrations
+                                                                    Unlimited Teacher Accounts
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Unlimited Student Accounts
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
+                                                                    Unlimited Parent Accounts
                                                                 </div>
                                                                 <div className="flex items-center">
                                                                     <FaCheck className="h-4 w-4 text-green-500 mr-2" />
@@ -2193,16 +2219,64 @@ const SuperAdminDashboard: React.FC = () => {
                                                                 </div>
                                                                 <div className="flex items-center">
                                                                     <FaCheck className="h-4 w-4 text-green-500 mr-2" />
-                                                                    SLA Guarantee
-                                                                </div>
-                                                                <div className="flex items-center">
-                                                                    <FaCheck className="h-4 w-4 text-green-500 mr-2" />
-                                                                    On-premise Option
+                                                                    Custom Integrations
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <button className="w-full mt-4 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200">
-                                                            Contact Sales
+                                                        <button className="w-full mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200">
+                                                            Upgrade to Enterprise
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                {/* Enterprise Plan - Annual */}
+                                                <div className="bg-gradient-to-r from-purple-600 to-indigo-700 rounded-lg p-4 text-white">
+                                                    <div className="flex flex-col justify-between h-full">
+                                                        <div>
+                                                            <div className="mb-3">
+                                                                <h4 className="font-semibold text-white">Enterprise Annual</h4>
+                                                                <p className="text-sm text-purple-100">Best value for large institutions</p>
+                                                            </div>
+                                                            <div className="text-center mb-4">
+                                                                <div className="flex items-center justify-center mb-2">
+                                                                    <span className="text-2xl font-bold text-white">$2,870</span>
+                                                                    <span className="text-sm text-purple-100 ml-1">/annual</span>
+                                                                </div>
+                                                                <div className="flex items-center justify-center">
+                                                                    <span className="px-3 py-1 bg-green-500/20 text-green-200 text-xs font-medium rounded-full">
+                                                                        Save 20%
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div className="space-y-2 text-sm text-purple-100">
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-400 mr-2" />
+                                                                    Unlimited Admin Accounts
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-400 mr-2" />
+                                                                    Unlimited Teacher Accounts
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-400 mr-2" />
+                                                                    Unlimited Student Accounts
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-400 mr-2" />
+                                                                    Unlimited Parent Accounts
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-400 mr-2" />
+                                                                    Dedicated Support
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <FaCheck className="h-4 w-4 text-green-400 mr-2" />
+                                                                    SLA Guarantee
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <button className="w-full mt-4 px-4 py-2 bg-white text-purple-600 rounded-lg hover:bg-gray-50 transition-colors duration-200 font-medium">
+                                                            Get Best Value
                                                         </button>
                                                     </div>
                                                 </div>
