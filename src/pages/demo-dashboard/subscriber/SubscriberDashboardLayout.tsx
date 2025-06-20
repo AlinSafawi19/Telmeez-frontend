@@ -35,7 +35,7 @@ interface SubscriberDashboardLayoutProps {
 const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
     children
 }): React.ReactElement => {
-    const { subscriber, logout, isDemoMode, setDemoMode, isLoading } = useUser();
+    const { subscriber, logout, isDemoMode, setDemoMode } = useUser();
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
         'administration': false,
@@ -73,37 +73,6 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
             setDemoMode(true);
         }
     }, [subscriber, isDemoMode, setDemoMode]);
-
-    // Show loading state while initializing
-    if (isLoading || (!subscriber && !isDemoMode)) {
-        return (
-            <div className="flex h-screen bg-gray-50 items-center justify-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading dashboard...</p>
-                </div>
-            </div>
-        );
-    }
-
-    // Show error state if no subscriber data is available
-    if (!subscriber) {
-        return (
-            <div className="flex h-screen bg-gray-50 items-center justify-center">
-                <div className="text-center">
-                    <div className="text-6xl mb-4">⚠️</div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">No User Data</h2>
-                    <p className="text-gray-600 mb-4">Unable to load subscriber information.</p>
-                    <button
-                        onClick={() => setDemoMode(true)}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                    >
-                        Enable Demo Mode
-                    </button>
-                </div>
-            </div>
-        );
-    }
 
     const navigationItems = [
         {
@@ -386,7 +355,6 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                                 alt={`${subscriber.user?.first_name} ${subscriber.user?.last_name}`}
                                                 className="w-full h-full object-cover"
                                                 onError={(e) => {
-                                                    console.log('Profile image failed to load:', subscriber.profileImage?.file_url);
                                                     e.currentTarget.style.display = 'none';
                                                     e.currentTarget.nextElementSibling?.classList.remove('hidden');
                                                 }}

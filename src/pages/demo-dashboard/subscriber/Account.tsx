@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from 'react';
 import SubscriberDashboardLayout from './SubscriberDashboardLayout';
 import { motion } from 'framer-motion';
 import Swal from 'sweetalert2';
-import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import Select2 from '../../../components/Select2';
 import { useUser } from '../../../contexts/UserContext';
@@ -29,7 +28,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Account: React.FC = () => {
-    const { subscriber, isLoading, error } = useUser();
+    const { subscriber, error } = useUser();
     const { currentLanguage } = useLanguage();
     const t = translations[currentLanguage];
     const isRTL = currentLanguage === 'ar';
@@ -148,7 +147,7 @@ const Account: React.FC = () => {
         // Validate phone
         if (!personalData.phone.trim()) {
             newValidation.phone = { isValid: false, message: 'Phone number is required' };
-        } 
+        }
 
         setPersonalValidation(newValidation);
 
@@ -261,11 +260,10 @@ const Account: React.FC = () => {
     useEffect(() => {
         console.log('Account component state:', {
             subscriber: subscriber,
-            isLoading: isLoading,
             error: error,
             profileData: profileData
         });
-    }, [subscriber, isLoading, error, profileData]);
+    }, [subscriber, error, profileData]);
 
     // Add a flag to track if data has been initially loaded
     const [isInitialized, setIsInitialized] = useState(false);
@@ -377,28 +375,6 @@ const Account: React.FC = () => {
             };
             reader.readAsDataURL(file);
         }
-    };
-
-    const handleCountryChange = (selectedOption: any) => {
-        if (selectedOption.value === 'other') {
-            setShowCustomCountryInput(true);
-            setProfileData(prev => ({ ...prev, country: 'other' }));
-        } else {
-            setShowCustomCountryInput(false);
-            setProfileData(prev => ({ ...prev, country: selectedOption.value }));
-        }
-    };
-
-    const handleCustomCountryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setProfileData(prev => ({ ...prev, customCountry: e.target.value }));
-    };
-
-    const handleProfileDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setProfileData(prev => ({
-            ...prev,
-            [name]: value
-        }));
     };
 
     // Save personal information function
@@ -850,8 +826,8 @@ const Account: React.FC = () => {
                             value={personalData.firstName}
                             onChange={handlePersonalDataChange}
                             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${personalValidation.firstName.isValid
-                                    ? 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
-                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                ? 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                                : 'border-red-300 focus:ring-red-500 focus:border-red-500'
                                 }`}
                             placeholder="Enter first name"
                         />
@@ -869,8 +845,8 @@ const Account: React.FC = () => {
                             value={personalData.lastName}
                             onChange={handlePersonalDataChange}
                             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${personalValidation.lastName.isValid
-                                    ? 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
-                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                ? 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                                : 'border-red-300 focus:ring-red-500 focus:border-red-500'
                                 }`}
                             placeholder="Enter last name"
                         />
@@ -888,8 +864,8 @@ const Account: React.FC = () => {
                             value={personalData.email}
                             onChange={handlePersonalDataChange}
                             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${personalValidation.email.isValid
-                                    ? 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
-                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                ? 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                                : 'border-red-300 focus:ring-red-500 focus:border-red-500'
                                 }`}
                             placeholder="Enter email address"
                         />
@@ -906,8 +882,8 @@ const Account: React.FC = () => {
                             value={personalData.phone}
                             onChange={handlePhoneChange}
                             inputClass={`w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 transition-all duration-300 ${personalValidation.phone.isValid
-                                    ? 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
-                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                ? 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                                : 'border-red-300 focus:ring-red-500 focus:border-red-500'
                                 }`}
                             buttonClass={`${isRTL ? 'rounded-l-none' : 'rounded-r-none'} border-r-0`}
                             inputStyle={{
@@ -928,8 +904,8 @@ const Account: React.FC = () => {
                                 backgroundColor: 'white'
                             }}
                             containerClass={`${isRTL ? 'rtl-phone-input' : ''} focus-within:ring-2 transition-all duration-300 ${personalValidation.phone.isValid
-                                    ? 'focus-within:ring-blue-500 focus-within:border-blue-500'
-                                    : 'focus-within:ring-red-500 focus-within:border-red-500'
+                                ? 'focus-within:ring-blue-500 focus-within:border-blue-500'
+                                : 'focus-within:ring-red-500 focus-within:border-red-500'
                                 }`}
                             dropdownStyle={{
                                 borderRadius: '0.75rem',
@@ -1202,8 +1178,8 @@ const Account: React.FC = () => {
                             value={addressData.city}
                             onChange={handleAddressDataChange}
                             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${addressValidation.city.isValid
-                                    ? 'border-gray-300 focus:ring-green-500 focus:border-green-500'
-                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                ? 'border-gray-300 focus:ring-green-500 focus:border-green-500'
+                                : 'border-red-300 focus:ring-red-500 focus:border-red-500'
                                 }`}
                             placeholder="Enter city"
                         />
@@ -1221,8 +1197,8 @@ const Account: React.FC = () => {
                             value={addressData.state}
                             onChange={handleAddressDataChange}
                             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${addressValidation.state.isValid
-                                    ? 'border-gray-300 focus:ring-green-500 focus:border-green-500'
-                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                ? 'border-gray-300 focus:ring-green-500 focus:border-green-500'
+                                : 'border-red-300 focus:ring-red-500 focus:border-red-500'
                                 }`}
                             placeholder="Enter state or province"
                         />
@@ -1240,8 +1216,8 @@ const Account: React.FC = () => {
                             value={addressData.zip}
                             onChange={handleAddressDataChange}
                             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${addressValidation.zip.isValid
-                                    ? 'border-gray-300 focus:ring-green-500 focus:border-green-500'
-                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                ? 'border-gray-300 focus:ring-green-500 focus:border-green-500'
+                                : 'border-red-300 focus:ring-red-500 focus:border-red-500'
                                 }`}
                             placeholder="Enter ZIP or postal code"
                         />
@@ -1267,10 +1243,10 @@ const Account: React.FC = () => {
                                     minHeight: '42px',
                                     height: '42px',
                                     borderRadius: '0.75rem',
-                                    borderColor: state.isFocused 
-                                        ? '#10B981' 
-                                        : !addressValidation.country.isValid 
-                                            ? '#EF4444' 
+                                    borderColor: state.isFocused
+                                        ? '#10B981'
+                                        : !addressValidation.country.isValid
+                                            ? '#EF4444'
                                             : '#D1D5DB',
                                     boxShadow: state.isFocused ? '0 0 0 2px rgba(16, 185, 129, 0.1)' : 'none',
                                     '&:hover': {
@@ -1297,8 +1273,8 @@ const Account: React.FC = () => {
                                     onChange={handleAddressCustomCountryChange}
                                     placeholder="Enter your country"
                                     className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${addressValidation.customCountry.isValid
-                                            ? 'border-gray-300 focus:ring-green-500 focus:border-green-500'
-                                            : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                        ? 'border-gray-300 focus:ring-green-500 focus:border-green-500'
+                                        : 'border-red-300 focus:ring-red-500 focus:border-red-500'
                                         }`}
                                 />
                                 {!addressValidation.customCountry.isValid && (
@@ -1318,8 +1294,8 @@ const Account: React.FC = () => {
                             value={addressData.address1}
                             onChange={handleAddressDataChange}
                             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${addressValidation.address1.isValid
-                                    ? 'border-gray-300 focus:ring-green-500 focus:border-green-500'
-                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                ? 'border-gray-300 focus:ring-green-500 focus:border-green-500'
+                                : 'border-red-300 focus:ring-red-500 focus:border-red-500'
                                 }`}
                             placeholder="Enter primary address"
                         />
@@ -1360,14 +1336,6 @@ const Account: React.FC = () => {
                     <p className="text-gray-600 mt-2">Manage your profile, security, and preferences</p>
                 </div>
 
-                {/* Loading State */}
-                {isLoading && (
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                        <p className="text-gray-600">Loading account information...</p>
-                    </div>
-                )}
-
                 {/* Error State */}
                 {error && (
                     <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
@@ -1385,62 +1353,57 @@ const Account: React.FC = () => {
                     </div>
                 )}
 
-                {/* Main Content - Only show when not loading and no error */}
-                {!isLoading && !error && (
-                    <>
-                        {/* Tab Navigation */}
-                        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 overflow-hidden">
-                            <nav className="flex relative">
-                                {tabs.map((tab) => (
-                                    <button
-                                        key={tab.id}
-                                        onClick={() => setActiveTab(tab.id)}
-                                        className={`flex-1 flex items-center justify-center py-4 px-6 bg-transparent focus:outline-none font-medium text-sm transition-all duration-300 border-none relative group ${activeTab === tab.id
-                                            ? 'text-white bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg transform scale-105'
-                                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                                            }`}
-                                    >
-                                        <div className="flex items-center space-x-2">
-                                            <tab.icon className={`w-5 h-5 transition-all duration-300 ${activeTab === tab.id
-                                                ? 'text-white transform scale-110'
-                                                : tab.color
-                                                }`} />
-                                            <span className="font-semibold">{tab.name}</span>
-                                        </div>
+                {/* Tab Navigation */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 overflow-hidden">
+                    <nav className="flex relative">
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`flex-1 flex items-center justify-center py-4 px-6 bg-transparent focus:outline-none font-medium text-sm transition-all duration-300 border-none relative group ${activeTab === tab.id
+                                    ? 'text-white bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg transform scale-105'
+                                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                                    }`}
+                            >
+                                <div className="flex items-center space-x-2">
+                                    <tab.icon className={`w-5 h-5 transition-all duration-300 ${activeTab === tab.id
+                                        ? 'text-white transform scale-110'
+                                        : tab.color
+                                        }`} />
+                                    <span className="font-semibold">{tab.name}</span>
+                                </div>
 
-                                        {/* Animated underline for active tab */}
-                                        {activeTab === tab.id && (
-                                            <motion.div
-                                                layoutId="activeTab"
-                                                className="absolute bottom-0 left-0 right-0 h-1 bg-white rounded-t-full"
-                                                initial={{ scaleX: 0 }}
-                                                animate={{ scaleX: 1 }}
-                                                transition={{ duration: 0.3 }}
-                                            />
-                                        )}
+                                {/* Animated underline for active tab */}
+                                {activeTab === tab.id && (
+                                    <motion.div
+                                        layoutId="activeTab"
+                                        className="absolute bottom-0 left-0 right-0 h-1 bg-white rounded-t-full"
+                                        initial={{ scaleX: 0 }}
+                                        animate={{ scaleX: 1 }}
+                                        transition={{ duration: 0.3 }}
+                                    />
+                                )}
 
-                                        {/* Hover effect for inactive tabs */}
-                                        {activeTab !== tab.id && (
-                                            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-transparent group-hover:bg-gray-200 transition-all duration-300" />
-                                        )}
+                                {/* Hover effect for inactive tabs */}
+                                {activeTab !== tab.id && (
+                                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-transparent group-hover:bg-gray-200 transition-all duration-300" />
+                                )}
 
-                                        {/* Glow effect for active tab */}
-                                        {activeTab === tab.id && (
-                                            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-lg blur-sm" />
-                                        )}
-                                    </button>
-                                ))}
-                            </nav>
-                        </div>
+                                {/* Glow effect for active tab */}
+                                {activeTab === tab.id && (
+                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-lg blur-sm" />
+                                )}
+                            </button>
+                        ))}
+                    </nav>
+                </div>
 
-                        {/* Tab Content */}
-                        <div className="min-h-[600px]">
-                            {activeTab === 'profile' && renderProfileTab()}
-                            {activeTab === 'security' && renderSecurityTab()}
-                            {activeTab === 'address' && renderAddressTab()}
-                        </div>
-                    </>
-                )}
+                {/* Tab Content */}
+                <div className="min-h-[600px]">
+                    {activeTab === 'profile' && renderProfileTab()}
+                    {activeTab === 'security' && renderSecurityTab()}
+                    {activeTab === 'address' && renderAddressTab()}
+                </div>
             </div>
         </SubscriberDashboardLayout>
     );
