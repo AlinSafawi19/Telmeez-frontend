@@ -25,7 +25,9 @@ import {
     ShieldCheckIcon,
     BuildingOfficeIcon,
     ExclamationTriangleIcon,
-    ArrowRightOnRectangleIcon
+    ArrowRightOnRectangleIcon,
+    QuestionMarkCircleIcon,
+    EnvelopeIcon
 } from '@heroicons/react/24/outline';
 import { FaUser } from 'react-icons/fa';
 
@@ -271,17 +273,24 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
 
                         {/* Footer Section */}
                         <div className="border-t border-gray-700 p-4 mt-auto">
-                            <div className="space-y-2">
-                                <Link
-                                    to="/demo-dashboard/subscriber/help"
-                                    className={`flex items-center space-x-3 px-3 py-2 text-sm rounded-md transition-colors ${isActiveLink('/demo-dashboard/subscriber/help')
-                                        ? 'bg-gray-700 text-white'
-                                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                                        }`}
-                                >
-                                    <AcademicCapIcon className="w-4 h-4 text-green-400" />
-                                    <span>Need help? Contact support</span>
-                                </Link>
+                            <div className="space-y-3">
+                                {/* Enhanced Support Section */}
+                                <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg p-3 text-white">
+                                    <div className="flex items-center space-x-2">
+                                        <QuestionMarkCircleIcon className="w-4 h-4 text-blue-200" />
+                                        <span className="text-sm font-medium">Need Help?</span>
+                                    </div>
+                                    <div className="space-y-2 text-xs">
+                                        <a
+                                            href="mailto:support@telmeez.com"
+                                            className="flex items-center space-x-2 text-blue-100 hover:text-white transition-colors cursor-pointer"
+                                        >
+                                            <EnvelopeIcon className="w-3 h-3" />
+                                            <span>support@telmeez.com</span>
+                                        </a>
+                                    </div>
+                                </div>
+
                                 <button
                                     onClick={handleLogout}
                                     className="flex items-center space-x-3 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition-colors w-full text-left border-none bg-transparent focus:outline-none"
@@ -382,18 +391,11 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                                 My Profile
                                             </Link>
                                             <Link
-                                                to="/demo-dashboard/subscriber/help"
+                                                to="/demo-dashboard/subscriber/billing"
                                                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                             >
-                                                <AcademicCapIcon className="w-4 h-4 mr-3 text-green-500" />
-                                                Help & Support
-                                            </Link>
-                                            <Link
-                                                to="/demo-dashboard/subscriber/about"
-                                                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            >
-                                                <BuildingLibraryIcon className="w-4 h-4 mr-3 text-purple-500" />
-                                                About System
+                                                <CreditCardIcon className="w-4 h-4 mr-3 text-purple-500" />
+                                                Billing
                                             </Link>
                                             <div className="border-t border-gray-100"></div>
                                             <button
