@@ -53,7 +53,7 @@ const AvatarModal: React.FC<AvatarModalProps> = ({ isOpen, onClose, onSelect }) 
                     <div className="flex justify-end gap-2 pt-2">
                         <button
                             onClick={onClose}
-                            className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
+                            className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none border-none"
                         >
                             Cancel
                         </button>
@@ -61,7 +61,7 @@ const AvatarModal: React.FC<AvatarModalProps> = ({ isOpen, onClose, onSelect }) 
                             onClick={() =>
                                 onSelect(`https://api.dicebear.com/8.x/${selectedStyle}/svg?seed=${currentSeed}`)
                             }
-                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none border-none"
                         >
                             Use Avatar
                         </button>
