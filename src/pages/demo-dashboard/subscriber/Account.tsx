@@ -1,11 +1,10 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import SubscriberDashboardLayout from './SubscriberDashboardLayout';
 import { motion } from 'framer-motion';
 import Swal from 'sweetalert2';
 import "react-datepicker/dist/react-datepicker.css";
 import Select2 from '../../../components/Select2';
 import { useUser } from '../../../contexts/UserContext';
-import Select from 'react-select';
 import { translations } from '../../../translations';
 import { useLanguage } from '../../../contexts/LanguageContext';
 import type { Language } from '../../../translations';
@@ -28,7 +27,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Account: React.FC = () => {
-    const { subscriber, error } = useUser();
+    const { subscriber, error, updateSubscriber } = useUser();
     const { currentLanguage } = useLanguage();
     const t = translations[currentLanguage];
     const isRTL = currentLanguage === 'ar';
@@ -39,6 +38,12 @@ const Account: React.FC = () => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [previewImage, setPreviewImage] = useState<string | null>(null);
     const [showCustomCountryInput, setShowCustomCountryInput] = useState(false);
+    const [isScrolling, setIsScrolling] = useState(false);
+
+    // Add refs for smooth scrolling
+    const profileSectionRef = useRef<HTMLDivElement>(null);
+    const securitySectionRef = useRef<HTMLDivElement>(null);
+    const addressSectionRef = useRef<HTMLDivElement>(null);
 
     // Form states
     const [profileData, setProfileData] = useState({
@@ -77,6 +82,26 @@ const Account: React.FC = () => {
         customCountry: ''
     });
 
+    // Original data for change detection
+    const [originalPersonalData, setOriginalPersonalData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        institution: '',
+        countryCode: ''
+    });
+
+    const [originalAddressData, setOriginalAddressData] = useState({
+        address1: '',
+        address2: '',
+        city: '',
+        state: '',
+        zip: '',
+        country: '',
+        customCountry: ''
+    });
+
     const [securityData, setSecurityData] = useState({
         currentPassword: '',
         newPassword: '',
@@ -102,12 +127,59 @@ const Account: React.FC = () => {
 
     // Country options from translations - memoized to prevent recreation
     const countryOptions = useMemo(() => [
-        ...Object.entries(t.countries).map(([value, label]) => ({
-            value,
-            label
+        ...Object.entries(t.countries).map(([value, label], index) => ({
+            value: index + 1,
+            label,
+            countryCode: value
         })),
-        { value: 'other', label: 'Other' }
+        { value: 999, label: 'Other', countryCode: 'other' }
     ], [t.countries]);
+
+    // Create a mapping for country codes to Select2 values
+    const countryCodeToValue = useMemo(() => {
+        const mapping: { [key: string]: number } = {};
+        countryOptions.forEach((option, index) => {
+            if (option.countryCode) {
+                mapping[option.countryCode] = option.value;
+            }
+        });
+        return mapping;
+    }, [countryOptions]);
+
+    // Create a mapping for Select2 values to country codes
+    const valueToCountryCode = useMemo(() => {
+        const mapping: { [key: number]: string } = {};
+        countryOptions.forEach((option) => {
+            if (option.countryCode) {
+                mapping[option.value] = option.countryCode;
+            }
+        });
+        return mapping;
+    }, [countryOptions]);
+
+    // Functions to check if data has changed
+    const hasPersonalDataChanged = useMemo(() => {
+        return (
+            personalData.firstName !== originalPersonalData.firstName ||
+            personalData.lastName !== originalPersonalData.lastName ||
+            personalData.email !== originalPersonalData.email ||
+            personalData.phone !== originalPersonalData.phone ||
+            personalData.institution !== originalPersonalData.institution ||
+            personalData.countryCode !== originalPersonalData.countryCode
+        );
+    }, [personalData, originalPersonalData]);
+
+    const hasAddressDataChanged = useMemo(() => {
+        return (
+            addressData.address1 !== originalAddressData.address1 ||
+            addressData.address2 !== originalAddressData.address2 ||
+            addressData.city !== originalAddressData.city ||
+            addressData.state !== originalAddressData.state ||
+            addressData.zip !== originalAddressData.zip ||
+            addressData.country !== originalAddressData.country ||
+            addressData.customCountry !== originalAddressData.customCountry
+        );
+    }, [addressData, originalAddressData]);
 
     // Validation functions
     const validateEmail = (email: string): boolean => {
@@ -294,17 +366,16 @@ const Account: React.FC = () => {
             setProfileData(newProfileData);
 
             // Set separate personal data
-            setPersonalData({
+            const newPersonalData = {
                 firstName: subscriber.user?.first_name || '',
                 lastName: subscriber.user?.last_name || '',
                 email: subscriber.user?.email || '',
                 phone: subscriber.user?.phone || '',
                 institution: subscriber.institution_name || '',
                 countryCode: subscriber.user?.country_code || ''
-            });
+            };
 
-            // Set separate address data
-            setAddressData({
+            const newAddressData = {
                 address1: subscriber.user?.primary_address || '',
                 address2: subscriber.user?.secondary_address || '',
                 city: subscriber.user?.city || '',
@@ -312,24 +383,33 @@ const Account: React.FC = () => {
                 zip: subscriber.user?.zip || '',
                 country: userCountry,
                 customCountry: ''
-            });
+            };
+
+            setPersonalData(newPersonalData);
+            setAddressData(newAddressData);
+
+            // Set original data for change detection
+            setOriginalPersonalData(newPersonalData);
+            setOriginalAddressData(newAddressData);
 
             // Check if the country exists in our options
-            const countryExists = countryOptions.some(option => option.value === userCountry);
-            console.log('Country exists in options:', countryExists, 'Available options:', countryOptions.map(opt => opt.value));
+            const countryExists = Object.keys(t.countries).includes(String(userCountry));
+            console.log('Country exists in options:', countryExists, 'Available options:', Object.keys(t.countries));
 
-            if (!countryExists && userCountry && userCountry !== 'lebanon') {
+            if (!countryExists && userCountry && String(userCountry) !== 'lebanon') {
                 // If country doesn't exist in options, set it as custom
+                const updatedAddressData = {
+                    ...newAddressData,
+                    country: 'other',
+                    customCountry: userCountry
+                };
                 setProfileData(prev => ({
                     ...prev,
                     country: 'other',
                     customCountry: userCountry
                 }));
-                setAddressData(prev => ({
-                    ...prev,
-                    country: 'other',
-                    customCountry: userCountry
-                }));
+                setAddressData(updatedAddressData);
+                setOriginalAddressData(updatedAddressData);
                 setShowCustomCountryInput(true);
             }
 
@@ -366,6 +446,25 @@ const Account: React.FC = () => {
         { id: 'address', name: 'Address', icon: MapPinIcon, color: 'text-green-500' },
     ];
 
+    const handleTabChange = (tabId: string) => {
+        setActiveTab(tabId);
+
+        // Smooth scroll to the appropriate section
+        setTimeout(() => {
+            switch (tabId) {
+                case 'profile':
+                    smoothScrollTo(profileSectionRef.current);
+                    break;
+                case 'security':
+                    smoothScrollTo(securitySectionRef.current);
+                    break;
+                case 'address':
+                    smoothScrollTo(addressSectionRef.current);
+                    break;
+            }
+        }, 100);
+    };
+
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -377,6 +476,19 @@ const Account: React.FC = () => {
         }
     };
 
+    // Add function to handle avatar creation
+    const handleCreateAvatar = () => {
+        // For now, we'll show a placeholder message
+        // In a real app, this would open an avatar creation modal or redirect to an avatar service
+        Swal.fire({
+            icon: 'info',
+            title: 'Avatar Creation',
+            text: 'Avatar creation feature will be available soon! You can customize your avatar with various options.',
+            confirmButtonText: 'Got it!',
+            confirmButtonColor: '#3B82F6'
+        });
+    };
+
     // Save personal information function
     const handleSavePersonal = async () => {
         // Validate data first
@@ -384,9 +496,34 @@ const Account: React.FC = () => {
             return;
         }
 
+        // Show scroll loader
+        setIsScrolling(true);
+
         try {
             // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 800));
+
+            // Update the user context with new personal data
+            if (subscriber) {
+                const updatedSubscriber = {
+                    ...subscriber,
+                    user: {
+                        ...subscriber.user!,
+                        first_name: personalData.firstName,
+                        last_name: personalData.lastName,
+                        email: personalData.email,
+                        phone: personalData.phone,
+                        country_code: personalData.countryCode
+                    },
+                    institution_name: personalData.institution
+                };
+                
+                // Update the context
+                updateSubscriber(updatedSubscriber);
+            }
+
+            // Update original data after successful save
+            setOriginalPersonalData(personalData);
 
             Swal.fire({
                 icon: 'success',
@@ -408,6 +545,8 @@ const Account: React.FC = () => {
                 timer: 3000
             });
         } finally {
+            // Hide scroll loader after a short delay
+            setTimeout(() => setIsScrolling(false), 500);
         }
     };
 
@@ -418,9 +557,34 @@ const Account: React.FC = () => {
             return;
         }
 
+        // Show scroll loader
+        setIsScrolling(true);
+
         try {
             // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 800));
+
+            // Update the user context with new address data
+            if (subscriber) {
+                const updatedSubscriber = {
+                    ...subscriber,
+                    user: {
+                        ...subscriber.user!,
+                        primary_address: addressData.address1,
+                        secondary_address: addressData.address2,
+                        city: addressData.city,
+                        state: addressData.state,
+                        zip: addressData.zip,
+                        country: addressData.country === 'other' ? addressData.customCountry : addressData.country
+                    }
+                };
+                
+                // Update the context
+                updateSubscriber(updatedSubscriber);
+            }
+
+            // Update original data after successful save
+            setOriginalAddressData(addressData);
 
             Swal.fire({
                 icon: 'success',
@@ -442,6 +606,8 @@ const Account: React.FC = () => {
                 timer: 3000
             });
         } finally {
+            // Hide scroll loader after a short delay
+            setTimeout(() => setIsScrolling(false), 500);
         }
     };
 
@@ -480,13 +646,13 @@ const Account: React.FC = () => {
     };
 
     // Handle address country change
-    const handleAddressCountryChange = (selectedOption: any) => {
-        if (selectedOption.value === 'other') {
+    const handleAddressCountryChange = (selectedValue: number) => {
+        if (selectedValue === 999) {
             setShowCustomCountryInput(true);
             setAddressData(prev => ({ ...prev, country: 'other' }));
         } else {
             setShowCustomCountryInput(false);
-            setAddressData(prev => ({ ...prev, country: selectedOption.value }));
+            setAddressData(prev => ({ ...prev, country: valueToCountryCode[selectedValue] }));
         }
 
         // Clear validation error for country when user makes a selection
@@ -724,6 +890,15 @@ const Account: React.FC = () => {
 
     const passwordStrength = checkPasswordStrength(securityData.newPassword);
 
+    // Add smooth scroll function with loading state
+    const smoothScrollTo = (element: HTMLElement | null) => {
+        if (element) {
+            setIsScrolling(true);
+            element.scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => setIsScrolling(false), 1000);
+        }
+    };
+
     const handlePasswordChange = async () => {
         if (securityData.newPassword !== securityData.confirmPassword) {
             Swal.fire({
@@ -734,8 +909,28 @@ const Account: React.FC = () => {
             return;
         }
 
+        // Show scroll loader
+        setIsScrolling(true);
+
         try {
             await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // Note: In a real application, passwords should be handled securely
+            // and typically not stored in the user context. This is just for demo purposes.
+            if (subscriber) {
+                const updatedSubscriber = {
+                    ...subscriber,
+                    user: {
+                        ...subscriber.user!,
+                        // In a real app, you would update a last_password_change timestamp
+                        // or handle password changes through a separate secure endpoint
+                        updatedAt: new Date()
+                    }
+                };
+                
+                // Update the context
+                updateSubscriber(updatedSubscriber);
+            }
 
             Swal.fire({
                 icon: 'success',
@@ -757,6 +952,9 @@ const Account: React.FC = () => {
                 title: 'Password Change Failed',
                 text: 'There was an error changing your password. Please try again.'
             });
+        } finally {
+            // Hide scroll loader after a short delay
+            setTimeout(() => setIsScrolling(false), 500);
         }
     };
 
@@ -782,16 +980,6 @@ const Account: React.FC = () => {
                                     </span>
                                 )}
                             </div>
-                            <label className="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                                <CameraIcon className="w-4 h-4 text-gray-600" />
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleImageUpload}
-                                    className="hidden"
-                                    aria-label="Upload profile image"
-                                />
-                            </label>
                         </div>
                         <div className="flex-1">
                             <h2 className="text-2xl font-bold text-gray-900">
@@ -809,6 +997,44 @@ const Account: React.FC = () => {
                             </div>
                         </div>
                     </div>
+                </div>
+
+                {/* Profile Image Action Buttons */}
+                <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                    <div className="relative">
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            className="hidden"
+                            id="profile-image-upload"
+                            aria-label="Upload profile image"
+                        />
+                        <label
+                            htmlFor="profile-image-upload"
+                            className="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors cursor-pointer font-medium text-sm"
+                        >
+                            <CameraIcon className="w-4 h-4 mr-2" />
+                            Change Photo
+                        </label>
+                    </div>
+                    <button
+                        onClick={handleCreateAvatar}
+                        className="inline-flex items-center px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors font-medium text-sm focus:outline-none border-none"
+                    >
+                        <UserCircleIcon className="w-4 h-4 mr-2" />
+                        Create Avatar
+                    </button>
+                </div>
+
+                {/* Image Upload Info */}
+                <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                    <p className="text-sm text-gray-600">
+                        <strong>Supported formats:</strong> JPG, PNG, GIF (Max 5MB)
+                    </p>
+                    <p className="text-sm text-gray-600 mt-1">
+                        <strong>Recommended size:</strong> 400x400 pixels or larger
+                    </p>
                 </div>
             </div>
 
@@ -940,7 +1166,11 @@ const Account: React.FC = () => {
                 <div className="flex justify-end mt-6">
                     <button
                         onClick={handleSavePersonal}
-                        className={`px-4 py-2 rounded-md transition-colors focus:outline-none bg-blue-500 text-white hover:bg-blue-600 `}
+                        disabled={!hasPersonalDataChanged}
+                        className={`px-4 py-2 rounded-md transition-colors focus:outline-none ${hasPersonalDataChanged
+                                ? 'bg-blue-500 text-white hover:bg-blue-600'
+                                : 'bg-gray-300 text-gray-500 cursor-not-allowed border-none'
+                            }`}
                     >
                         Save Changes
                     </button>
@@ -1229,37 +1459,13 @@ const Account: React.FC = () => {
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Country <span className="text-red-500">*</span>
                         </label>
-                        <Select
+                        <Select2
                             options={countryOptions}
-                            value={(() => {
-                                const selectedOption = countryOptions.find(option => option.value === addressData.country);
-                                return selectedOption || null;
-                            })()}
+                            value={countryCodeToValue[addressData.country] || undefined}
                             onChange={handleAddressCountryChange}
-                            styles={{
-                                ...customSelectStyles,
-                                control: (base: any, state: any) => ({
-                                    ...base,
-                                    minHeight: '42px',
-                                    height: '42px',
-                                    borderRadius: '0.75rem',
-                                    borderColor: state.isFocused
-                                        ? '#10B981'
-                                        : !addressValidation.country.isValid
-                                            ? '#EF4444'
-                                            : '#D1D5DB',
-                                    boxShadow: state.isFocused ? '0 0 0 2px rgba(16, 185, 129, 0.1)' : 'none',
-                                    '&:hover': {
-                                        borderColor: '#10B981'
-                                    },
-                                    backgroundColor: 'white',
-                                    fontSize: '0.875rem',
-                                    padding: '0.25rem 0.5rem'
-                                })
-                            }}
                             placeholder="Select your country"
-                            isSearchable
-                            noOptionsMessage={() => "No countries found"}
+                            isSearchable={true}
+                            className=""
                         />
                         {!addressValidation.country.isValid && (
                             <p className="mt-1 text-sm text-red-600">{addressValidation.country.message}</p>
@@ -1318,7 +1524,11 @@ const Account: React.FC = () => {
                 <div className="flex justify-end mt-6">
                     <button
                         onClick={handleSaveAddress}
-                        className={`px-4 py-2 rounded-md transition-colors focus:outline-none bg-green-500 text-white hover:bg-green-600`}
+                        disabled={!hasAddressDataChanged}
+                        className={`px-4 py-2 rounded-md transition-colors focus:outline-none border-none ${hasAddressDataChanged
+                                ? 'bg-green-500 text-white hover:bg-green-600'
+                                : 'bg-gray-300 text-gray-500 cursor-not-allowed border-none'
+                            }`}
                     >
                         Save Address
                     </button>
@@ -1359,7 +1569,7 @@ const Account: React.FC = () => {
                         {tabs.map((tab) => (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
+                                onClick={() => handleTabChange(tab.id)}
                                 className={`flex-1 flex items-center justify-center py-4 px-6 bg-transparent focus:outline-none font-medium text-sm transition-all duration-300 border-none relative group ${activeTab === tab.id
                                     ? 'text-white bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg transform scale-105'
                                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -1400,11 +1610,35 @@ const Account: React.FC = () => {
 
                 {/* Tab Content */}
                 <div className="min-h-[600px]">
-                    {activeTab === 'profile' && renderProfileTab()}
-                    {activeTab === 'security' && renderSecurityTab()}
-                    {activeTab === 'address' && renderAddressTab()}
+                    {activeTab === 'profile' && (
+                        <div ref={profileSectionRef}>
+                            {renderProfileTab()}
+                        </div>
+                    )}
+                    {activeTab === 'security' && (
+                        <div ref={securitySectionRef}>
+                            {renderSecurityTab()}
+                        </div>
+                    )}
+                    {activeTab === 'address' && (
+                        <div ref={addressSectionRef}>
+                            {renderAddressTab()}
+                        </div>
+                    )}
                 </div>
             </div>
+
+            {/* Add loading overlay for smooth scrolling */}
+            {isScrolling && (
+                <div className="fixed inset-0 bg-black bg-opacity-10 z-40 pointer-events-none">
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        <svg className="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
+                </div>
+            )}
         </SubscriberDashboardLayout>
     );
 };

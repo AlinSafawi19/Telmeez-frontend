@@ -77,7 +77,7 @@ const Checkout: React.FC<CheckoutProps> = ({
             value,
             label
         })),
-        { value: 'other', label: t.checkout.account_info.fields.other_country }
+        { value: 999, label: t.checkout.account_info.fields.other_country }
     ];
 
     // Initialize all state with saved values if available
