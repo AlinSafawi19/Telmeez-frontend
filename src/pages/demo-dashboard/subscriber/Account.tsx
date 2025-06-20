@@ -39,6 +39,8 @@ const Account: React.FC = () => {
     const [previewImage, setPreviewImage] = useState<string | null>(null);
     const [showCustomCountryInput, setShowCustomCountryInput] = useState(false);
     const [isScrolling, setIsScrolling] = useState(false);
+    const [hasProfileImageChanged, setHasProfileImageChanged] = useState(false);
+    const [isImageDeleted, setIsImageDeleted] = useState(false);
 
     // Add refs for smooth scrolling
     const profileSectionRef = useRef<HTMLDivElement>(null);
@@ -342,6 +344,7 @@ const Account: React.FC = () => {
 
     // Update profile data when subscriber data changes
     useEffect(() => {
+        setIsScrolling(true);
         console.log('Account component - subscriber data changed:', subscriber);
         if (subscriber && !isInitialized) {
             const userCountry = subscriber.user?.country || 'lebanon'; // Default to Lebanon if no country
@@ -431,7 +434,13 @@ const Account: React.FC = () => {
                 customCountry: ''
             });
         }
-    }, [subscriber, isInitialized]); // Removed countryOptions from dependencies
+
+        // Set loading to false when we have subscriber data or when there's an error
+        if (subscriber || error) {
+            setIsScrolling(false);
+        }
+
+    }, [subscriber, isInitialized, error]); // Added error to dependencies
 
     // Set up custom country input visibility based on saved data
     useEffect(() => {
@@ -471,9 +480,27 @@ const Account: React.FC = () => {
             const reader = new FileReader();
             reader.onload = (e) => {
                 setPreviewImage(e.target?.result as string);
+                setHasProfileImageChanged(true);
+                setIsImageDeleted(false);
             };
             reader.readAsDataURL(file);
         }
+    };
+
+    // Add function to handle image removal
+    const handleRemoveImage = () => {
+        setPreviewImage(null);
+        setHasProfileImageChanged(true);
+        setIsImageDeleted(true);
+    };
+
+    // Add function to handle canceling changes
+    const handleCancelChanges = () => {
+        setPreviewImage(null);
+        setHasProfileImageChanged(false);
+        setIsImageDeleted(false);
+        setPersonalData(originalPersonalData);
+        setAddressData(originalAddressData);
     };
 
     // Add function to handle avatar creation
@@ -517,7 +544,30 @@ const Account: React.FC = () => {
                     },
                     institution_name: personalData.institution
                 };
-                
+
+                // Handle profile image changes
+                if (hasProfileImageChanged) {
+                    if (isImageDeleted) {
+                        // Remove profile image from context
+                        updatedSubscriber.user!.profile_image_id = '';
+                        updatedSubscriber.profileImage = undefined;
+                    } else if (previewImage) {
+                        // Add new profile image to context
+                        const newImageId = `profile-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                        updatedSubscriber.user!.profile_image_id = newImageId;
+                        updatedSubscriber.profileImage = {
+                            id: newImageId,
+                            user_id: subscriber.id,
+                            file_name: `profile-${Date.now()}.jpg`,
+                            file_type: 'image/jpeg',
+                            file_url: previewImage,
+                            uploaded_at: new Date(),
+                            uploaded_by: subscriber.id,
+                            is_active: true
+                        };
+                    }
+                }
+
                 // Update the context
                 updateSubscriber(updatedSubscriber);
             }
@@ -525,15 +575,12 @@ const Account: React.FC = () => {
             // Update original data after successful save
             setOriginalPersonalData(personalData);
 
-            Swal.fire({
-                icon: 'success',
-                title: 'Personal Information Saved!',
-                text: 'Your personal information has been successfully updated.',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 2000
-            });
+            // Clear profile image change flag and preview after successful save
+            if (hasProfileImageChanged) {
+                setHasProfileImageChanged(false);
+                setPreviewImage(null);
+                setIsImageDeleted(false);
+            }
         } catch (error) {
             Swal.fire({
                 icon: 'error',
@@ -578,23 +625,13 @@ const Account: React.FC = () => {
                         country: addressData.country === 'other' ? addressData.customCountry : addressData.country
                     }
                 };
-                
+
                 // Update the context
                 updateSubscriber(updatedSubscriber);
             }
 
             // Update original data after successful save
             setOriginalAddressData(addressData);
-
-            Swal.fire({
-                icon: 'success',
-                title: 'Address Saved!',
-                text: 'Your address information has been successfully updated.',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 2000
-            });
         } catch (error) {
             Swal.fire({
                 icon: 'error',
@@ -927,18 +964,10 @@ const Account: React.FC = () => {
                         updatedAt: new Date()
                     }
                 };
-                
+
                 // Update the context
                 updateSubscriber(updatedSubscriber);
             }
-
-            Swal.fire({
-                icon: 'success',
-                title: 'Password Changed!',
-                text: 'Your password has been successfully updated.',
-                timer: 2000,
-                showConfirmButton: false
-            });
 
             setSecurityData(prev => ({
                 ...prev,
@@ -970,9 +999,9 @@ const Account: React.FC = () => {
                     <div className="flex items-center space-x-6">
                         <div className="relative">
                             <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                                {previewImage ? (
+                                {!isImageDeleted && previewImage ? (
                                     <img src={previewImage} alt="Profile" className="w-full h-full object-cover" />
-                                ) : subscriber?.profileImage?.file_url ? (
+                                ) : !isImageDeleted && subscriber?.profileImage?.file_url ? (
                                     <img src={subscriber.profileImage.file_url} alt="Profile" className="w-full h-full object-cover" />
                                 ) : (
                                     <span className="text-white text-2xl font-bold">
@@ -980,6 +1009,13 @@ const Account: React.FC = () => {
                                     </span>
                                 )}
                             </div>
+                            {/* New image indicator */}
+                            {hasProfileImageChanged && (
+                                <div className={`absolute -top-1 -right-1 text-white text-xs px-2 py-1 rounded-full font-medium animate-pulse ${isImageDeleted ? 'bg-red-500' : 'bg-blue-500'
+                                    }`}>
+                                    {isImageDeleted ? 'Deleted' : 'New'}
+                                </div>
+                            )}
                         </div>
                         <div className="flex-1">
                             <h2 className="text-2xl font-bold text-gray-900">
@@ -1025,6 +1061,17 @@ const Account: React.FC = () => {
                         <UserCircleIcon className="w-4 h-4 mr-2" />
                         Create Avatar
                     </button>
+                    {(subscriber?.profileImage?.file_url || previewImage || isImageDeleted) && (
+                        <button
+                            onClick={handleRemoveImage}
+                            className="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium text-sm focus:outline-none border-none"
+                        >
+                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Remove Photo
+                        </button>
+                    )}
                 </div>
 
                 {/* Image Upload Info */}
@@ -1035,6 +1082,12 @@ const Account: React.FC = () => {
                     <p className="text-sm text-gray-600 mt-1">
                         <strong>Recommended size:</strong> 400x400 pixels or larger
                     </p>
+                    {hasProfileImageChanged && (
+                        <p className={`text-sm font-medium mt-2 ${isImageDeleted ? 'text-red-600' : 'text-blue-600'
+                            }`}>
+                            {isImageDeleted ? '🗑️ Profile image deleted - ready to save' : '📸 New profile image ready to save'}
+                        </p>
+                    )}
                 </div>
             </div>
 
@@ -1163,13 +1216,21 @@ const Account: React.FC = () => {
                         />
                     </div>
                 </div>
-                <div className="flex justify-end mt-6">
+                <div className="flex justify-end mt-6 space-x-3">
+                    {(hasPersonalDataChanged || hasProfileImageChanged) && (
+                        <button
+                            onClick={handleCancelChanges}
+                            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors focus:outline-none"
+                        >
+                            Cancel
+                        </button>
+                    )}
                     <button
                         onClick={handleSavePersonal}
-                        disabled={!hasPersonalDataChanged}
-                        className={`px-4 py-2 rounded-md transition-colors focus:outline-none ${hasPersonalDataChanged
-                                ? 'bg-blue-500 text-white hover:bg-blue-600'
-                                : 'bg-gray-300 text-gray-500 cursor-not-allowed border-none'
+                        disabled={!hasPersonalDataChanged && !hasProfileImageChanged}
+                        className={`px-4 py-2 rounded-md transition-colors focus:outline-none ${(hasPersonalDataChanged || hasProfileImageChanged)
+                            ? 'bg-blue-500 text-white hover:bg-blue-600'
+                            : 'bg-gray-300 text-gray-500 cursor-not-allowed border-none'
                             }`}
                     >
                         Save Changes
@@ -1521,13 +1582,23 @@ const Account: React.FC = () => {
                         />
                     </div>
                 </div>
-                <div className="flex justify-end mt-6">
+                <div className="flex justify-end mt-6 space-x-3">
+                    {hasAddressDataChanged && (
+                        <button
+                            onClick={() => {
+                                setAddressData(originalAddressData);
+                            }}
+                            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors focus:outline-none"
+                        >
+                            Cancel
+                        </button>
+                    )}
                     <button
                         onClick={handleSaveAddress}
                         disabled={!hasAddressDataChanged}
                         className={`px-4 py-2 rounded-md transition-colors focus:outline-none border-none ${hasAddressDataChanged
-                                ? 'bg-green-500 text-white hover:bg-green-600'
-                                : 'bg-gray-300 text-gray-500 cursor-not-allowed border-none'
+                            ? 'bg-green-500 text-white hover:bg-green-600'
+                            : 'bg-gray-300 text-gray-500 cursor-not-allowed border-none'
                             }`}
                     >
                         Save Address
