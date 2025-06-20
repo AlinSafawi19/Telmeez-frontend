@@ -10,8 +10,6 @@ export interface User {
     subscriber_id: string
     user_status_id: string
     role_id: string
-    department_id: string
-    course_id: string
     user_preference_id: string
     is_online: boolean
     is_verified: boolean

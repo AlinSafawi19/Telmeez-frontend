@@ -9,4 +9,5 @@ export interface Department {
     is_active: boolean;
     is_deleted: boolean;
     is_archived: boolean;
+    head_of_department_id: string;
 }
