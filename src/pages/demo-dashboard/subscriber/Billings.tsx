@@ -44,7 +44,7 @@ const Billings: React.FC = () => {
     return (
         <SubscriberDashboardLayout>
             <div>
-                <h1>Billings</h1>
+
             </div>
         </SubscriberDashboardLayout>
     );

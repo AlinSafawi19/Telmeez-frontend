@@ -19,7 +19,6 @@ import {
     Bars3Icon,
     XMarkIcon,
     ChartBarIcon,
-    AcademicCapIcon,
     BuildingLibraryIcon,
     DocumentTextIcon,
     ShieldCheckIcon,
@@ -371,7 +370,9 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                         <p className="text-sm font-medium text-gray-900">
                                             {subscriber?.user?.first_name} {subscriber?.user?.last_name}
                                         </p>
-                                        <p className="text-xs text-gray-500">{subscriber?.role?.name}</p>
+                                        <p className="text-xs text-gray-500">
+                                            {subscriber?.roles?.find(role => role.id === subscriber?.user?.role_id)?.name}
+                                        </p>
                                     </div>
                                     <ChevronDownIcon className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${userDropdownOpen ? 'rotate-180' : ''}`} />
                                 </button>
@@ -394,7 +395,7 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                                 to="/demo-dashboard/subscriber/billing"
                                                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                             >
-                                                <CreditCardIcon className="w-4 h-4 mr-3 text-purple-500" />
+                                                <BuildingLibraryIcon className="w-4 h-4 mr-3 text-purple-500" />
                                                 Billing
                                             </Link>
                                             <div className="border-t border-gray-100"></div>

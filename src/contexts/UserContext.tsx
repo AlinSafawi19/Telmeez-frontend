@@ -23,13 +23,13 @@ export interface UserWithDetails extends Subscriber {
     preferences?: UserPreference;
     profileImage?: ProfileImage;
     payment?: Payment;
-    paymentMethod?: PaymentMethod;
-    plan?: Plan;
-    paymentStatus?: PaymentStatus;
+    payments?: Payment[];
+    paymentMethods?: PaymentMethod[];
+    plans?: Plan[];
+    paymentStatuses?: PaymentStatus[];
     billingAddress?: BillingAddress;
     user?: User;
-    role?: Role;
-    cardType?: CardType;
+    cardTypes?: CardType[];
     admins?: User[];
     roles?: Role[];
     departments?: Department[];
@@ -79,6 +79,9 @@ const dummySubscriberData: UserWithDetails = {
     id: 'demo-subscriber-001',
     last_payment_id: 'pay_001',
     institution_name: 'Demo University',
+    is_active: true,
+    recurrence: 'annually',
+    is_auto_renew: true,
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
     user: {
@@ -126,57 +129,199 @@ const dummySubscriberData: UserWithDetails = {
         uploaded_by: 'demo-subscriber-001',
         is_active: true
     },
-    payment: {
-        id: "pay_001",
-        payment_method_id: "pm_001",
-        plan_id: "plan_001",
-        final_price: "760.00",
-        next_payment_date: new Date("2025-07-20"),
-        payment_status_id: 'status_001',
-        promo_code_id: '',
-        subscriber_id: 'demo-subscriber-001',
-        billing_address_id: 'addr_001',
-        createdAt: new Date("2025-06-20")
-    },
-    paymentMethod: {
-        id: "pm_001",
-        card_number: "1234567890123456",
-        expiry_month: 12,
-        expiry_year: 2025,
-        cvv: "123",
-        subscriber_id: "demo-subscriber-001",
-        card_type_id: "card_type_001",
-        is_default: true,
-        updated_at: new Date(),
-        createdAt: new Date("2025-06-20")
-    },
-    cardType: {
-        id: "card_type_001",
-        name: "Visa",
-        createdAt: new Date("2025-06-20"),
-        updatedAt: new Date("2025-06-20")
-    },
-    plan: {
-        id: "plan_001",
-        name: "Standard Plan",
-        price: "950",
-        description: "Perfect for growing educational institutions",
-        is_annual: true,
-        discount: 20,
-        free_trial_days: 0,
-        max_admin: 10,
-        max_teacher: 150,
-        max_student: 1500,
-        max_parent: 750,
-        createdAt: new Date("2025-06-20"),
-        updatedAt: new Date("2025-06-20")
-    },
-    paymentStatus: {
-        id: "status_001",
-        name: "Completed",
-        createdAt: new Date("2025-06-20"),
-        updated_at: new Date("2025-06-20"),
-    },
+    payments: [
+        {
+            id: "pay_001",
+            payment_method_id: "pm_001",
+            plan_id: "plan_001",
+            final_price: "760.00",
+            next_payment_date: new Date("2025-07-20"),
+            payment_status_id: 'status_001',
+            promo_code_id: '',
+            subscriber_id: 'demo-subscriber-001',
+            billing_address_id: 'addr_001',
+            createdAt: new Date("2025-06-20")
+        },
+        {
+            id: "pay_002",
+            payment_method_id: "pm_001",
+            plan_id: "plan_001",
+            final_price: "760.00",
+            next_payment_date: new Date("2025-05-20"),
+            payment_status_id: 'status_001',
+            promo_code_id: 'PROMO20',
+            subscriber_id: 'demo-subscriber-001',
+            billing_address_id: 'addr_001',
+            createdAt: new Date("2025-05-20")
+        },
+        {
+            id: "pay_003",
+            payment_method_id: "pm_002",
+            plan_id: "plan_002",
+            final_price: "1200.00",
+            next_payment_date: new Date("2025-04-20"),
+            payment_status_id: 'status_001',
+            promo_code_id: '',
+            subscriber_id: 'demo-subscriber-001',
+            billing_address_id: 'addr_002',
+            createdAt: new Date("2025-04-20")
+        },
+        {
+            id: "pay_004",
+            payment_method_id: "pm_001",
+            plan_id: "plan_001",
+            final_price: "950.00",
+            next_payment_date: new Date("2025-03-20"),
+            payment_status_id: 'status_002',
+            promo_code_id: '',
+            subscriber_id: 'demo-subscriber-001',
+            billing_address_id: 'addr_001',
+            createdAt: new Date("2025-03-20")
+        },
+        {
+            id: "pay_005",
+            payment_method_id: "pm_003",
+            plan_id: "plan_003",
+            final_price: "1500.00",
+            next_payment_date: new Date("2025-02-20"),
+            payment_status_id: 'status_003',
+            promo_code_id: 'WELCOME50',
+            subscriber_id: 'demo-subscriber-001',
+            billing_address_id: 'addr_003',
+            createdAt: new Date("2025-02-20")
+        }
+    ],
+    paymentMethods: [
+        {
+            id: "pm_001",
+            card_number: "1234567890123456",
+            expiry_month: 12,
+            expiry_year: 2025,
+            cvv: "123",
+            subscriber_id: "demo-subscriber-001",
+            card_type_id: "card_type_001",
+            is_default: true,
+            updated_at: new Date(),
+            createdAt: new Date("2025-06-20")
+        },
+        {
+            id: "pm_002",
+            card_number: "9876543210987654",
+            expiry_month: 8,
+            expiry_year: 2026,
+            cvv: "456",
+            subscriber_id: "demo-subscriber-001",
+            card_type_id: "card_type_002",
+            is_default: false,
+            updated_at: new Date(),
+            createdAt: new Date("2025-05-15")
+        },
+        {
+            id: "pm_003",
+            card_number: "5555666677778888",
+            expiry_month: 3,
+            expiry_year: 2024,
+            cvv: "789",
+            subscriber_id: "demo-subscriber-001",
+            card_type_id: "card_type_001",
+            is_default: false,
+            updated_at: new Date(),
+            createdAt: new Date("2025-02-10")
+        }
+    ],
+    cardTypes: [
+        {
+            id: "card_type_001",
+            name: "Visa",
+            createdAt: new Date("2025-06-20"),
+            updatedAt: new Date("2025-06-20")
+        },
+        {
+            id: "card_type_002",
+            name: "Mastercard",
+            createdAt: new Date("2025-06-20"),
+            updatedAt: new Date("2025-06-20")
+        },
+        {
+            id: "card_type_003",
+            name: "American Express",
+            createdAt: new Date("2025-06-20"),
+            updatedAt: new Date("2025-06-20")
+        }
+    ],
+    plans: [
+        {
+            id: "plan_002",
+            name: "Starter Plan",
+            pricepermonth: "49",
+            description: "Perfect for tutoring centers and small schools",
+            discountperyear: 25,
+            max_admin: 3,
+            max_teacher: 25,
+            max_student: 250,
+            max_parent: 125,
+            createdAt: new Date("2025-06-20"),
+            updatedAt: new Date("2025-06-20")
+        },
+        {
+            id: "plan_002",
+            name: "Standard Plan",
+            pricepermonth: "99",
+            description: "Perfect for growing educational institutions",
+            discountperyear: 20,
+            max_admin: 10,
+            max_teacher: 150,
+            max_student: 1500,
+            max_parent: 750,
+            createdAt: new Date("2025-06-20"),
+            updatedAt: new Date("2025-06-20")
+        },
+        {
+            id: "plan_003",
+            name: "Enterprise Plan",
+            pricepermonth: "299",
+            description: "For institutions big in size and high in demands",
+            discountperyear: 20,
+            max_admin: null,
+            max_teacher: null,
+            max_student: null,
+            max_parent: null,
+            createdAt: new Date("2025-06-20"),
+            updatedAt: new Date("2025-06-20")
+        }
+    ],
+    paymentStatuses: [
+        {
+            id: "status_001",
+            name: "Completed",
+            createdAt: new Date("2025-06-20"),
+            updated_at: new Date("2025-06-20"),
+        },
+        {
+            id: "status_002",
+            name: "Failed",
+            createdAt: new Date("2025-06-20"),
+            updated_at: new Date("2025-06-20"),
+        },
+        {
+            id: "status_003",
+            name: "Pending",
+            createdAt: new Date("2025-06-20"),
+            updated_at: new Date("2025-06-20"),
+        },
+        {
+            id: "status_004",
+            name: "Refunded",
+            createdAt: new Date("2025-06-20"),
+            updated_at: new Date("2025-06-20"),
+        },
+        {
+            id: "status_005",
+            name: "Cancelled",
+            createdAt: new Date("2025-06-20"),
+            updated_at: new Date("2025-06-20"),
+        }
+    ],
     billingAddress: {
         id: "addr_001",
         subscriber_id: 'demo-subscriber-001',
@@ -186,12 +331,6 @@ const dummySubscriberData: UserWithDetails = {
         state: 'Demo State',
         zip: '12345',
         country: 'United States',
-        createdAt: new Date("2025-06-20"),
-        updatedAt: new Date("2025-06-20"),
-    },
-    role: {
-        id: "role_001",
-        name: "SuperAdmin",
         createdAt: new Date("2025-06-20"),
         updatedAt: new Date("2025-06-20"),
     },

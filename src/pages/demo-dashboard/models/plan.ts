@@ -1,15 +1,13 @@
 export interface Plan {
     id: string;
     name: string;
-    price: string;
+    pricepermonth: string;
     description: string;
-    is_annual: boolean;
-    discount: number;
-    free_trial_days: number;
-    max_admin: number;
-    max_teacher: number;
-    max_student: number;
-    max_parent: number;
+    discountperyear: number;
+    max_admin: number | null;
+    max_teacher: number | null;
+    max_student: number | null;
+    max_parent: number | null;
     createdAt: Date;
     updatedAt: Date;
 }
