@@ -1129,7 +1129,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                         borderRadius: '0.5rem',
                                                         borderColor: '#D1D5DB'
                                                     }}
-                                                    countryCodeEditable={false}
+                                                    countryCodeEditable={true}
                                                 />
 
                                                 {errors.billing?.phone && (

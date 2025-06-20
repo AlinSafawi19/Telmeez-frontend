@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import SubscriberDashboardLayout from './SubscriberDashboardLayout';
 import { motion } from 'framer-motion';
 import Swal from 'sweetalert2';
@@ -6,6 +6,12 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import Select2 from '../../../components/Select2';
 import { useUser } from '../../../contexts/UserContext';
+import Select from 'react-select';
+import { translations } from '../../../translations';
+import { useLanguage } from '../../../contexts/LanguageContext';
+import type { Language } from '../../../translations';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 import {
     UserCircleIcon,
@@ -13,27 +19,34 @@ import {
     EyeIcon,
     EyeSlashIcon,
     CameraIcon,
-    PencilIcon,
+    CheckIcon,
     KeyIcon,
     CalendarIcon,
     StarIcon,
-    MapPinIcon
+    MapPinIcon,
+    ExclamationTriangleIcon,
+    InformationCircleIcon
 } from '@heroicons/react/24/outline';
 
 const Account: React.FC = () => {
     const { subscriber, isLoading, error } = useUser();
+    const { currentLanguage } = useLanguage();
+    const t = translations[currentLanguage];
+    const isRTL = currentLanguage === 'ar';
+
     const [activeTab, setActiveTab] = useState('profile');
-    const [isEditing, setIsEditing] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [previewImage, setPreviewImage] = useState<string | null>(null);
+    const [showCustomCountryInput, setShowCustomCountryInput] = useState(false);
 
     // Form states
     const [profileData, setProfileData] = useState({
         firstName: '',
         lastName: '',
         email: '',
+        countryCode: '',
         phone: '',
         institution: '',
         address1: '',
@@ -41,7 +54,28 @@ const Account: React.FC = () => {
         city: '',
         state: '',
         zip: '',
-        country: ''
+        country: '',
+        customCountry: ''
+    });
+
+    // Separate data for personal and address info
+    const [personalData, setPersonalData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        institution: '',
+        countryCode: ''
+    });
+
+    const [addressData, setAddressData] = useState({
+        address1: '',
+        address2: '',
+        city: '',
+        state: '',
+        zip: '',
+        country: '',
+        customCountry: ''
     });
 
     const [securityData, setSecurityData] = useState({
@@ -49,6 +83,179 @@ const Account: React.FC = () => {
         newPassword: '',
         confirmPassword: '',
     });
+
+    // Validation states
+    const [personalValidation, setPersonalValidation] = useState({
+        firstName: { isValid: true, message: '' },
+        lastName: { isValid: true, message: '' },
+        email: { isValid: true, message: '' },
+        phone: { isValid: true, message: '' }
+    });
+
+    const [addressValidation, setAddressValidation] = useState({
+        address1: { isValid: true, message: '' },
+        city: { isValid: true, message: '' },
+        state: { isValid: true, message: '' },
+        zip: { isValid: true, message: '' },
+        country: { isValid: true, message: '' },
+        customCountry: { isValid: true, message: '' }
+    });
+
+    // Country options from translations - memoized to prevent recreation
+    const countryOptions = useMemo(() => [
+        ...Object.entries(t.countries).map(([value, label]) => ({
+            value,
+            label
+        })),
+        { value: 'other', label: 'Other' }
+    ], [t.countries]);
+
+    // Validation functions
+    const validateEmail = (email: string): boolean => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePersonalData = (): boolean => {
+        const newValidation = {
+            firstName: { isValid: true, message: '' },
+            lastName: { isValid: true, message: '' },
+            email: { isValid: true, message: '' },
+            phone: { isValid: true, message: '' }
+        };
+
+        // Validate first name
+        if (!personalData.firstName.trim()) {
+            newValidation.firstName = { isValid: false, message: 'First name is required' };
+        } else if (personalData.firstName.trim().length < 2) {
+            newValidation.firstName = { isValid: false, message: 'First name must be at least 2 characters' };
+        }
+
+        // Validate last name
+        if (!personalData.lastName.trim()) {
+            newValidation.lastName = { isValid: false, message: 'Last name is required' };
+        } else if (personalData.lastName.trim().length < 2) {
+            newValidation.lastName = { isValid: false, message: 'Last name must be at least 2 characters' };
+        }
+
+        // Validate email
+        if (!personalData.email.trim()) {
+            newValidation.email = { isValid: false, message: 'Email is required' };
+        } else if (!validateEmail(personalData.email.trim())) {
+            newValidation.email = { isValid: false, message: 'Please enter a valid email address' };
+        }
+
+        // Validate phone
+        if (!personalData.phone.trim()) {
+            newValidation.phone = { isValid: false, message: 'Phone number is required' };
+        } 
+
+        setPersonalValidation(newValidation);
+
+        // Return true if all validations pass
+        return Object.values(newValidation).every(validation => validation.isValid);
+    };
+
+    const validateAddressData = (): boolean => {
+        const newValidation = {
+            address1: { isValid: true, message: '' },
+            city: { isValid: true, message: '' },
+            state: { isValid: true, message: '' },
+            zip: { isValid: true, message: '' },
+            country: { isValid: true, message: '' },
+            customCountry: { isValid: true, message: '' }
+        };
+
+        // Validate address line 1
+        if (!addressData.address1.trim()) {
+            newValidation.address1 = { isValid: false, message: 'Address line 1 is required' };
+        }
+
+        // Validate city
+        if (!addressData.city.trim()) {
+            newValidation.city = { isValid: false, message: 'City is required' };
+        }
+
+        // Validate state/province
+        if (!addressData.state.trim()) {
+            newValidation.state = { isValid: false, message: 'State/Province is required' };
+        }
+
+        // Validate ZIP/Postal code
+        if (!addressData.zip.trim()) {
+            newValidation.zip = { isValid: false, message: 'ZIP/Postal code is required' };
+        }
+
+        // Validate country
+        if (!addressData.country) {
+            newValidation.country = { isValid: false, message: 'Country is required' };
+        }
+
+        // Validate custom country if "other" is selected
+        if (addressData.country === 'other' && !addressData.customCountry.trim()) {
+            newValidation.customCountry = { isValid: false, message: 'Please enter your country' };
+        }
+
+        setAddressValidation(newValidation);
+
+        // Return true if all validations pass
+        return Object.values(newValidation).every(validation => validation.isValid);
+    };
+
+    // Custom select styles
+    const customSelectStyles = {
+        control: (base: any, state: any) => ({
+            ...base,
+            minHeight: '42px',
+            height: '42px',
+            borderRadius: '0.75rem',
+            borderColor: state.isFocused ? '#3B82F6' : '#D1D5DB',
+            boxShadow: state.isFocused ? '0 0 0 2px rgba(59, 130, 246, 0.1)' : 'none',
+            '&:hover': {
+                borderColor: '#3B82F6'
+            },
+            backgroundColor: 'white',
+            fontSize: '0.875rem',
+            padding: '0.25rem 0.5rem'
+        }),
+        option: (base: any, state: any) => ({
+            ...base,
+            backgroundColor: state.isSelected ? '#3B82F6' : state.isFocused ? '#EFF6FF' : 'white',
+            color: state.isSelected ? 'white' : '#1F2937',
+            fontSize: '0.875rem',
+            padding: '0.5rem 0.75rem',
+            '&:hover': {
+                backgroundColor: state.isSelected ? '#3B82F6' : '#EFF6FF'
+            }
+        }),
+        menu: (base: any) => ({
+            ...base,
+            borderRadius: '0.75rem',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+            zIndex: 50
+        }),
+        input: (base: any) => ({
+            ...base,
+            margin: 0,
+            padding: 0,
+            fontSize: '0.875rem'
+        }),
+        valueContainer: (base: any) => ({
+            ...base,
+            padding: 0,
+            margin: 0
+        }),
+        singleValue: (base: any) => ({
+            ...base,
+            fontSize: '0.875rem',
+            color: '#1F2937'
+        }),
+        placeholder: (base: any) => ({
+            ...base,
+            fontSize: '0.875rem',
+            color: '#6B7280'
+        })
+    };
 
     // Debug logging
     useEffect(() => {
@@ -60,11 +267,17 @@ const Account: React.FC = () => {
         });
     }, [subscriber, isLoading, error, profileData]);
 
+    // Add a flag to track if data has been initially loaded
+    const [isInitialized, setIsInitialized] = useState(false);
+
     // Update profile data when subscriber data changes
     useEffect(() => {
         console.log('Account component - subscriber data changed:', subscriber);
-        if (subscriber) {
-            setProfileData({
+        if (subscriber && !isInitialized) {
+            const userCountry = subscriber.user?.country || 'lebanon'; // Default to Lebanon if no country
+            console.log('User country from data:', userCountry);
+
+            const newProfileData = {
                 firstName: subscriber.user?.first_name || '',
                 lastName: subscriber.user?.last_name || '',
                 email: subscriber.user?.email || '',
@@ -75,8 +288,56 @@ const Account: React.FC = () => {
                 city: subscriber.user?.city || '',
                 state: subscriber.user?.state || '',
                 zip: subscriber.user?.zip || '',
-                country: subscriber.user?.country || ''
+                countryCode: subscriber.user?.country_code || '',
+                country: userCountry,
+                customCountry: ''
+            };
+
+            setProfileData(newProfileData);
+
+            // Set separate personal data
+            setPersonalData({
+                firstName: subscriber.user?.first_name || '',
+                lastName: subscriber.user?.last_name || '',
+                email: subscriber.user?.email || '',
+                phone: subscriber.user?.phone || '',
+                institution: subscriber.institution_name || '',
+                countryCode: subscriber.user?.country_code || ''
             });
+
+            // Set separate address data
+            setAddressData({
+                address1: subscriber.user?.primary_address || '',
+                address2: subscriber.user?.secondary_address || '',
+                city: subscriber.user?.city || '',
+                state: subscriber.user?.state || '',
+                zip: subscriber.user?.zip || '',
+                country: userCountry,
+                customCountry: ''
+            });
+
+            // Check if the country exists in our options
+            const countryExists = countryOptions.some(option => option.value === userCountry);
+            console.log('Country exists in options:', countryExists, 'Available options:', countryOptions.map(opt => opt.value));
+
+            if (!countryExists && userCountry && userCountry !== 'lebanon') {
+                // If country doesn't exist in options, set it as custom
+                setProfileData(prev => ({
+                    ...prev,
+                    country: 'other',
+                    customCountry: userCountry
+                }));
+                setAddressData(prev => ({
+                    ...prev,
+                    country: 'other',
+                    customCountry: userCountry
+                }));
+                setShowCustomCountryInput(true);
+            }
+
+            // Mark as initialized to prevent future overwrites
+            setIsInitialized(true);
+
             console.log('Account component - profile data updated:', {
                 firstName: subscriber.user?.first_name || '',
                 lastName: subscriber.user?.last_name || '',
@@ -88,10 +349,18 @@ const Account: React.FC = () => {
                 city: subscriber.user?.city || '',
                 state: subscriber.user?.state || '',
                 zip: subscriber.user?.zip || '',
-                country: subscriber.user?.country || ''
+                country: userCountry,
+                customCountry: ''
             });
         }
-    }, [subscriber]);
+    }, [subscriber, isInitialized]); // Removed countryOptions from dependencies
+
+    // Set up custom country input visibility based on saved data
+    useEffect(() => {
+        if (profileData.country === 'other') {
+            setShowCustomCountryInput(true);
+        }
+    }, [profileData.country]);
 
     const tabs = [
         { id: 'profile', name: 'Profile', icon: UserCircleIcon, color: 'text-blue-500' },
@@ -110,28 +379,374 @@ const Account: React.FC = () => {
         }
     };
 
-    const handleSaveProfile = async () => {
+    const handleCountryChange = (selectedOption: any) => {
+        if (selectedOption.value === 'other') {
+            setShowCustomCountryInput(true);
+            setProfileData(prev => ({ ...prev, country: 'other' }));
+        } else {
+            setShowCustomCountryInput(false);
+            setProfileData(prev => ({ ...prev, country: selectedOption.value }));
+        }
+    };
+
+    const handleCustomCountryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setProfileData(prev => ({ ...prev, customCountry: e.target.value }));
+    };
+
+    const handleProfileDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setProfileData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    // Save personal information function
+    const handleSavePersonal = async () => {
+        // Validate data first
+        if (!validatePersonalData()) {
+            return;
+        }
+
         try {
             // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 800));
 
             Swal.fire({
                 icon: 'success',
-                title: 'Profile Updated!',
-                text: 'Your profile information has been successfully updated.',
-                timer: 2000,
-                showConfirmButton: false
+                title: 'Personal Information Saved!',
+                text: 'Your personal information has been successfully updated.',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000
             });
-
-            setIsEditing(false);
         } catch (error) {
             Swal.fire({
                 icon: 'error',
-                title: 'Update Failed',
-                text: 'There was an error updating your profile. Please try again.'
+                title: 'Save Failed',
+                text: 'There was an error saving your personal information. Please try again.',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
             });
+        } finally {
         }
     };
+
+    // Save address function
+    const handleSaveAddress = async () => {
+        // Validate data first
+        if (!validateAddressData()) {
+            return;
+        }
+
+        try {
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Address Saved!',
+                text: 'Your address information has been successfully updated.',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Save Failed',
+                text: 'There was an error saving your address. Please try again.',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        } finally {
+        }
+    };
+
+    // Handle personal data changes
+    const handlePersonalDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setPersonalData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+
+        // Clear validation error for this field when user starts typing
+        if (personalValidation[name as keyof typeof personalValidation]?.isValid === false) {
+            setPersonalValidation(prev => ({
+                ...prev,
+                [name]: { isValid: true, message: '' }
+            }));
+        }
+    };
+
+    // Handle address data changes
+    const handleAddressDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setAddressData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+
+        // Clear validation error for this field when user starts typing
+        if (addressValidation[name as keyof typeof addressValidation]?.isValid === false) {
+            setAddressValidation(prev => ({
+                ...prev,
+                [name]: { isValid: true, message: '' }
+            }));
+        }
+    };
+
+    // Handle address country change
+    const handleAddressCountryChange = (selectedOption: any) => {
+        if (selectedOption.value === 'other') {
+            setShowCustomCountryInput(true);
+            setAddressData(prev => ({ ...prev, country: 'other' }));
+        } else {
+            setShowCustomCountryInput(false);
+            setAddressData(prev => ({ ...prev, country: selectedOption.value }));
+        }
+
+        // Clear validation error for country when user makes a selection
+        if (addressValidation.country.isValid === false) {
+            setAddressValidation(prev => ({
+                ...prev,
+                country: { isValid: true, message: '' }
+            }));
+        }
+    };
+
+    // Handle address custom country change
+    const handleAddressCustomCountryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setAddressData(prev => ({ ...prev, customCountry: e.target.value }));
+
+        // Clear validation error for custom country when user starts typing
+        if (addressValidation.customCountry.isValid === false) {
+            setAddressValidation(prev => ({
+                ...prev,
+                customCountry: { isValid: true, message: '' }
+            }));
+        }
+    };
+
+    // Handle phone change for PhoneInput
+    const handlePhoneChange = (value: string) => {
+        setPersonalData(prev => ({
+            ...prev,
+            phone: value
+        }));
+
+        // Clear validation error for phone when user starts typing
+        if (personalValidation.phone.isValid === false) {
+            setPersonalValidation(prev => ({
+                ...prev,
+                phone: { isValid: true, message: '' }
+            }));
+        }
+    };
+
+    // Map country codes to PhoneInput country codes
+    const getPhoneInputCountry = (countryCode: string): string => {
+        const countryMap: { [key: string]: string } = {
+            'us': 'us',
+            'gb': 'gb',
+            'ca': 'ca',
+            'au': 'au',
+            'de': 'de',
+            'fr': 'fr',
+            'it': 'it',
+            'es': 'es',
+            'nl': 'nl',
+            'be': 'be',
+            'ch': 'ch',
+            'at': 'at',
+            'se': 'se',
+            'no': 'no',
+            'dk': 'dk',
+            'fi': 'fi',
+            'pl': 'pl',
+            'cz': 'cz',
+            'hu': 'hu',
+            'ro': 'ro',
+            'bg': 'bg',
+            'hr': 'hr',
+            'si': 'si',
+            'sk': 'sk',
+            'ee': 'ee',
+            'lv': 'lv',
+            'lt': 'lt',
+            'pt': 'pt',
+            'ie': 'ie',
+            'gr': 'gr',
+            'cy': 'cy',
+            'mt': 'mt',
+            'lu': 'lu',
+            'li': 'li',
+            'mc': 'mc',
+            'sm': 'sm',
+            'va': 'va',
+            'ad': 'ad',
+            'and': 'ad',
+            'al': 'al',
+            'ba': 'ba',
+            'me': 'me',
+            'mk': 'mk',
+            'rs': 'rs',
+            'xk': 'xk',
+            'ua': 'ua',
+            'by': 'by',
+            'md': 'md',
+            'ru': 'ru',
+            'kz': 'kz',
+            'uz': 'uz',
+            'kg': 'kg',
+            'tj': 'tj',
+            'tm': 'tm',
+            'az': 'az',
+            'ge': 'ge',
+            'am': 'am',
+            'tr': 'tr',
+            'il': 'il',
+            'jo': 'jo',
+            'lb': 'lb',
+            'sy': 'sy',
+            'iq': 'iq',
+            'ir': 'ir',
+            'kw': 'kw',
+            'sa': 'sa',
+            'ye': 'ye',
+            'om': 'om',
+            'ae': 'ae',
+            'qa': 'qa',
+            'bh': 'bh',
+            'eg': 'eg',
+            'ly': 'ly',
+            'tn': 'tn',
+            'dz': 'dz',
+            'ma': 'ma',
+            'mr': 'mr',
+            'ml': 'ml',
+            'ne': 'ne',
+            'td': 'td',
+            'sd': 'sd',
+            'er': 'er',
+            'dj': 'dj',
+            'so': 'so',
+            'et': 'et',
+            'ke': 'ke',
+            'ug': 'ug',
+            'tz': 'tz',
+            'rw': 'rw',
+            'bi': 'bi',
+            'mw': 'mw',
+            'zm': 'zm',
+            'zw': 'zw',
+            'bw': 'bw',
+            'na': 'na',
+            'sz': 'sz',
+            'ls': 'ls',
+            'za': 'za',
+            'mg': 'mg',
+            'mu': 'mu',
+            'km': 'km',
+            'sc': 'sc',
+            'com': 'km',
+            're': 're',
+            'yt': 'yt',
+            'mz': 'mz',
+            'ao': 'ao',
+            'cg': 'cg',
+            'cd': 'cd',
+            'ga': 'ga',
+            'gq': 'gq',
+            'cm': 'cm',
+            'cf': 'cf',
+            'st': 'st',
+            'ng': 'ng',
+            'gh': 'gh',
+            'ci': 'ci',
+            'bf': 'bf',
+            'sn': 'sn',
+            'gm': 'gm',
+            'gn': 'gn',
+            'gw': 'gw',
+            'sl': 'sl',
+            'lr': 'lr',
+            'tg': 'tg',
+            'bj': 'bj',
+            'cv': 'cv'
+        };
+
+        return countryMap[countryCode.toLowerCase()] || 'us';
+    };
+
+    // Password strength checker
+    const checkPasswordStrength = (password: string) => {
+        let score = 0;
+        const feedback: string[] = [];
+
+        if (password.length >= 8) {
+            score += 1;
+        } else {
+            feedback.push('At least 8 characters');
+        }
+
+        if (/[a-z]/.test(password)) {
+            score += 1;
+        } else {
+            feedback.push('Include lowercase letters');
+        }
+
+        if (/[A-Z]/.test(password)) {
+            score += 1;
+        } else {
+            feedback.push('Include uppercase letters');
+        }
+
+        if (/[0-9]/.test(password)) {
+            score += 1;
+        } else {
+            feedback.push('Include numbers');
+        }
+
+        if (/[^A-Za-z0-9]/.test(password)) {
+            score += 1;
+        } else {
+            feedback.push('Include special characters');
+        }
+
+        if (password.length >= 12) {
+            score += 1;
+        }
+
+        return { score, feedback, strength: score < 2 ? 'weak' : score < 4 ? 'medium' : 'strong' };
+    };
+
+    const getPasswordStrengthColor = (strength: string) => {
+        switch (strength) {
+            case 'weak': return 'text-red-500';
+            case 'medium': return 'text-yellow-500';
+            case 'strong': return 'text-green-500';
+            default: return 'text-gray-500';
+        }
+    };
+
+    const getPasswordStrengthBg = (strength: string) => {
+        switch (strength) {
+            case 'weak': return 'bg-red-500';
+            case 'medium': return 'bg-yellow-500';
+            case 'strong': return 'bg-green-500';
+            default: return 'bg-gray-300';
+        }
+    };
+
+    const passwordStrength = checkPasswordStrength(securityData.newPassword);
 
     const handlePasswordChange = async () => {
         if (securityData.newPassword !== securityData.confirmPassword) {
@@ -177,52 +792,47 @@ const Account: React.FC = () => {
         >
             {/* Profile Header */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <div className="flex items-center space-x-6">
-                    <div className="relative">
-                        <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                            {previewImage ? (
-                                <img src={previewImage} alt="Profile" className="w-full h-full object-cover" />
-                            ) : subscriber?.profileImage?.file_url ? (
-                                <img src={subscriber.profileImage.file_url} alt="Profile" className="w-full h-full object-cover" />
-                            ) : (
-                                <span className="text-white text-2xl font-bold">
-                                    {subscriber?.user?.first_name?.[0]}{subscriber?.user?.last_name?.[0]}
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-6">
+                        <div className="relative">
+                            <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                                {previewImage ? (
+                                    <img src={previewImage} alt="Profile" className="w-full h-full object-cover" />
+                                ) : subscriber?.profileImage?.file_url ? (
+                                    <img src={subscriber.profileImage.file_url} alt="Profile" className="w-full h-full object-cover" />
+                                ) : (
+                                    <span className="text-white text-2xl font-bold">
+                                        {subscriber?.user?.first_name?.[0]}{subscriber?.user?.last_name?.[0]}
+                                    </span>
+                                )}
+                            </div>
+                            <label className="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                <CameraIcon className="w-4 h-4 text-gray-600" />
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageUpload}
+                                    className="hidden"
+                                    aria-label="Upload profile image"
+                                />
+                            </label>
+                        </div>
+                        <div className="flex-1">
+                            <h2 className="text-2xl font-bold text-gray-900">
+                                {subscriber?.user?.first_name} {subscriber?.user?.last_name}
+                            </h2>
+                            <div className="flex items-center mt-2 space-x-4 text-sm text-gray-500">
+                                <span className="flex items-center">
+                                    <CalendarIcon className="w-4 h-4 mr-1" />
+                                    Member since {new Date(subscriber?.createdAt || '').toLocaleDateString()}
                                 </span>
-                            )}
-                        </div>
-                        <label className="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-lg cursor-pointer hover:bg-gray-50">
-                            <CameraIcon className="w-4 h-4 text-gray-600" />
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageUpload}
-                                className="hidden"
-                                aria-label="Upload profile image"
-                            />
-                        </label>
-                    </div>
-                    <div className="flex-1">
-                        <h2 className="text-2xl font-bold text-gray-900">
-                            {subscriber?.user?.first_name} {subscriber?.user?.last_name}
-                        </h2>
-                        <div className="flex items-center mt-2 space-x-4 text-sm text-gray-500">
-                            <span className="flex items-center">
-                                <CalendarIcon className="w-4 h-4 mr-1" />
-                                Member since {new Date(subscriber?.createdAt || '').toLocaleDateString()}
-                            </span>
-                            <span className="flex items-center">
-                                <StarIcon className="w-4 h-4 mr-1 text-yellow-500" />
-                                {subscriber?.role?.name}
-                            </span>
+                                <span className="flex items-center">
+                                    <StarIcon className="w-4 h-4 mr-1 text-yellow-500" />
+                                    {subscriber?.role?.name}
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <button
-                        onClick={() => setIsEditing(!isEditing)}
-                        className="flex items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors focus:outline-none"
-                    >
-                        <PencilIcon className="w-4 h-4" />
-                        <span>{isEditing ? 'Cancel' : 'Edit Profile'}</span>
-                    </button>
                 </div>
             </div>
 
@@ -231,78 +841,134 @@ const Account: React.FC = () => {
                 <h3 className="text-lg font-semibold text-gray-900 mb-6">Personal Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            First Name <span className="text-red-500">*</span>
+                        </label>
                         <input
                             type="text"
-                            value={profileData.firstName}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, firstName: e.target.value }))}
-                            disabled={!isEditing}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50"
+                            name="firstName"
+                            value={personalData.firstName}
+                            onChange={handlePersonalDataChange}
+                            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${personalValidation.firstName.isValid
+                                    ? 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                }`}
                             placeholder="Enter first name"
                         />
+                        {!personalValidation.firstName.isValid && (
+                            <p className="mt-1 text-sm text-red-600">{personalValidation.firstName.message}</p>
+                        )}
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Last Name <span className="text-red-500">*</span>
+                        </label>
                         <input
                             type="text"
-                            value={profileData.lastName}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, lastName: e.target.value }))}
-                            disabled={!isEditing}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50"
+                            name="lastName"
+                            value={personalData.lastName}
+                            onChange={handlePersonalDataChange}
+                            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${personalValidation.lastName.isValid
+                                    ? 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                }`}
                             placeholder="Enter last name"
                         />
+                        {!personalValidation.lastName.isValid && (
+                            <p className="mt-1 text-sm text-red-600">{personalValidation.lastName.message}</p>
+                        )}
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Email <span className="text-red-500">*</span>
+                        </label>
                         <input
                             type="email"
-                            value={profileData.email}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, email: e.target.value }))}
-                            disabled={!isEditing}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50"
+                            name="email"
+                            value={personalData.email}
+                            onChange={handlePersonalDataChange}
+                            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${personalValidation.email.isValid
+                                    ? 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                }`}
                             placeholder="Enter email address"
                         />
+                        {!personalValidation.email.isValid && (
+                            <p className="mt-1 text-sm text-red-600">{personalValidation.email.message}</p>
+                        )}
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
-                        <input
-                            type="tel"
-                            value={profileData.phone}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, phone: e.target.value }))}
-                            disabled={!isEditing}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50"
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Phone <span className="text-red-500">*</span>
+                        </label>
+                        <PhoneInput
+                            country={getPhoneInputCountry(subscriber?.user?.country_code || 'us')}
+                            value={personalData.phone}
+                            onChange={handlePhoneChange}
+                            inputClass={`w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 transition-all duration-300 ${personalValidation.phone.isValid
+                                    ? 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                }`}
+                            buttonClass={`${isRTL ? 'rounded-l-none' : 'rounded-r-none'} border-r-0`}
+                            inputStyle={{
+                                height: '38px',
+                                width: '100%',
+                                fontSize: '0.875rem',
+                                borderRadius: '0.75rem !important',
+                                borderColor: personalValidation.phone.isValid ? '#D1D5DB' : '#EF4444',
+                                backgroundColor: 'white'
+                            }}
+                            buttonStyle={{
+                                height: '38px',
+                                borderTopRightRadius: '0.75rem',
+                                borderBottomRightRadius: '0.75rem',
+                                borderTopLeftRadius: '0',
+                                borderBottomLeftRadius: '0',
+                                borderColor: personalValidation.phone.isValid ? '#D1D5DB' : '#EF4444',
+                                backgroundColor: 'white'
+                            }}
+                            containerClass={`${isRTL ? 'rtl-phone-input' : ''} focus-within:ring-2 transition-all duration-300 ${personalValidation.phone.isValid
+                                    ? 'focus-within:ring-blue-500 focus-within:border-blue-500'
+                                    : 'focus-within:ring-red-500 focus-within:border-red-500'
+                                }`}
+                            dropdownStyle={{
+                                borderRadius: '0.75rem',
+                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                                zIndex: 50
+                            }}
+                            searchStyle={{
+                                height: '36px',
+                                fontSize: '0.875rem',
+                                borderRadius: '0.5rem',
+                                borderColor: '#D1D5DB'
+                            }}
+                            countryCodeEditable={true}
                             placeholder="Enter phone number"
                         />
+                        {!personalValidation.phone.isValid && (
+                            <p className="mt-1 text-sm text-red-600">{personalValidation.phone.message}</p>
+                        )}
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Institution</label>
                         <input
                             type="text"
-                            value={profileData.institution}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, institution: e.target.value }))}
-                            disabled={!isEditing}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50"
+                            name="institution"
+                            value={personalData.institution}
+                            onChange={handlePersonalDataChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                             placeholder="Enter institution name"
                         />
                     </div>
                 </div>
-
-                {isEditing && (
-                    <div className="flex justify-end space-x-3 mt-6 pt-6 border-t border-gray-200">
-                        <button
-                            onClick={() => setIsEditing(false)}
-                            className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors focus:outline-none border-none"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            onClick={handleSaveProfile}
-                            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors focus:outline-none"
-                        >
-                            Save Changes
-                        </button>
-                    </div>
-                )}
+                <div className="flex justify-end mt-6">
+                    <button
+                        onClick={handleSavePersonal}
+                        className={`px-4 py-2 rounded-md transition-colors focus:outline-none bg-blue-500 text-white hover:bg-blue-600 `}
+                    >
+                        Save Changes
+                    </button>
+                </div>
             </div>
         </motion.div>
     );
@@ -313,6 +979,46 @@ const Account: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
         >
+            {/* Password Security Tips */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                <div className="flex items-start space-x-3">
+                    <InformationCircleIcon className="w-6 h-6 text-blue-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                        <h4 className="text-lg font-semibold text-blue-900 mb-2">Password Security Tips</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-800">
+                            <div className="space-y-2">
+                                <div className="flex items-center space-x-2">
+                                    <CheckIcon className="w-4 h-4 text-green-500" />
+                                    <span>Use at least 8 characters</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <CheckIcon className="w-4 h-4 text-green-500" />
+                                    <span>Mix uppercase and lowercase letters</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <CheckIcon className="w-4 h-4 text-green-500" />
+                                    <span>Include numbers and symbols</span>
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <div className="flex items-center space-x-2">
+                                    <ExclamationTriangleIcon className="w-4 h-4 text-red-500" />
+                                    <span>Avoid common words or phrases</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <ExclamationTriangleIcon className="w-4 h-4 text-red-500" />
+                                    <span>Don't use personal information</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <ExclamationTriangleIcon className="w-4 h-4 text-red-500" />
+                                    <span>Never share your password</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {/* Password Change */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
@@ -327,7 +1033,7 @@ const Account: React.FC = () => {
                                 type={showPassword ? 'text' : 'password'}
                                 value={securityData.currentPassword}
                                 onChange={(e) => setSecurityData(prev => ({ ...prev, currentPassword: e.target.value }))}
-                                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                 placeholder="Enter current password"
                             />
                             <button
@@ -351,7 +1057,7 @@ const Account: React.FC = () => {
                                 type={showNewPassword ? 'text' : 'password'}
                                 value={securityData.newPassword}
                                 onChange={(e) => setSecurityData(prev => ({ ...prev, newPassword: e.target.value }))}
-                                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                 placeholder="Enter new password"
                             />
                             <button
@@ -367,6 +1073,34 @@ const Account: React.FC = () => {
                                 )}
                             </button>
                         </div>
+
+                        {/* Password Strength Indicator */}
+                        {securityData.newPassword && (
+                            <div className="mt-3">
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm font-medium text-gray-700">Password Strength:</span>
+                                    <span className={`text-sm font-semibold ${getPasswordStrengthColor(passwordStrength.strength)}`}>
+                                        {passwordStrength.strength.charAt(0).toUpperCase() + passwordStrength.strength.slice(1)}
+                                    </span>
+                                </div>
+                                <div className="w-full bg-gray-200 rounded-full h-2">
+                                    <div
+                                        className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthBg(passwordStrength.strength)}`}
+                                        style={{ width: `${(passwordStrength.score / 6) * 100}%` }}
+                                    ></div>
+                                </div>
+
+                                {/* Password Requirements */}
+                                <div className="mt-3 space-y-1">
+                                    {passwordStrength.feedback.map((requirement, index) => (
+                                        <div key={index} className="flex items-center space-x-2">
+                                            <div className={`w-2 h-2 rounded-full ${passwordStrength.score >= index + 1 ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                                            <span className="text-xs text-gray-600">{requirement}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                     <div className="md:col-span-2">
                         <label className="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
@@ -375,7 +1109,12 @@ const Account: React.FC = () => {
                                 type={showConfirmPassword ? 'text' : 'password'}
                                 value={securityData.confirmPassword}
                                 onChange={(e) => setSecurityData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className={`w-full px-3 py-2 pr-10 border rounded-md focus:outline-none focus:ring-2 transition-colors ${securityData.confirmPassword && securityData.newPassword !== securityData.confirmPassword
+                                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                    : securityData.confirmPassword && securityData.newPassword === securityData.confirmPassword
+                                        ? 'border-green-300 focus:ring-green-500 focus:border-green-500'
+                                        : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                                    }`}
                                 placeholder="Confirm new password"
                             />
                             <button
@@ -391,11 +1130,45 @@ const Account: React.FC = () => {
                                 )}
                             </button>
                         </div>
+
+                        {/* Password Match Indicator */}
+                        {securityData.confirmPassword && (
+                            <div className="mt-2 flex items-center space-x-2">
+                                {securityData.newPassword === securityData.confirmPassword ? (
+                                    <>
+                                        <CheckIcon className="w-4 h-4 text-green-500" />
+                                        <span className="text-sm text-green-600">Passwords match</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <ExclamationTriangleIcon className="w-4 h-4 text-red-500" />
+                                        <span className="text-sm text-red-600">Passwords do not match</span>
+                                    </>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
+
+                {/* Additional Security Notes */}
+                <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                    <h4 className="text-sm font-semibold text-gray-900 mb-2">Security Recommendations:</h4>
+                    <ul className="text-sm text-gray-600 space-y-1">
+                        <li>• Change your password regularly (every 3-6 months)</li>
+                        <li>• Use a unique password for each account</li>
+                        <li>• Consider using a password manager for better security</li>
+                        <li>• Enable two-factor authentication if available</li>
+                        <li>• Never write down passwords or share them via email/text</li>
+                    </ul>
+                </div>
+
                 <button
                     onClick={handlePasswordChange}
-                    className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors focus:outline-none border-none"
+                    disabled={!securityData.currentPassword || !securityData.newPassword || !securityData.confirmPassword || securityData.newPassword !== securityData.confirmPassword || passwordStrength.strength === 'weak'}
+                    className={`mt-4 px-4 py-2 rounded-md transition-colors focus:outline-none border-none ${!securityData.currentPassword || !securityData.newPassword || !securityData.confirmPassword || securityData.newPassword !== securityData.confirmPassword || passwordStrength.strength === 'weak'
+                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        : 'bg-red-500 text-white hover:bg-red-600'
+                        }`}
                 >
                     Change Password
                 </button>
@@ -416,100 +1189,164 @@ const Account: React.FC = () => {
                         <MapPinIcon className="w-5 h-5 mr-2 text-green-500" />
                         Address Information
                     </h3>
-                    <button
-                        onClick={() => setIsEditing(!isEditing)}
-                        className="flex items-center space-x-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors focus:outline-none border-none"
-                    >
-                        <PencilIcon className="w-4 h-4" />
-                        <span>{isEditing ? 'Cancel' : 'Edit Address'}</span>
-                    </button>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="md:col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Address Line 1</label>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            City <span className="text-red-500">*</span>
+                        </label>
                         <input
                             type="text"
-                            value={profileData.address1}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, address1: e.target.value }))}
-                            disabled={!isEditing}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-50"
+                            name="city"
+                            value={addressData.city}
+                            onChange={handleAddressDataChange}
+                            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${addressValidation.city.isValid
+                                    ? 'border-gray-300 focus:ring-green-500 focus:border-green-500'
+                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                }`}
+                            placeholder="Enter city"
+                        />
+                        {!addressValidation.city.isValid && (
+                            <p className="mt-1 text-sm text-red-600">{addressValidation.city.message}</p>
+                        )}
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            State/Province <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="state"
+                            value={addressData.state}
+                            onChange={handleAddressDataChange}
+                            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${addressValidation.state.isValid
+                                    ? 'border-gray-300 focus:ring-green-500 focus:border-green-500'
+                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                }`}
+                            placeholder="Enter state or province"
+                        />
+                        {!addressValidation.state.isValid && (
+                            <p className="mt-1 text-sm text-red-600">{addressValidation.state.message}</p>
+                        )}
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            ZIP/Postal Code <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="zip"
+                            value={addressData.zip}
+                            onChange={handleAddressDataChange}
+                            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${addressValidation.zip.isValid
+                                    ? 'border-gray-300 focus:ring-green-500 focus:border-green-500'
+                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                }`}
+                            placeholder="Enter ZIP or postal code"
+                        />
+                        {!addressValidation.zip.isValid && (
+                            <p className="mt-1 text-sm text-red-600">{addressValidation.zip.message}</p>
+                        )}
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Country <span className="text-red-500">*</span>
+                        </label>
+                        <Select
+                            options={countryOptions}
+                            value={(() => {
+                                const selectedOption = countryOptions.find(option => option.value === addressData.country);
+                                return selectedOption || null;
+                            })()}
+                            onChange={handleAddressCountryChange}
+                            styles={{
+                                ...customSelectStyles,
+                                control: (base: any, state: any) => ({
+                                    ...base,
+                                    minHeight: '42px',
+                                    height: '42px',
+                                    borderRadius: '0.75rem',
+                                    borderColor: state.isFocused 
+                                        ? '#10B981' 
+                                        : !addressValidation.country.isValid 
+                                            ? '#EF4444' 
+                                            : '#D1D5DB',
+                                    boxShadow: state.isFocused ? '0 0 0 2px rgba(16, 185, 129, 0.1)' : 'none',
+                                    '&:hover': {
+                                        borderColor: '#10B981'
+                                    },
+                                    backgroundColor: 'white',
+                                    fontSize: '0.875rem',
+                                    padding: '0.25rem 0.5rem'
+                                })
+                            }}
+                            placeholder="Select your country"
+                            isSearchable
+                            noOptionsMessage={() => "No countries found"}
+                        />
+                        {!addressValidation.country.isValid && (
+                            <p className="mt-1 text-sm text-red-600">{addressValidation.country.message}</p>
+                        )}
+                        {showCustomCountryInput && (
+                            <div className="mt-2">
+                                <input
+                                    type="text"
+                                    name="customCountry"
+                                    value={addressData.customCountry}
+                                    onChange={handleAddressCustomCountryChange}
+                                    placeholder="Enter your country"
+                                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${addressValidation.customCountry.isValid
+                                            ? 'border-gray-300 focus:ring-green-500 focus:border-green-500'
+                                            : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                        }`}
+                                />
+                                {!addressValidation.customCountry.isValid && (
+                                    <p className="mt-1 text-sm text-red-600">{addressValidation.customCountry.message}</p>
+                                )}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Address Line 1 <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="address1"
+                            value={addressData.address1}
+                            onChange={handleAddressDataChange}
+                            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors ${addressValidation.address1.isValid
+                                    ? 'border-gray-300 focus:ring-green-500 focus:border-green-500'
+                                    : 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                }`}
                             placeholder="Enter primary address"
                         />
+                        {!addressValidation.address1.isValid && (
+                            <p className="mt-1 text-sm text-red-600">{addressValidation.address1.message}</p>
+                        )}
                     </div>
                     <div className="md:col-span-2">
                         <label className="block text-sm font-medium text-gray-700 mb-2">Address Line 2</label>
                         <input
                             type="text"
-                            value={profileData.address2}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, address2: e.target.value }))}
-                            disabled={!isEditing}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-50"
+                            name="address2"
+                            value={addressData.address2}
+                            onChange={handleAddressDataChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
                             placeholder="Enter secondary address (optional)"
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
-                        <input
-                            type="text"
-                            value={profileData.city}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, city: e.target.value }))}
-                            disabled={!isEditing}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-50"
-                            placeholder="Enter city"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">State/Province</label>
-                        <input
-                            type="text"
-                            value={profileData.state}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, state: e.target.value }))}
-                            disabled={!isEditing}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-50"
-                            placeholder="Enter state or province"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">ZIP/Postal Code</label>
-                        <input
-                            type="text"
-                            value={profileData.zip}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, zip: e.target.value }))}
-                            disabled={!isEditing}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-50"
-                            placeholder="Enter ZIP or postal code"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Country</label>
-                        <input
-                            type="text"
-                            value={profileData.country}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, country: e.target.value }))}
-                            disabled={!isEditing}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-50"
-                            placeholder="Enter country"
-                        />
-                    </div>
                 </div>
-
-                {isEditing && (
-                    <div className="flex justify-end space-x-3 mt-6 pt-6 border-t border-gray-200">
-                        <button
-                            onClick={() => setIsEditing(false)}
-                            className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors focus:outline-none border-none"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            onClick={handleSaveProfile}
-                            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors focus:outline-none border-none"
-                        >
-                            Save Address
-                        </button>
-                    </div>
-                )}
+                <div className="flex justify-end mt-6">
+                    <button
+                        onClick={handleSaveAddress}
+                        className={`px-4 py-2 rounded-md transition-colors focus:outline-none bg-green-500 text-white hover:bg-green-600`}
+                    >
+                        Save Address
+                    </button>
+                </div>
             </div>
         </motion.div>
     );
@@ -559,14 +1396,14 @@ const Account: React.FC = () => {
                                         key={tab.id}
                                         onClick={() => setActiveTab(tab.id)}
                                         className={`flex-1 flex items-center justify-center py-4 px-6 bg-transparent focus:outline-none font-medium text-sm transition-all duration-300 border-none relative group ${activeTab === tab.id
-                                                ? 'text-white bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg transform scale-105'
-                                                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                                            ? 'text-white bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg transform scale-105'
+                                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                                             }`}
                                     >
                                         <div className="flex items-center space-x-2">
                                             <tab.icon className={`w-5 h-5 transition-all duration-300 ${activeTab === tab.id
-                                                    ? 'text-white transform scale-110'
-                                                    : tab.color
+                                                ? 'text-white transform scale-110'
+                                                : tab.color
                                                 }`} />
                                             <span className="font-semibold">{tab.name}</span>
                                         </div>
