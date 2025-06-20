@@ -10,6 +10,7 @@ import { useLanguage } from '../../../contexts/LanguageContext';
 import type { Language } from '../../../translations';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import AvatarModal from '../../../components/AvatarModal';
 
 import {
     UserCircleIcon,
@@ -41,6 +42,7 @@ const Account: React.FC = () => {
     const [isScrolling, setIsScrolling] = useState(false);
     const [hasProfileImageChanged, setHasProfileImageChanged] = useState(false);
     const [isImageDeleted, setIsImageDeleted] = useState(false);
+    const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
 
     // Add refs for smooth scrolling
     const profileSectionRef = useRef<HTMLDivElement>(null);
@@ -505,15 +507,14 @@ const Account: React.FC = () => {
 
     // Add function to handle avatar creation
     const handleCreateAvatar = () => {
-        // For now, we'll show a placeholder message
-        // In a real app, this would open an avatar creation modal or redirect to an avatar service
-        Swal.fire({
-            icon: 'info',
-            title: 'Avatar Creation',
-            text: 'Avatar creation feature will be available soon! You can customize your avatar with various options.',
-            confirmButtonText: 'Got it!',
-            confirmButtonColor: '#3B82F6'
-        });
+        setIsAvatarModalOpen(true);
+    };
+
+    const handleAvatarSelected = (avatarUrl: string) => {
+        setPreviewImage(avatarUrl);
+        setHasProfileImageChanged(true);
+        setIsImageDeleted(false);
+        setIsAvatarModalOpen(false);
     };
 
     // Save personal information function
@@ -1054,13 +1055,6 @@ const Account: React.FC = () => {
                             Change Photo
                         </label>
                     </div>
-                    <button
-                        onClick={handleCreateAvatar}
-                        className="inline-flex items-center px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors font-medium text-sm focus:outline-none border-none"
-                    >
-                        <UserCircleIcon className="w-4 h-4 mr-2" />
-                        Create Avatar
-                    </button>
                     {(subscriber?.profileImage?.file_url || previewImage || isImageDeleted) && (
                         <button
                             onClick={handleRemoveImage}
@@ -1072,6 +1066,13 @@ const Account: React.FC = () => {
                             Remove Photo
                         </button>
                     )}
+                                        <button
+                        onClick={handleCreateAvatar}
+                        className="inline-flex items-center px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors font-medium text-sm focus:outline-none border-none"
+                    >
+                        <UserCircleIcon className="w-4 h-4 mr-2" />
+                        Create Avatar
+                    </button>
                 </div>
 
                 {/* Image Upload Info */}
@@ -1710,6 +1711,12 @@ const Account: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            <AvatarModal
+                isOpen={isAvatarModalOpen}
+                onClose={() => setIsAvatarModalOpen(false)}
+                onSelect={handleAvatarSelected}
+            />
         </SubscriberDashboardLayout>
     );
 };
