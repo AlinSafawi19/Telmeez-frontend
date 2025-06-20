@@ -21,6 +21,7 @@ import {
     Filler,
 } from 'chart.js';
 import { Line, Bar, Doughnut, Radar } from 'react-chartjs-2';
+import { useUser } from '../../../contexts/UserContext';
 
 // Register ChartJS components
 ChartJS.register(
@@ -38,6 +39,8 @@ ChartJS.register(
 );
 
 const Billings: React.FC = () => {
+    const { subscriber } = useUser();
+
     return (
         <SubscriberDashboardLayout>
             <div>

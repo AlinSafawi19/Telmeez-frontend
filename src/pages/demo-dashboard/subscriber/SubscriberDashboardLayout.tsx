@@ -27,6 +27,7 @@ import {
     ExclamationTriangleIcon,
     ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline';
+import { FaUser } from 'react-icons/fa';
 
 interface SubscriberDashboardLayoutProps {
     children: React.ReactNode;
@@ -93,6 +94,13 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
             ]
         },
         {
+            id: 'departments',
+            name: 'Departments',
+            icon: BuildingOfficeIcon,
+            href: '/demo-dashboard/subscriber/departments',
+            color: 'text-teal-500'
+        },
+        {
             id: 'communication',
             name: 'Communication',
             icon: ChatBubbleLeftRightIcon,
@@ -102,13 +110,6 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                 { name: 'Announcements', icon: MegaphoneIcon, href: '/demo-dashboard/subscriber/announcements', color: 'text-green-400' },
                 { name: 'Notifications', icon: BellIcon, href: '/demo-dashboard/subscriber/notifications', color: 'text-green-400' }
             ]
-        },
-        {
-            id: 'departments',
-            name: 'Departments',
-            icon: BuildingOfficeIcon,
-            href: '/demo-dashboard/subscriber/departments',
-            color: 'text-teal-500'
         },
         {
             id: 'events',
@@ -179,7 +180,11 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                 />
                                 <div>
                                     <h1 className="text-lg font-bold text-white">{subscriber?.user?.first_name} {subscriber?.user?.last_name}</h1>
-                                    <p className="text-xs text-gray-400">Dashboard</p>
+                                    {subscriber?.institution_name && (
+                                        <span className="text-blue-200 font-medium text-sm">
+                                            {subscriber.institution_name}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                             <button
@@ -304,19 +309,6 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                             >
                                 <Bars3Icon className="w-5 h-5" />
                             </button>
-
-                            {/* Breadcrumbs */}
-                            <nav className="hidden md:flex items-center space-x-2 text-sm text-gray-600">
-                                <span className="text-gray-400">Dashboard</span>
-                                {subscriber?.institution_name && (
-                                    <>
-                                        <span>/</span>
-                                        <span className="text-blue-600 font-medium">
-                                            {subscriber.institution_name}
-                                        </span>
-                                    </>
-                                )}
-                            </nav>
                         </div>
 
                         {/* Right side - Search and user menu */}
@@ -382,7 +374,13 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, y: -10 }}
                                             className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200"
+                                        > <Link
+                                            to="/demo-dashboard/subscriber/account"
+                                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                         >
+                                                <FaUser className="w-4 h-4 mr-3 text-green-500" />
+                                                My Profile
+                                            </Link>
                                             <Link
                                                 to="/demo-dashboard/subscriber/help"
                                                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

@@ -10,6 +10,7 @@ import type { BillingAddress } from '../pages/demo-dashboard/models/billing_addr
 import type { User } from '../pages/demo-dashboard/models/user';
 import type { UserPreference } from '../pages/demo-dashboard/models/user_preference';
 import type { Role } from '../pages/demo-dashboard/models/role';
+import type { CardType } from '../pages/demo-dashboard/models/card_type';
 
 // Extended user interface with related data
 export interface UserWithDetails extends Subscriber {
@@ -22,6 +23,7 @@ export interface UserWithDetails extends Subscriber {
     billingAddress?: BillingAddress;
     user?: User;
     role?: Role;
+    cardType?: CardType;
 }
 
 interface UserContextType {
@@ -120,10 +122,16 @@ const dummySubscriberData: UserWithDetails = {
         expiry_year: 2025,
         cvv: "123",
         subscriber_id: "demo-subscriber-001",
-        card_type_id: "card_visa",
+        card_type_id: "card_type_001",
         is_default: true,
         updated_at: new Date(),
         createdAt: new Date("2025-06-20")
+    },
+    cardType: {
+        id: "card_type_001",
+        name: "Visa",
+        createdAt: new Date("2025-06-20"),
+        updatedAt: new Date("2025-06-20")
     },
     plan: {
         id: "plan_001",
