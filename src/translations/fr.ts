@@ -511,6 +511,13 @@ export const fr = {
             title: "Adresse de facturation",
             checbox: "Utiliser la même adresse que les informations du compte"
         },
+        legal: {
+            terms: "Conditions d'utilisation",
+            privacy: "Politique de confidentialité",
+            pci: "Compliance PCI-DSS",
+            by_continuing: "En continuant, vous acceptez nos",
+            payment_secured_with: "Votre paiement est sécurisé avec"
+        },
         summary: {
             title: "Récapitulatif de la commande",
             plan: "Forfait",

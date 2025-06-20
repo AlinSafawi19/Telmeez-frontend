@@ -1711,6 +1711,13 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                 {currentStep < 3 ? t.checkout.summary.continue : t.checkout.summary.activate}
                                             </button>
                                         </div>
+                                        <p className="text-xs text-gray-500 text-center mt-3">
+                                            {t.checkout.legal.by_continuing} {' '}
+                                            <a href="/terms" className="text-blue-600 hover:text-blue-700 underline">{t.checkout.legal.terms}</a> and{' '}
+                                            <a href="/privacy" className="text-blue-600 hover:text-blue-700 underline">{t.checkout.legal.privacy}</a>.{' '}
+                                            {t.checkout.legal.payment_secured_with} {' '}
+                                            <a href="/pci-dss" className="text-blue-600 hover:text-blue-700 underline">{t.checkout.legal.pci}</a>
+                                        </p>
                                     </div>
                                 </div>
                             </div>

@@ -511,6 +511,13 @@ export const en = {
             title: "Billing Address",
             checbox: "Use same address as account information"
         },
+        legal: {
+            terms: "Terms & Conditions",
+            privacy: "Privacy Policy",
+            pci: "PCI-DSS Compliance",
+            by_continuing: "By continuing, you agree to our",
+            payment_secured_with: "Your payment is secured with"
+        },
         summary: {
             title: "Order Summary",
             plan: "Plan",

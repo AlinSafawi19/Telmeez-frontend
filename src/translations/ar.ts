@@ -511,6 +511,13 @@ export const ar = {
             title: "عنوان الفواتير",
             checbox: "استخدم نفس العنوان الموجود في معلومات الحساب"
         },
+        legal: {
+            terms: "الشروط والأحكام",
+            privacy: "سياسة الخصوصية",
+            pci: "التوافق مع PCI-DSS",
+            by_continuing: "باستمرار، فإنك توافق على",
+            payment_secured_with: "تأمين الدفع باستخدام"
+        },
         summary: {
             title: "ملخص الطلب",
             plan: "الخطة",
