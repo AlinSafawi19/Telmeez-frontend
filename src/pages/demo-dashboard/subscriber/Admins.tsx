@@ -9,6 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../../../assets/css/datepicker.css";
 import ReactDOM from 'react-dom';
 import statusColors from '../../../constants/statusColors';
+import InitialsAvatar from '../../../components/InitialsAvatar';
 
 const PopperContainer = (props: { children?: React.ReactNode }) => {
     return ReactDOM.createPortal(props.children, document.body);
@@ -110,8 +111,31 @@ const Admins: React.FC = () => {
     const isAtMaxLimit = maxAdmins !== null && maxAdmins !== undefined && admins.length >= maxAdmins;
     const isNearLimit = maxAdmins !== null && maxAdmins !== undefined && admins.length >= maxAdmins * 0.8; // 80% of limit
 
-    const getProfileImage = (adminId: string) =>
-        adminProfiles.find((img) => img.user_id === adminId)?.file_url;
+    const getProfileImage = (adminId: string) => {
+        const profileImage = adminProfiles.find((img) => img.user_id === adminId);
+        if (profileImage) {
+            return profileImage.file_url;
+        }
+        
+        // If no profile image found, return undefined instead of a default avatar
+        return undefined;
+    };
+
+    const getAdminUserData = (adminId: string) => {
+        const admin = admins.find(a => a.id === adminId);
+        if (admin) {
+            return {
+                firstName: admin.first_name,
+                lastName: admin.last_name,
+                email: admin.email
+            };
+        }
+        return {
+            firstName: '',
+            lastName: '',
+            email: ''
+        };
+    };
 
     const getStatus = (statusId: string) => userStatuses.find((s) => s.id === statusId)?.name || 'Active';
 
@@ -692,23 +716,11 @@ const Admins: React.FC = () => {
                 state: '',
                 zip: '',
                 country: '',
-                profile_image_id: `demo-profile-${adminId}`,
+                profile_image_id: '', // No profile image
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 createdBy: subscriber?.user?.id || '',
                 updatedBy: subscriber?.user?.id || ''
-            };
-
-            // Create profile image for new admin (no default image)
-            const newProfileImage = {
-                id: `demo-profile-${adminId}`,
-                user_id: adminId,
-                file_name: `${newAdmin.first_name.toLowerCase()}-${newAdmin.last_name.toLowerCase()}-profile.jpg`,
-                file_type: 'image/jpeg',
-                file_url: 'https://ui-avatars.com/api/?name=' + encodeURIComponent(`${newAdmin.first_name} ${newAdmin.last_name}`),
-                uploaded_at: new Date(),
-                uploaded_by: adminId,
-                is_active: true
             };
 
             // Create preference for new admin
@@ -721,12 +733,11 @@ const Admins: React.FC = () => {
                 createdAt: new Date()
             };
 
-            // Update subscriber with new admin
+            // Update subscriber with new admin (without profile image)
             if (subscriber) {
                 const updatedSubscriber = {
                     ...subscriber,
                     admins: [...(subscriber.admins || []), newAdminUser],
-                    adminProfileImages: [...(subscriber.adminProfileImages || []), newProfileImage],
                     adminPreferences: [...(subscriber.adminPreferences || []), newPreference]
                 };
 
@@ -1441,11 +1452,21 @@ const Admins: React.FC = () => {
                             {/* Admin Info */}
                             <div className="bg-gray-50 rounded-lg p-4 mb-6">
                                 <div className="flex items-center gap-3">
-                                    <img
-                                        src={getProfileImage(selectedAdminForTransfer.id)}
-                                        alt={selectedAdminForTransfer.first_name}
-                                        className="w-10 h-10 rounded-full border-2 border-blue-200"
-                                    />
+                                    {getProfileImage(selectedAdminForTransfer.id) !== undefined ? (
+                                        <img
+                                            src={getProfileImage(selectedAdminForTransfer.id)!}
+                                            alt={selectedAdminForTransfer.first_name}
+                                            className="w-10 h-10 rounded-full border-2 border-blue-200"
+                                        />
+                                    ) : (
+                                        <InitialsAvatar
+                                            userData={getAdminUserData(selectedAdminForTransfer.id)}
+                                            size="md"
+                                            variant="blue"
+                                            border
+                                            borderColor="border-blue-200"
+                                        />
+                                    )}
                                     <div>
                                         <h4 className="font-semibold text-gray-900">
                                             {selectedAdminForTransfer.first_name} {selectedAdminForTransfer.last_name}
@@ -1582,11 +1603,22 @@ const Admins: React.FC = () => {
                             {/* Admin Info */}
                             <div className="bg-gray-50 rounded-lg p-4 mb-6">
                                 <div className="flex items-center gap-3">
-                                    <img
-                                        src={getProfileImage(selectedAdminForEdit.id)}
-                                        alt={selectedAdminForEdit.first_name}
-                                        className="w-12 h-12 rounded-full border-2 border-green-200"
-                                    />
+                                    {getProfileImage(selectedAdminForEdit.id) !== undefined ? (
+                                        <img
+                                            src={getProfileImage(selectedAdminForEdit.id)!}
+                                            alt={selectedAdminForEdit.first_name}
+                                            className="w-12 h-12 rounded-full border-2 border-green-200"
+                                        />
+                                    ) : (
+                                        <InitialsAvatar
+                                            userData={getAdminUserData(selectedAdminForEdit.id)}
+                                            size="lg"
+                                            variant="success"
+                                            border
+                                            borderColor="border-green-200"
+                                            shadow
+                                        />
+                                    )}
                                     <div>
                                         <h4 className="font-semibold text-gray-900">
                                             {selectedAdminForEdit.first_name} {selectedAdminForEdit.last_name}
@@ -1754,11 +1786,22 @@ const Admins: React.FC = () => {
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-4">
                                             <div className="relative">
-                                                <img
-                                                    src={getProfileImage(admin.id)}
-                                                    alt={admin.first_name}
-                                                    className="w-12 h-12 rounded-full border-2 border-purple-200 shadow"
-                                                />
+                                                {getProfileImage(admin.id) !== undefined ? (
+                                                    <img
+                                                        src={getProfileImage(admin.id)!}
+                                                        alt={admin.first_name}
+                                                        className="w-12 h-12 rounded-full border-2 border-purple-200 shadow"
+                                                    />
+                                                ) : (
+                                                    <InitialsAvatar
+                                                        userData={getAdminUserData(admin.id)}
+                                                        size="lg"
+                                                        variant="purple"
+                                                        border
+                                                        borderColor="border-purple-200"
+                                                        shadow
+                                                    />
+                                                )}
                                                 <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${admin.is_online ? 'bg-green-500' : 'bg-gray-400'
                                                     }`}></div>
                                             </div>
@@ -1974,4 +2017,4 @@ const Admins: React.FC = () => {
     );
 };
 
-export default Admins; 
+export default Admins;

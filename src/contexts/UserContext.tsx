@@ -516,7 +516,7 @@ const dummySubscriberData: UserWithDetails = {
             state: '',
             zip: '',
             country: '',
-            profile_image_id: 'demo-profile-004',
+            profile_image_id: '',
             createdAt: new Date("2025-06-20"),
             updatedAt: new Date("2025-06-20"),
             createdBy: 'demo-user-001',
@@ -568,16 +568,6 @@ const dummySubscriberData: UserWithDetails = {
             file_url: 'https://randomuser.me/api/portraits/women/42.jpg',
             uploaded_at: new Date(),
             uploaded_by: 'demo-user-003',
-            is_active: true
-        },
-        {
-            id: 'demo-profile-004',
-            user_id: 'demo-user-004',
-            file_name: 'dana-smith-profile.jpg',
-            file_type: 'image/jpeg',
-            file_url: 'https://randomuser.me/api/portraits/women/67.jpg',
-            uploaded_at: new Date(),
-            uploaded_by: 'demo-user-004',
             is_active: true
         }
     ],
