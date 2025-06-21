@@ -7,7 +7,7 @@ import Select2 from '../../../components/Select2';
 import { useUser } from '../../../contexts/UserContext';
 import { translations } from '../../../translations';
 import { useLanguage } from '../../../contexts/LanguageContext';
-import type { Language } from '../../../translations';
+//import type { Language } from '../../../translations';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import AvatarModal from '../../../components/AvatarModal';
@@ -142,7 +142,7 @@ const Account: React.FC = () => {
     // Create a mapping for country codes to Select2 values
     const countryCodeToValue = useMemo(() => {
         const mapping: { [key: string]: number } = {};
-        countryOptions.forEach((option, index) => {
+        countryOptions.forEach((option) => {
             if (option.countryCode) {
                 mapping[option.countryCode] = option.value;
             }
@@ -275,61 +275,6 @@ const Account: React.FC = () => {
 
         // Return true if all validations pass
         return Object.values(newValidation).every(validation => validation.isValid);
-    };
-
-    // Custom select styles
-    const customSelectStyles = {
-        control: (base: any, state: any) => ({
-            ...base,
-            minHeight: '42px',
-            height: '42px',
-            borderRadius: '0.75rem',
-            borderColor: state.isFocused ? '#3B82F6' : '#D1D5DB',
-            boxShadow: state.isFocused ? '0 0 0 2px rgba(59, 130, 246, 0.1)' : 'none',
-            '&:hover': {
-                borderColor: '#3B82F6'
-            },
-            backgroundColor: 'white',
-            fontSize: '0.875rem',
-            padding: '0.25rem 0.5rem'
-        }),
-        option: (base: any, state: any) => ({
-            ...base,
-            backgroundColor: state.isSelected ? '#3B82F6' : state.isFocused ? '#EFF6FF' : 'white',
-            color: state.isSelected ? 'white' : '#1F2937',
-            fontSize: '0.875rem',
-            padding: '0.5rem 0.75rem',
-            '&:hover': {
-                backgroundColor: state.isSelected ? '#3B82F6' : '#EFF6FF'
-            }
-        }),
-        menu: (base: any) => ({
-            ...base,
-            borderRadius: '0.75rem',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-            zIndex: 50
-        }),
-        input: (base: any) => ({
-            ...base,
-            margin: 0,
-            padding: 0,
-            fontSize: '0.875rem'
-        }),
-        valueContainer: (base: any) => ({
-            ...base,
-            padding: 0,
-            margin: 0
-        }),
-        singleValue: (base: any) => ({
-            ...base,
-            fontSize: '0.875rem',
-            color: '#1F2937'
-        }),
-        placeholder: (base: any) => ({
-            ...base,
-            fontSize: '0.875rem',
-            color: '#6B7280'
-        })
     };
 
     // Debug logging
@@ -926,6 +871,16 @@ const Account: React.FC = () => {
         }
     };
 
+    const getPasswordStrengthWidth = (score: number) => {
+        const percentage = Math.min((score / 6) * 100, 100);
+        if (percentage <= 16) return 'w-[16%]';
+        if (percentage <= 33) return 'w-[33%]';
+        if (percentage <= 50) return 'w-[50%]';
+        if (percentage <= 66) return 'w-[66%]';
+        if (percentage <= 83) return 'w-[83%]';
+        return 'w-full';
+    };
+
     const passwordStrength = checkPasswordStrength(securityData.newPassword);
 
     // Add smooth scroll function with loading state
@@ -1029,7 +984,7 @@ const Account: React.FC = () => {
                                 </span>
                                 <span className="flex items-center">
                                     <StarIcon className="w-4 h-4 mr-1 text-yellow-500" />
-                                    {subscriber?.role?.name}
+                                    {subscriber?.roles?.find(role => role.id === subscriber?.user?.role_id)?.name || 'Unknown Role'}
                                 </span>
                             </div>
                         </div>
@@ -1353,8 +1308,7 @@ const Account: React.FC = () => {
                                 </div>
                                 <div className="w-full bg-gray-200 rounded-full h-2">
                                     <div
-                                        className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthBg(passwordStrength.strength)}`}
-                                        style={{ width: `${(passwordStrength.score / 6) * 100}%` }}
+                                        className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthBg(passwordStrength.strength)} ${getPasswordStrengthWidth(passwordStrength.score)}`}
                                     ></div>
                                 </div>
 

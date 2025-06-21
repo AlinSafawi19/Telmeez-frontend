@@ -56,7 +56,16 @@ const Select2: React.FC<Select2Props> = ({
       border: '1px solid #e5e7eb',
       borderRadius: '6px',
       boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-      zIndex: 50,
+      zIndex: 9999,
+      position: 'absolute',
+      width: 'max-content',
+      minWidth: '100%',
+      maxWidth: '200px',
+    }),
+    menuList: (provided: any) => ({
+      ...provided,
+      maxHeight: '200px',
+      padding: '4px 0',
     }),
     singleValue: (provided: any) => ({
       ...provided,
@@ -85,7 +94,7 @@ const Select2: React.FC<Select2Props> = ({
   };
 
   return (
-    <div className={className}>
+    <div className={`relative ${className}`}>
       {label && (
         <label className="block text-sm font-medium text-gray-600 mb-1">
           {label}
@@ -93,13 +102,14 @@ const Select2: React.FC<Select2Props> = ({
       )}
       <Select
         value={selectedOption}
-        onChange={(option) => onChange(option?.value || 10)}
+        onChange={(option) => onChange(option?.value || 0)}
         options={options}
         placeholder={placeholder}
         isSearchable={isSearchable}
         isClearable={isClearable}
         styles={customStyles}
         classNamePrefix="select2"
+        menuPosition="fixed"
         {...props}
       />
     </div>

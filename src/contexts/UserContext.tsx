@@ -133,7 +133,7 @@ const dummySubscriberData: UserWithDetails = {
         {
             id: "pay_001",
             payment_method_id: "pm_001",
-            plan_id: "plan_001",
+            plan_id: "plan_002",
             final_price: "760.00",
             next_payment_date: new Date("2025-07-20"),
             payment_status_id: 'status_001',
@@ -251,7 +251,7 @@ const dummySubscriberData: UserWithDetails = {
     ],
     plans: [
         {
-            id: "plan_002",
+            id: "plan_001",
             name: "Starter Plan",
             pricepermonth: "49",
             description: "Perfect for tutoring centers and small schools",
@@ -453,7 +453,7 @@ const dummySubscriberData: UserWithDetails = {
             user_status_id: 'status_002',
             role_id: 'role_002',
             user_preference_id: 'pref_003',
-            is_online: true,
+            is_online: false,
             is_verified: true,
             last_login: new Date(),
             primary_address: '',
