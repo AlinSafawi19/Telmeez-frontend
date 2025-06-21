@@ -11,7 +11,6 @@ import type { User } from '../pages/demo-dashboard/models/user';
 import type { UserPreference } from '../pages/demo-dashboard/models/user_preference';
 import type { Role } from '../pages/demo-dashboard/models/role';
 import type { CardType } from '../pages/demo-dashboard/models/card_type';
-import type { Department } from '../pages/demo-dashboard/models/department';
 import type { UserStatus } from '../pages/demo-dashboard/models/user_status';
 import type { Course } from '../pages/demo-dashboard/models/course';
 import type { Parent } from '../pages/demo-dashboard/models/parent';
@@ -32,7 +31,6 @@ export interface UserWithDetails extends Subscriber {
     cardTypes?: CardType[];
     admins?: User[];
     roles?: Role[];
-    departments?: Department[];
     user_statuses?: UserStatus[];
     adminPreferences?: UserPreference[];
     adminProfileImages?: ProfileImage[];
@@ -366,34 +364,6 @@ const dummySubscriberData: UserWithDetails = {
             updatedAt: new Date("2025-06-20"),
         },
     ],
-    departments: [
-        {
-            id: "dept_001",
-            name: "Department 1",
-            description: "Department 1 description",
-            created_by: 'demo-user-001',
-            updated_by: 'demo-user-001',
-            is_active: true,
-            is_deleted: false,
-            is_archived: false,
-            created_at: new Date("2025-06-20"),
-            updated_at: new Date("2025-06-20"),
-            head_of_department_id: 'demo-user-002'
-        },
-        {
-            id: "dept_002",
-            name: "Department 2",
-            description: "Department 2 description",
-            created_by: 'demo-user-001',
-            updated_by: 'demo-user-001',
-            is_active: true,
-            is_deleted: false,
-            is_archived: false,
-            created_at: new Date("2025-06-20"),
-            updated_at: new Date("2025-06-20"),
-            head_of_department_id: 'demo-user-003'
-        },
-    ],
     courses: [
         {
             id: "course_001",
@@ -507,6 +477,33 @@ const dummySubscriberData: UserWithDetails = {
             user_status_id: 'status_001',
             role_id: 'role_002',
             user_preference_id: 'pref_004',
+            is_online: true,
+            is_verified: true,
+            last_login: new Date(),
+            primary_address: '',
+            secondary_address: '',
+            city: '',
+            state: '',
+            zip: '',
+            country: '',
+            profile_image_id: '',
+            createdAt: new Date("2025-06-20"),
+            updatedAt: new Date("2025-06-20"),
+            createdBy: 'demo-user-001',
+            updatedBy: ''
+        },
+        {
+            id: 'demo-user-005',
+            first_name: 'Samira',
+            last_name: 'carl',
+            email: 'samira.carl@demo.edu',
+            country_code: 'lb',
+            phone: '+96170266666',
+            password: 'hashed_password_here',
+            subscriber_id: 'demo-subscriber-001',
+            user_status_id: 'status_001',
+            role_id: 'role_002',
+            user_preference_id: 'pref_005',
             is_online: true,
             is_verified: true,
             last_login: new Date(),
@@ -1085,7 +1082,6 @@ const dummySubscriberData: UserWithDetails = {
         {
             id: 'teacher-detail-001',
             user_id: 'demo-user-011', // Dr. Robert Wilson (Teacher)
-            department_id: 'dept_001', // Department 1
             course_id: 'course_001', // Course 1
             created_at: new Date("2025-06-20"),
             updated_at: new Date("2025-06-20")
@@ -1093,7 +1089,6 @@ const dummySubscriberData: UserWithDetails = {
         {
             id: 'teacher-detail-002',
             user_id: 'demo-user-012', // Prof. Lisa Garcia (Teacher)
-            department_id: 'dept_001', // Department 1
             course_id: 'course_002', // Course 2
             created_at: new Date("2025-06-20"),
             updated_at: new Date("2025-06-20")
@@ -1101,7 +1096,6 @@ const dummySubscriberData: UserWithDetails = {
         {
             id: 'teacher-detail-003',
             user_id: 'demo-user-013', // Dr. James Taylor (Teacher)
-            department_id: 'dept_002', // Department 2
             course_id: 'course_003', // Course 3
             created_at: new Date("2025-06-20"),
             updated_at: new Date("2025-06-20")
@@ -1109,7 +1103,6 @@ const dummySubscriberData: UserWithDetails = {
         {
             id: 'teacher-detail-004',
             user_id: 'demo-user-011', // Dr. Robert Wilson (Teacher) - teaching multiple courses
-            department_id: 'dept_001', // Department 1
             course_id: 'course_002', // Course 2 (additional course)
             created_at: new Date("2025-06-20"),
             updated_at: new Date("2025-06-20")
@@ -1117,7 +1110,6 @@ const dummySubscriberData: UserWithDetails = {
         {
             id: 'teacher-detail-005',
             user_id: 'demo-user-012', // Prof. Lisa Garcia (Teacher) - teaching multiple courses
-            department_id: 'dept_002', // Department 2 (cross-department)
             course_id: 'course_003', // Course 3 (additional course)
             created_at: new Date("2025-06-20"),
             updated_at: new Date("2025-06-20")

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import SubscriberDashboardLayout from './SubscriberDashboardLayout';
 import { useUser } from '../../../contexts/UserContext';
 import { motion } from 'framer-motion';
-import { FaUserPlus, FaSearch, FaUserShield, FaCircle, FaEdit, FaTrash, FaCheck, FaTimes, FaSort, FaSortUp, FaSortDown, FaChevronLeft, FaChevronRight, FaExclamationTriangle, FaCrown, FaFilter, FaClock, FaAngleDown, FaLayerGroup, FaCalendarAlt, FaToggleOn, FaExchangeAlt } from 'react-icons/fa';
+import { FaUserPlus, FaSearch, FaUserShield, FaCircle, FaEdit, FaTrash, FaCheck, FaTimes, FaSort, FaSortUp, FaSortDown, FaChevronLeft, FaChevronRight, FaExclamationTriangle, FaCrown, FaFilter, FaClock, FaAngleDown, FaCalendarAlt, FaToggleOn } from 'react-icons/fa';
 import Select2 from '../../../components/Select2';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
@@ -15,7 +15,7 @@ const PopperContainer = (props: { children?: React.ReactNode }) => {
     return ReactDOM.createPortal(props.children, document.body);
 };
 
-type SortField = 'name' | 'email' | 'status' | 'phone' | 'department';
+type SortField = 'name' | 'email' | 'status' | 'phone';
 type SortDirection = 'asc' | 'desc';
 
 const Admins: React.FC = () => {
@@ -24,8 +24,6 @@ const Admins: React.FC = () => {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showMaxLimitModal, setShowMaxLimitModal] = useState(false);
-    const [showTransferModal, setShowTransferModal] = useState(false);
-    const [selectedAdminForTransfer, setSelectedAdminForTransfer] = useState<any>(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedAdminForEdit, setSelectedAdminForEdit] = useState<any>(null);
     const [sortField, setSortField] = useState<SortField>('name');
@@ -36,7 +34,6 @@ const Admins: React.FC = () => {
 
     // Filter states
     const [statusFilter, setStatusFilter] = useState<number>(0);
-    const [departmentFilter, setDepartmentFilter] = useState<number>(0);
     const [onlineFilter, setOnlineFilter] = useState<number>(0);
 
     // Date range filter states
@@ -49,8 +46,7 @@ const Admins: React.FC = () => {
     const [newAdmin, setNewAdmin] = useState({
         first_name: '',
         last_name: '',
-        email: '',
-        department_id: 0
+        email: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -61,12 +57,6 @@ const Admins: React.FC = () => {
         email: ''
     });
     const [isEditing, setIsEditing] = useState(false);
-
-    // Transfer department form state
-    const [transferForm, setTransferForm] = useState({
-        department_id: 0
-    });
-    const [isTransferring, setIsTransferring] = useState(false);
 
     // Add validation states
     const [validationErrors, setValidationErrors] = useState({
@@ -82,17 +72,11 @@ const Admins: React.FC = () => {
         email: ''
     });
 
-    // Transfer validation states
-    const [transferValidationErrors, setTransferValidationErrors] = useState({
-        department_id: ''
-    });
-
     const admins = subscriber?.admins || [];
     const adminProfiles = subscriber?.adminProfileImages || [];
     const userStatuses = subscriber?.user_statuses || [];
     const plans = subscriber?.plans || [];
     const payments = subscriber?.payments || [];
-    const departments = subscriber?.departments || [];
 
     // Get current plan based on latest payment
     const getCurrentPlan = () => {
@@ -116,7 +100,7 @@ const Admins: React.FC = () => {
         if (profileImage) {
             return profileImage.file_url;
         }
-        
+
         // If no profile image found, return undefined instead of a default avatar
         return undefined;
     };
@@ -138,11 +122,6 @@ const Admins: React.FC = () => {
     };
 
     const getStatus = (statusId: string) => userStatuses.find((s) => s.id === statusId)?.name || 'Active';
-
-    const getDepartmentName = (adminId: string) => {
-        const department = departments.find((dept) => dept.head_of_department_id === adminId);
-        return department?.name || 'N/A';
-    };
 
     const getLoggedInUserTimezone = (): string => {
         return subscriber?.preferences?.timezone || 'UTC';
@@ -254,15 +233,6 @@ const Admins: React.FC = () => {
         }))
     ];
 
-    const departmentFilterOptions = [
-        { value: 0, label: 'All Departments' },
-        ...departments.map((dept, index) => ({
-            value: index + 1,
-            label: dept.name
-        })),
-        { value: departments.length + 1, label: 'N/A' }
-    ];
-
     const onlineOptions = [
         { value: 0, label: 'All' },
         { value: 1, label: 'Online' },
@@ -307,10 +277,6 @@ const Admins: React.FC = () => {
                     aValue = a.phone.toLowerCase();
                     bValue = b.phone.toLowerCase();
                     break;
-                case 'department':
-                    aValue = getDepartmentName(a.id).toLowerCase();
-                    bValue = getDepartmentName(b.id).toLowerCase();
-                    break;
                 default:
                     aValue = `${a.first_name} ${a.last_name}`.toLowerCase();
                     bValue = `${b.first_name} ${b.last_name}`.toLowerCase();
@@ -326,7 +292,6 @@ const Admins: React.FC = () => {
         const fullName = `${admin.first_name} ${admin.last_name}`.toLowerCase();
         const email = admin.email.toLowerCase();
         const status = getStatus(admin.user_status_id);
-        const department = getDepartmentName(admin.id);
         const isOnline = admin.is_online;
 
         // Search filter
@@ -336,12 +301,6 @@ const Admins: React.FC = () => {
         const selectedStatusOption = statusOptions[statusFilter];
         const matchesStatus = statusFilter === 0 || status === selectedStatusOption?.label;
 
-        // Department filter - fixed logic
-        const selectedDepartmentOption = departmentFilterOptions[departmentFilter];
-        const matchesDepartment = departmentFilter === 0 ||
-            (departmentFilter <= departments.length
-                ? department === selectedDepartmentOption?.label
-                : department === 'N/A');
 
         // Online filter - fixed logic
         let matchesOnline = true;
@@ -361,7 +320,7 @@ const Admins: React.FC = () => {
             matchesDateRange = isDateInRange(dateToCheck, startDate, endDate, loggedInUserTimezone);
         }
 
-        return matchesSearch && matchesStatus && matchesDepartment && matchesOnline && matchesDateRange;
+        return matchesSearch && matchesStatus && matchesOnline && matchesDateRange;
     });
 
     const sortedAdmins = sortAdmins(filteredAdmins);
@@ -405,11 +364,6 @@ const Admins: React.FC = () => {
         setCurrentPage(1);
     };
 
-    const handleDepartmentFilterChange = (value: number) => {
-        setDepartmentFilter(value);
-        setCurrentPage(1);
-    };
-
     const handleOnlineFilterChange = (value: number) => {
         setOnlineFilter(value);
         setCurrentPage(1);
@@ -418,7 +372,6 @@ const Admins: React.FC = () => {
     // Clear all filters
     const clearAllFilters = () => {
         setStatusFilter(0);
-        setDepartmentFilter(0);
         setOnlineFilter(0);
         setStartDate(null);
         setEndDate(null);
@@ -427,7 +380,7 @@ const Admins: React.FC = () => {
     };
 
     // Check if any filters are active
-    const hasActiveFilters = statusFilter > 0 || departmentFilter > 0 || onlineFilter > 0 || startDate || endDate;
+    const hasActiveFilters = statusFilter > 0 || onlineFilter > 0 || startDate || endDate;
 
     const handleEditAdmin = (adminId: string) => {
         const adminToEdit = admins.find(admin => admin.id === adminId);
@@ -445,99 +398,6 @@ const Admins: React.FC = () => {
             email: ''
         });
         setShowEditModal(true);
-    };
-
-    const handleTransferDepartment = (admin: any) => {
-        setSelectedAdminForTransfer(admin);
-        setTransferForm({ department_id: 0 });
-        setTransferValidationErrors({ department_id: '' });
-        setShowTransferModal(true);
-    };
-
-    const validateTransferForm = (): boolean => {
-        const errors = {
-            department_id: ''
-        };
-
-        if (!transferForm.department_id) {
-            errors.department_id = 'Please select a department';
-        }
-
-        setTransferValidationErrors(errors);
-        return !Object.values(errors).some(error => error !== '');
-    };
-
-    const handleTransferInputChange = (field: string, value: number) => {
-        setTransferForm(prev => ({
-            ...prev,
-            [field]: value
-        }));
-
-        // Clear validation error for this field when user starts typing
-        if (transferValidationErrors[field as keyof typeof transferValidationErrors]) {
-            setTransferValidationErrors(prev => ({
-                ...prev,
-                [field]: ''
-            }));
-        }
-    };
-
-    const getCurrentHeadInfo = (departmentId: number) => {
-        if (!departmentId) return null;
-        const selectedDepartment = departments[departmentId - 1];
-        if (!selectedDepartment || !selectedDepartment.head_of_department_id) return null;
-
-        const headAdmin = admins.find(admin => admin.id === selectedDepartment.head_of_department_id);
-        return headAdmin ? {
-            name: `${headAdmin.first_name} ${headAdmin.last_name}`,
-            email: headAdmin.email,
-            id: headAdmin.id
-        } : null;
-    };
-
-    const handleTransferAdmin = async () => {
-        if (!validateTransferForm() || !selectedAdminForTransfer) {
-            return;
-        }
-
-        setIsTransferring(true);
-        try {
-            // Find the selected department
-            const selectedDepartment = departments[transferForm.department_id - 1];
-            if (!selectedDepartment) {
-                throw new Error('Selected department not found');
-            }
-
-            // Update subscriber data
-            if (subscriber) {
-                const updatedSubscriber = { ...subscriber };
-
-                // Remove admin from current department head position
-                updatedSubscriber.departments = (subscriber.departments || []).map(dept =>
-                    dept.head_of_department_id === selectedAdminForTransfer.id
-                        ? { ...dept, head_of_department_id: '' }
-                        : dept
-                );
-
-                // Set admin as head of the new department
-                updatedSubscriber.departments = updatedSubscriber.departments.map(dept =>
-                    dept.id === selectedDepartment.id
-                        ? { ...dept, head_of_department_id: selectedAdminForTransfer.id }
-                        : dept
-                );
-
-                updateSubscriber(updatedSubscriber);
-            }
-
-            // Reset form and close modal
-            setTransferForm({ department_id: 0 });
-            setTransferValidationErrors({ department_id: '' });
-            setSelectedAdminForTransfer(null);
-            setShowTransferModal(false);
-        } catch (error) {
-        } finally {
-            setIsTransferring(false);
-        }
     };
 
     // Validation functions
@@ -656,13 +516,6 @@ const Admins: React.FC = () => {
                 adminPreferences: (subscriber.adminPreferences || []).filter(pref => pref.user_id !== adminId)
             };
 
-            // If this admin was a head of department, remove them from that role
-            updatedSubscriber.departments = (subscriber.departments || []).map(dept =>
-                dept.head_of_department_id === adminId
-                    ? { ...dept, head_of_department_id: '' }
-                    : dept
-            );
-
             updateSubscriber(updatedSubscriber);
         }
     };
@@ -741,18 +594,6 @@ const Admins: React.FC = () => {
                     adminPreferences: [...(subscriber.adminPreferences || []), newPreference]
                 };
 
-                // If department is selected, update the department's head
-                if (newAdmin.department_id > 0) {
-                    const selectedDepartment = departments[newAdmin.department_id - 1];
-                    if (selectedDepartment) {
-                        updatedSubscriber.departments = (subscriber.departments || []).map(dept =>
-                            dept.id === selectedDepartment.id
-                                ? { ...dept, head_of_department_id: adminId }
-                                : dept
-                        );
-                    }
-                }
-
                 updateSubscriber(updatedSubscriber);
             }
 
@@ -760,8 +601,7 @@ const Admins: React.FC = () => {
             setNewAdmin({
                 first_name: '',
                 last_name: '',
-                email: '',
-                department_id: 0
+                email: ''
             });
             setValidationErrors({
                 first_name: '',
@@ -835,33 +675,6 @@ const Admins: React.FC = () => {
         { value: 50, label: '50' },
         { value: 100, label: '100' }
     ];
-
-    // Options for department dropdown
-    const departmentOptions = departments
-        .map((dept, originalIndex) => ({
-            dept,
-            originalIndex: originalIndex + 1
-        }))
-        .filter(item => !item.dept.head_of_department_id) // Only show departments without a head
-        .map(item => ({
-            value: item.originalIndex,
-            label: item.dept.name
-        }));
-
-    // Options for department dropdown in transfer modal
-    const transferDepartmentOptions = departments
-        .map((dept, originalIndex) => ({
-            value: originalIndex + 1,
-            label: dept.name,
-            hasHead: !!dept.head_of_department_id,
-            currentHeadId: dept.head_of_department_id,
-            currentHeadName: dept.head_of_department_id ?
-                (() => {
-                    const headAdmin = admins.find(admin => admin.id === dept.head_of_department_id);
-                    return headAdmin ? `${headAdmin.first_name} ${headAdmin.last_name}` : 'Unknown Admin';
-                })() : null
-        }))
-        .filter(option => option.hasHead !== selectedAdminForTransfer?.id); // Show all departments except where this admin is already head
 
     // Quick filter options
     const quickFilters = [
@@ -1018,24 +831,6 @@ const Admins: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {/* Department Filter */}
-                                <div>
-                                    <label className="block text-xs font-medium text-gray-700 mb-1 flex items-center gap-2">
-                                        <FaLayerGroup className="text-blue-500 text-xs" />
-                                        Department
-                                    </label>
-                                    <div className="relative">
-                                        <Select2
-                                            options={departmentFilterOptions}
-                                            value={departmentFilter}
-                                            onChange={handleDepartmentFilterChange}
-                                            placeholder="All Departments"
-                                            className="w-full text-sm bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200 rounded-xl pl-10"
-                                        />
-                                        <FaLayerGroup className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-500 text-sm" />
-                                    </div>
-                                </div>
-
                                 {/* Online Status Filter */}
                                 <div>
                                     <label className="block text-xs font-medium text-gray-700 mb-1 flex items-center gap-2">
@@ -1134,20 +929,6 @@ const Admins: React.FC = () => {
                                                 onClick={() => setStatusFilter(0)}
                                                 className="text-green-600 hover:text-green-800 focus:outline-none"
                                                 title="Remove status filter"
-                                            >
-                                                <FaTimes className="text-xs" />
-                                            </button>
-                                        </span>
-                                    )}
-                                    {departmentFilter > 0 && (
-                                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full border border-blue-200">
-                                            Dept: {departmentFilter <= departments.length
-                                                ? departmentFilterOptions[departmentFilter]?.label
-                                                : 'N/A'}
-                                            <button
-                                                onClick={() => setDepartmentFilter(0)}
-                                                className="text-blue-600 hover:text-blue-800 focus:outline-none"
-                                                title="Remove department filter"
                                             >
                                                 <FaTimes className="text-xs" />
                                             </button>
@@ -1310,25 +1091,6 @@ const Admins: React.FC = () => {
                                         <p className="mt-1 text-sm text-red-600">{validationErrors.email}</p>
                                     )}
                                 </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Head of Department
-                                    </label>
-                                    {departmentOptions.length === 0 ? (
-                                        <div className="text-sm text-gray-500 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
-                                            All departments already have heads assigned
-                                        </div>
-                                    ) : (
-                                        <Select2
-                                            options={departmentOptions}
-                                            value={newAdmin.department_id}
-                                            onChange={(value) => handleInputChange('department_id', value)}
-                                            placeholder="Select department"
-                                            className="w-full"
-                                        />
-                                    )}
-                                </div>
                             </div>
 
                             <div className="flex gap-3 mt-6">
@@ -1419,157 +1181,6 @@ const Admins: React.FC = () => {
                                 >
                                     <FaCrown className="text-yellow-400" />
                                     Upgrade Plan
-                                </button>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-
-                {/* Transfer Department Modal */}
-                {showTransferModal && selectedAdminForTransfer && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-                        onClick={() => setShowTransferModal(false)}
-                    >
-                        <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            className="bg-white rounded-lg p-6 max-w-md w-full mx-4"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                    <FaExchangeAlt className="text-blue-600" />
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-semibold text-gray-900">Transfer Department</h3>
-                                    <p className="text-sm text-gray-500">Move admin to a different department</p>
-                                </div>
-                            </div>
-
-                            {/* Admin Info */}
-                            <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                                <div className="flex items-center gap-3">
-                                    {getProfileImage(selectedAdminForTransfer.id) !== undefined ? (
-                                        <img
-                                            src={getProfileImage(selectedAdminForTransfer.id)!}
-                                            alt={selectedAdminForTransfer.first_name}
-                                            className="w-10 h-10 rounded-full border-2 border-blue-200"
-                                        />
-                                    ) : (
-                                        <InitialsAvatar
-                                            userData={getAdminUserData(selectedAdminForTransfer.id)}
-                                            size="md"
-                                            variant="blue"
-                                            border
-                                            borderColor="border-blue-200"
-                                        />
-                                    )}
-                                    <div>
-                                        <h4 className="font-semibold text-gray-900">
-                                            {selectedAdminForTransfer.first_name} {selectedAdminForTransfer.last_name}
-                                        </h4>
-                                        <p className="text-sm text-gray-600">{selectedAdminForTransfer.email}</p>
-                                        <p className="text-xs text-gray-500">
-                                            Current: {getDepartmentName(selectedAdminForTransfer.id)}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        New Department <span className="text-red-500">*</span>
-                                    </label>
-                                    {transferDepartmentOptions.length === 0 ? (
-                                        <div className="text-sm text-gray-500 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
-                                            No available departments for transfer
-                                        </div>
-                                    ) : (
-                                        <Select2
-                                            options={transferDepartmentOptions}
-                                            value={transferForm.department_id}
-                                            onChange={(value) => handleTransferInputChange('department_id', value)}
-                                            placeholder="Select department"
-                                            className={`w-full ${transferValidationErrors.department_id ? 'border-red-300 focus:ring-red-400' : ''}`}
-                                        />
-                                    )}
-                                    {transferValidationErrors.department_id && (
-                                        <p className="mt-1 text-sm text-red-600">{transferValidationErrors.department_id}</p>
-                                    )}
-                                </div>
-
-                                {/* Warning about current department */}
-                                {getDepartmentName(selectedAdminForTransfer.id) !== 'N/A' && (
-                                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                                        <div className="flex items-start gap-2">
-                                            <FaExclamationTriangle className="text-yellow-600 text-sm mt-0.5" />
-                                            <div className="text-sm text-yellow-800">
-                                                <p className="font-medium">Transfer Warning</p>
-                                                <p className="text-xs mt-1">
-                                                    This admin is currently the head of <strong>{getDepartmentName(selectedAdminForTransfer.id)}</strong>.
-                                                    Transferring will remove them from this position.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Warning about department with existing head */}
-                                {transferForm.department_id > 0 && (() => {
-                                    const currentHeadInfo = getCurrentHeadInfo(transferForm.department_id);
-                                    const hasExistingHead = currentHeadInfo && currentHeadInfo.id !== selectedAdminForTransfer.id;
-
-                                    if (hasExistingHead) {
-                                        return (
-                                            <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                                                <div className="flex items-start gap-2">
-                                                    <FaExclamationTriangle className="text-red-600 text-sm mt-0.5" />
-                                                    <div className="text-sm text-red-800">
-                                                        <p className="font-medium">Department Already Has a Head</p>
-                                                        <p className="text-xs mt-1">
-                                                            <strong>{currentHeadInfo.name}</strong> ({currentHeadInfo.email})
-                                                            is currently the head of this department.
-                                                        </p>
-                                                        <p className="text-xs mt-1 font-medium">
-                                                            Transferring will replace them as the department head.
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        );
-                                    }
-                                    return null;
-                                })()}
-                            </div>
-
-                            <div className="flex gap-3 mt-6">
-                                <button
-                                    onClick={() => setShowTransferModal(false)}
-                                    className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 focus:outline-none border-none"
-                                >
-                                    <FaTimes />
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handleTransferAdmin}
-                                    disabled={isTransferring || transferDepartmentOptions.length === 0}
-                                    className="flex-1 px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 focus:outline-none border-none"
-                                >
-                                    {isTransferring ? (
-                                        <>
-                                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                                            Transferring...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <FaExchangeAlt />
-                                            Transfer
-                                        </>
-                                    )}
                                 </button>
                             </div>
                         </motion.div>
@@ -1761,15 +1372,6 @@ const Admins: React.FC = () => {
                                         {getSortIcon('phone')}
                                     </div>
                                 </th>
-                                <th
-                                    className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors"
-                                    onClick={() => handleSort('department')}
-                                >
-                                    <div className="flex items-center gap-2">
-                                        Head of Department
-                                        {getSortIcon('department')}
-                                    </div>
-                                </th>
                                 <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
@@ -1827,11 +1429,6 @@ const Admins: React.FC = () => {
                                     </td>
                                     <td className="px-6 py-4 text-gray-600">{admin.phone}</td>
                                     <td className="px-6 py-4">
-                                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
-                                            {getDepartmentName(admin.id)}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4">
                                         <div className="relative">
                                             {/* Quick Action Buttons */}
                                             <div className="flex items-center gap-2">
@@ -1843,16 +1440,6 @@ const Admins: React.FC = () => {
                                                     title="Edit Admin"
                                                 >
                                                     <FaEdit className="text-sm group-hover:text-green-700" />
-                                                </motion.button>
-
-                                                <motion.button
-                                                    whileHover={{ scale: 1.1 }}
-                                                    whileTap={{ scale: 0.95 }}
-                                                    onClick={() => handleTransferDepartment(admin)}
-                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 group focus:outline-none border-none"
-                                                    title="Transfer Department"
-                                                >
-                                                    <FaExchangeAlt className="text-sm group-hover:text-blue-700" />
                                                 </motion.button>
 
                                                 <motion.button
