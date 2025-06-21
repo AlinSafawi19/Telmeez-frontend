@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import SubscriberDashboardLayout from './SubscriberDashboardLayout';
 import { useUser } from '../../../contexts/UserContext';
 import { motion } from 'framer-motion';
@@ -6,88 +6,12 @@ import { FaUserPlus, FaSearch, FaUserShield, FaCircle, FaEdit, FaTrash, FaCheck,
 import Select2 from '../../../components/Select2';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import "../../../assets/css/datepicker.css";
 import ReactDOM from 'react-dom';
-
-// Custom styles for react-datepicker to prevent cutoff
-const datePickerStyles = `
-  .react-datepicker-popper {
-    z-index: 9999 !important;
-    position: absolute !important;
-  }
-  
-  .react-datepicker-wrapper {
-    position: relative;
-  }
-  
-  .react-datepicker__input-container {
-    position: relative;
-  }
-  
-  .react-datepicker__calendar-container {
-    z-index: 9999 !important;
-    position: absolute !important;
-    background: white !important;
-    border: 1px solid #ccc !important;
-    border-radius: 4px !important;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
-  }
-  
-  .react-datepicker__month-container {
-    z-index: 9999 !important;
-  }
-  
-  .react-datepicker__header {
-    z-index: 9999 !important;
-  }
-  
-  .react-datepicker__month {
-    z-index: 9999 !important;
-  }
-  
-  .react-datepicker__day {
-    z-index: 9999 !important;
-  }
-  
-  .react-datepicker__day:hover {
-    background-color: #f0f0f0 !important;
-  }
-  
-  .react-datepicker__day--selected {
-    background-color: #0066cc !important;
-    color: white !important;
-  }
-  
-  .react-datepicker__day--in-range {
-    background-color: #e6f3ff !important;
-  }
-  
-  .react-datepicker__day--keyboard-selected {
-    background-color: #0066cc !important;
-    color: white !important;
-  }
-  
-  .react-datepicker__navigation {
-    z-index: 9999 !important;
-  }
-  
-  .react-datepicker__current-month {
-    z-index: 9999 !important;
-  }
-  
-  .react-datepicker__month-dropdown-container,
-  .react-datepicker__year-dropdown-container {
-    z-index: 9999 !important;
-  }
-`;
+import statusColors from '../../../constants/statusColors';
 
 const PopperContainer = (props: { children?: React.ReactNode }) => {
     return ReactDOM.createPortal(props.children, document.body);
-};
-
-const statusColors: Record<string, string> = {
-    Active: 'text-green-500',
-    Inactive: 'text-gray-400',
-    Pending: 'text-yellow-500',
 };
 
 type SortField = 'name' | 'email' | 'status' | 'phone' | 'department';
@@ -162,17 +86,6 @@ const Admins: React.FC = () => {
         department_id: ''
     });
 
-    // Inject custom CSS for datepicker
-    useEffect(() => {
-        const styleElement = document.createElement('style');
-        styleElement.textContent = datePickerStyles;
-        document.head.appendChild(styleElement);
-
-        return () => {
-            document.head.removeChild(styleElement);
-        };
-    }, []);
-
     const admins = subscriber?.admins || [];
     const adminProfiles = subscriber?.adminProfileImages || [];
     const userStatuses = subscriber?.user_statuses || [];
@@ -198,8 +111,8 @@ const Admins: React.FC = () => {
     const isNearLimit = maxAdmins !== null && maxAdmins !== undefined && admins.length >= maxAdmins * 0.8; // 80% of limit
 
     const getProfileImage = (adminId: string) =>
-        adminProfiles.find((img) => img.user_id === adminId)?.file_url ||
-        'https://ui-avatars.com/api/?name=Admin';
+        adminProfiles.find((img) => img.user_id === adminId)?.file_url;
+
     const getStatus = (statusId: string) => userStatuses.find((s) => s.id === statusId)?.name || 'Active';
 
     const getDepartmentName = (adminId: string) => {
@@ -211,29 +124,41 @@ const Admins: React.FC = () => {
         return subscriber?.preferences?.timezone || 'UTC';
     };
 
-    const formatTimezone = (timezone: string): string => {
-        // Convert timezone to a more readable format
-        const timezoneMap: Record<string, string> = {
-            'America/New_York': 'EST/EDT',
-            'America/Chicago': 'CST/CDT',
-            'America/Denver': 'MST/MDT',
-            'America/Los_Angeles': 'PST/PDT',
-            'Europe/London': 'GMT/BST',
-            'Europe/Paris': 'CET/CEST',
-            'Asia/Beirut': 'EET/EEST',
-            'Asia/Tokyo': 'JST',
-            'UTC': 'UTC'
-        };
-
-        return timezoneMap[timezone] || timezone.split('/').pop()?.replace('_', ' ') || timezone;
-    };
-
     const convertToUserTimezone = (date: Date, timezone: string): Date => {
         try {
-            const userDate = new Date(date.toLocaleString('en-US', { timeZone: timezone }));
-            return userDate;
+            // Use Intl.DateTimeFormat for more reliable timezone conversion
+            const formatter = new Intl.DateTimeFormat('en-US', {
+                timeZone: timezone,
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+
+            const parts = formatter.formatToParts(date);
+            const dateObj: any = {};
+
+            parts.forEach(part => {
+                if (part.type !== 'literal') {
+                    dateObj[part.type] = parseInt(part.value, 10);
+                }
+            });
+
+            // Create a new date in the target timezone
+            const targetDate = new Date(
+                dateObj.year,
+                dateObj.month - 1, // Month is 0-indexed
+                dateObj.day,
+                dateObj.hour,
+                dateObj.minute,
+                dateObj.second
+            );
+
+            return targetDate;
         } catch (error) {
-            console.warn('Invalid timezone, using UTC:', timezone);
             return date;
         }
     };
@@ -241,14 +166,31 @@ const Admins: React.FC = () => {
     const isDateInRange = (date: Date, start: Date | null, end: Date | null, timezone: string): boolean => {
         if (!start && !end) return true;
 
-        const userDate = convertToUserTimezone(date, timezone);
-        const userStart = start ? convertToUserTimezone(start, timezone) : null;
-        const userEnd = end ? convertToUserTimezone(end, timezone) : null;
+        try {
+            // Convert all dates to the user's timezone for comparison
+            const userDate = convertToUserTimezone(date, timezone);
+            const userStart = start ? convertToUserTimezone(start, timezone) : null;
+            const userEnd = end ? convertToUserTimezone(end, timezone) : null;
 
-        if (userStart && userDate < userStart) return false;
-        if (userEnd && userDate > userEnd) return false;
+            // For date-only comparison (ignoring time), normalize to start of day in user's timezone
+            const normalizeToStartOfDay = (dateToNormalize: Date) => {
+                const normalized = new Date(dateToNormalize);
+                normalized.setHours(0, 0, 0, 0);
+                return normalized;
+            };
 
-        return true;
+            const normalizedUserDate = normalizeToStartOfDay(userDate);
+            const normalizedUserStart = userStart ? normalizeToStartOfDay(userStart) : null;
+            const normalizedUserEnd = userEnd ? normalizeToStartOfDay(userEnd) : null;
+
+            if (normalizedUserStart && normalizedUserDate < normalizedUserStart) return false;
+            if (normalizedUserEnd && normalizedUserDate > normalizedUserEnd) return false;
+
+            return true;
+        } catch (error) {
+            console.warn('Date range filtering failed, including date in results:', error);
+            return true;
+        }
     };
 
     // Quick date filter functions
@@ -569,8 +511,6 @@ const Admins: React.FC = () => {
             setSelectedAdminForTransfer(null);
             setShowTransferModal(false);
         } catch (error) {
-            console.error('Error transferring admin:', error);
-            alert('Failed to transfer admin. Please try again.');
         } finally {
             setIsTransferring(false);
         }
@@ -681,7 +621,6 @@ const Admins: React.FC = () => {
     };
 
     const handleDeleteAdmin = (adminId: string) => {
-        console.log('Deleting admin:', adminId);
         setShowDeleteConfirm(null);
 
         // Remove admin from subscriber data
@@ -777,7 +716,7 @@ const Admins: React.FC = () => {
                 id: `pref-${adminId}`,
                 language: 'en',
                 user_id: adminId,
-                timezone: 'America/New_York',
+                timezone: 'Asia/Beirut',
                 updatedAt: new Date(),
                 createdAt: new Date()
             };
@@ -1156,9 +1095,11 @@ const Admins: React.FC = () => {
                                         />
                                         <FaClock className="absolute left-3 top-1/2 -translate-y-1/2 text-teal-500 text-sm" />
                                     </div>
-                                    <div className="mt-1 text-xs text-gray-500 flex items-center gap-1">
-                                        <FaClock className="text-xs" />
-                                        <span>Dates filtered in your timezone ({formatTimezone(getLoggedInUserTimezone())})</span>
+                                    <div className="mt-1 text-xs text-gray-500">
+                                        <span>Dates filtered in your timezone ({getLoggedInUserTimezone()})</span>
+                                    </div>
+                                    <div className="mt-1 text-xs text-gray-400">
+                                        <span>Daylight Saving Time transitions are automatically handled.</span>
                                     </div>
                                 </div>
                             </div>

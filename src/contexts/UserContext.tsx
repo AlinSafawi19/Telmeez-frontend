@@ -115,7 +115,7 @@ const dummySubscriberData: UserWithDetails = {
         id: 'demo-pref-001',
         language: 'en',
         user_id: 'demo-user-001',
-        timezone: 'America/New_York',
+        timezone: 'Asia/Beirut',
         updatedAt: new Date('2024-01-01'),
         createdAt: new Date('2024-01-01')
     },
@@ -528,7 +528,7 @@ const dummySubscriberData: UserWithDetails = {
             id: 'pref_002',
             language: 'en',
             user_id: 'demo-user-002',
-            timezone: 'America/New_York',
+            timezone: 'Asia/Beirut',
             updatedAt: new Date('2024-01-01'),
             createdAt: new Date('2024-01-01')
         },
@@ -835,7 +835,7 @@ const dummySubscriberData: UserWithDetails = {
             id: 'pref_005',
             language: 'en',
             user_id: 'demo-user-005',
-            timezone: 'America/New_York',
+            timezone: 'Asia/Beirut',
             updatedAt: new Date('2024-01-01'),
             createdAt: new Date('2024-01-01')
         },
@@ -861,7 +861,7 @@ const dummySubscriberData: UserWithDetails = {
             id: 'pref_008',
             language: 'en',
             user_id: 'demo-user-008',
-            timezone: 'America/New_York',
+            timezone: 'Asia/Beirut',
             updatedAt: new Date('2024-01-01'),
             createdAt: new Date('2024-01-01')
         },
@@ -887,7 +887,7 @@ const dummySubscriberData: UserWithDetails = {
             id: 'pref_011',
             language: 'en',
             user_id: 'demo-user-011',
-            timezone: 'America/New_York',
+            timezone: 'Asia/Beirut',
             updatedAt: new Date('2024-01-01'),
             createdAt: new Date('2024-01-01')
         },

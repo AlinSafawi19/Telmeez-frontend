@@ -1,0 +1,69 @@
+/* Custom styles for react-datepicker to prevent cutoff */
+.react-datepicker-popper {
+  z-index: 9999 !important;
+  position: absolute !important;
+}
+
+.react-datepicker-wrapper {
+  position: relative;
+}
+
+.react-datepicker__input-container {
+  position: relative;
+}
+
+.react-datepicker__calendar-container {
+  z-index: 9999 !important;
+  position: absolute !important;
+  background: white !important;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+}
+
+.react-datepicker__month-container {
+  z-index: 9999 !important;
+}
+
+.react-datepicker__header {
+  z-index: 9999 !important;
+}
+
+.react-datepicker__month {
+  z-index: 9999 !important;
+}
+
+.react-datepicker__day {
+  z-index: 9999 !important;
+}
+
+.react-datepicker__day:hover {
+  background-color: #f0f0f0 !important;
+}
+
+.react-datepicker__day--selected {
+  background-color: #0066cc !important;
+  color: white !important;
+}
+
+.react-datepicker__day--in-range {
+  background-color: #e6f3ff !important;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: #0066cc !important;
+  color: white !important;
+}
+
+.react-datepicker__navigation {
+  z-index: 9999 !important;
+}
+
+.react-datepicker__current-month {
+  z-index: 9999 !important;
+}
+
+.react-datepicker__month-dropdown-container,
+.react-datepicker__year-dropdown-container {
+  z-index: 9999 !important;
+} 
