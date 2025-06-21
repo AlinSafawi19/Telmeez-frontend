@@ -29,6 +29,7 @@ import {
     EnvelopeIcon
 } from '@heroicons/react/24/outline';
 import { FaUser } from 'react-icons/fa';
+import { createInitialsAvatar } from '../../../utils/avatarUtils';
 
 interface SubscriberDashboardLayoutProps {
     children: React.ReactNode;
@@ -360,11 +361,16 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                                 }}
                                             />
                                         ) : null}
-                                        <div className={`w-full h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center ${subscriber?.profileImage?.file_url ? 'hidden' : ''}`}>
-                                            <span className="text-white font-semibold text-sm">
-                                                {subscriber?.user?.first_name?.[0]}{subscriber?.user?.last_name?.[0]}
-                                            </span>
-                                        </div>
+                                        {!subscriber?.profileImage?.file_url && createInitialsAvatar({
+                                            firstName: subscriber?.user?.first_name,
+                                            lastName: subscriber?.user?.last_name,
+                                            email: subscriber?.user?.email
+                                        }, {
+                                            size: 'sm',
+                                            variant: 'purple',
+                                            shape: 'circle',
+                                            shadow: false
+                                        })}
                                     </div>
                                     <div className="hidden md:block text-left">
                                         <p className="text-sm font-medium text-gray-900">

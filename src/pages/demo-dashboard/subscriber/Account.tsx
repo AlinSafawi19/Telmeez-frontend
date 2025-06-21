@@ -11,6 +11,7 @@ import { useLanguage } from '../../../contexts/LanguageContext';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import AvatarModal from '../../../components/AvatarModal';
+import { createInitialsAvatar } from '../../../utils/avatarUtils';
 
 import {
     UserCircleIcon,
@@ -954,15 +955,22 @@ const Account: React.FC = () => {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-6">
                         <div className="relative">
-                            <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                            <div className="w-24 h-24 rounded-full overflow-hidden">
                                 {!isImageDeleted && previewImage ? (
                                     <img src={previewImage} alt="Profile" className="w-full h-full object-cover" />
                                 ) : !isImageDeleted && subscriber?.profileImage?.file_url ? (
                                     <img src={subscriber.profileImage.file_url} alt="Profile" className="w-full h-full object-cover" />
                                 ) : (
-                                    <span className="text-white text-2xl font-bold">
-                                        {subscriber?.user?.first_name?.[0]}{subscriber?.user?.last_name?.[0]}
-                                    </span>
+                                    createInitialsAvatar({
+                                        firstName: subscriber?.user?.first_name,
+                                        lastName: subscriber?.user?.last_name,
+                                        email: subscriber?.user?.email
+                                    }, {
+                                        size: '2xl',
+                                        variant: 'purple',
+                                        shape: 'circle',
+                                        shadow: false
+                                    })
                                 )}
                             </div>
                             {/* New image indicator */}
