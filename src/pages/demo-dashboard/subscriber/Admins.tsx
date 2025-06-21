@@ -101,6 +101,8 @@ const Admins: React.FC = () => {
     const [showMaxLimitModal, setShowMaxLimitModal] = useState(false);
     const [showTransferModal, setShowTransferModal] = useState(false);
     const [selectedAdminForTransfer, setSelectedAdminForTransfer] = useState<any>(null);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [selectedAdminForEdit, setSelectedAdminForEdit] = useState<any>(null);
     const [sortField, setSortField] = useState<SortField>('name');
     const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
     const [currentPage, setCurrentPage] = useState(1);
@@ -127,6 +129,14 @@ const Admins: React.FC = () => {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // Edit admin form state
+    const [editForm, setEditForm] = useState({
+        first_name: '',
+        last_name: '',
+        email: ''
+    });
+    const [isEditing, setIsEditing] = useState(false);
+
     // Transfer department form state
     const [transferForm, setTransferForm] = useState({
         department_id: 0
@@ -135,6 +145,13 @@ const Admins: React.FC = () => {
 
     // Add validation states
     const [validationErrors, setValidationErrors] = useState({
+        first_name: '',
+        last_name: '',
+        email: ''
+    });
+
+    // Edit validation states
+    const [editValidationErrors, setEditValidationErrors] = useState({
         first_name: '',
         last_name: '',
         email: ''
@@ -447,8 +464,21 @@ const Admins: React.FC = () => {
     const hasActiveFilters = statusFilter > 0 || departmentFilter > 0 || onlineFilter > 0 || startDate || endDate;
 
     const handleEditAdmin = (adminId: string) => {
-        console.log('Editing admin:', adminId);
-        // TODO: Implement edit admin functionality
+        const adminToEdit = admins.find(admin => admin.id === adminId);
+        if (!adminToEdit) return;
+
+        setSelectedAdminForEdit(adminToEdit);
+        setEditForm({
+            first_name: adminToEdit.first_name,
+            last_name: adminToEdit.last_name,
+            email: adminToEdit.email
+        });
+        setEditValidationErrors({
+            first_name: '',
+            last_name: '',
+            email: ''
+        });
+        setShowEditModal(true);
     };
 
     const handleTransferDepartment = (admin: any) => {
@@ -490,7 +520,7 @@ const Admins: React.FC = () => {
         if (!departmentId) return null;
         const selectedDepartment = departments[departmentId - 1];
         if (!selectedDepartment || !selectedDepartment.head_of_department_id) return null;
-        
+
         const headAdmin = admins.find(admin => admin.id === selectedDepartment.head_of_department_id);
         return headAdmin ? {
             name: `${headAdmin.first_name} ${headAdmin.last_name}`,
@@ -586,6 +616,40 @@ const Admins: React.FC = () => {
         return !Object.values(errors).some(error => error !== '');
     };
 
+    const validateEditForm = (): boolean => {
+        const errors = {
+            first_name: '',
+            last_name: '',
+            email: ''
+        };
+
+        // Validate first name
+        if (!editForm.first_name.trim()) {
+            errors.first_name = 'First name is required';
+        } else if (editForm.first_name.trim().length < 2) {
+            errors.first_name = 'First name must be at least 2 characters';
+        }
+
+        // Validate last name
+        if (!editForm.last_name.trim()) {
+            errors.last_name = 'Last name is required';
+        } else if (editForm.last_name.trim().length < 2) {
+            errors.last_name = 'Last name must be at least 2 characters';
+        }
+
+        // Validate email
+        if (!editForm.email.trim()) {
+            errors.email = 'Email is required';
+        } else if (!validateEmail(editForm.email.trim())) {
+            errors.email = 'Please enter a valid email address';
+        }
+
+        setEditValidationErrors(errors);
+
+        // Return true if all validations pass
+        return !Object.values(errors).some(error => error !== '');
+    };
+
     const handleInputChange = (field: string, value: string | number) => {
         setNewAdmin(prev => ({
             ...prev,
@@ -595,6 +659,21 @@ const Admins: React.FC = () => {
         // Clear validation error for this field when user starts typing
         if (validationErrors[field as keyof typeof validationErrors]) {
             setValidationErrors(prev => ({
+                ...prev,
+                [field]: ''
+            }));
+        }
+    };
+
+    const handleEditInputChange = (field: string, value: string | number) => {
+        setEditForm(prev => ({
+            ...prev,
+            [field]: value
+        }));
+
+        // Clear validation error for this field when user starts typing
+        if (editValidationErrors[field as keyof typeof editValidationErrors]) {
+            setEditValidationErrors(prev => ({
                 ...prev,
                 [field]: ''
             }));
@@ -748,6 +827,56 @@ const Admins: React.FC = () => {
         }
     };
 
+    const handleUpdateAdmin = async () => {
+        // Validate form first
+        if (!validateEditForm() || !selectedAdminForEdit) {
+            return;
+        }
+
+        setIsEditing(true);
+        try {
+            // Update subscriber data
+            if (subscriber) {
+                const updatedSubscriber = { ...subscriber };
+
+                // Update admin data
+                updatedSubscriber.admins = (subscriber.admins || []).map(admin =>
+                    admin.id === selectedAdminForEdit.id
+                        ? {
+                            ...admin,
+                            first_name: editForm.first_name,
+                            last_name: editForm.last_name,
+                            email: editForm.email,
+                            updatedAt: new Date(),
+                            updatedBy: subscriber.user?.id || ''
+                        }
+                        : admin
+                );
+
+                updateSubscriber(updatedSubscriber);
+            }
+
+            // Reset form and close modal
+            setEditForm({
+                first_name: '',
+                last_name: '',
+                email: ''
+            });
+            setEditValidationErrors({
+                first_name: '',
+                last_name: '',
+                email: ''
+            });
+            setSelectedAdminForEdit(null);
+            setShowEditModal(false);
+        } catch (error) {
+            console.error('Error updating admin:', error);
+            alert('Failed to update admin. Please try again.');
+        } finally {
+            setIsEditing(false);
+        }
+    };
+
     // Options for items per page dropdown
     const itemsPerPageOptions = [
         { value: 5, label: '5' },
@@ -776,7 +905,7 @@ const Admins: React.FC = () => {
             label: dept.name,
             hasHead: !!dept.head_of_department_id,
             currentHeadId: dept.head_of_department_id,
-            currentHeadName: dept.head_of_department_id ? 
+            currentHeadName: dept.head_of_department_id ?
                 (() => {
                     const headAdmin = admins.find(admin => admin.id === dept.head_of_department_id);
                     return headAdmin ? `${headAdmin.first_name} ${headAdmin.last_name}` : 'Unknown Admin';
@@ -792,14 +921,14 @@ const Admins: React.FC = () => {
         { label: 'Active Status', action: () => handleStatusFilterChange(1), active: statusFilter === 1 },
         { label: 'Inactive Status', action: () => handleStatusFilterChange(2), active: statusFilter === 2 },
         { label: 'Pending Status', action: () => handleStatusFilterChange(3), active: statusFilter === 3 },
-        { 
-            label: 'Last 7 Days', 
-            action: setLast7Days, 
+        {
+            label: 'Last 7 Days',
+            action: setLast7Days,
             active: activeQuickFilter === 'Last 7 Days'
         },
-        { 
-            label: 'Last 3 Months', 
-            action: setLast3Months, 
+        {
+            label: 'Last 3 Months',
+            action: setLast3Months,
             active: activeQuickFilter === 'Last 3 Months'
         },
     ];
@@ -920,7 +1049,7 @@ const Admins: React.FC = () => {
                     >
                         <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-4">
                             {/* Main Filters in Single Row */}
-                            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-4">
+                            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
                                 {/* Status Filter */}
                                 <div>
                                     <label className="block text-xs font-medium text-gray-700 mb-1 flex items-center gap-2">
@@ -1033,94 +1162,94 @@ const Admins: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            {/* Quick Filters */}
-                            <div className="border-t border-gray-100 pt-3">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <span className="text-xs font-medium text-gray-700">Quick:</span>
-                                    <div className="flex flex-wrap gap-1">
-                                        {quickFilters.map((filter, index) => (
-                                            <button
-                                                key={index}
-                                                onClick={filter.action}
-                                                className={`px-2 py-1 text-xs font-medium rounded transition-all duration-200 focus:outline-none border ${filter.active
-                                                    ? 'bg-purple-600 text-white border-purple-600'
-                                                    : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
-                                                    }`}
-                                            >
-                                                {filter.label}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Active Filters Display - Compact */}
-                            {hasActiveFilters && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 5 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="border-t border-gray-100 pt-3 mt-3"
-                                >
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <span className="text-xs font-medium text-gray-700">Active:</span>
-                                        <div className="flex flex-wrap gap-1">
-                                            {statusFilter > 0 && (
-                                                <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full border border-green-200">
-                                                    Status: {statusOptions[statusFilter]?.label}
-                                                    <button
-                                                        onClick={() => setStatusFilter(0)}
-                                                        className="text-green-600 hover:text-green-800"
-                                                        title="Remove status filter"
-                                                    >
-                                                        <FaTimes className="text-xs" />
-                                                    </button>
-                                                </span>
-                                            )}
-                                            {departmentFilter > 0 && (
-                                                <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full border border-blue-200">
-                                                    Dept: {departmentFilter <= departments.length
-                                                        ? departmentFilterOptions[departmentFilter]?.label
-                                                        : 'N/A'}
-                                                    <button
-                                                        onClick={() => setDepartmentFilter(0)}
-                                                        className="text-blue-600 hover:text-blue-800"
-                                                        title="Remove department filter"
-                                                    >
-                                                        <FaTimes className="text-xs" />
-                                                    </button>
-                                                </span>
-                                            )}
-                                            {onlineFilter > 0 && (
-                                                <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full border border-purple-200">
-                                                    {onlineOptions[onlineFilter]?.label}
-                                                    <button
-                                                        onClick={() => setOnlineFilter(0)}
-                                                        className="text-purple-600 hover:text-purple-800"
-                                                        title="Remove online status filter"
-                                                    >
-                                                        <FaTimes className="text-xs" />
-                                                    </button>
-                                                </span>
-                                            )}
-                                            {(startDate || endDate) && (
-                                                <span className="inline-flex items-center gap-1 px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full border border-orange-200">
-                                                    {dateFilterType === 'created' ? 'Created' : 'Last Login'}: {startDate?.toLocaleDateString() || 'Any'} - {endDate?.toLocaleDateString() || 'Any'}
-                                                    <button
-                                                        onClick={clearDateFilter}
-                                                        className="text-orange-600 hover:text-orange-800"
-                                                        title="Remove date filter"
-                                                    >
-                                                        <FaTimes className="text-xs" />
-                                                    </button>
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            )}
                         </div>
                     </motion.div>
+
+                    {/* Active Filters Display - Compact */}
+                    {hasActiveFilters && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 5 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="border-t border-gray-100 pt-3 mt-3"
+                        >
+                            <div className="flex items-center gap-2 mb-2">
+                                <span className="text-xs font-medium text-gray-700">Active Filters:</span>
+                                <div className="flex flex-wrap gap-1">
+                                    {statusFilter > 0 && (
+                                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full border border-green-200">
+                                            Status: {statusOptions[statusFilter]?.label}
+                                            <button
+                                                onClick={() => setStatusFilter(0)}
+                                                className="text-green-600 hover:text-green-800 focus:outline-none"
+                                                title="Remove status filter"
+                                            >
+                                                <FaTimes className="text-xs" />
+                                            </button>
+                                        </span>
+                                    )}
+                                    {departmentFilter > 0 && (
+                                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full border border-blue-200">
+                                            Dept: {departmentFilter <= departments.length
+                                                ? departmentFilterOptions[departmentFilter]?.label
+                                                : 'N/A'}
+                                            <button
+                                                onClick={() => setDepartmentFilter(0)}
+                                                className="text-blue-600 hover:text-blue-800 focus:outline-none"
+                                                title="Remove department filter"
+                                            >
+                                                <FaTimes className="text-xs" />
+                                            </button>
+                                        </span>
+                                    )}
+                                    {onlineFilter > 0 && (
+                                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full border border-purple-200">
+                                            {onlineOptions[onlineFilter]?.label}
+                                            <button
+                                                onClick={() => setOnlineFilter(0)}
+                                                className="text-purple-600 hover:text-purple-800 focus:outline-none"
+                                                title="Remove online status filter"
+                                            >
+                                                <FaTimes className="text-xs" />
+                                            </button>
+                                        </span>
+                                    )}
+                                    {(startDate || endDate) && (
+                                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full border border-orange-200">
+                                            {dateFilterType === 'created' ? 'Created' : 'Last Login'}: {startDate?.toLocaleDateString() || 'Any'} - {endDate?.toLocaleDateString() || 'Any'}
+                                            <button
+                                                onClick={clearDateFilter}
+                                                className="text-orange-600 hover:text-orange-800 focus:outline-none"
+                                                title="Remove date filter"
+                                            >
+                                                <FaTimes className="text-xs" />
+                                            </button>
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {/* Quick Filters */}
+                    <div className="border-t border-gray-100 pt-3 mt-3">
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className="text-xs font-medium text-gray-700">Quick Filters:</span>
+                            <div className="flex flex-wrap gap-1">
+                                {quickFilters.map((filter, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={filter.action}
+                                        className={`px-2 py-1 text-xs font-medium rounded transition-all duration-200 focus:outline-none border ${filter.active
+                                            ? 'bg-purple-600 text-white border-purple-600'
+                                            : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
+                                            }`}
+                                    >
+                                        {filter.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </motion.div>
 
                 {/* Warning Banner when approaching limit */}
@@ -1419,7 +1548,7 @@ const Admins: React.FC = () => {
                                             <div className="text-sm text-yellow-800">
                                                 <p className="font-medium">Transfer Warning</p>
                                                 <p className="text-xs mt-1">
-                                                    This admin is currently the head of <strong>{getDepartmentName(selectedAdminForTransfer.id)}</strong>. 
+                                                    This admin is currently the head of <strong>{getDepartmentName(selectedAdminForTransfer.id)}</strong>.
                                                     Transferring will remove them from this position.
                                                 </p>
                                             </div>
@@ -1431,7 +1560,7 @@ const Admins: React.FC = () => {
                                 {transferForm.department_id > 0 && (() => {
                                     const currentHeadInfo = getCurrentHeadInfo(transferForm.department_id);
                                     const hasExistingHead = currentHeadInfo && currentHeadInfo.id !== selectedAdminForTransfer.id;
-                                    
+
                                     if (hasExistingHead) {
                                         return (
                                             <div className="bg-red-50 border border-red-200 rounded-lg p-3">
@@ -1440,7 +1569,7 @@ const Admins: React.FC = () => {
                                                     <div className="text-sm text-red-800">
                                                         <p className="font-medium">Department Already Has a Head</p>
                                                         <p className="text-xs mt-1">
-                                                            <strong>{currentHeadInfo.name}</strong> ({currentHeadInfo.email}) 
+                                                            <strong>{currentHeadInfo.name}</strong> ({currentHeadInfo.email})
                                                             is currently the head of this department.
                                                         </p>
                                                         <p className="text-xs mt-1 font-medium">
@@ -1477,6 +1606,135 @@ const Admins: React.FC = () => {
                                         <>
                                             <FaExchangeAlt />
                                             Transfer
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+
+                {/* Edit Admin Modal */}
+                {showEditModal && selectedAdminForEdit && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                        onClick={() => setShowEditModal(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                    <FaEdit className="text-green-600" />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900">Edit Admin</h3>
+                                    <p className="text-sm text-gray-500">Update admin information</p>
+                                </div>
+                            </div>
+
+                            {/* Admin Info */}
+                            <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                                <div className="flex items-center gap-3">
+                                    <img
+                                        src={getProfileImage(selectedAdminForEdit.id)}
+                                        alt={selectedAdminForEdit.first_name}
+                                        className="w-12 h-12 rounded-full border-2 border-green-200"
+                                    />
+                                    <div>
+                                        <h4 className="font-semibold text-gray-900">
+                                            {selectedAdminForEdit.first_name} {selectedAdminForEdit.last_name}
+                                        </h4>
+                                        <p className="text-sm text-gray-600">{selectedAdminForEdit.email}</p>
+                                        <p className="text-xs text-gray-500">
+                                            ID: {selectedAdminForEdit.id}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            First Name <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={editForm.first_name}
+                                            onChange={(e) => handleEditInputChange('first_name', e.target.value)}
+                                            className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none transition-colors ${editValidationErrors.first_name ? 'border-red-300 focus:ring-red-400' : ''
+                                                }`}
+                                            placeholder="Enter first name"
+                                        />
+                                        {editValidationErrors.first_name && (
+                                            <p className="mt-1 text-sm text-red-600">{editValidationErrors.first_name}</p>
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Last Name <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={editForm.last_name}
+                                            onChange={(e) => handleEditInputChange('last_name', e.target.value)}
+                                            className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none transition-colors ${editValidationErrors.last_name ? 'border-red-300 focus:ring-red-400' : ''
+                                                }`}
+                                            placeholder="Enter last name"
+                                        />
+                                        {editValidationErrors.last_name && (
+                                            <p className="mt-1 text-sm text-red-600">{editValidationErrors.last_name}</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Email Address <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="email"
+                                        value={editForm.email}
+                                        onChange={(e) => handleEditInputChange('email', e.target.value)}
+                                        className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none transition-colors ${editValidationErrors.email ? 'border-red-300 focus:ring-red-400' : ''
+                                            }`}
+                                        placeholder="Enter email address"
+                                    />
+                                    {editValidationErrors.email && (
+                                        <p className="mt-1 text-sm text-red-600">{editValidationErrors.email}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3 mt-6">
+                                <button
+                                    onClick={() => setShowEditModal(false)}
+                                    className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 focus:outline-none border-none"
+                                >
+                                    <FaTimes />
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleUpdateAdmin}
+                                    disabled={isEditing}
+                                    className="flex-1 px-4 py-2 text-white bg-green-600 hover:bg-green-700 disabled:bg-green-400 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 focus:outline-none border-none"
+                                >
+                                    {isEditing ? (
+                                        <>
+                                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                            Updating...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FaCheck />
+                                            Update Admin
                                         </>
                                     )}
                                 </button>
