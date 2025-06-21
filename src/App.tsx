@@ -11,7 +11,6 @@ import Messages from './pages/demo-dashboard/subscriber/Messages';
 import Announcements from './pages/demo-dashboard/subscriber/Announcements';
 import Admins from "./pages/demo-dashboard/subscriber/Admins";
 import Notifications from "./pages/demo-dashboard/subscriber/Notifications";
-import Departments from "./pages/demo-dashboard/subscriber/Departments";
 import Events from "./pages/demo-dashboard/subscriber/Events";
 import Analytics from "./pages/demo-dashboard/subscriber/Analytics";
 import Settings from "./pages/demo-dashboard/subscriber/Settings";
@@ -59,7 +58,6 @@ const App: React.FC = () => {
               <Route path="/demo-dashboard/subscriber/messages" element={<Messages />} />
               <Route path="/demo-dashboard/subscriber/announcements" element={<Announcements />} />
               <Route path="/demo-dashboard/subscriber/notifications" element={<Notifications />} />
-              <Route path="/demo-dashboard/subscriber/departments" element={<Departments />} />
               <Route path="/demo-dashboard/subscriber/events" element={<Events />} />
               <Route path="/demo-dashboard/subscriber/analytics" element={<Analytics />} />
               <Route path="/demo-dashboard/subscriber/settings" element={<Settings />} />

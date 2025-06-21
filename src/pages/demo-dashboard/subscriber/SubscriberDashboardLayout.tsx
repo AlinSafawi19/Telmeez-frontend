@@ -96,13 +96,6 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
             ]
         },
         {
-            id: 'departments',
-            name: 'Departments',
-            icon: BuildingOfficeIcon,
-            href: '/demo-dashboard/subscriber/departments',
-            color: 'text-teal-500'
-        },
-        {
             id: 'communication',
             name: 'Communication',
             icon: ChatBubbleLeftRightIcon,
