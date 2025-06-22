@@ -78,7 +78,6 @@ const dummySubscriberData: UserWithDetails = {
     last_payment_id: 'pay_001',
     institution_name: 'Demo University',
     is_active: true,
-    recurrence: 'annually',
     is_auto_renew: true,
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
@@ -138,6 +137,7 @@ const dummySubscriberData: UserWithDetails = {
             promo_code_id: '',
             subscriber_id: 'demo-subscriber-001',
             billing_address_id: 'addr_001',
+            is_annual: true,
             createdAt: new Date("2025-06-20")
         },
         {
@@ -150,7 +150,8 @@ const dummySubscriberData: UserWithDetails = {
             promo_code_id: 'PROMO20',
             subscriber_id: 'demo-subscriber-001',
             billing_address_id: 'addr_001',
-            createdAt: new Date("2025-05-20")
+            is_annual: true,
+            createdAt: new Date("2024-05-20")
         },
         {
             id: "pay_003",
@@ -162,7 +163,8 @@ const dummySubscriberData: UserWithDetails = {
             promo_code_id: '',
             subscriber_id: 'demo-subscriber-001',
             billing_address_id: 'addr_002',
-            createdAt: new Date("2025-04-20")
+            is_annual: true,
+            createdAt: new Date("2024-04-20")
         },
         {
             id: "pay_004",
@@ -170,11 +172,12 @@ const dummySubscriberData: UserWithDetails = {
             plan_id: "plan_001",
             final_price: "950.00",
             next_payment_date: new Date("2025-03-20"),
-            payment_status_id: 'status_002',
+            payment_status_id: 'status_001',
             promo_code_id: '',
             subscriber_id: 'demo-subscriber-001',
             billing_address_id: 'addr_001',
-            createdAt: new Date("2025-03-20")
+            is_annual: false,
+            createdAt: new Date("2024-03-20")
         },
         {
             id: "pay_005",
@@ -182,11 +185,12 @@ const dummySubscriberData: UserWithDetails = {
             plan_id: "plan_003",
             final_price: "1500.00",
             next_payment_date: new Date("2025-02-20"),
-            payment_status_id: 'status_003',
-            promo_code_id: 'WELCOME50',
+            payment_status_id: 'status_001',
+            promo_code_id: '',
             subscriber_id: 'demo-subscriber-001',
             billing_address_id: 'addr_003',
-            createdAt: new Date("2025-02-20")
+            is_annual: true,
+            createdAt: new Date("2023-02-20")
         }
     ],
     paymentMethods: [

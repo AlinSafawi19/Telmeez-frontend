@@ -8,5 +8,6 @@ export interface Payment {
     promo_code_id: string;
     subscriber_id: string;
     billing_address_id: string;
+    is_annual: boolean;
     createdAt: Date;
 }

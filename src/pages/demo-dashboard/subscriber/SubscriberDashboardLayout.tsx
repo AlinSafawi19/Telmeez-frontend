@@ -22,7 +22,6 @@ import {
     BuildingLibraryIcon,
     DocumentTextIcon,
     ShieldCheckIcon,
-    BuildingOfficeIcon,
     ExclamationTriangleIcon,
     ArrowRightOnRectangleIcon,
     QuestionMarkCircleIcon,
