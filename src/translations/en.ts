@@ -411,7 +411,7 @@ export const en = {
                     title: "Become a Success Story",
                     subtitle: "Share your experience with others",
                 },
-                tag: "Limited Time Offer - Join Our Pioneer Program",
+                tag: "Limited Time Offer",
                 pioneers: {
                     first: "A",
                     second: "B",

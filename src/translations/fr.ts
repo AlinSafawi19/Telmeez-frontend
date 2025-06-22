@@ -396,7 +396,7 @@ export const fr = {
                     title: "Devenez une Histoire de Réussite",
                     subtitle: "Partagez votre expérience avec les autres"
                 },
-                tag: "Offre limitée - Rejoignez notre programme pionnier",
+                tag: "Offre limitée",
                 pioneers: {
                     first: "A",
                     second: "B",

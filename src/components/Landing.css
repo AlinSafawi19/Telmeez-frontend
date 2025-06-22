@@ -20,7 +20,7 @@
 /* Ensure feature cards are properly visible */
 #features-section .grid > div {
     overflow: visible !important;
-    min-height: auto !important;
+    min-height: 0 !important;
     height: auto !important;
 }
 
