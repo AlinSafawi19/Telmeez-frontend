@@ -1,17 +1,6 @@
 export const en = {
     header: {
         home: "Home",
-        why_us: {
-            why_us: "Why Institutions Choose ",
-            company_name: "Telmeez",
-            question_mark: "?",
-            role_based: "Role-Based Access",
-            role_based_desc: "Administrator, staff, parent, and student dashboards with role-based secure access.",
-            advanced_security: "Advanced Security",
-            advanced_security_desc: "Enterprise-grade security with password encryption, token-based sessions, and account protection.",
-            seamless_comm: "Seamless Communication",
-            seamless_comm_desc: "Engage administrators, staff, parents, and students on our integrated platform."
-        },
         features: {
             features: "Features"
         },
@@ -238,7 +227,6 @@ export const en = {
             about_us: "About Us",
             features: "Features",
             pricing: "Pricing",
-            why_us: "Why Us?",
             testimonials: "Testimonials"
         },
         resources: {

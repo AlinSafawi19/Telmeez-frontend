@@ -6,6 +6,7 @@ import type { Language } from '../translations';
 import logo from '../assets/images/logo.png';
 import logoarb from '../assets/images/logo_arb.png';
 import comingsoon from '../assets/images/comingsoon.svg';
+import '../components/Landing.css';
 
 const ComingSoon: React.FC = () => {
     const { currentLanguage, setCurrentLanguage } = useLanguage();
@@ -88,7 +89,7 @@ const ComingSoon: React.FC = () => {
                         <div className="relative" ref={dropdownRef}>
                             <button
                                 onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-                                className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium focus:outline-none"
+                                className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium focus:outline-none force-white-bg"
                                 aria-label="Select language"
                             >
                                 <span className="font-medium">

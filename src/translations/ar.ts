@@ -1,17 +1,6 @@
 export const ar = {
     header: {
         home: "الرئيسية",
-        why_us: {
-            why_us: "لماذا تختار المؤسسات ",
-            company_name: "تلميز",
-            question_mark: "؟",
-            role_based: "الوصول القائم على الأدوار",
-            role_based_desc: "لوحات تحكم للمشرفين والموظفين وأولياء الأمور والطلاب مع وصول آمن قائم على الأدوار.",
-            advanced_security: "أمان متقدم",
-            advanced_security_desc: "أمان على مستوى المؤسسات مع تشفير كلمات المرور وجلسات قائمة على الرموز وحماية الحسابات.",
-            seamless_comm: "تواصل سلس",
-            seamless_comm_desc: "تفاعل مع المشرفين والموظفين وأولياء الأمور والطلاب على منصتنا المتكاملة."
-        },
         features: {
             features: "الميزات"
         },
@@ -238,7 +227,6 @@ export const ar = {
             about_us: "من نحن",
             features: "الميزات",
             pricing: "الأسعار",
-            why_us: "لماذا نحن؟",
             testimonials: "الشهادات"
         },
         resources: {

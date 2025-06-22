@@ -1,17 +1,6 @@
 export const fr = {
     header: {
         home: "Accueil",
-        why_us: {
-            why_us: "Pourquoi les Institutions Choisissent ",
-            company_name: "Telmeez",
-            question_mark: "?",
-            role_based: "Accès Basé sur les Rôles",
-            role_based_desc: "Tableaux de bord administrateur, personnel, parent et étudiant avec accès sécurisé basé sur les rôles.",
-            advanced_security: "Sécurité Avancée",
-            advanced_security_desc: "Sécurité de niveau entreprise avec chiffrement des mots de passe, sessions basées sur des jetons et protection des comptes.",
-            seamless_comm: "Communication Transparente",
-            seamless_comm_desc: "Engagez les administrateurs, le personnel, les parents et les étudiants sur notre plateforme intégrée."
-        },
         features: {
             features: "Fonctionnalités"
         },
@@ -223,7 +212,6 @@ export const fr = {
             about_us: "À Propos",
             features: "Fonctionnalités",
             pricing: "Tarification",
-            why_us: "Pourquoi Nous ?",
             testimonials: "Témoignages"
         },
         resources: {

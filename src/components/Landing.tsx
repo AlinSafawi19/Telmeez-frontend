@@ -63,16 +63,6 @@ const Landing: React.FC = () => {
     const t = translations[currentLanguage];
     const [testimonials, /*setTestimonials*/] = useState<any[]>([]);
 
-    // Debug: Log translation values to check if they're loaded
-    useEffect(() => {
-        console.log('Current language:', currentLanguage);
-        console.log('Translation values:', {
-            role_based: t.header.why_us.role_based,
-            advanced_security: t.header.why_us.advanced_security,
-            seamless_comm: t.header.why_us.seamless_comm
-        });
-    }, [currentLanguage, t.header.why_us.role_based, t.header.why_us.advanced_security, t.header.why_us.seamless_comm]);
-
     // Add testimonial form states
     const [isTestimonialModalOpen, setIsTestimonialModalOpen] = useState(false);
     const [testimonialForm, setTestimonialForm] = useState<TestimonialForm>(() => {
@@ -445,11 +435,11 @@ const Landing: React.FC = () => {
     useEffect(() => {
         // Check if we should scroll to pricing (from register button)
         const shouldScrollToPricing = localStorage.getItem('scrollToPricing');
-        
+
         if (shouldScrollToPricing === 'true') {
             // Clear the flag
             localStorage.removeItem('scrollToPricing');
-            
+
             // Scroll to pricing section after a short delay to ensure component is mounted
             setTimeout(() => {
                 pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -915,44 +905,8 @@ const Landing: React.FC = () => {
             </div>
 
             {/* Features Section */}
-            <div id="features-section" className="py-12 sm:py-16 md:py-20 bg-white">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8 sm:mb-12 md:mb-16 px-4 sm:px-0">
-                        {t.header.why_us.why_us} <span className="text-blue-600">{t.header.why_us.company_name}</span>{t.header.why_us.question_mark}
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
-                        {/* Feature 1: Role-Based Access */}
-                        <div className="p-8 rounded-2xl bg-white shadow-lg border border-gray-100 transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-                            <div className="text-blue-600 text-5xl mb-6">👤</div>
-                            <h3 className="text-2xl font-semibold mb-4 text-gray-900">
-                                {t.header.why_us.role_based || 'Role-Based Access'}
-                            </h3>
-                            <p className="text-gray-600 leading-relaxed text-base">
-                                {t.header.why_us.role_based_desc || 'Administrator, staff, parent, and student dashboards with role-based secure access.'}
-                            </p>
-                        </div>
-                        {/* Feature 2: Advanced Security */}
-                        <div className="p-8 rounded-2xl bg-white shadow-lg border border-gray-100 transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-                            <div className="text-blue-600 text-5xl mb-6">🔒</div>
-                            <h3 className="text-2xl font-semibold mb-4 text-gray-900">
-                                {t.header.why_us.advanced_security || 'Advanced Security'}
-                            </h3>
-                            <p className="text-gray-600 leading-relaxed text-base">
-                                {t.header.why_us.advanced_security_desc || 'Enterprise-grade security with password encryption, token-based sessions, and account protection.'}
-                            </p>
-                        </div>
-                        {/* Feature 3: Seamless Communication */}
-                        <div className="p-8 rounded-2xl bg-white shadow-lg border border-gray-100 transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-                            <div className="text-blue-600 text-5xl mb-6">💬</div>
-                            <h3 className="text-2xl font-semibold mb-4 text-gray-900">
-                                {t.header.why_us.seamless_comm || 'Seamless Communication'}
-                            </h3>
-                            <p className="text-gray-600 leading-relaxed text-base">
-                                {t.header.why_us.seamless_comm_desc || 'Engage administrators, staff, parents, and students on our integrated platform.'}
-                            </p>
-                        </div>
-                    </div>
-                </div>
+            <div id="features-section">
+
             </div>
 
             {/* App Download Section */}
@@ -1487,11 +1441,7 @@ const Landing: React.FC = () => {
                                 <li><a href="#pricing" onClick={(e) => {
                                     e.preventDefault(); pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
                                     setTimeout(() => setIsScrolling(false), 1000);
-                                }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.pricing}</a></li>
-                                <li><a href="#features-section" onClick={(e) => {
-                                    e.preventDefault(); document.getElementById('features-section')?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
-                                    setTimeout(() => setIsScrolling(false), 1000);
-                                }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.why_us}</a></li>
+                                }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.pricing}</a></li>    
                                 <li><a href="#testimonials" onClick={(e) => {
                                     e.preventDefault(); document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
                                     setTimeout(() => setIsScrolling(false), 1000);

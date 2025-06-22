@@ -1084,7 +1084,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     name="email"
                                                     value={billingInfo.email}
                                                     onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg${errors.billing?.email ? 'border-red-500' : 'border-gray-300'
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.email ? 'border-red-500' : 'border-gray-300'
                                                         }`}
                                                 />
                                                 {errors.billing?.email && (
@@ -1228,7 +1228,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     name="city"
                                                     value={billingInfo.city}
                                                     onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg${errors.billing?.city ? 'border-red-500' : 'border-gray-300'
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.city ? 'border-red-500' : 'border-gray-300'
                                                         }`}
                                                 />
                                                 {errors.billing?.city && (
@@ -1265,7 +1265,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     name="zipCode"
                                                     value={billingInfo.zipCode}
                                                     onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg${errors.billing?.zipCode ? 'border-red-500' : 'border-gray-300'
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.zipCode ? 'border-red-500' : 'border-gray-300'
                                                         }`}
                                                 />
                                                 {errors.billing?.zipCode && (
@@ -1305,7 +1305,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     name="confirmPassword"
                                                     value={billingInfo.confirmPassword}
                                                     onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg${errors.billing?.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.confirmPassword ? 'border-red-500' : 'border-gray-300'
                                                         }`}
                                                     placeholder={t.checkout.account_info.fields.password_confirm_placeholder}
                                                 />
@@ -1396,7 +1396,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                             value={paymentInfo.expiryDate}
                                                             onChange={handlePaymentInfoChange}
                                                             placeholder="MM/YY"
-                                                            className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg${errors.payment?.expiryDate ? 'border-red-500' : 'border-gray-300'
+                                                            className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.payment?.expiryDate ? 'border-red-500' : 'border-gray-300'
                                                                 }`}
                                                         />
                                                         {errors.payment?.expiryDate && (
@@ -1482,7 +1482,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                             value={billingAddress.customCountry}
                                                             onChange={(e) => handleCustomCountryChange(e, true)}
                                                             placeholder={t.checkout.account_info.fields.enter_country || "Enter your country"}
-                                                            className={`mt-2 focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg${errors.billingAddress?.customCountry ? 'border-red-500' : 'border-gray-300'}`}
+                                                            className={`mt-2 focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billingAddress?.customCountry ? 'border-red-500' : 'border-gray-300'}`}
                                                         />
                                                     )}
                                                     {errors.billingAddress?.country && (
@@ -1547,7 +1547,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                         name="state"
                                                         value={billingAddress.state}
                                                         onChange={handleBillingAddressChange}
-                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg${errors.billingAddress?.state ? 'border-red-500' : 'border-gray-300'
+                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.state ? 'border-red-500' : 'border-gray-300'
                                                             }`}
                                                     />
                                                     {errors.billingAddress?.state && (
