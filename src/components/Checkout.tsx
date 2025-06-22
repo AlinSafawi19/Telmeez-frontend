@@ -955,7 +955,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                             )}
                         </div>
                         <button
-                            onClick={() => navigate('/home')}
+                            onClick={() => navigate('/')}
                             className="group focus:outline-none flex items-center gap-2 px-6 py-3 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-full hover:bg-indigo-50"
                             aria-label="Back to home"
                         >

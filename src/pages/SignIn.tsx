@@ -109,14 +109,9 @@ const SignIn: React.FC = () => {
     };
 
     const handleCreateAccount = () => {
-        navigate('/home');
-        // Use setTimeout to ensure the navigation completes before scrolling
-        setTimeout(() => {
-            const pricingSection = document.querySelector('[data-section="pricing"]');
-            if (pricingSection) {
-                pricingSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        }, 100);
+        // Set a flag to indicate we want to scroll to pricing
+        localStorage.setItem('scrollToPricing', 'true');
+        navigate('/');
     };
 
     return (
@@ -163,7 +158,7 @@ const SignIn: React.FC = () => {
                             )}
                         </div>
                         <button
-                            onClick={() => navigate('/home')}
+                            onClick={() => navigate('/')}
                             className="flex focus:outline-none items-center gap-1 px-3 py-2 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-lg hover:bg-gray-100"
                             aria-label="Back to home"
                         >
@@ -218,7 +213,7 @@ const SignIn: React.FC = () => {
                                     )}
                                 </div>
                                 <button
-                                    onClick={() => navigate('/home')}
+                                    onClick={() => navigate('/')}
                                     className="flex focus:outline-none items-center gap-2 px-4 py-2 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-full hover:bg-indigo-50 force-white-bg"
                                     aria-label="Back to sign in"
                                 >

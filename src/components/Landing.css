@@ -1,3 +1,126 @@
 .force-white-bg {
     background: white !important;
+}
+
+/* Ensure feature section text is always visible */
+#features-section h3 {
+    color: #111827 !important; /* text-gray-900 */
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+#features-section p {
+    color: #4B5563 !important; /* text-gray-600 */
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Ensure feature cards are properly visible */
+#features-section .grid > div {
+    overflow: visible !important;
+    min-height: auto !important;
+    height: auto !important;
+}
+
+#features-section .grid > div > * {
+    overflow: visible !important;
+    max-width: none !important;
+    width: auto !important;
+}
+
+/* Mobile-specific animations */
+@media (max-width: 640px) {
+    .animate-fadeInUp {
+        animation: fadeInUpMobile 0.8s ease-out forwards;
+    }
+    
+    .animate-fadeInUp.delay-200 {
+        animation-delay: 0.2s;
+    }
+    
+    .animate-fadeInUp.delay-300 {
+        animation-delay: 0.4s;
+    }
+    
+    /* Ensure text is visible on mobile */
+    #features-section h3,
+    #features-section p {
+        color: inherit !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        font-size: inherit !important;
+        line-height: inherit !important;
+    }
+}
+
+@keyframes fadeInUpMobile {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile-friendly blob animations */
+@media (max-width: 640px) {
+    .animate-blob {
+        animation: blobMobile 7s infinite;
+    }
+    
+    .animation-delay-2000 {
+        animation-delay: 2s;
+    }
+    
+    .animation-delay-4000 {
+        animation-delay: 4s;
+    }
+}
+
+@keyframes blobMobile {
+    0% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+        transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+        transform: translate(0px, 0px) scale(1);
+    }
+}
+
+/* Mobile touch-friendly button improvements */
+@media (max-width: 640px) {
+    button {
+        min-height: 44px; /* iOS recommended minimum touch target */
+    }
+    
+    /* Improve button spacing on mobile */
+    .space-y-3 > * + * {
+        margin-top: 0.75rem;
+    }
+    
+    .space-y-4 > * + * {
+        margin-top: 1rem;
+    }
+}
+
+/* Mobile text readability improvements */
+@media (max-width: 640px) {
+    h1 {
+        line-height: 1.1;
+        letter-spacing: -0.025em;
+    }
+    
+    p {
+        line-height: 1.6;
+    }
 } 
