@@ -13,6 +13,7 @@ import CookieBanner from './CookieBanner';
 import type { Language } from '../translations';
 import { translations } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
+import './Landing.css';
 
 interface TestimonialForm {
     name: string;
@@ -560,10 +561,9 @@ const Landing: React.FC = () => {
                                     </svg>
                                 </a>
                                 <div
-                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-72 bg-white !bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'features' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
+                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-72 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'features' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'} force-white-bg`}
                                     onMouseEnter={() => handleDropdownEnter('features')}
                                     onMouseLeave={handleDropdownLeave}
-                                    style={{ backgroundColor: 'white !important' }}
                                 >
                                     {dropdownItems.features.map((/*item,*/ index) => (
                                         <a
@@ -593,10 +593,9 @@ const Landing: React.FC = () => {
                                     </svg>
                                 </a>
                                 <div
-                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-72 bg-white !bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'pricing' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
+                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-72 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'pricing' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'} force-white-bg`}
                                     onMouseEnter={() => handleDropdownEnter('pricing')}
                                     onMouseLeave={handleDropdownLeave}
-                                    style={{ backgroundColor: 'white !important' }}
                                 >
                                     {dropdownItems.pricing.map((item, index) => (
                                         <a
@@ -643,10 +642,9 @@ const Landing: React.FC = () => {
                                     </svg>
                                 </a>
                                 <div
-                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-48 bg-white !bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'about' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
+                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-48 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'about' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'} force-white-bg`}
                                     onMouseEnter={() => handleDropdownEnter('about')}
                                     onMouseLeave={handleDropdownLeave}
-                                    style={{ backgroundColor: 'white !important' }}
                                 >
                                     {dropdownItems.about.map((item, index) => (
                                         <a
@@ -676,10 +674,9 @@ const Landing: React.FC = () => {
                                     </svg>
                                 </a>
                                 <div
-                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-48 bg-white !bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'resources' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
+                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-48 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'resources' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'} force-white-bg`}
                                     onMouseEnter={() => handleDropdownEnter('resources')}
                                     onMouseLeave={handleDropdownLeave}
-                                    style={{ backgroundColor: 'white !important' }}
                                 >
                                     {dropdownItems.resources.map((item, index) => (
                                         <a
@@ -707,7 +704,7 @@ const Landing: React.FC = () => {
                         <div className={`flex items-center ${currentLanguage === 'ar' ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                             <div className="relative group">
                                 <button
-                                    className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium focus:outline-none"
+                                    className="flex items-center bg-white text-gray-600 hover:bg-gray-100 transition-colors duration-300 font-medium focus:outline-none px-3 py-2 rounded-lg border border-gray-300"
                                     onClick={() => setActiveDropdown(activeDropdown === 'language' ? null : 'language')}
                                     aria-expanded="false"
                                     aria-haspopup="true"
@@ -721,12 +718,11 @@ const Landing: React.FC = () => {
                                     </svg>
                                 </button>
                                 <div
-                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-40 bg-white !bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'language' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'}`}
+                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-40 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'language' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'} force-white-bg`}
                                     role="menu"
                                     aria-orientation="vertical"
                                     aria-labelledby="language-menu"
                                     ref={languageDropdownRef}
-                                    style={{ backgroundColor: 'white !important' }}
                                 >
                                     {languages.map((lang) => (
                                         <button
@@ -756,7 +752,7 @@ const Landing: React.FC = () => {
                             </button>
                             <button
                                 type="button"
-                                className="md:hidden text-gray-600 focus:outline-none"
+                                className="md:hidden text-gray-600 bg-white p-2 rounded-lg border border-gray-300 focus:outline-none"
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                                 aria-label="Toggle mobile menu"
                             >
@@ -774,8 +770,7 @@ const Landing: React.FC = () => {
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                                className="md:hidden mt-4 py-4 border-t overflow-hidden bg-white !bg-white"
-                                style={{ backgroundColor: 'white !important' }}
+                                className="md:hidden mt-4 py-4 border-t overflow-hidden bg-white force-white-bg"
                             >
                                 <div className="flex justify-end mb-4">
                                     <button
@@ -1935,122 +1930,6 @@ const Landing: React.FC = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-
-            <style>{`
-                @keyframes fadeInUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(20px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-                .animate-fadeInUp {
-                    animation: fadeInUp 0.6s ease-out forwards;
-                }
-                .delay-100 {
-                    animation-delay: 100ms;
-                }
-                .delay-200 {
-                    animation-delay: 200ms;
-                }
-                .delay-300 {
-                    animation-delay: 300ms;
-                }
-                .bg-grid-pattern {
-                    background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
-                                    linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
-                    background-size: 20px 20px;
-                }
-                @keyframes slideDown {
-                    from {
-                        opacity: 0;
-                        transform: translateY(-100%);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-                .animate-slideDown {
-                    animation: slideDown 0.6s ease-out forwards;
-                }
-                @keyframes blob {
-                    0% {
-                        transform: translate(0px, 0px) scale(1);
-                    }
-                    33% {
-                        transform: translate(30px, -50px) scale(1.1);
-                    }
-                    66% {
-                        transform: translate(-20px, 20px) scale(0.9);
-                    }
-                    100% {
-                        transform: translate(0px, 0px) scale(1);
-                    }
-                }
-                .animate-blob {
-                    animation: blob 7s infinite;
-                }
-                .animation-delay-2000 {
-                    animation-delay: 2s;
-                }
-                .animation-delay-4000 {
-                    animation-delay: 4s;
-                }
-                .animation-delay-1000 {
-                    animation-delay: 1s;
-                }
-                
-                /* Force light mode for dropdowns and mobile menu */
-                [class*="bg-white"] {
-                    background-color: white !important;
-                }
-                
-                /* Specific overrides for dropdown elements */
-                .absolute[class*="bg-white"] {
-                    background-color: white !important;
-                }
-                
-                /* Mobile menu override */
-                .md\\:hidden[class*="bg-white"] {
-                    background-color: white !important;
-                }
-                
-                /* Ensure text colors remain visible */
-                .text-gray-600 {
-                    color: #4B5563 !important;
-                }
-                
-                .text-gray-900 {
-                    color: #111827 !important;
-                }
-                
-                .text-gray-500 {
-                    color: #6B7280 !important;
-                }
-                
-                /* Override any dark mode styles */
-                @media (prefers-color-scheme: dark) {
-                    [class*="bg-white"] {
-                        background-color: white !important;
-                    }
-                    
-                    .text-gray-600 {
-                        color: #4B5563 !important;
-                    }
-                    
-                    .text-gray-900 {
-                        color: #111827 !important;
-                    }
-                    
-                    .text-gray-500 {
-                        color: #6B7280 !important;
-                    }
-                }
-            `}</style>
 
             {/* Add Cookie Banner */}
             <CookieBanner />
