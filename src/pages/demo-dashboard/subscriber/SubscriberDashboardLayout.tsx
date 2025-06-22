@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { useUser } from '../../../contexts/UserContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -44,8 +44,10 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
         'communication': false,
         'system': false
     });
+    const [manuallyCollapsedSections, setManuallyCollapsedSections] = useState<Record<string, boolean>>({});
     const [userDropdownOpen, setUserDropdownOpen] = useState(false);
     const location = useLocation();
+    const userDropdownRef = useRef<HTMLDivElement>(null);
 
     // Function to check if a navigation item is active
     const isActiveLink = (href: string) => {
@@ -75,6 +77,49 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
             setDemoMode(true);
         }
     }, [subscriber, isDemoMode, setDemoMode]);
+
+    // Synchronize expandedSections state with active children
+    useEffect(() => {
+        const newExpandedSections = { ...expandedSections };
+        let hasChanges = false;
+
+        navigationItems.forEach(item => {
+            if (item.children) {
+                const hasActiveChild = shouldExpandSection(item.children);
+                const isManuallyCollapsed = manuallyCollapsedSections[item.id];
+                const shouldBeExpanded = hasActiveChild && !isManuallyCollapsed;
+                
+                // Only auto-expand if it has active children and isn't manually collapsed
+                if (shouldBeExpanded && !expandedSections[item.id]) {
+                    newExpandedSections[item.id] = true;
+                    hasChanges = true;
+                }
+                // Don't auto-collapse sections that were manually expanded
+                // Only collapse if it no longer has active children and wasn't manually expanded
+            }
+        });
+
+        if (hasChanges) {
+            setExpandedSections(newExpandedSections);
+        }
+    }, [location.pathname, manuallyCollapsedSections]);
+
+    // Close user dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+                setUserDropdownOpen(false);
+            }
+        };
+
+        if (userDropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [userDropdownOpen]);
 
     const navigationItems = [
         {
@@ -141,6 +186,22 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
     ];
 
     const toggleSection = (sectionId: string) => {
+        const isCurrentlyExpanded = expandedSections[sectionId];
+        
+        if (isCurrentlyExpanded) {
+            // User is collapsing the section
+            setManuallyCollapsedSections(prev => ({
+                ...prev,
+                [sectionId]: true
+            }));
+        } else {
+            // User is expanding the section
+            setManuallyCollapsedSections(prev => ({
+                ...prev,
+                [sectionId]: false
+            }));
+        }
+        
         setExpandedSections(prev => ({
             ...prev,
             [sectionId]: !prev[sectionId]
@@ -194,8 +255,7 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                         <nav className="flex-1 overflow-y-auto mt-6 px-4 space-y-2 pb-6 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 hover:scrollbar-thumb-gray-500">
                             {navigationItems.map((item) => {
                                 const isActive = item.href ? isActiveLink(item.href) : false;
-                                const hasActiveChild = item.children ? shouldExpandSection(item.children) : false;
-                                const isExpanded = expandedSections[item.id] || hasActiveChild;
+                                const isExpanded = expandedSections[item.id];
 
                                 return (
                                     <div key={item.id}>
@@ -203,10 +263,7 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                                             <div>
                                                 <button
                                                     onClick={() => toggleSection(item.id)}
-                                                    className={`w-full flex items-center justify-between px-3 bg-transparent text-gray-300 py-2 text-sm font-medium rounded-md transition-colors border-none focus:outline-none ${hasActiveChild
-                                                        ? ''
-                                                        : 'hover:bg-gray-700 hover:text-white'
-                                                        }`}
+                                                    className={`w-full flex items-center justify-between px-3 bg-transparent text-gray-300 py-2 text-sm font-medium rounded-md transition-colors border-none focus:outline-none hover:bg-gray-700 hover:text-white`}
                                                 >
                                                     <div className="flex items-center space-x-3">
                                                         <item.icon className={`w-5 h-5 ${item.color}`} />
@@ -336,7 +393,7 @@ const SubscriberDashboardLayout: React.FC<SubscriberDashboardLayoutProps> = ({
                             </button>
 
                             {/* User Dropdown */}
-                            <div className="relative">
+                            <div className="relative" ref={userDropdownRef}>
                                 <button
                                     onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                                     className="flex items-center space-x-3 p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none border-none"
