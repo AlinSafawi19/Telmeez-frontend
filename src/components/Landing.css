@@ -36,9 +36,7 @@ input[type="checkbox"].force-white-bg:checked::after {
 
 input[type="checkbox"].force-white-bg:focus {
     outline: none !important;
-    ring: 2px !important;
-    ring-offset: 2px !important;
-    ring-color: #4f46e5 !important; /* ring-indigo-500 */
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #4f46e5 !important; /* ring-indigo-500 equivalent */
 }
 
 /* Ensure feature section text is always visible */
