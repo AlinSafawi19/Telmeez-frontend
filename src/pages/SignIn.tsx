@@ -122,7 +122,7 @@ const SignIn: React.FC = () => {
                     <img
                         src={currentLanguage === 'ar' ? logoarb : logo}
                         alt="Company Logo"
-                        className="h-12 w-auto transition-transform"
+                        className="h-20 w-20 transition-transform"
                     />
                     <div className="flex items-center gap-2">
                         <div className="relative" ref={dropdownRef}>

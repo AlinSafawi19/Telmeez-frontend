@@ -7,6 +7,7 @@ import 'react-phone-input-2/lib/style.css';
 import Select from 'react-select';
 import visa from "../assets/images/visa.png";
 import mastercard from "../assets/images/mastercard.png";
+import amex from "../assets/images/amex.png";
 import logo from "../assets/images/logo.png";
 import logoarb from "../assets/images/logo_arb.png";
 import { FaHome, FaLock, FaCreditCard, FaMapMarkerAlt } from 'react-icons/fa';
@@ -912,7 +913,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                     <img
                         src={currentLanguage === 'ar' ? logoarb : logo}
                         alt="Company Logo"
-                        className="h-20 w-auto transition-transform hover:scale-105"
+                        className="h-20 w-20 transition-transform hover:scale-105"
                     />
                     <div className="max-w-2xl mx-auto text-center">
                         <h1 className="text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
@@ -1363,6 +1364,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                 <div className="flex items-center space-x-4 mb-6">
                                                     <img src={visa} alt="Visa" className="h-8 transition-transform hover:scale-110" />
                                                     <img src={mastercard} alt="Mastercard" className="h-8 transition-transform hover:scale-110" />
+                                                    <img src={amex} alt="Amex" className="h-8 transition-transform hover:scale-110" />
                                                 </div>
 
                                                 <div className="space-y-2">
