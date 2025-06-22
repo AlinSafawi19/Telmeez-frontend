@@ -187,7 +187,7 @@ const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
                             </button>
                             <button
                                 onClick={() => setActiveTab('getting_started')}
-                                className={`px-6 py-3 text-sm font-medium focus:outline-none force-white-bg${activeTab === 'getting_started'
+                                className={`px-6 py-3 text-sm font-medium focus:outline-none force-white-bg ${activeTab === 'getting_started'
                                     ? 'text-blue-600 border-b-2 border-blue-600'
                                     : 'text-gray-500 hover:text-gray-700'
                                     }`}

@@ -880,13 +880,13 @@ const Landing: React.FC = () => {
             <div className="min-h-screen pt-20 sm:pt-24 pb-12 sm:pb-16 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 flex items-center">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center max-w-4xl mx-auto">
-                        <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-4 sm:mb-6 md:mb-8 leading-tight px-2 sm:px-0 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+                        <h1 className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl font-bold text-gray-900 mb-6 sm:mb-8 md:mb-10 leading-tight px-2 sm:px-0 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
                             {t.hero.title}
                         </h1>
-                        <p className={`text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 mb-6 sm:mb-8 md:mb-12 max-w-2xl mx-auto leading-relaxed px-4 sm:px-6 lg:px-0 ${isVisible ? 'animate-fadeInUp delay-200' : 'opacity-0'}`}>
+                        <p className={`text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-600 mb-8 sm:mb-10 md:mb-14 max-w-3xl mx-auto leading-relaxed px-4 sm:px-6 lg:px-0 ${isVisible ? 'animate-fadeInUp delay-200' : 'opacity-0'}`}>
                             {t.hero.subtitle}
                         </p>
-                        <div className={`flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4 lg:space-x-6 rtl:space-x-reverse px-4 sm:px-6 lg:px-0 ${isVisible ? 'animate-fadeInUp delay-300' : 'opacity-0'}`}>
+                        <div className={`flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-6 rtl:space-x-reverse px-4 sm:px-6 lg:px-0 ${isVisible ? 'animate-fadeInUp delay-300' : 'opacity-0'}`}>
                             <button
                                 type="button"
                                 onClick={() => {
@@ -894,7 +894,7 @@ const Landing: React.FC = () => {
                                     setIsScrolling(true);
                                     setTimeout(() => setIsScrolling(false), 1000);
                                 }}
-                                className="w-full sm:w-auto bg-blue-600 text-white px-4 sm:px-6 md:px-8 lg:px-10 py-3 sm:py-3 md:py-4 rounded-lg text-base sm:text-lg md:text-xl font-semibold hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 min-w-[200px] sm:min-w-0"
+                                className="w-full sm:w-auto bg-blue-600 text-white px-6 sm:px-8 md:px-10 lg:px-12 py-4 sm:py-4 md:py-5 rounded-lg text-lg sm:text-xl md:text-2xl font-semibold hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 min-w-[250px] sm:min-w-0"
                             >
                                 {t.hero.getStarted}
                             </button>
@@ -905,7 +905,7 @@ const Landing: React.FC = () => {
                                     setIsScrolling(true);
                                     setTimeout(() => setIsScrolling(false), 300);
                                 }}
-                                className="w-full sm:w-auto bg-white text-blue-600 px-4 sm:px-6 md:px-8 lg:px-10 py-3 sm:py-3 md:py-4 rounded-lg text-base sm:text-lg md:text-xl font-semibold hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 min-w-[200px] sm:min-w-0"
+                                className="w-full sm:w-auto bg-white text-blue-600 px-6 sm:px-8 md:px-10 lg:px-12 py-4 sm:py-4 md:py-5 rounded-lg text-lg sm:text-xl md:text-2xl font-semibold hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border-2 border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 min-w-[250px] sm:min-w-0"
                             >
                                 {t.hero.learnMore}
                             </button>
@@ -920,31 +920,34 @@ const Landing: React.FC = () => {
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8 sm:mb-12 md:mb-16 px-4 sm:px-0">
                         {t.header.why_us.why_us} <span className="text-blue-600">{t.header.why_us.company_name}</span>{t.header.why_us.question_mark}
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-                        <div className="p-6 sm:p-8 rounded-xl bg-white shadow-lg border border-gray-100">
-                            <div className="text-blue-600 text-3xl sm:text-4xl mb-4 sm:mb-6">👤</div>
-                            <h3 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-gray-900">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+                        {/* Feature 1: Role-Based Access */}
+                        <div className="p-8 rounded-2xl bg-white shadow-lg border border-gray-100 transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                            <div className="text-blue-600 text-5xl mb-6">👤</div>
+                            <h3 className="text-2xl font-semibold mb-4 text-gray-900">
                                 {t.header.why_us.role_based || 'Role-Based Access'}
                             </h3>
-                            <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
+                            <p className="text-gray-600 leading-relaxed text-base">
                                 {t.header.why_us.role_based_desc || 'Administrator, staff, parent, and student dashboards with role-based secure access.'}
                             </p>
                         </div>
-                        <div className="p-6 sm:p-8 rounded-xl bg-white shadow-lg border border-gray-100">
-                            <div className="text-blue-600 text-3xl sm:text-4xl mb-4 sm:mb-6">🔒</div>
-                            <h3 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-gray-900">
+                        {/* Feature 2: Advanced Security */}
+                        <div className="p-8 rounded-2xl bg-white shadow-lg border border-gray-100 transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                            <div className="text-blue-600 text-5xl mb-6">🔒</div>
+                            <h3 className="text-2xl font-semibold mb-4 text-gray-900">
                                 {t.header.why_us.advanced_security || 'Advanced Security'}
                             </h3>
-                            <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
+                            <p className="text-gray-600 leading-relaxed text-base">
                                 {t.header.why_us.advanced_security_desc || 'Enterprise-grade security with password encryption, token-based sessions, and account protection.'}
                             </p>
                         </div>
-                        <div className="p-6 sm:p-8 rounded-xl bg-white shadow-lg border border-gray-100">
-                            <div className="text-blue-600 text-3xl sm:text-4xl mb-4 sm:mb-6">💬</div>
-                            <h3 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-gray-900">
+                        {/* Feature 3: Seamless Communication */}
+                        <div className="p-8 rounded-2xl bg-white shadow-lg border border-gray-100 transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                            <div className="text-blue-600 text-5xl mb-6">💬</div>
+                            <h3 className="text-2xl font-semibold mb-4 text-gray-900">
                                 {t.header.why_us.seamless_comm || 'Seamless Communication'}
                             </h3>
-                            <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
+                            <p className="text-gray-600 leading-relaxed text-base">
                                 {t.header.why_us.seamless_comm_desc || 'Engage administrators, staff, parents, and students on our integrated platform.'}
                             </p>
                         </div>

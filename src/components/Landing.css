@@ -2,6 +2,45 @@
     background: white !important;
 }
 
+/* Checkbox specific styling to ensure white background */
+input[type="checkbox"].force-white-bg {
+    background: white !important;
+    background-color: white !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    border: 2px solid #d1d5db !important; /* border-gray-300 */
+    border-radius: 4px !important;
+    width: 16px !important;
+    height: 16px !important;
+    position: relative !important;
+    cursor: pointer !important;
+}
+
+input[type="checkbox"].force-white-bg:checked {
+    background: #4f46e5 !important; /* bg-indigo-600 */
+    border-color: #4f46e5 !important;
+}
+
+input[type="checkbox"].force-white-bg:checked::after {
+    content: '' !important;
+    position: absolute !important;
+    left: 4px !important;
+    top: 1px !important;
+    width: 4px !important;
+    height: 8px !important;
+    border: solid white !important;
+    border-width: 0 2px 2px 0 !important;
+    transform: rotate(45deg) !important;
+}
+
+input[type="checkbox"].force-white-bg:focus {
+    outline: none !important;
+    ring: 2px !important;
+    ring-offset: 2px !important;
+    ring-color: #4f46e5 !important; /* ring-indigo-500 */
+}
+
 /* Ensure feature section text is always visible */
 #features-section h3 {
     color: #111827 !important; /* text-gray-900 */

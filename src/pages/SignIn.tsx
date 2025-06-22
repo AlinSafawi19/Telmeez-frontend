@@ -128,7 +128,7 @@ const SignIn: React.FC = () => {
                         <div className="relative" ref={dropdownRef}>
                             <button
                                 onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-                                className="flex items-center text-gray-600 hover:text-indigo-600 transition-colors focus:outline-none p-2 rounded-lg hover:bg-gray-100"
+                                className="flex items-center text-gray-600 hover:text-indigo-600 transition-colors focus:outline-none p-2 rounded-lg hover:bg-gray-100 force-white-bg"
                                 aria-label="Select language"
                             >
                                 <span className="text-sm font-medium">
@@ -159,7 +159,7 @@ const SignIn: React.FC = () => {
                         </div>
                         <button
                             onClick={() => navigate('/')}
-                            className="flex focus:outline-none items-center gap-1 px-3 py-2 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-lg hover:bg-gray-100"
+                            className="flex focus:outline-none items-center gap-1 px-3 py-2 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-lg hover:bg-gray-100 force-white-bg"
                             aria-label="Back to home"
                         >
                             <FaHome className="w-4 h-4" />
