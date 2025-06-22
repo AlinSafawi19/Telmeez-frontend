@@ -68,6 +68,21 @@ export const en = {
         getStarted: "Get Started",
         learnMore: "Learn More"
     },
+    app_download: {
+        title: "Get Telmeez on Your Mobile Device",
+        subtitle: "Download our mobile app for seamless access to your educational platform on the go",
+        features: [
+            "Real-time notifications",
+            "Quick access to all features",
+            "Offline mode support",
+            "Secure login with biometrics"
+        ],
+        download_ios: "Download on App Store",
+        download_android: "Get it on Google Play",
+        coming_soon: "Coming Soon",
+        scan_qr: "Scan QR Code",
+        qr_description: "Scan this QR code with your mobile device to download the app"
+    },
     faq: {
         title: "Frequently Asked Questions",
         subtitle: "Find answers to commonly asked questions about Telmeez and our services.",

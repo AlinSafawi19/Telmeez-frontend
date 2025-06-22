@@ -63,8 +63,8 @@ export const fr = {
         }
     },
     hero: {
-        title: "Renforcer les Institutions Éducatives",
-        subtitle: "Une plateforme tout-en-un conçue pour les écoles, les collèges et les institutions éducatives. Simplifiez vos opérations et votre communication au sein de votre organisation.",
+        title: "Autonomiser les Institutions Éducatives",
+        subtitle: "Une plateforme tout-en-un conçue pour répondre aux besoins des écoles, collèges et institutions éducatives. Simplifiez vos opérations et votre communication au sein de votre organisation.",
         getStarted: "Commencer",
         learnMore: "En Savoir Plus"
     },
@@ -748,5 +748,20 @@ export const fr = {
     days: "jours",
     hours: "heures",
     minutes: "minutes",
-    seconds: "secondes"
+    seconds: "secondes",
+    app_download: {
+        title: "Obtenez Telmeez sur Votre Appareil Mobile",
+        subtitle: "Téléchargez notre application mobile pour un accès transparent à votre plateforme éducative en déplacement",
+        features: [
+            "Notifications en temps réel",
+            "Accès rapide à toutes les fonctionnalités",
+            "Support du mode hors ligne",
+            "Connexion sécurisée avec biométrie"
+        ],
+        download_ios: "Télécharger sur l'App Store",
+        download_android: "Obtenir sur Google Play",
+        coming_soon: "Bientôt Disponible",
+        scan_qr: "Scanner le Code QR",
+        qr_description: "Scannez ce code QR avec votre appareil mobile pour télécharger l'application"
+    }
 };

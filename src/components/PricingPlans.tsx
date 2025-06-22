@@ -55,8 +55,8 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
     // Helper function to calculate discounted monthly price for annual billing
     const getDiscountedMonthlyPrice = (monthlyPrice: string): string => {
         const monthlyValue = extractPrice(monthlyPrice);
-        const discountedMonthly = Math.round(monthlyValue * 0.8); // 20% discount
-        return `$${discountedMonthly}`;
+        const discountedMonthly = monthlyValue * 0.8; // 20% discount
+        return `$${discountedMonthly.toFixed(2)}`;
     };
 
     // Helper function to format price display
