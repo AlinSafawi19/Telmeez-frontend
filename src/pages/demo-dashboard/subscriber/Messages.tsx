@@ -1,10 +1,4 @@
-import { useState, useEffect } from 'react';
 import SubscriberDashboardLayout from './SubscriberDashboardLayout';
-import { motion } from 'framer-motion';
-import Swal from 'sweetalert2';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
-import Select2 from '../../../components/Select2';
 
 import {
     Chart as ChartJS,
@@ -20,7 +14,6 @@ import {
     Legend,
     Filler,
 } from 'chart.js';
-import { Line, Bar, Doughnut, Radar } from 'react-chartjs-2';
 
 // Register ChartJS components
 ChartJS.register(
