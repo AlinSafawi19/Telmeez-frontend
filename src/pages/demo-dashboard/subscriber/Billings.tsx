@@ -11,6 +11,8 @@ const Billings: React.FC = () => {
     const [billingFrequency, setBillingFrequency] = useState<'monthly' | 'annually'>('monthly');
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [cancellationReason, setCancellationReason] = useState('');
+    const [cancellationReasonType, setCancellationReasonType] = useState<string[]>([]);
+    const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
 
     // Payment Method Modal States
@@ -19,7 +21,7 @@ const Billings: React.FC = () => {
     const [showDeletePaymentModal, setShowDeletePaymentModal] = useState(false);
     const [editingPaymentMethod, setEditingPaymentMethod] = useState<any>(null);
     const [deletingPaymentMethod, setDeletingPaymentMethod] = useState<any>(null);
-    
+
     // Payment Method Form Data
     const [paymentFormData, setPaymentFormData] = useState({
         cardNumber: '',
@@ -27,7 +29,7 @@ const Billings: React.FC = () => {
         cvv: '',
         cardTypeId: ''
     });
-    const [paymentFormErrors, setPaymentFormErrors] = useState<{[key: string]: string}>({});
+    const [paymentFormErrors, setPaymentFormErrors] = useState<{ [key: string]: string }>({});
 
     // Billing Address Modal States
     const [showUpdateAddressModal, setShowUpdateAddressModal] = useState(false);
@@ -39,7 +41,7 @@ const Billings: React.FC = () => {
         zip: '',
         country: ''
     });
-    const [addressFormErrors, setAddressFormErrors] = useState<{[key: string]: string}>({});
+    const [addressFormErrors, setAddressFormErrors] = useState<{ [key: string]: string }>({});
     const [showSuccessNotification, setShowSuccessNotification] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
 
@@ -134,8 +136,24 @@ const Billings: React.FC = () => {
         }
     };
 
+    // Handle checkbox changes for cancellation reasons
+    const handleReasonCheckboxChange = (reason: string, checked: boolean) => {
+        if (checked) {
+            setCancellationReasonType(prev => [...prev, reason]);
+        } else {
+            setCancellationReasonType(prev => prev.filter(r => r !== reason));
+        }
+    };
+
     // Handle cancellation
     const handleCancellation = async () => {
+        setHasAttemptedSubmit(true);
+
+        // Validate cancellation reason
+        if (cancellationReasonType.length === 0 || (cancellationReasonType.includes('other') && !cancellationReason.trim())) {
+            return; // Don't proceed if no reason is selected or if "other" is selected but no text provided
+        }
+
         setIsProcessing(true);
         try {
             await new Promise(resolve => setTimeout(resolve, 2000));
@@ -145,6 +163,8 @@ const Billings: React.FC = () => {
             });
             setShowCancelModal(false);
             setCancellationReason('');
+            setCancellationReasonType([]);
+            setHasAttemptedSubmit(false);
         } catch (error) {
             console.error('Error cancelling subscription:', error);
         } finally {
@@ -168,7 +188,7 @@ const Billings: React.FC = () => {
         setIsProcessing(true);
         try {
             await new Promise(resolve => setTimeout(resolve, 1000));
-            
+
             const updatedPaymentMethods = subscriber?.paymentMethods?.map(pm => ({
                 ...pm,
                 is_default: pm.id === id
@@ -189,10 +209,10 @@ const Billings: React.FC = () => {
         // Format expiry date as MM/YY
         const expiryMonth = paymentMethod.expiry_month.toString().padStart(2, '0');
         const expiryYear = paymentMethod.expiry_year.toString().slice(-2); // Get last 2 digits
-        
+
         // Format card number with spaces (XXXX XXXX XXXX XXXX)
         const formattedCardNumber = paymentMethod.card_number.replace(/(\d{4})/g, '$1 ').trim();
-        
+
         setPaymentFormData({
             cardNumber: formattedCardNumber,
             expiryDate: `${expiryMonth}/${expiryYear}`,
@@ -210,13 +230,13 @@ const Billings: React.FC = () => {
 
     const confirmDeletePaymentMethod = async () => {
         if (!deletingPaymentMethod) return;
-        
+
         setIsProcessing(true);
         try {
             await new Promise(resolve => setTimeout(resolve, 1000));
-            
+
             const updatedPaymentMethods = subscriber?.paymentMethods?.filter(pm => pm.id !== deletingPaymentMethod.id) || [];
-            
+
             // If we're deleting the default payment method and there are other methods, set the first one as default
             if (deletingPaymentMethod.is_default && updatedPaymentMethods.length > 0) {
                 updatedPaymentMethods[0].is_default = true;
@@ -225,7 +245,7 @@ const Billings: React.FC = () => {
             updateSubscriber({
                 paymentMethods: updatedPaymentMethods
             });
-            
+
             setShowDeletePaymentModal(false);
             setDeletingPaymentMethod(null);
         } catch (error) {
@@ -284,17 +304,17 @@ const Billings: React.FC = () => {
     };
 
     const validatePaymentForm = () => {
-        const errors: {[key: string]: string} = {};
-        
+        const errors: { [key: string]: string } = {};
+
         if (!paymentFormData.cardNumber.replace(/\s/g, '')) {
             errors.cardNumber = 'Card number is required';
         } else {
             const cleanCardNumber = paymentFormData.cardNumber.replace(/\s/g, '');
-            
+
             // Check length first
             if (cleanCardNumber.length < 13 || cleanCardNumber.length > 19) {
                 errors.cardNumber = 'Card number must be between 13 and 19 digits';
-            } 
+            }
             // Check if it contains only digits
             else if (!/^\d+$/.test(cleanCardNumber)) {
                 errors.cardNumber = 'Card number must contain only digits';
@@ -308,7 +328,7 @@ const Billings: React.FC = () => {
                 errors.cardNumber = 'Unsupported card type. Please use Visa, Mastercard, or American Express.';
             }
         }
-        
+
         if (!paymentFormData.expiryDate) {
             errors.expiryDate = 'Expiry date is required';
         } else {
@@ -318,7 +338,7 @@ const Billings: React.FC = () => {
             } else {
                 const month = parseInt(expiryParts[0]);
                 const year = parseInt(expiryParts[1]);
-                
+
                 if (isNaN(month) || month < 1 || month > 12) {
                     errors.expiryDate = 'Invalid month';
                 } else if (isNaN(year) || year < 0 || year > 99) {
@@ -328,27 +348,27 @@ const Billings: React.FC = () => {
                     const currentDate = new Date();
                     const currentYear = currentDate.getFullYear() % 100; // Get last 2 digits
                     const currentMonth = currentDate.getMonth() + 1; // getMonth() returns 0-11
-                    
+
                     if (year < currentYear || (year === currentYear && month < currentMonth)) {
                         errors.expiryDate = 'Card has expired';
                     }
                 }
             }
         }
-        
+
         if (!paymentFormData.cvv) {
             errors.cvv = 'CVV is required';
         } else if (paymentFormData.cvv.length < 3) {
             errors.cvv = 'CVV must be at least 3 digits';
         }
-        
+
         setPaymentFormErrors(errors);
         return Object.keys(errors).length === 0;
     };
 
     const handleSavePaymentMethod = async () => {
         if (!validatePaymentForm()) return;
-        
+
         // Auto-detect card type if not already set
         const detectedCardType = getCardTypeFromNumber(paymentFormData.cardNumber);
         if (!detectedCardType) {
@@ -358,17 +378,17 @@ const Billings: React.FC = () => {
             }));
             return;
         }
-        
+
         // Parse expiry date
         const expiryParts = paymentFormData.expiryDate.split('/');
         const expiryMonth = parseInt(expiryParts[0]);
         const expiryYear = parseInt(expiryParts[1]);
         const fullYear = 2000 + expiryYear; // Convert YY to YYYY
-        
+
         setIsProcessing(true);
         try {
             await new Promise(resolve => setTimeout(resolve, 1000));
-            
+
             const newPaymentMethod = {
                 id: editingPaymentMethod ? editingPaymentMethod.id : `pm_${Date.now()}`,
                 card_number: paymentFormData.cardNumber.replace(/\s/g, ''),
@@ -385,7 +405,7 @@ const Billings: React.FC = () => {
             let updatedPaymentMethods;
             if (editingPaymentMethod) {
                 // Update existing payment method
-                updatedPaymentMethods = subscriber?.paymentMethods?.map(pm => 
+                updatedPaymentMethods = subscriber?.paymentMethods?.map(pm =>
                     pm.id === editingPaymentMethod.id ? newPaymentMethod : pm
                 ) || [];
             } else {
@@ -441,36 +461,36 @@ const Billings: React.FC = () => {
     // Validate card number using Luhn algorithm
     const validateCardNumber = (cardNumber: string): boolean => {
         const cleanNumber = cardNumber.replace(/\s/g, '');
-        
+
         // Check if it's a valid length (13-19 digits)
         if (cleanNumber.length < 13 || cleanNumber.length > 19) {
             return false;
         }
-        
+
         // Check if it contains only digits
         if (!/^\d+$/.test(cleanNumber)) {
             return false;
         }
-        
+
         // Luhn algorithm implementation
         let sum = 0;
         let isEven = false;
-        
+
         // Loop through values starting from the rightmost side
         for (let i = cleanNumber.length - 1; i >= 0; i--) {
             let digit = parseInt(cleanNumber.charAt(i));
-            
+
             if (isEven) {
                 digit *= 2;
                 if (digit > 9) {
                     digit -= 9;
                 }
             }
-            
+
             sum += digit;
             isEven = !isEven;
         }
-        
+
         return sum % 10 === 0;
     };
 
@@ -517,26 +537,26 @@ const Billings: React.FC = () => {
     };
 
     const validateAddressForm = () => {
-        const errors: {[key: string]: string} = {};
-        
+        const errors: { [key: string]: string } = {};
+
         if (!addressFormData.primary_address.trim()) {
             errors.primary_address = 'Primary address is required';
         } else if (addressFormData.primary_address.trim().length < 5) {
             errors.primary_address = 'Primary address must be at least 5 characters';
         }
-        
+
         if (!addressFormData.city.trim()) {
             errors.city = 'City is required';
         } else if (addressFormData.city.trim().length < 2) {
             errors.city = 'City must be at least 2 characters';
         }
-        
+
         if (!addressFormData.state.trim()) {
             errors.state = 'State/Province is required';
         } else if (addressFormData.state.trim().length < 2) {
             errors.state = 'State/Province must be at least 2 characters';
         }
-        
+
         if (!addressFormData.zip.trim()) {
             errors.zip = 'ZIP/Postal code is required';
         } else {
@@ -545,22 +565,22 @@ const Billings: React.FC = () => {
                 errors.zip = 'Please enter a valid ZIP/Postal code (e.g., 12345 or 12345-6789)';
             }
         }
-        
+
         if (!addressFormData.country.trim()) {
             errors.country = 'Country is required';
         }
-        
+
         setAddressFormErrors(errors);
         return Object.keys(errors).length === 0;
     };
 
     const handleSaveAddress = async () => {
         if (!validateAddressForm()) return;
-        
+
         setIsProcessing(true);
         try {
             await new Promise(resolve => setTimeout(resolve, 1000));
-            
+
             const updatedBillingAddress = {
                 id: subscriber?.billingAddress?.id || `addr_${Date.now()}`,
                 subscriber_id: subscriber?.id || '',
@@ -588,11 +608,11 @@ const Billings: React.FC = () => {
                 country: ''
             });
             setAddressFormErrors({});
-            
+
             // Show success notification
             setSuccessMessage(subscriber?.billingAddress ? 'Billing address updated successfully!' : 'Billing address added successfully!');
             setShowSuccessNotification(true);
-            
+
             // Hide notification after 3 seconds
             setTimeout(() => {
                 setShowSuccessNotification(false);
@@ -672,8 +692,8 @@ const Billings: React.FC = () => {
                                         {lastPayment && (
                                             <div className="mt-2">
                                                 <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${lastPayment.is_annual
-                                                        ? 'bg-blue-100 text-blue-800'
-                                                        : 'bg-green-100 text-green-800'
+                                                    ? 'bg-blue-100 text-blue-800'
+                                                    : 'bg-green-100 text-green-800'
                                                     }`}>
                                                     {lastPayment.is_annual ? 'Annual Billing' : 'Monthly Billing'}
                                                 </span>
@@ -872,8 +892,8 @@ const Billings: React.FC = () => {
                                             <button
                                                 onClick={() => setBillingFrequency('monthly')}
                                                 className={`px-4 py-2 text-sm font-medium rounded-md transition-all focus:outline-none border-none ${billingFrequency === 'monthly'
-                                                        ? 'bg-white text-purple-600 shadow-sm'
-                                                        : 'text-gray-600 hover:text-gray-900'
+                                                    ? 'bg-white text-purple-600 shadow-sm'
+                                                    : 'text-gray-600 hover:text-gray-900'
                                                     }`}
                                             >
                                                 Monthly
@@ -881,8 +901,8 @@ const Billings: React.FC = () => {
                                             <button
                                                 onClick={() => setBillingFrequency('annually')}
                                                 className={`px-4 py-2 text-sm font-medium rounded-md transition-all focus:outline-none border-none ${billingFrequency === 'annually'
-                                                        ? 'bg-white text-purple-600 shadow-sm'
-                                                        : 'text-gray-600 hover:text-gray-900'
+                                                    ? 'bg-white text-purple-600 shadow-sm'
+                                                    : 'text-gray-600 hover:text-gray-900'
                                                     }`}
                                             >
                                                 Annually
@@ -1067,8 +1087,8 @@ const Billings: React.FC = () => {
                                             const type = subscriber.cardTypes?.find(ct => ct.id === pm.card_type_id)?.name;
                                             const isDefault = pm.is_default;
                                             return (
-                                                <div key={pm.id} className={`flex items-center justify-between p-4 rounded-lg border ${isDefault 
-                                                    ? 'bg-green-50 border-green-200' 
+                                                <div key={pm.id} className={`flex items-center justify-between p-4 rounded-lg border ${isDefault
+                                                    ? 'bg-green-50 border-green-200'
                                                     : 'bg-gray-50 border-gray-200'}`}>
                                                     <div className="flex items-center gap-4">
                                                         <div className="w-12 h-8 bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg flex items-center justify-center">
@@ -1142,13 +1162,13 @@ const Billings: React.FC = () => {
                                             <div className="font-medium">{subscriber.billingAddress.country}</div>
                                         </div>
                                         <div className="mt-4 flex gap-2">
-                                            <button 
-                                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition focus:outline-none border-none text-sm font-medium" 
+                                            <button
+                                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition focus:outline-none border-none text-sm font-medium"
                                                 onClick={handleUpdateAddress}
                                             >
                                                 Update Address
                                             </button>
-                                            <button 
+                                            <button
                                                 className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition focus:outline-none border-none text-sm font-medium"
                                                 onClick={() => {
                                                     // Copy address to clipboard
@@ -1170,8 +1190,8 @@ const Billings: React.FC = () => {
                                         </div>
                                         <h4 className="text-gray-900 font-medium mb-1">No Billing Address</h4>
                                         <p className="text-gray-600 text-sm mb-4">Add a billing address to receive invoices and manage your subscription</p>
-                                        <button 
-                                            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition focus:outline-none border-none text-sm font-medium" 
+                                        <button
+                                            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition focus:outline-none border-none text-sm font-medium"
                                             onClick={handleUpdateAddress}
                                         >
                                             + Add Billing Address
@@ -1256,15 +1276,54 @@ const Billings: React.FC = () => {
 
                             <div className="mb-6">
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Reason for cancellation (optional)
+                                    Reason for cancellation <span className="text-red-500">*</span>
                                 </label>
-                                <textarea
-                                    value={cancellationReason}
-                                    onChange={(e) => setCancellationReason(e.target.value)}
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                    rows={3}
-                                    placeholder="Please let us know why you're cancelling..."
-                                />
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    {[
+                                        { value: 'too_expensive', label: 'Too expensive' },
+                                        { value: 'not_using', label: 'Not using the service enough' },
+                                        { value: 'switching', label: 'Switching to another service' },
+                                        { value: 'features', label: 'Missing features I need' },
+                                        { value: 'support', label: 'Poor customer support' },
+                                        { value: 'technical', label: 'Technical issues' },
+                                        { value: 'temporary', label: 'Temporary cancellation' },
+                                        { value: 'other', label: 'Other' }
+                                    ].map((reason) => (
+                                        <div key={reason.value} className="flex items-start">
+                                            <input
+                                                type="checkbox"
+                                                id={`reason-${reason.value}`}
+                                                checked={cancellationReasonType.includes(reason.value)}
+                                                onChange={(e) => handleReasonCheckboxChange(reason.value, e.target.checked)}
+                                                className="mt-1 w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                                            />
+                                            <label htmlFor={`reason-${reason.value}`} className="ml-3 text-sm text-gray-700">
+                                                {reason.label}
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+                                {hasAttemptedSubmit && cancellationReasonType.length === 0 && (
+                                    <p className="text-xs text-red-600 mt-3">Please select at least one reason for cancellation</p>
+                                )}
+
+                                {cancellationReasonType.includes('other') && (
+                                    <div className="mt-4">
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Please specify <span className="text-red-500">*</span>
+                                        </label>
+                                        <textarea
+                                            value={cancellationReason}
+                                            onChange={(e) => setCancellationReason(e.target.value)}
+                                            className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none focus:outline-none ${hasAttemptedSubmit && cancellationReasonType.includes('other') && !cancellationReason.trim() ? 'border-red-500' : 'border-gray-300'}`}
+                                            rows={3}
+                                            placeholder="Please let us know why you're cancelling..."
+                                        />
+                                        {hasAttemptedSubmit && cancellationReasonType.includes('other') && !cancellationReason.trim() && (
+                                            <p className="text-xs text-red-600 mt-1">Please provide a reason for cancellation</p>
+                                        )}
+                                    </div>
+                                )}
                             </div>
 
                             <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
@@ -1280,21 +1339,24 @@ const Billings: React.FC = () => {
                             <div className="flex justify-end gap-4">
                                 <button
                                     className="px-6 py-3 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition focus:outline-none border-none"
-                                    onClick={() => setShowCancelModal(false)}
+                                    onClick={() => {
+                                        setShowCancelModal(false);
+                                        setHasAttemptedSubmit(false);
+                                    }}
                                 >
                                     Keep Subscription
                                 </button>
                                 <button
-                                    className={`px-6 py-3 rounded-xl font-semibold transition focus:outline-none border-none ${!isProcessing
-                                        ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                    className={`px-6 py-3 rounded-xl font-semibold transition focus:outline-none border-none ${!isProcessing && (cancellationReasonType.length > 0 && (!cancellationReasonType.includes('other') || cancellationReason.trim()))
+                                        ? 'bg-red-500 text-white hover:bg-red-600'
                                         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                         }`}
                                     onClick={handleCancellation}
-                                    disabled={isProcessing}
+                                    disabled={isProcessing || cancellationReasonType.length === 0 || (cancellationReasonType.includes('other') && !cancellationReason.trim())}
                                 >
                                     {isProcessing ? (
                                         <div className="flex items-center gap-2">
-                                            <div className="w-4 h-4 border-2 border-gray-500 border-t-transparent rounded-full animate-spin"></div>
+                                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                             Cancelling...
                                         </div>
                                     ) : (
@@ -1345,9 +1407,9 @@ const Billings: React.FC = () => {
                                     <div className="flex items-center gap-4">
                                         <div className="w-12 h-8 bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg flex items-center justify-center">
                                             <span className="text-white font-bold text-sm">
-                                                {getCardTypeNameFromId(editingPaymentMethod.card_type_id) === 'Visa' ? 'VISA' : 
-                                                 getCardTypeNameFromId(editingPaymentMethod.card_type_id) === 'Mastercard' ? 'MC' : 
-                                                 getCardTypeNameFromId(editingPaymentMethod.card_type_id) === 'American Express' ? 'AMEX' : 'CARD'}
+                                                {getCardTypeNameFromId(editingPaymentMethod.card_type_id) === 'Visa' ? 'VISA' :
+                                                    getCardTypeNameFromId(editingPaymentMethod.card_type_id) === 'Mastercard' ? 'MC' :
+                                                        getCardTypeNameFromId(editingPaymentMethod.card_type_id) === 'American Express' ? 'AMEX' : 'CARD'}
                                             </span>
                                         </div>
                                         <div>
@@ -1387,9 +1449,9 @@ const Billings: React.FC = () => {
                                             <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                                                 <div className="w-8 h-5 bg-gradient-to-r from-purple-600 to-purple-700 rounded flex items-center justify-center">
                                                     <span className="text-white font-bold text-xs">
-                                                        {getCardTypeName(paymentFormData.cardNumber) === 'Visa' ? 'VISA' : 
-                                                         getCardTypeName(paymentFormData.cardNumber) === 'Mastercard' ? 'MC' : 
-                                                         getCardTypeName(paymentFormData.cardNumber) === 'American Express' ? 'AMEX' : 'CARD'}
+                                                        {getCardTypeName(paymentFormData.cardNumber) === 'Visa' ? 'VISA' :
+                                                            getCardTypeName(paymentFormData.cardNumber) === 'Mastercard' ? 'MC' :
+                                                                getCardTypeName(paymentFormData.cardNumber) === 'American Express' ? 'AMEX' : 'CARD'}
                                                     </span>
                                                 </div>
                                             </div>
@@ -1599,7 +1661,7 @@ const Billings: React.FC = () => {
                                     {subscriber?.billingAddress ? 'Update Billing Address' : 'Add Billing Address'}
                                 </h3>
                                 <p className="text-gray-600">
-                                    {subscriber?.billingAddress 
+                                    {subscriber?.billingAddress
                                         ? 'Update your billing address information'
                                         : 'Add a billing address for your account'
                                     }
