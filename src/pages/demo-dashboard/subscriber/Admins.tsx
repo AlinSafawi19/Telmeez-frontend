@@ -2,7 +2,7 @@ import { useState } from 'react';
 import SubscriberDashboardLayout from './SubscriberDashboardLayout';
 import { useUser } from '../../../contexts/UserContext';
 import { motion } from 'framer-motion';
-import { FaUserPlus, FaSearch, FaUserShield, FaCircle, FaEdit, FaTrash, FaCheck, FaTimes, FaSort, FaSortUp, FaSortDown, FaChevronLeft, FaChevronRight, FaExclamationTriangle, FaCrown, FaFilter, FaClock, FaAngleDown, FaCalendarAlt, FaToggleOn } from 'react-icons/fa';
+import { FaUserPlus, FaSearch, FaUserShield, FaCircle, FaEdit, FaTrash, FaCheck, FaTimes, FaSort, FaSortUp, FaSortDown, FaChevronLeft, FaChevronRight, FaExclamationTriangle, FaCrown, FaFilter, FaClock, FaAngleDown, FaCalendarAlt, FaToggleOn, FaTrashAlt } from 'react-icons/fa';
 import Select2 from '../../../components/Select2';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
@@ -41,6 +41,11 @@ const Admins: React.FC = () => {
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [dateFilterType, setDateFilterType] = useState<'created' | 'last_login'>('created');
     const [activeQuickFilter, setActiveQuickFilter] = useState<string | null>(null);
+
+    // Bulk delete states
+    const [selectedAdmins, setSelectedAdmins] = useState<Set<string>>(new Set());
+    const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = useState(false);
+    const [isBulkDeleting, setIsBulkDeleting] = useState(false);
 
     // Add admin form state
     const [newAdmin, setNewAdmin] = useState({
@@ -520,6 +525,53 @@ const Admins: React.FC = () => {
         }
     };
 
+    // Bulk delete handlers
+    const handleSelectAdmin = (adminId: string, checked: boolean) => {
+        const newSelected = new Set(selectedAdmins);
+        if (checked) {
+            newSelected.add(adminId);
+        } else {
+            newSelected.delete(adminId);
+        }
+        setSelectedAdmins(newSelected);
+    };
+
+    const handleSelectAll = (checked: boolean) => {
+        if (checked) {
+            setSelectedAdmins(new Set(currentAdmins.map(admin => admin.id)));
+        } else {
+            setSelectedAdmins(new Set());
+        }
+    };
+
+    const handleBulkDelete = async () => {
+        if (selectedAdmins.size === 0) return;
+
+        setIsBulkDeleting(true);
+        try {
+            // Remove selected admins from subscriber data
+            if (subscriber) {
+                const updatedSubscriber = {
+                    ...subscriber,
+                    admins: (subscriber.admins || []).filter(admin => !selectedAdmins.has(admin.id)),
+                    adminProfileImages: (subscriber.adminProfileImages || []).filter(img => !selectedAdmins.has(img.user_id)),
+                    adminPreferences: (subscriber.adminPreferences || []).filter(pref => !selectedAdmins.has(pref.user_id))
+                };
+
+                updateSubscriber(updatedSubscriber);
+            }
+
+            // Clear selection and close modal
+            setSelectedAdmins(new Set());
+            setShowBulkDeleteConfirm(false);
+        } catch (error) {
+            console.error('Error bulk deleting admins:', error);
+            alert('Failed to delete selected admins. Please try again.');
+        } finally {
+            setIsBulkDeleting(false);
+        }
+    };
+
     const handleAddAdminClick = () => {
         if (isAtMaxLimit) {
             setShowMaxLimitModal(true);
@@ -729,9 +781,9 @@ const Admins: React.FC = () => {
                         {isAtMaxLimit && (
                             <button
                                 onClick={handleUpgradePlan}
-                                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-700 bg-white hover:bg-gray-50 rounded-lg transition-colors duration-200 focus:outline-none border-none shadow-sm"
+                                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-lg transition-colors duration-200 focus:outline-none border-none"
                             >
-                                <FaCrown className="text-yellow-500" />
+                                <FaCrown className="text-yellow-400" />
                                 Upgrade
                             </button>
                         )}
@@ -747,6 +799,15 @@ const Admins: React.FC = () => {
                             />
                             <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                         </div>
+                        {selectedAdmins.size > 0 && (
+                            <button
+                                onClick={() => setShowBulkDeleteConfirm(true)}
+                                className="flex items-center gap-2 px-4 py-2 rounded-lg shadow transition focus:outline-none border-none bg-red-600 hover:bg-red-700 text-white"
+                            >
+                                <FaTrashAlt />
+                                <span>Delete ({selectedAdmins.size})</span>
+                            </button>
+                        )}
                         <button
                             onClick={handleAddAdminClick}
                             disabled={isAtMaxLimit}
@@ -1327,6 +1388,75 @@ const Admins: React.FC = () => {
                     </motion.div>
                 )}
 
+                {/* Bulk Delete Confirmation Modal */}
+                {showBulkDeleteConfirm && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                        onClick={() => setShowBulkDeleteConfirm(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="bg-white rounded-lg p-6 max-w-md w-full mx-4"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                                    <FaTrashAlt className="text-red-600 text-xl" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-semibold text-gray-900">Bulk Delete Admins</h3>
+                                    <p className="text-sm text-gray-500">This action cannot be undone</p>
+                                </div>
+                            </div>
+
+                            <div className="bg-red-50 rounded-lg p-4 mb-6">
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm font-medium text-red-700">Selected Admins:</span>
+                                    <span className="text-sm font-semibold text-red-800">{selectedAdmins.size} admin{selectedAdmins.size !== 1 ? 's' : ''}</span>
+                                </div>
+                                <div className="text-sm text-red-600">
+                                    This will permanently delete {selectedAdmins.size} admin account{selectedAdmins.size !== 1 ? 's' : ''} and remove their access to the system.
+                                </div>
+                            </div>
+
+                            <p className="text-gray-700 mb-6">
+                                Are you sure you want to delete the selected admin{selectedAdmins.size !== 1 ? 's' : ''}? 
+                                This action cannot be undone and will permanently remove their access to the system.
+                            </p>
+
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={() => setShowBulkDeleteConfirm(false)}
+                                    className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 focus:outline-none border-none"
+                                >
+                                    <FaTimes />
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleBulkDelete}
+                                    disabled={isBulkDeleting}
+                                    className="flex-1 px-4 py-2 text-white bg-red-600 hover:bg-red-700 disabled:bg-red-400 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 focus:outline-none border-none"
+                                >
+                                    {isBulkDeleting ? (
+                                        <>
+                                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                            Deleting...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FaTrashAlt />
+                                            Delete {selectedAdmins.size} Admin{selectedAdmins.size !== 1 ? 's' : ''}
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+
                 <motion.div
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -1336,6 +1466,17 @@ const Admins: React.FC = () => {
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                             <tr>
+                                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                    <div className="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            checked={currentAdmins.length > 0 && selectedAdmins.size === currentAdmins.length}
+                                            onChange={(e) => handleSelectAll(e.target.checked)}
+                                            className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 focus:ring-2"
+                                            title="Select all admins on this page"
+                                        />
+                                    </div>
+                                </th>
                                 <th
                                     className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors"
                                     onClick={() => handleSort('name')}
@@ -1378,13 +1519,22 @@ const Admins: React.FC = () => {
                         <tbody className="bg-white divide-y divide-gray-100">
                             {currentAdmins.length === 0 && (
                                 <tr>
-                                    <td colSpan={7} className="text-center py-8 text-gray-400">
+                                    <td colSpan={8} className="text-center py-8 text-gray-400">
                                         {sortedAdmins.length === 0 ? 'No admins found.' : 'No admins on this page.'}
                                     </td>
                                 </tr>
                             )}
                             {currentAdmins.map((admin) => (
                                 <tr key={admin.id} className="hover:bg-purple-50 transition">
+                                    <td className="px-6 py-4">
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedAdmins.has(admin.id)}
+                                            onChange={(e) => handleSelectAdmin(admin.id, e.target.checked)}
+                                            className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 focus:ring-2"
+                                            title={`Select ${admin.first_name} ${admin.last_name}`}
+                                        />
+                                    </td>
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-4">
                                             <div className="relative">
