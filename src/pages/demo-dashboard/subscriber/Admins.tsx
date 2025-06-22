@@ -649,6 +649,9 @@ const Admins: React.FC = () => {
                 updateSubscriber(updatedSubscriber);
             }
 
+            // Auto-select the newly added admin
+            setSelectedAdmins(prev => new Set([...prev, adminId]));
+
             // Reset form and close modal
             setNewAdmin({
                 first_name: '',
@@ -1577,7 +1580,7 @@ const Admins: React.FC = () => {
                                             {getStatus(admin.user_status_id)}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-gray-600">{admin.phone}</td>
+                                    <td className="px-6 py-4 text-gray-600">{admin.phone || 'N/A'}</td>
                                     <td className="px-6 py-4">
                                         <div className="relative">
                                             {/* Quick Action Buttons */}
