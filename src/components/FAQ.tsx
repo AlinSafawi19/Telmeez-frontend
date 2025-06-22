@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { translations } from '../translations';
 import type { Language } from '../translations';
+import './Landing.css';
 
 interface FAQProps {
     language?: Language;
@@ -64,7 +65,7 @@ const FAQ: React.FC<FAQProps> = ({ language = 'en' }) => {
                             className="bg-white rounded-lg shadow-sm border border-gray-100 h-fit"
                         >
                             <button
-                                className="w-full px-5 py-4 text-left focus:outline-none"
+                                className="w-full px-5 py-4 text-left focus:outline-none force-white-bg"
                                 onClick={() => handleToggle(index)}
                             >
                                 <div className="flex justify-between items-center">

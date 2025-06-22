@@ -774,7 +774,7 @@ const Landing: React.FC = () => {
                             >
                                 <div className="flex justify-end mb-4">
                                     <button
-                                        className="text-gray-600 hover:text-blue-600 focus:outline-none"
+                                        className="text-gray-600 bg-white p-2 rounded-lg border border-gray-300 focus:outline-none hover:bg-gray-100"
                                         onClick={() => setIsMobileMenuOpen(false)}
                                         aria-label="Close mobile menu"
                                     >
@@ -814,19 +814,6 @@ const Landing: React.FC = () => {
                                         className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium"
                                     >
                                         {t.header.pricing.pricing}
-                                    </a>
-                                    <a
-                                        href="#"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            document.getElementById('app-download')?.scrollIntoView({ behavior: 'smooth' });
-                                            setIsScrolling(true);
-                                            setTimeout(() => setIsScrolling(false), 1000);
-                                            setIsMobileMenuOpen(false);
-                                        }}
-                                        className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium"
-                                    >
-                                        📱 {t.app_download.title}
                                     </a>
                                     <div className={`${currentLanguage === 'ar' ? 'pr-4 border-r-2' : 'pl-4 border-l-2'} border-gray-200`}>
                                         <span className="text-gray-600 font-medium block mb-2">{t.header.about.about}</span>
@@ -1386,7 +1373,7 @@ const Landing: React.FC = () => {
                                         value={subscribeEmail}
                                         onChange={handleSubscribeEmailChange}
                                         placeholder={translations[currentLanguage].newsletter.email_placeholder}
-                                        className={`w-full px-4 py-3 rounded-lg border ${subscribeEmailError ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
+                                        className={`w-full px-4 py-3 rounded-lg border force-white-bg ${subscribeEmailError ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
                                     />
                                     {subscribeEmailError && (
                                         <p className="mt-1 text-sm text-red-500">{subscribeEmailError}</p>

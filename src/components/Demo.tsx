@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { translations } from '../translations';
 import type { Language } from '../translations';
+import './Landing.css';
 
 interface DemoProps {
     language: Language;
@@ -177,7 +178,7 @@ const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
                         <div className="flex border-b border-gray-200">
                             <button
                                 onClick={() => setActiveTab('features')}
-                                className={`px-6 py-3 text-sm font-medium focus:outline-none ${activeTab === 'features'
+                                className={`px-6 py-3 text-sm font-medium focus:outline-none force-white-bg ${activeTab === 'features'
                                     ? 'text-blue-600 border-b-2 border-blue-600'
                                     : 'text-gray-500 hover:text-gray-700'
                                     }`}
@@ -186,7 +187,7 @@ const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
                             </button>
                             <button
                                 onClick={() => setActiveTab('getting_started')}
-                                className={`px-6 py-3 text-sm font-medium focus:outline-none ${activeTab === 'getting_started'
+                                className={`px-6 py-3 text-sm font-medium focus:outline-none force-white-bg${activeTab === 'getting_started'
                                     ? 'text-blue-600 border-b-2 border-blue-600'
                                     : 'text-gray-500 hover:text-gray-700'
                                     }`}
@@ -195,7 +196,7 @@ const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
                             </button>
                             <button
                                 onClick={() => setActiveTab('mobile_preview')}
-                                className={`px-6 py-3 text-sm font-medium focus:outline-none ${activeTab === 'mobile_preview'
+                                className={`px-6 py-3 text-sm font-medium focus:outline-none force-white-bg ${activeTab === 'mobile_preview'
                                     ? 'text-blue-600 border-b-2 border-blue-600'
                                     : 'text-gray-500 hover:text-gray-700'
                                     }`}
@@ -204,7 +205,7 @@ const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
                             </button>
                             <button
                                 onClick={() => setActiveTab('videos_tutorials')}
-                                className={`px-6 py-3 text-sm font-medium focus:outline-none ${activeTab === 'videos_tutorials'
+                                className={`px-6 py-3 text-sm font-medium focus:outline-none force-white-bg ${activeTab === 'videos_tutorials'
                                     ? 'text-blue-600 border-b-2 border-blue-600'
                                     : 'text-gray-500 hover:text-gray-700'
                                     }`}
