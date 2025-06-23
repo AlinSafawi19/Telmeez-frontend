@@ -134,7 +134,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
         <div className="py-24 bg-gradient-to-b from-gray-50 to-white" dir={isRTL ? 'rtl' : 'ltr'}>
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                    <h2 className="text-5xl font-bold text-gray-900 mb-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">
                         {t.title}
                     </h2>
                     <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
@@ -173,8 +173,8 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
                             key={plan.id}
                             onClick={() => handlePlanSelect(plan.id)}
                             className={`relative rounded-xl bg-white p-5 shadow-lg cursor-pointer focus:outline-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${plan.recommended
-                                    ? 'transform scale-[1.02] hover:scale-[1.03]'
-                                    : 'border border-gray-200 hover:border-blue-200'
+                                ? 'transform scale-[1.02] hover:scale-[1.03]'
+                                : 'border border-gray-200 hover:border-blue-200'
                                 } ${selectedPlan === plan.id ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`}
                         >
                             {plan.recommended && (
@@ -260,7 +260,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
                     ))}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
