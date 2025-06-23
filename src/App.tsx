@@ -1,8 +1,8 @@
 //import { useEffect , useState } from "react";
 //import axios from "axios";
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-//import ComingSoon from "./components/ComingSoon";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import ComingSoon from "./components/ComingSoon";
 import SignIn from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
 import Overview from "./pages/demo-dashboard/subscriber/Overview";
@@ -47,8 +47,9 @@ const App: React.FC = () => {
                         API says: {apiMessage}
                       </div> */}
             <Routes>
-              {/* <Route path="/" element={<ComingSoon />} /> */}
-              <Route path="/" element={<Landing />} />
+              <Route path="/" element={<Navigate to="/coming-soon" replace />} />
+              <Route path="/landing" element={<Landing />} />
+              <Route path="/coming-soon" element={<ComingSoon />} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/checkout" element={<Checkout />} />
