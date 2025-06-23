@@ -9,7 +9,6 @@ import PricingPlans from './PricingPlans';
 import About from './About';
 import Demo from './Demo';
 import FAQ from './FAQ';
-import CookieBanner from './CookieBanner';
 import type { Language } from '../translations';
 import { translations } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -67,51 +66,11 @@ const Landing: React.FC = () => {
         email: ''
     });
 
-    const [isNewsletterSubscribed, setIsNewsletterSubscribed] = useState(false);
     const [showUnsubscribeMessage, setShowUnsubscribeMessage] = useState(false);
     const [testimonialFormErrors, setTestimonialFormErrors] = useState<TestimonialFormErrors>({});
 
-    // Load localStorage data after component mounts
     useEffect(() => {
-        // Use requestAnimationFrame for better performance
-        const loadLocalStorageData = () => {
-            const cookieConsent = localStorage.getItem('cookieConsent');
-            const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-
-            if (hasConsent) {
-                // Load unsubscribe email
-                const savedUnsubscribeEmail = localStorage.getItem('newsletterEmail');
-                if (savedUnsubscribeEmail) {
-                    setUnsubscribeEmail(savedUnsubscribeEmail);
-                }
-
-                // Load testimonial form
-                const savedForm = localStorage.getItem('testimonialForm');
-                if (savedForm) {
-                    try {
-                        const parsedForm = JSON.parse(savedForm);
-                        setTestimonialForm(parsedForm);
-                    } catch (error) {
-                        // Ignore parsing errors
-                    }
-                }
-
-                // Load newsletter subscription status
-                const isSubscribed = localStorage.getItem('newsletterSubscribed') === 'true';
-                setIsNewsletterSubscribed(isSubscribed);
-            }
-        };
-
-        // Use requestAnimationFrame instead of setTimeout for better performance
-        if (typeof requestAnimationFrame !== 'undefined') {
-            requestAnimationFrame(loadLocalStorageData);
-        } else {
-            // Fallback for older browsers
-            setTimeout(loadLocalStorageData, 0);
-        }
-    }, []);
-
-    useEffect(() => {
+        localStorage.clear();
         const handleClickOutside = (event: MouseEvent) => {
             if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target as Node)) {
                 setActiveDropdown(null);
@@ -150,61 +109,16 @@ const Landing: React.FC = () => {
         }, 500);
     };
 
-    useEffect(() => {
-        // Only run localStorage operations in development and only if needed
-        if (import.meta.env.DEV) {
-            // Use a much more efficient approach - only log if explicitly requested
-            const shouldLog = localStorage.getItem('debugLocalStorage') === 'true';
-            if (shouldLog) {
-                // Use setTimeout to defer the operation completely
-                setTimeout(() => {
-                    const logKey = 'lastLocalStorageLog';
-                    const lastLog = localStorage.getItem(logKey);
-                    const now = Date.now();
-
-                    // Only log if it's been more than 5 seconds since last log
-                    if (!lastLog || (now - parseInt(lastLog)) > 5000) {
-                        console.log('LocalStorage contents:', Object.fromEntries(
-                            Object.entries(localStorage).map(([key, value]) => [
-                                key,
-                                (() => {
-                                    try { return JSON.parse(value); }
-                                    catch { return value; }
-                                })()
-                            ])
-                        ));
-                        localStorage.setItem(logKey, now.toString());
-                    }
-                }, 1000); // Defer by 1 second
-            }
-        }
-    }, []);
-
     // Add scroll detection
     useEffect(() => {
-        let scrollTimeout: number;
-
         const handleScroll = () => {
             const scrollPosition = window.scrollY;
             setShowBackToTop(scrollPosition > 300);
-
-            // Throttle localStorage operations
-            clearTimeout(scrollTimeout);
-            scrollTimeout = window.setTimeout(() => {
-                // Save scroll position to localStorage as a necessary cookie
-                const cookieConsent = localStorage.getItem('cookieConsent');
-                const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-
-                if (hasConsent) {
-                    localStorage.setItem('scrollPosition', scrollPosition.toString());
-                }
-            }, 100); // Throttle to 100ms
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => {
             window.removeEventListener('scroll', handleScroll);
-            clearTimeout(scrollTimeout);
         };
     }, []);
 
@@ -284,8 +198,6 @@ const Landing: React.FC = () => {
 
         if (planId) {
             setSelectedPricingPlan(planId);
-            // Save the selected plan in localStorage
-            localStorage.setItem('selected_plan', planId);
             setIsScrolling(true);
             pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
             setTimeout(() => setIsScrolling(false), 1000);
@@ -375,21 +287,10 @@ const Landing: React.FC = () => {
             // Here you would typically make an API call to your backend
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            // Store newsletter subscription status and email as necessary cookies
-            const cookieConsent = localStorage.getItem('cookieConsent');
-            const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-
-            if (hasConsent) {
-                localStorage.setItem('newsletterSubscribed', 'true');
-                localStorage.setItem('newsletterEmail', subscribeEmail);
-                setIsScrolling(true);
-                setTimeout(() => { setIsScrolling(false); setIsNewsletterSubscribed(true); }, 1000);
-            }
             setUnsubscribeEmail(subscribeEmail);
             setSubscribeEmail('');
             setSubscribeEmailError('');
         } catch (error) {
-            // Handle error case if needed
         }
     };
 
@@ -411,16 +312,6 @@ const Landing: React.FC = () => {
             // Here you would typically make an API call to your backend
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            // Remove newsletter subscription status and email
-            const cookieConsent = localStorage.getItem('cookieConsent');
-            const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-
-            if (hasConsent) {
-                localStorage.removeItem('newsletterSubscribed');
-                localStorage.removeItem('newsletterEmail');
-                setIsNewsletterSubscribed(false);
-            }
-
             setUnsubscribeEmail('');
             setUnsubscribeEmailError('');
             setShowUnsubscribeMessage(true);
@@ -441,52 +332,7 @@ const Landing: React.FC = () => {
             [name]: value
         };
         setTestimonialForm(updatedForm);
-
-        // Save form data as a necessary cookie
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-        if (hasConsent) {
-            localStorage.setItem('testimonialForm', JSON.stringify(updatedForm));
-        }
     };
-
-    useEffect(() => {
-        // Check if we should scroll to pricing (from register button)
-        const shouldScrollToPricing = localStorage.getItem('scrollToPricing');
-
-        if (shouldScrollToPricing === 'true') {
-            // Clear the flag
-            localStorage.removeItem('scrollToPricing');
-
-            // Scroll to pricing section after a short delay to ensure component is mounted
-            setTimeout(() => {
-                pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                setIsScrolling(true);
-                setTimeout(() => setIsScrolling(false), 1000);
-            }, 100);
-        } else {
-            // Defer scroll position restoration to avoid blocking
-            const restoreScrollPosition = () => {
-                const cookieConsent = localStorage.getItem('cookieConsent');
-                const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-
-                if (hasConsent) {
-                    const savedScrollPosition = localStorage.getItem('scrollPosition');
-                    if (savedScrollPosition) {
-                        window.scrollTo(0, parseInt(savedScrollPosition));
-                    }
-                }
-            };
-
-            // Use requestAnimationFrame instead of setTimeout for better performance
-            if (typeof requestAnimationFrame !== 'undefined') {
-                requestAnimationFrame(restoreScrollPosition);
-            } else {
-                // Fallback for older browsers
-                setTimeout(restoreScrollPosition, 0);
-            }
-        }
-    }, []);
 
     const validateTestimonialForm = (): boolean => {
         const errors: TestimonialFormErrors = {};
@@ -993,7 +839,7 @@ const Landing: React.FC = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
-                            className="mb-8"
+                            className="mb-8 mt-8"
                         >
                             <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 border border-blue-200 shadow-sm">
                                 {t.hero.tag}
@@ -1680,25 +1526,6 @@ const Landing: React.FC = () => {
                             </p>
                         </form>
 
-                        {/* Subscription Status Indicator */}
-                        <div className="mt-8">
-                            <AnimatePresence mode="wait">
-                                {isNewsletterSubscribed ? (
-                                    <motion.div
-                                        initial={{ scale: 0, opacity: 0 }}
-                                        animate={{ scale: 1, opacity: 1 }}
-                                        exit={{ scale: 0, opacity: 0 }}
-                                        className="inline-flex items-center space-x-2 bg-green-100 text-green-800 px-4 py-2 rounded-full"
-                                    >
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        <span className="font-medium">{t.newsletter.unsubscribe_message}</span>
-                                    </motion.div>
-                                ) : null}
-                            </AnimatePresence>
-                        </div>
-
                     </div>
                 </div>
             </section>
@@ -1922,9 +1749,6 @@ const Landing: React.FC = () => {
                                     onClick={() => {
                                         setIsUnsubscribeModalOpen(false);
                                         setUnsubscribeEmailError('');
-                                        const cookieConsent = localStorage.getItem('cookieConsent');
-                                        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-                                        setUnsubscribeEmail(hasConsent ? localStorage.getItem('newsletterEmail') || '' : '');
                                     }}
                                     className="text-gray-400 hover:text-gray-500 focus:outline-none"
                                     aria-label="Close unsubscribe modal"
@@ -1974,9 +1798,6 @@ const Landing: React.FC = () => {
                                         onClick={() => {
                                             setIsUnsubscribeModalOpen(false);
                                             setUnsubscribeEmailError('');
-                                            const cookieConsent = localStorage.getItem('cookieConsent');
-                                            const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-                                            setUnsubscribeEmail(hasConsent ? localStorage.getItem('newsletterEmail') || '' : '');
                                         }}
                                         className="px-4 py-2 focus:outline-none text-gray-700 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
@@ -2215,9 +2036,6 @@ const Landing: React.FC = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-
-            {/* Add Cookie Banner */}
-            <CookieBanner />
         </div>
     );
 };

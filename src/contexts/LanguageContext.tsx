@@ -14,10 +14,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     useEffect(() => {
         // Use requestAnimationFrame for better performance
         const loadLanguage = () => {
-            const savedLanguage = localStorage.getItem('language') as Language;
-            if (savedLanguage) {
-                setCurrentLanguage(savedLanguage);
-            }
+            setCurrentLanguage('en');
         };
 
         // Use requestAnimationFrame instead of setTimeout for better performance
@@ -30,15 +27,6 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }, []);
 
     useEffect(() => {
-        // Check if user has given cookie consent
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-
-        // Only save language preference to localStorage if user has given consent
-        if (hasConsent) {
-            localStorage.setItem('language', currentLanguage);
-        }
-        
         // Update document direction for RTL languages
         if (currentLanguage === 'ar') {
             document.documentElement.dir = 'rtl';

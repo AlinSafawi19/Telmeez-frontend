@@ -34,15 +34,13 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
     const BILLING_PREFERENCE_KEY = 'billing_preference';
     const SELECTED_PLAN_KEY = 'selected_plan';
     const [isAnnual, setIsAnnual] = useState(() => {
-        const savedPreference = localStorage.getItem(BILLING_PREFERENCE_KEY);
-        return savedPreference ? savedPreference === 'annual' : true;
+        return true;
     });
     const [selectedPlan, setSelectedPlan] = useState<string | null>(() => {
         if (initialSelectedPlan) {
             return initialSelectedPlan;
         }
-        const savedPlan = localStorage.getItem(SELECTED_PLAN_KEY);
-        return savedPlan || 'standard'; // Default to standard plan ID
+        return 'standard'; // Default to standard plan ID
     });
 
     const t = translations[language].pricing;
@@ -73,14 +71,12 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
         if (initialSelectedPlan) {
             setSelectedPlan(initialSelectedPlan);
         } else {
-            const savedPlan = localStorage.getItem(SELECTED_PLAN_KEY);
-            setSelectedPlan(savedPlan || 'standard');
+            setSelectedPlan('standard');
         }
     }, [language, initialSelectedPlan]);
 
     const handlePlanSelect = (planId: string) => {
         setSelectedPlan(planId);
-        localStorage.setItem(SELECTED_PLAN_KEY, planId);
     };
 
     const handleContinue = () => {
@@ -96,7 +92,6 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
     const handleBillingToggle = () => {
         const newIsAnnual = !isAnnual;
         setIsAnnual(newIsAnnual);
-        localStorage.setItem(BILLING_PREFERENCE_KEY, newIsAnnual ? 'annual' : 'monthly');
     };
 
     const plans: Plan[] = [

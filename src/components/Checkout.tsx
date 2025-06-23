@@ -110,26 +110,7 @@ const Checkout: React.FC<CheckoutProps> = ({
 
     // Initialize add-ons state
     const [addOns, setAddOns] = useState<AddOn[]>(() => {
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-
-        const defaultAddOns = getDefaultAddOns();
-
-        if (hasConsent) {
-            const savedAddOnsRaw = localStorage.getItem('checkoutAddOns');
-            if (savedAddOnsRaw) {
-                try {
-                    const savedAddOns = JSON.parse(savedAddOnsRaw) as AddOn[];
-                    return defaultAddOns.map(defaultAddon => {
-                        const saved = savedAddOns.find(s => s.id === defaultAddon.id);
-                        return saved ? { ...defaultAddon, quantity: saved.quantity } : defaultAddon;
-                    });
-                } catch (e) {
-                    return defaultAddOns;
-                }
-            }
-        }
-        return defaultAddOns;
+        return getDefaultAddOns();
     });
 
     function getDefaultAddOns(): AddOn[] {
@@ -147,37 +128,10 @@ const Checkout: React.FC<CheckoutProps> = ({
 
     // Initialize all state with saved values if available
     const [currentStep, setCurrentStep] = useState(() => {
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-        if (hasConsent) {
-            const savedStep = localStorage.getItem('checkoutCurrentStep');
-            return savedStep ? parseInt(savedStep) : 1;
-        }
         return 1;
     });
 
     const [billingInfo, setBillingInfo] = useState<BillingInfo>(() => {
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-        if (hasConsent) {
-            const savedBillingInfo = localStorage.getItem('checkoutBillingInfo');
-            return savedBillingInfo ? JSON.parse(savedBillingInfo) : {
-                firstName: '',
-                lastName: '',
-                email: '',
-                phone: '',
-                institutionName: '',
-                address: '',
-                address2: '',
-                city: '',
-                state: '',
-                zipCode: '',
-                country: 'lebanon',
-                password: '',
-                confirmPassword: '',
-                customCountry: ''
-            };
-        }
         return {
             firstName: '',
             lastName: '',
@@ -197,20 +151,6 @@ const Checkout: React.FC<CheckoutProps> = ({
     });
 
     const [billingAddress, setBillingAddress] = useState<BillingAddress>(() => {
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-        if (hasConsent) {
-            const savedBillingAddress = localStorage.getItem('checkoutBillingAddress');
-            return savedBillingAddress ? JSON.parse(savedBillingAddress) : {
-                address: '',
-                address2: '',
-                city: '',
-                state: '',
-                zipCode: '',
-                country: 'lebanon',
-                customCountry: ''
-            };
-        }
         return {
             address: '',
             address2: '',
@@ -223,16 +163,6 @@ const Checkout: React.FC<CheckoutProps> = ({
     });
 
     const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>(() => {
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-        if (hasConsent) {
-            const savedPaymentInfo = localStorage.getItem('checkoutPaymentInfo');
-            return savedPaymentInfo ? JSON.parse(savedPaymentInfo) : {
-                cardNumber: '',
-                expiryDate: '',
-                cvv: ''
-            };
-        }
         return {
             cardNumber: '',
             expiryDate: '',
@@ -241,12 +171,6 @@ const Checkout: React.FC<CheckoutProps> = ({
     });
 
     const [useSameAddress, setUseSameAddress] = useState(() => {
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-        if (hasConsent) {
-            const savedUseSameAddress = localStorage.getItem('checkoutUseSameAddress');
-            return savedUseSameAddress ? JSON.parse(savedUseSameAddress) : true;
-        }
         return true;
     });
 
@@ -259,12 +183,6 @@ const Checkout: React.FC<CheckoutProps> = ({
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
     const [detectedCardType, setDetectedCardType] = useState<string>('');
     const [isAddOnsExpanded, setIsAddOnsExpanded] = useState(() => {
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-        if (hasConsent) {
-            const savedAddOnsExpanded = localStorage.getItem('checkoutAddOnsExpanded');
-            return savedAddOnsExpanded ? JSON.parse(savedAddOnsExpanded) : false;
-        }
         return false;
     });
 
@@ -384,22 +302,6 @@ const Checkout: React.FC<CheckoutProps> = ({
             return digitsOnly.replace(/(\d{4})/g, '$1 ').trim();
         }
     };
-
-    // Save form data to cookies when it changes
-    useEffect(() => {
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-
-        if (hasConsent) {
-            localStorage.setItem('checkoutBillingInfo', JSON.stringify(billingInfo));
-            localStorage.setItem('checkoutBillingAddress', JSON.stringify(billingAddress));
-            localStorage.setItem('checkoutPaymentInfo', JSON.stringify(paymentInfo));
-            localStorage.setItem('checkoutCurrentStep', currentStep.toString());
-            localStorage.setItem('checkoutUseSameAddress', JSON.stringify(useSameAddress));
-            localStorage.setItem('checkoutAddOns', JSON.stringify(addOns));
-            localStorage.setItem('checkoutAddOnsExpanded', JSON.stringify(isAddOnsExpanded));
-        }
-    }, [billingInfo, billingAddress, paymentInfo, currentStep, useSameAddress, addOns, isAddOnsExpanded]);
 
     // Set up custom country input visibility based on saved data
     useEffect(() => {
@@ -883,7 +785,6 @@ const Checkout: React.FC<CheckoutProps> = ({
 
     const handleStepSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Form submitted, current step:', currentStep);
 
         if (currentStep < 3) {
             handleNextStep();
@@ -924,18 +825,6 @@ const Checkout: React.FC<CheckoutProps> = ({
                 ...prev,
                 billingAddress: undefined
             }));
-
-            // Clear saved form data
-            localStorage.removeItem('checkoutBillingInfo');
-            localStorage.removeItem('checkoutBillingAddress');
-            localStorage.removeItem('checkoutPaymentInfo');
-            localStorage.removeItem('checkoutCurrentStep');
-            localStorage.removeItem('checkoutAddOns');
-            localStorage.removeItem('checkoutAddOnsExpanded');
-
-            // Handle final submission
-            console.log('Form submitted:', { billingInfo, paymentInfo, billingAddress, addOns });
-            // Navigate to success page or handle the submission
         }
     };
 
@@ -1170,45 +1059,7 @@ const Checkout: React.FC<CheckoutProps> = ({
             color: '#6B7280'
         })
     };
-
-    // Load saved form data from cookies if available
-    useEffect(() => {
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-
-        if (hasConsent) {
-            const savedBillingInfo = localStorage.getItem('checkoutBillingInfo');
-            const savedBillingAddress = localStorage.getItem('checkoutBillingAddress');
-            const savedPaymentInfo = localStorage.getItem('checkoutPaymentInfo');
-            const savedCurrentStep = localStorage.getItem('checkoutCurrentStep');
-            const savedUseSameAddress = localStorage.getItem('checkoutUseSameAddress');
-            const savedAddOns = localStorage.getItem('checkoutAddOns');
-            const savedAddOnsExpanded = localStorage.getItem('checkoutAddOnsExpanded');
-
-            if (savedBillingInfo) {
-                setBillingInfo(JSON.parse(savedBillingInfo));
-            }
-            if (savedBillingAddress) {
-                setBillingAddress(JSON.parse(savedBillingAddress));
-            }
-            if (savedPaymentInfo) {
-                setPaymentInfo(JSON.parse(savedPaymentInfo));
-            }
-            if (savedCurrentStep) {
-                setCurrentStep(parseInt(savedCurrentStep));
-            }
-            if (savedUseSameAddress) {
-                setUseSameAddress(JSON.parse(savedUseSameAddress));
-            }
-            if (savedAddOns) {
-                setAddOns(JSON.parse(savedAddOns));
-            }
-            if (savedAddOnsExpanded) {
-                setIsAddOnsExpanded(JSON.parse(savedAddOnsExpanded));
-            }
-        }
-    }, []);
-
+    
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" dir={isRTL ? 'rtl' : 'ltr'}>
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

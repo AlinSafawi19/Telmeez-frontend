@@ -7,7 +7,6 @@ import SignIn from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
 import Checkout from './components/Checkout';
 import { LanguageProvider } from './contexts/LanguageContext';
-import { CookieConsentProvider } from './contexts/CookieConsentContext';
 import Landing from './components/Landing';
 
 const App: React.FC = () => {
@@ -20,23 +19,21 @@ const App: React.FC = () => {
   }, []);*/
 
   return (
-    <CookieConsentProvider>
-      <LanguageProvider>
-        <Router>
-          {/* <div className="text-xl font-medium text-green-600">
+    <LanguageProvider>
+      <Router>
+        {/* <div className="text-xl font-medium text-green-600">
                         API says: {apiMessage}
                       </div> */}
-          <Routes>
-            <Route path="/" element={<Navigate to="/coming-soon" replace />} />
-            <Route path="/landing" element={<Landing />} />
-            <Route path="/coming-soon" element={<ComingSoon />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/checkout" element={<Checkout />} />
-          </Routes>
-        </Router>
-      </LanguageProvider>
-    </CookieConsentProvider>
+        <Routes>
+          <Route path="/" element={<Navigate to="/coming-soon" replace />} />
+          <Route path="/landing" element={<Landing />} />
+          <Route path="/coming-soon" element={<ComingSoon />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/checkout" element={<Checkout />} />
+        </Routes>
+      </Router>
+    </LanguageProvider>
   );
 };
 

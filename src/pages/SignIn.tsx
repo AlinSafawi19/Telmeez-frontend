@@ -34,20 +34,6 @@ const SignIn: React.FC = () => {
         };
     }, []);
 
-    // Load saved credentials if they exist and user has given consent
-    useEffect(() => {
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-
-        if (hasConsent) {
-            const savedEmail = localStorage.getItem('rememberedEmail');
-            if (savedEmail) {
-                setEmail(savedEmail);
-                setRememberMe(true);
-            }
-        }
-    }, []);
-
     const languages = [
         { code: 'en', label: 'English' },
         { code: 'ar', label: 'عربي' },
@@ -96,21 +82,9 @@ const SignIn: React.FC = () => {
             setErrors(prev => ({ ...prev, password: t.header.signin_errors.password_required }));
             return;
         }
-
-        // Save email if remember me is checked and user has given consent
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-
-        if (rememberMe && hasConsent) {
-            localStorage.setItem('rememberedEmail', email);
-        } else if (!rememberMe) {
-            localStorage.removeItem('rememberedEmail');
-        }
     };
 
     const handleCreateAccount = () => {
-        // Set a flag to indicate we want to scroll to pricing
-        localStorage.setItem('scrollToPricing', 'true');
         navigate('/');
     };
 

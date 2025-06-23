@@ -12,30 +12,9 @@ const FAQ: React.FC<FAQProps> = ({ language = 'en' }) => {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
     const t = translations[language].faq;
 
-    // Load expanded state from localStorage on mount
-    useEffect(() => {
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-        
-        if (hasConsent) {
-            const savedOpenIndex = localStorage.getItem('faqOpenIndex');
-            if (savedOpenIndex !== null) {
-                setOpenIndex(parseInt(savedOpenIndex));
-            }
-        }
-    }, []);
-
-    // Save expanded state to localStorage when it changes
     const handleToggle = (index: number) => {
         const newIndex = openIndex === index ? null : index;
         setOpenIndex(newIndex);
-        
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-        
-        if (hasConsent) {
-            localStorage.setItem('faqOpenIndex', newIndex?.toString() ?? '');
-        }
     };
 
     return (
