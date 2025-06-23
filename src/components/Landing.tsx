@@ -1605,6 +1605,14 @@ const Landing: React.FC = () => {
                     </div>
                     <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
                         <p>&copy; {new Date().getFullYear()} {translations[currentLanguage].footer.copyright}</p>
+                        <div className="mt-4 flex flex-wrap justify-center gap-4 text-sm">
+                            <a href="/privacy-policy" className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.legal.privacy_policy}</a>
+                            <a href="/terms-of-service" className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.legal.terms_of_service}</a>
+                            <a href="/cookie-policy" className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.legal.cookie_policy}</a>
+                            <a href="/data-protection" className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.legal.data_protection}</a>
+                            <a href="/acceptable-use" className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.legal.acceptable_use}</a>
+                            <a href="/refund-policy" className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.legal.refund_policy}</a>
+                        </div>
                     </div>
                 </div>
             </footer>
@@ -1857,7 +1865,7 @@ const Landing: React.FC = () => {
                                     </div>
                                     <div className="group">
                                         <label htmlFor="email" className="block text-xs font-medium text-gray-700 mb-1 group-focus-within:text-blue-600 transition-colors duration-200">
-                                            Email
+                                            {t.testimonials.modal.form.email}
                                         </label>
                                         <div className="relative">
                                             <input

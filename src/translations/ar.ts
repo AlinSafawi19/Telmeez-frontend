@@ -243,6 +243,15 @@ export const ar = {
         contact_us: {
             contact_us: "اتصل بنا"
         },
+        legal: {
+            legal: "القانونية",
+            privacy_policy: "سياسة الخصوصية",
+            terms_of_service: "شروط الخدمة",
+            cookie_policy: "سياسة ملفات تعريف الارتباط",
+            data_protection: "حماية البيانات",
+            acceptable_use: "سياسة الاستخدام المقبول",
+            refund_policy: "سياسة الاسترداد"
+        },
         social: "تواصل معنا",
         language: "اللغة",
         copyright: "تلميز. جميع الحقوق محفوظة"
@@ -418,6 +427,7 @@ export const ar = {
             subtitle: "ساعد الآخرين في اكتشاف قوة تلميز",
             form: {
                 name: "الاسم",
+                email: "البريد الإلكتروني",
                 name_placeholder: "أدخل اسمك",
                 institution: "المؤسسة",
                 institution_placeholder: "أدخل اسم مؤسستك",

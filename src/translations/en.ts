@@ -243,6 +243,15 @@ export const en = {
         contact_us: {
             contact_us: "Contact Us"
         },
+        legal: {
+            legal: "Legal",
+            privacy_policy: "Privacy Policy",
+            terms_of_service: "Terms of Service",
+            cookie_policy: "Cookie Policy",
+            data_protection: "Data Protection",
+            acceptable_use: "Acceptable Use Policy",
+            refund_policy: "Refund Policy"
+        },
         social: "Connect With Us",
         language: "Language",
         copyright: "Telmeez. All rights reserved"
@@ -419,6 +428,7 @@ export const en = {
             form: {
                 name: "Name",
                 name_placeholder: "Enter your name",
+                email: "Email",
                 institution: "Institution",
                 institution_placeholder: "Enter your institution name",
                 role: "Role",

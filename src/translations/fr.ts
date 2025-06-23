@@ -228,6 +228,15 @@ export const fr = {
         contact_us: {
             contact_us: "Contactez-nous"
         },
+        legal: {
+            legal: "Légal",
+            privacy_policy: "Politique de Confidentialité",
+            terms_of_service: "Conditions d'Utilisation",
+            cookie_policy: "Politique des Cookies",
+            data_protection: "Protection des Données",
+            acceptable_use: "Politique d'Utilisation Acceptable",
+            refund_policy: "Politique de Remboursement"
+        },
         social: "Connectez-vous avec nous",
         language: "Langue",
         copyright: "Telmeez. Tous droits réservés"
@@ -404,6 +413,7 @@ export const fr = {
             form: {
                 name: "Nom",
                 name_placeholder: "Entrez votre nom",
+                email: "Email",
                 institution: "Institution",
                 institution_placeholder: "Entrez le nom de votre institution",
                 role: "Rôle",
