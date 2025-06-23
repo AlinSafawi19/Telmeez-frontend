@@ -563,7 +563,16 @@ export const en = {
             promo_code_required: "Please enter a promo code",
             apply: "Apply",
             annual: "Annual",
-            monthly: "Monthly"
+            monthly: "Monthly",
+            add_ons: {
+                title: "Add Additional Users",
+                admin: "Admin",
+                teacher: "Teacher",
+                student: "Student",
+                parent: "Parent",
+                per_user: "/user",
+                total: "Add-ons Total"
+            }
         }
     },
     countries: {

@@ -523,32 +523,41 @@ export const fr = {
             payment_secured_with: "Votre paiement est sécurisé avec"
         },
         summary: {
-            title: "Récapitulatif de la commande",
-            plan: "Forfait",
+            title: "Résumé de la commande",
+            plan: "Plan",
             billing_period: "Période de facturation",
             price: "Prix",
-            plan_features: "Fonctionnalités du forfait",
+            plan_features: "Fonctionnalités du plan",
             add_promo: "Ajouter un code promo",
             hide_promo: "Masquer le code promo",
             add_promo_placeholder: "Entrez le code promo",
+            promo_code_savings: "Économies code promo",
+            total_savings: "Économies totales",
             total: "Montant total final",
             back: "Retour",
             continue: "Continuer",
             activate: "Activer",
             free_trial: {
-                thirty_days: "30 Jours d'essai gratuit",
-                seven_days: "7 Jours d'essai gratuit",
-                try_before_you_buy: "Essayer avant d'acheter",
-                thirty_days_badge: "30 Jours",
-                seven_days_badge: "7 Jours"
+                thirty_days: "Essai gratuit de 30 jours",
+                seven_days: "Essai gratuit de 7 jours",
+                try_before_you_buy: "Essayez avant d'acheter",
+                thirty_days_badge: "30 jours",
+                seven_days_badge: "7 jours"
             },
             annual_saving: "Économies annuelles",
-            promo_code_savings: "Réduction du code promo",
             promo_code_required: "Veuillez entrer un code promo",
-            total_savings: "Total des économies",
             apply: "Appliquer",
             annual: "Annuel",
-            monthly: "Mensuel"
+            monthly: "Mensuel",
+            add_ons: {
+                title: "Ajouter des utilisateurs supplémentaires",
+                admin: "Admin",
+                teacher: "Enseignant",
+                student: "Étudiant",
+                parent: "Parent",
+                per_user: "/utilisateur",
+                total: "Total des suppléments"
+            }
         }
     },
     countries: {

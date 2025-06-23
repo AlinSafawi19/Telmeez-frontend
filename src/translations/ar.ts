@@ -542,28 +542,37 @@ export const ar = {
             plan: "الخطة",
             billing_period: "فترة الفوترة",
             price: "السعر",
-            plan_features: "مميزات الخطة",
+            plan_features: "ميزات الخطة",
             add_promo: "إضافة رمز ترويجي",
-            hide_promo: "إخفاء رمز الخصم",
-            add_promo_placeholder: "أدخل الرمز الترويجي",
-            total: "المبلغ الإجمالي النهائي",
+            hide_promo: "إخفاء رمز ترويجي",
+            add_promo_placeholder: "أدخل رمز ترويجي",
+            promo_code_savings: "توفير رمز ترويجي",
+            total_savings: "إجمالي التوفير",
+            total: "المبلغ النهائي الإجمالي",
             back: "رجوع",
             continue: "متابعة",
             activate: "تفعيل",
             free_trial: {
-                thirty_days: "30 يوم تجربة مجانية",
-                seven_days: "7 يوم تجربة مجانية",
-                try_before_you_buy: "جرب قبل أن تشتري",
+                thirty_days: "تجربة مجانية لمدة 30 يوم",
+                seven_days: "تجربة مجانية لمدة 7 أيام",
+                try_before_you_buy: "جرب قبل الشراء",
                 thirty_days_badge: "30 يوم",
-                seven_days_badge: "7 يوم"
+                seven_days_badge: "7 أيام"
             },
-            annual_saving: "الوفورات السنوية",
-            promo_code_savings: "توفير رمز الخصم",
-            total_savings: "التوفير الإجمالي",
-            promo_code_required: "يرجى إدخال رمز الخصم",
+            annual_saving: "التوفير السنوي",
+            promo_code_required: "يرجى إدخال رمز ترويجي",
             apply: "تطبيق",
             annual: "سنوي",
-            monthly: "شهري"
+            monthly: "شهري",
+            add_ons: {
+                title: "إضافة مستخدمين إضافيين",
+                admin: "مشرف",
+                teacher: "معلم",
+                student: "طالب",
+                parent: "ولي أمر",
+                per_user: "/مستخدم",
+                total: "إجمالي الإضافات"
+            }
         }
     },
     countries: {

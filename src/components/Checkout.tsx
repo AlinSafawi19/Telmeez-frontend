@@ -52,6 +52,14 @@ interface PaymentInfo {
     cvv: string;
 }
 
+interface AddOn {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    maxQuantity?: number;
+}
+
 type PaymentMethod = 'card';
 
 const Checkout: React.FC<CheckoutProps> = ({
@@ -81,6 +89,45 @@ const Checkout: React.FC<CheckoutProps> = ({
         })),
         { value: 999, label: t.checkout.account_info.fields.other_country }
     ];
+
+    // Add-ons configuration
+    const addOnsConfig = {
+        starter: {
+            admin: { price: 1.5, maxQuantity: 10 },
+            teacher: { price: 0.75, maxQuantity: 50 },
+            student: { price: 0.10, maxQuantity: 500 },
+            parent: { price: 0.05, maxQuantity: 250 }
+        },
+        standard: {
+            admin: { price: 1.5, maxQuantity: 20 },
+            teacher: { price: 0.75, maxQuantity: 200 },
+            student: { price: 0.10, maxQuantity: 2000 },
+            parent: { price: 0.05, maxQuantity: 1000 }
+        }
+    };
+
+    // Initialize add-ons state
+    const [addOns, setAddOns] = useState<AddOn[]>(() => {
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+        if (hasConsent) {
+            const savedAddOns = localStorage.getItem('checkoutAddOns');
+            return savedAddOns ? JSON.parse(savedAddOns) : getDefaultAddOns();
+        }
+        return getDefaultAddOns();
+    });
+
+    function getDefaultAddOns(): AddOn[] {
+        if (selectedPlan === 'enterprise') return [];
+
+        const config = addOnsConfig[selectedPlan as keyof typeof addOnsConfig];
+        return [
+            { id: 'admin', name: 'Admin', price: config.admin.price, quantity: 0, maxQuantity: config.admin.maxQuantity },
+            { id: 'teacher', name: 'Teacher', price: config.teacher.price, quantity: 0, maxQuantity: config.teacher.maxQuantity },
+            { id: 'student', name: 'Student', price: config.student.price, quantity: 0, maxQuantity: config.student.maxQuantity },
+            { id: 'parent', name: 'Parent', price: config.parent.price, quantity: 0, maxQuantity: config.parent.maxQuantity }
+        ];
+    }
 
     // Initialize all state with saved values if available
     const [currentStep, setCurrentStep] = useState(() => {
@@ -195,12 +242,43 @@ const Checkout: React.FC<CheckoutProps> = ({
     const [discount, setDiscount] = useState(0);
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
     const [detectedCardType, setDetectedCardType] = useState<string>('');
+    const [isAddOnsExpanded, setIsAddOnsExpanded] = useState(() => {
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+        if (hasConsent) {
+            const savedAddOnsExpanded = localStorage.getItem('checkoutAddOnsExpanded');
+            return savedAddOnsExpanded ? JSON.parse(savedAddOnsExpanded) : false;
+        }
+        return false;
+    });
 
     const [errors, setErrors] = useState<{
         billing?: Partial<Record<keyof BillingInfo, string>>;
         billingAddress?: Partial<Record<keyof BillingAddress, string>>;
         payment?: Partial<Record<keyof PaymentInfo, string>>;
     }>({});
+
+    // Add-ons handlers
+    const handleAddOnQuantityChange = (addOnId: string, newQuantity: number) => {
+        setAddOns(prev => prev.map(addOn =>
+            addOn.id === addOnId
+                ? { ...addOn, quantity: Math.max(0, Math.min(newQuantity, addOn.maxQuantity || 999)) }
+                : addOn
+        ));
+    };
+
+    const getAddOnsTotal = () => {
+        return addOns.reduce((total, addOn) => total + (addOn.price * addOn.quantity), 0);
+    };
+
+    const getAddOnsTotalFormatted = () => {
+        const total = getAddOnsTotal();
+        return `$${total.toFixed(2)}`;
+    };
+
+    const hasAddOns = () => {
+        return addOns.some(addOn => addOn.quantity > 0);
+    };
 
     // Card type detection functions
     const getCardTypeFromNumber = (cardNumber: string): string => {
@@ -302,8 +380,10 @@ const Checkout: React.FC<CheckoutProps> = ({
             localStorage.setItem('checkoutPaymentInfo', JSON.stringify(paymentInfo));
             localStorage.setItem('checkoutCurrentStep', currentStep.toString());
             localStorage.setItem('checkoutUseSameAddress', JSON.stringify(useSameAddress));
+            localStorage.setItem('checkoutAddOns', JSON.stringify(addOns));
+            localStorage.setItem('checkoutAddOnsExpanded', JSON.stringify(isAddOnsExpanded));
         }
-    }, [billingInfo, billingAddress, paymentInfo, currentStep, useSameAddress]);
+    }, [billingInfo, billingAddress, paymentInfo, currentStep, useSameAddress, addOns, isAddOnsExpanded]);
 
     // Set up custom country input visibility based on saved data
     useEffect(() => {
@@ -834,9 +914,11 @@ const Checkout: React.FC<CheckoutProps> = ({
             localStorage.removeItem('checkoutBillingAddress');
             localStorage.removeItem('checkoutPaymentInfo');
             localStorage.removeItem('checkoutCurrentStep');
+            localStorage.removeItem('checkoutAddOns');
+            localStorage.removeItem('checkoutAddOnsExpanded');
 
             // Handle final submission
-            console.log('Form submitted:', { billingInfo, paymentInfo, billingAddress });
+            console.log('Form submitted:', { billingInfo, paymentInfo, billingAddress, addOns });
             // Navigate to success page or handle the submission
         }
     };
@@ -901,6 +983,10 @@ const Checkout: React.FC<CheckoutProps> = ({
         } else {
             finalPrice = monthlyPrice; // $49
         }
+
+        // Add add-ons cost
+        const addOnsCost = getAddOnsTotal();
+        finalPrice += addOnsCost;
 
         // Apply promo code discount if exists
         if (discount > 0) {
@@ -1008,6 +1094,8 @@ const Checkout: React.FC<CheckoutProps> = ({
             const savedPaymentInfo = localStorage.getItem('checkoutPaymentInfo');
             const savedCurrentStep = localStorage.getItem('checkoutCurrentStep');
             const savedUseSameAddress = localStorage.getItem('checkoutUseSameAddress');
+            const savedAddOns = localStorage.getItem('checkoutAddOns');
+            const savedAddOnsExpanded = localStorage.getItem('checkoutAddOnsExpanded');
 
             if (savedBillingInfo) {
                 setBillingInfo(JSON.parse(savedBillingInfo));
@@ -1023,6 +1111,12 @@ const Checkout: React.FC<CheckoutProps> = ({
             }
             if (savedUseSameAddress) {
                 setUseSameAddress(JSON.parse(savedUseSameAddress));
+            }
+            if (savedAddOns) {
+                setAddOns(JSON.parse(savedAddOns));
+            }
+            if (savedAddOnsExpanded) {
+                setIsAddOnsExpanded(JSON.parse(savedAddOnsExpanded));
             }
         }
     }, []);
@@ -1743,6 +1837,103 @@ const Checkout: React.FC<CheckoutProps> = ({
                                         <span className="text-sm text-gray-600">{t.checkout.summary.price}</span>
                                         <span className="text-sm font-medium text-gray-900">{getPlanPrice()}</span>
                                     </div>
+
+                                    {/* Plan Features/Limits */}
+                                    <div className="border-t border-gray-100 pt-3">
+                                        <h4 className="text-xs font-medium text-gray-700 mb-2">{t.checkout.summary.plan_features}</h4>
+                                        <div className="space-y-1">
+                                            {t.pricing.plans[selectedPlan as keyof typeof t.pricing.plans].features.map((feature, index) => (
+                                                <div key={index} className="flex items-center text-xs text-gray-600">
+                                                    <svg className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                    </svg>
+                                                    <span>{feature}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Add-ons Section - Only for Starter and Standard plans */}
+                                    {(selectedPlan === 'starter' || selectedPlan === 'standard') && (
+                                        <div className="border-t border-gray-100 pt-3">
+                                            <div className="flex items-center justify-between mb-3">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setIsAddOnsExpanded(!isAddOnsExpanded)}
+                                                    className="flex items-center text-blue-600 hover:text-blue-700 text-sm font-medium focus:outline-none transition-colors"
+                                                    aria-label={isAddOnsExpanded ? "Collapse add-ons" : "Expand add-ons"}
+                                                >
+                                                    {t.checkout.summary.add_ons.title}
+                                                    <svg
+                                                        className={`ml-1 h-3 w-3 transform transition-transform ${isAddOnsExpanded ? 'rotate-180' : ''}`}
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                            {/* Show add-ons details when expanded */}
+                                            {isAddOnsExpanded && (
+                                                <div className="space-y-3 mb-3">
+                                                    {addOns.map((addOn) => (
+                                                        <div key={addOn.id} className="flex items-center justify-between">
+                                                            <div className="flex-1">
+                                                                <div className="flex items-center justify-between mb-1">
+                                                                    <span className="text-xs font-medium text-gray-700">
+                                                                        {t.checkout.summary.add_ons[addOn.id as keyof typeof t.checkout.summary.add_ons] || addOn.name}
+                                                                    </span>
+                                                                    <span className="text-xs text-gray-500">${addOn.price.toFixed(2)}{t.checkout.summary.add_ons.per_user}</span>
+                                                                </div>
+                                                                <div className="flex items-center space-x-2">
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => handleAddOnQuantityChange(addOn.id, addOn.quantity - 1)}
+                                                                        disabled={addOn.quantity === 0}
+                                                                        className="quantity-button w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+                                                                        aria-label={`Decrease ${addOn.name} quantity`}
+                                                                    >
+                                                                        <svg className="w-3 h-3" viewBox="0 0 24 24">
+                                                                            <rect x="4" y="11" width="16" height="2" fill="#6B7280" />
+                                                                        </svg>
+                                                                    </button>
+                                                                    <span className="text-xs font-medium text-gray-900 min-w-[2rem] text-center">{addOn.quantity}</span>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => handleAddOnQuantityChange(addOn.id, addOn.quantity + 1)}
+                                                                        disabled={addOn.quantity >= (addOn.maxQuantity || 999)}
+                                                                        className="quantity-button w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+                                                                        aria-label={`Increase ${addOn.name} quantity`}
+                                                                    >
+                                                                        <svg className="w-3 h-3" viewBox="0 0 24 24">
+                                                                            <rect x="11" y="4" width="2" height="16" fill="#6B7280" />
+                                                                            <rect x="4" y="11" width="16" height="2" fill="#6B7280" />
+                                                                        </svg>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div className="text-right ml-3">
+                                                                <span className="text-xs font-medium text-gray-900">
+                                                                    ${(addOn.price * addOn.quantity).toFixed(2)}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+
+                                            {/* Always show add-ons total if there are any add-ons */}
+                                            {hasAddOns() && (
+                                                <div className="flex justify-between items-center pt-2 border-t border-gray-100">
+                                                    <span className="text-xs font-medium text-gray-700">{t.checkout.summary.add_ons.total}</span>
+                                                    <span className="text-xs font-semibold text-gray-900">{getAddOnsTotalFormatted()}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
                                     {/* Annual Savings */}
                                     {isAnnual && (
                                         <div className="space-y-2">
@@ -1796,7 +1987,8 @@ const Checkout: React.FC<CheckoutProps> = ({
                                     <button
                                         type="button"
                                         onClick={() => setShowPromoInput(!showPromoInput)}
-                                        className="focus:outline-none text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center force-white-bg"
+                                        className="flex items-center text-blue-600 hover:text-blue-700 text-sm font-medium focus:outline-none transition-colors"
+                                        aria-label={showPromoInput ? "Hide promo code input" : "Show promo code input"}
                                     >
                                         {showPromoInput ? t.checkout.summary.hide_promo : t.checkout.summary.add_promo}
                                         <svg
