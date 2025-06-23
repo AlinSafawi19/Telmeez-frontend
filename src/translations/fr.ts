@@ -532,6 +532,8 @@ export const fr = {
             hide_promo: "Masquer le code promo",
             add_promo_placeholder: "Entrez le code promo",
             promo_code_savings: "Économies code promo",
+            promo_code_savings_applied: "Code promo appliqué avec succès",
+            promo_code_savings_saved: "Économisé",
             total_savings: "Économies totales",
             total: "Montant total final",
             back: "Retour",
@@ -557,6 +559,42 @@ export const fr = {
                 parent: "Parent",
                 per_user: "/utilisateur",
                 total: "Total des suppléments"
+            },
+            recommendation: {
+                standard: {
+                    title: "💡 Mise à Niveau Intelligente Disponible",
+                    desc1: "Vous dépensez",
+                    month: "mois",
+                    desc2: "en suppléments",
+                    save1: "Économisez",
+                    save2: "/mo",
+                    current: "Actuel (Starter + Add-ons):",
+                    plan_recommended: "Plan Standard:",
+                    you_save: "Vous économisez:",
+                    plan_includes: "Plan Standard inclut:",
+                    admin_accounts: "10 Comptes Admin",
+                    teacher_accounts: "150 Comptes Enseignants",
+                    student_accounts: "1,500 Comptes Étudiants",
+                    parent_accounts: "750 Comptes Parents",
+                    upgrade_to_standard: "Passer au Plan Standard"
+                },
+                enterprise: {
+                    title: "💡 Mise à Niveau Intelligente Disponible",
+                    desc1: "Vous dépensez",
+                    month: "mois",
+                    desc2: "en suppléments",
+                    save1: "Économisez",
+                    save2: "/mo",
+                    current: "Actuel (Standard + Add-ons):",
+                    plan_recommended: "Plan Entreprise:",
+                    you_save: "Vous économisez:",
+                    plan_includes: "Plan Entreprise inclut:",
+                    admin_accounts: "Comptes Admin Illimités",
+                    teacher_accounts: "Comptes Enseignants Illimités",
+                    student_accounts: "Comptes Étudiants Illimités",
+                    parent_accounts: "Comptes Parents Illimités",
+                    upgrade_to_enterprise: "Passer au Plan Entreprise"
+                }
             }
         }
     },

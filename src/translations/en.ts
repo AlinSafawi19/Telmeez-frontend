@@ -547,6 +547,8 @@ export const en = {
             hide_promo: "Hide Promo Code",
             add_promo_placeholder: "Enter Promo Code",
             promo_code_savings: "Promo Code Savings",
+            promo_code_savings_applied: "Promo code applied successfully",
+            promo_code_savings_saved: "Saved",
             total_savings: "Total Savings",
             total: "Final Total Amount",
             back: "Back",
@@ -572,6 +574,42 @@ export const en = {
                 parent: "Parent",
                 per_user: "/user",
                 total: "Add-ons Total"
+            },
+            recommendation: {
+                standard: {
+                    title: "💡 Smart Upgrade Available",
+                    desc1: "You're spending",
+                    month: "month",
+                    desc2: "on add-ons",
+                    save1: "Save",
+                    save2: "/mo",
+                    current: "Current (Starter + Add-ons):",
+                    plan_recommended: "Standard Plan:",
+                    you_save: "You save:",
+                    plan_includes: "Standard Plan includes:",
+                    admin_accounts: "10 Admin Accounts",
+                    teacher_accounts: "150 Teacher Accounts",
+                    student_accounts: "1,500 Student Accounts",
+                    parent_accounts: "750 Parent Accounts",
+                    upgrade_to_standard: "Upgrade to Standard"
+                },
+                enterprise: {
+                    title: "💡 Smart Upgrade Available",
+                    desc1: "You're spending",
+                    month: "month",
+                    desc2: "on add-ons",
+                    save1: "Save",
+                    save2: "/mo",
+                    current: "Current (Standard + Add-ons):",
+                    plan_recommended: "Enterprise Plan:",
+                    you_save: "You save:",
+                    plan_includes: "Enterprise Plan includes:",
+                    admin_accounts: "Unlimited Admin Accounts",
+                    teacher_accounts: "Unlimited Teacher Accounts",
+                    student_accounts: "Unlimited Student Accounts",
+                    parent_accounts: "Unlimited Parent Accounts",
+                    upgrade_to_enterprise: "Upgrade to Enterprise"
+                }
             }
         }
     },
