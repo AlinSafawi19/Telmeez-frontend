@@ -1,5 +1,3 @@
-import { SubTitle, Title } from "chart.js";
-
 export const en = {
     header: {
         home: "Home",
