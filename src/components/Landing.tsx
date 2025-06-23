@@ -1043,7 +1043,7 @@ const Landing: React.FC = () => {
                                 <span className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                                 <span className="relative flex items-center justify-center">
                                     {t.hero.getStarted}
-                                    <svg className="w-4 h-4 sm:w-5 sm:h-5 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className={`w-4 h-4 sm:w-5 sm:h-5 ${currentLanguage === 'ar' ? 'mr-2' : 'ml-2'} transform transition-transform duration-300 ${currentLanguage === 'ar' ? 'rotate-180 group-hover:-translate-x-1' : 'group-hover:translate-x-1'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                     </svg>
                                 </span>
@@ -1140,7 +1140,7 @@ const Landing: React.FC = () => {
                                 viewport={{ once: true }}
                                 className="space-y-4"
                             >
-                                <h3 className="text-base sm:text-lg font-semibold text-gray-900">Key Features:</h3>
+                                <h3 className="text-base sm:text-lg font-semibold text-gray-900">{t.app_download.key_features}</h3>
                                 <ul className="space-y-3">
                                     {t.app_download.features.map((feature, index) => (
                                         <li key={index} className="flex items-center">

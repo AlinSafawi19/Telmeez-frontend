@@ -68,6 +68,7 @@ export const en = {
     app_download: {
         title: "Get Telmeez on Your Mobile Device",
         subtitle: "Download our mobile app for seamless access to your educational platform on the go",
+        key_features: "Key Features:",
         features: [
             "Real-time notifications",
             "Quick access to all features",
@@ -204,7 +205,7 @@ export const en = {
                 {
                     title: "Interactive Dashboards & Demo Videos Coming Soon",
                     description: "We're excited to announce the upcoming launch of our interactive dashboards and comprehensive demo videos. These new features will help you better understand and utilize our platform's capabilities.",
-                    date: "March 2024"
+                    date: "May 2025"
                 }
             ]
         }

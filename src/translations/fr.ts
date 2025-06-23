@@ -189,7 +189,7 @@ export const fr = {
                 {
                     title: "Tableaux de Bord Interactifs et Vidéos Démo Bientôt Disponibles",
                     description: "Nous sommes ravis d'annoncer le lancement prochain de nos tableaux de bord interactifs et de nos vidéos démo complètes. Ces nouvelles fonctionnalités vous aideront à mieux comprendre et utiliser les capacités de notre plateforme.",
-                    date: "Mars 2024"
+                    date: "Mai 2025"
                 }
             ]
         }
@@ -813,6 +813,7 @@ export const fr = {
     app_download: {
         title: "Obtenez Telmeez sur Votre Appareil Mobile",
         subtitle: "Téléchargez notre application mobile pour un accès transparent à votre plateforme éducative en déplacement",
+        key_features: "Fonctionnalités Clés:",
         features: [
             "Notifications en temps réel",
             "Accès rapide à toutes les fonctionnalités",
