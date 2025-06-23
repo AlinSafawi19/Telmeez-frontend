@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { FaHome, FaEnvelope } from 'react-icons/fa';
 import { translations } from '../translations';
 import type { Language } from '../translations';
@@ -83,11 +83,13 @@ const ForgotPassword: React.FC = () => {
             {/* Mobile Header - Only visible on mobile */}
             <div className="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3">
                 <div className="flex items-center justify-between">
-                    <img
-                        src={currentLanguage === 'ar' ? logoarb : logo}
-                        alt="Company Logo"
-                        className="h-20 w-20 transition-transform"
-                    />
+                    <Link to="/">
+                        <img
+                            src={currentLanguage === 'ar' ? logoarb : logo}
+                            alt="Company Logo"
+                            className="h-20 w-20 transition-transform cursor-pointer hover:opacity-80"
+                        />
+                    </Link>
                     <div className="flex items-center gap-2">
                         <div className="relative" ref={dropdownRef}>
                             <button
@@ -138,11 +140,13 @@ const ForgotPassword: React.FC = () => {
                 <div className="w-full max-w-md mx-auto space-y-6 lg:space-y-8">
                     {/* Desktop Header - Only visible on desktop */}
                     <div className="hidden lg:flex items-center justify-between mb-8">
-                        <img
-                            src={currentLanguage === 'ar' ? logoarb : logo}
-                            alt="Company Logo"
-                            className="h-16 w-auto transition-transform"
-                        />
+                        <Link to="/">
+                            <img
+                                src={currentLanguage === 'ar' ? logoarb : logo}
+                                alt="Company Logo"
+                                className="h-16 w-auto transition-transform cursor-pointer hover:opacity-80"
+                            />
+                        </Link>
                         <div className="flex items-center gap-4">
                             <div className="relative" ref={dropdownRef}>
                                 <button
@@ -189,7 +193,7 @@ const ForgotPassword: React.FC = () => {
 
                     <div className="space-y-4 sm:space-y-6">
                         <div className="space-y-2">
-                            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight">
+                            <h1 className="text-5xl font-bold text-gray-900 mb-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">
                                 {t.header.forgot_password}
                             </h1>
                             <p className="text-gray-600 text-base sm:text-lg">

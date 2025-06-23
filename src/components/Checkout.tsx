@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { translations } from '../translations';
 import type { Language } from '../translations';
 import PhoneInput from 'react-phone-input-2';
@@ -1031,12 +1031,14 @@ const Checkout: React.FC<CheckoutProps> = ({
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" dir={isRTL ? 'rtl' : 'ltr'}>
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Header Section */}
-                <div className="flex flex-wrap items-center justify-center sm:justify-between gap-y-4 mb-8">
-                    <img
-                        src={currentLanguage === 'ar' ? logoarb : logo}
-                        alt="Company Logo"
-                        className="h-16 w-16 sm:h-20 sm:w-20 transition-transform hover:scale-105"
-                    />
+                <div className="flex flex-wrap items-center justify-center sm:justify-between gap-4 sm:gap-y-4 mb-8">
+                    <Link to="/" className="transition-transform hover:scale-105 order-1">
+                        <img
+                            src={currentLanguage === 'ar' ? logoarb : logo}
+                            alt="Company Logo"
+                            className="h-16 w-16 sm:h-20 sm:w-20"
+                        />
+                    </Link>
                     <div className="w-full sm:w-auto max-w-2xl text-center order-3 sm:order-none">
                         <h1 className="text-2xl sm:text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
                             {t.checkout.title}
@@ -1045,7 +1047,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                             {t.checkout.subtitle}
                         </p>
                     </div>
-                    <div className="flex items-center gap-2 sm:gap-4 order-2 sm:order-none">
+                    <div className="flex items-center gap-3 sm:gap-4 order-2 sm:order-none">
                         <div className="relative" ref={dropdownRef}>
                             <button
                                 onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
