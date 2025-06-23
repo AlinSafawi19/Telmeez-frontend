@@ -19,21 +19,14 @@ interface CheckoutProps {
     language?: Language;
 }
 
-interface BillingInfo {
+interface AccountInfo {
     firstName: string;
     lastName: string;
     email: string;
     phone: string;
     institutionName: string;
-    address: string;
-    address2: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
     password: string;
     confirmPassword: string;
-    customCountry: string;
 }
 
 interface BillingAddress {
@@ -87,7 +80,7 @@ const Checkout: React.FC<CheckoutProps> = ({
             value,
             label
         })),
-        { value: 999, label: t.checkout.account_info.fields.other_country }
+        { value: 'other', label: t.checkout.account_info.fields.other_country }
     ];
 
     // Add-ons configuration
@@ -131,21 +124,16 @@ const Checkout: React.FC<CheckoutProps> = ({
         return 1;
     });
 
-    const [billingInfo, setBillingInfo] = useState<BillingInfo>(() => {
+    const [billingInfo, setBillingInfo] = useState<AccountInfo>(() => {
         return {
             firstName: '',
             lastName: '',
             email: '',
             phone: '',
             institutionName: '',
-            address: '',
-            address2: '',
-            city: '',
-            state: '',
-            zipCode: '',
-            country: 'lebanon',
             password: '',
             confirmPassword: '',
+            country: 'lebanon',
             customCountry: ''
         };
     });
@@ -170,11 +158,6 @@ const Checkout: React.FC<CheckoutProps> = ({
         };
     });
 
-    const [useSameAddress, setUseSameAddress] = useState(() => {
-        return true;
-    });
-
-    const [showCustomCountryInput, setShowCustomCountryInput] = useState(false);
     const [showBillingCustomCountryInput, setShowBillingCustomCountryInput] = useState(false);
     const [promoCode, setPromoCode] = useState('');
     const [showPromoInput, setShowPromoInput] = useState(false);
@@ -187,7 +170,7 @@ const Checkout: React.FC<CheckoutProps> = ({
     });
 
     const [errors, setErrors] = useState<{
-        billing?: Partial<Record<keyof BillingInfo, string>>;
+        billing?: Partial<Record<keyof AccountInfo, string>>;
         billingAddress?: Partial<Record<keyof BillingAddress, string>>;
         payment?: Partial<Record<keyof PaymentInfo, string>>;
     }>({});
@@ -303,16 +286,6 @@ const Checkout: React.FC<CheckoutProps> = ({
         }
     };
 
-    // Set up custom country input visibility based on saved data
-    useEffect(() => {
-        if (billingInfo.country === 'other') {
-            setShowCustomCountryInput(true);
-        }
-        if (billingAddress.country === 'other') {
-            setShowBillingCustomCountryInput(true);
-        }
-    }, []);
-
     // Clear detected card type when card number is cleared
     useEffect(() => {
         if (!paymentInfo.cardNumber.trim()) {
@@ -371,10 +344,10 @@ const Checkout: React.FC<CheckoutProps> = ({
     useEffect(() => {
         // Update billing errors
         if (errors.billing) {
-            const updatedBillingErrors: Partial<Record<keyof BillingInfo, string>> = {};
+            const updatedBillingErrors: Partial<Record<keyof AccountInfo, string>> = {};
             Object.entries(errors.billing).forEach(([key, value]) => {
                 if (value) {
-                    const field = key as keyof BillingInfo;
+                    const field = key as keyof AccountInfo;
                     if (field === 'email' && value === t.checkout.validation.invalid_email) {
                         updatedBillingErrors[field] = t.checkout.validation.invalid_email;
                     } else if (field === 'password' && value === t.checkout.validation.password_length) {
@@ -449,7 +422,7 @@ const Checkout: React.FC<CheckoutProps> = ({
             [name]: value
         }));
         // Clear error when user types
-        if (errors.billing?.[name as keyof BillingInfo]) {
+        if (errors.billing?.[name as keyof AccountInfo]) {
             setErrors(prev => ({
                 ...prev,
                 billing: {
@@ -466,39 +439,6 @@ const Checkout: React.FC<CheckoutProps> = ({
             ...prev,
             [name]: value
         }));
-    };
-
-    const handleUseSameAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const checked = e.target.checked;
-        setUseSameAddress(checked);
-        if (checked) {
-            // Copy values from billingInfo when toggled on
-            setBillingAddress({
-                address: billingInfo.address,
-                address2: billingInfo.address2,
-                city: billingInfo.city,
-                state: billingInfo.state,
-                zipCode: billingInfo.zipCode,
-                country: billingInfo.country,
-                customCountry: billingInfo.customCountry
-            });
-            // Clear any billing address errors since we're using billing info
-            setErrors(prev => ({
-                ...prev,
-                billingAddress: undefined
-            }));
-        } else {
-            // Clear billing address fields when toggled off
-            setBillingAddress({
-                address: '',
-                address2: '',
-                city: '',
-                state: '',
-                zipCode: '',
-                country: '',
-                customCountry: ''
-            });
-        }
     };
 
     const handlePaymentInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -677,11 +617,9 @@ const Checkout: React.FC<CheckoutProps> = ({
     };
 
     const handleNextStep = () => {
-        console.log('handleNextStep called, current step:', currentStep);
-
         // Validate current step before proceeding
         if (currentStep === 1) {
-            const billingErrors: Partial<Record<keyof BillingInfo, string>> = {};
+            const billingErrors: Partial<Record<keyof AccountInfo, string>> = {};
 
             // Required fields validation
             if (!billingInfo.firstName.trim()) {
@@ -701,23 +639,6 @@ const Checkout: React.FC<CheckoutProps> = ({
             }
             if (!billingInfo.phone.trim()) {
                 billingErrors.phone = 'required';
-            }
-            if (!billingInfo.address.trim()) {
-                billingErrors.address = 'required';
-            }
-            if (!billingInfo.city.trim()) {
-                billingErrors.city = 'required';
-            }
-            if (!billingInfo.state.trim()) {
-                billingErrors.state = 'required';
-            }
-            if (!billingInfo.zipCode.trim()) {
-                billingErrors.zipCode = 'required';
-            }
-            if (!billingInfo.country) {
-                billingErrors.country = 'required';
-            } else if (billingInfo.country === 'other' && !billingInfo.customCountry.trim()) {
-                billingErrors.customCountry = 'required';
             }
             if (!billingInfo.password.trim()) {
                 billingErrors.password = 'required';
@@ -789,35 +710,32 @@ const Checkout: React.FC<CheckoutProps> = ({
         if (currentStep < 3) {
             handleNextStep();
         } else {
-            // Validate billing address only on final submission
-            if (!useSameAddress) {
-                const billingAddressErrors: Partial<Record<keyof BillingAddress, string>> = {};
+            const billingAddressErrors: Partial<Record<keyof BillingAddress, string>> = {};
 
-                if (!billingAddress.address.trim()) {
-                    billingAddressErrors.address = t.checkout.validation.required;
-                }
-                if (!billingAddress.city.trim()) {
-                    billingAddressErrors.city = t.checkout.validation.required;
-                }
-                if (!billingAddress.state.trim()) {
-                    billingAddressErrors.state = t.checkout.validation.required;
-                }
-                if (!billingAddress.zipCode.trim()) {
-                    billingAddressErrors.zipCode = t.checkout.validation.required;
-                }
-                if (!billingAddress.country) {
-                    billingAddressErrors.country = t.checkout.validation.required;
-                } else if (billingAddress.country === 'other' && !billingAddress.customCountry.trim()) {
-                    billingAddressErrors.customCountry = t.checkout.validation.required;
-                }
+            if (!billingAddress.address.trim()) {
+                billingAddressErrors.address = t.checkout.validation.required;
+            }
+            if (!billingAddress.city.trim()) {
+                billingAddressErrors.city = t.checkout.validation.required;
+            }
+            if (!billingAddress.state.trim()) {
+                billingAddressErrors.state = t.checkout.validation.required;
+            }
+            if (!billingAddress.zipCode.trim()) {
+                billingAddressErrors.zipCode = t.checkout.validation.required;
+            }
+            if (!billingAddress.country) {
+                billingAddressErrors.country = t.checkout.validation.required;
+            } else if (billingAddress.country === 'other' && !billingAddress.customCountry.trim()) {
+                billingAddressErrors.customCountry = t.checkout.validation.required;
+            }
 
-                if (Object.keys(billingAddressErrors).length > 0) {
-                    setErrors(prev => ({
-                        ...prev,
-                        billingAddress: billingAddressErrors
-                    }));
-                    return;
-                }
+            if (Object.keys(billingAddressErrors).length > 0) {
+                setErrors(prev => ({
+                    ...prev,
+                    billingAddress: billingAddressErrors
+                }));
+                return;
             }
 
             // Clear any existing billing address errors since validation passed
@@ -983,7 +901,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                 setShowBillingCustomCountryInput(true);
                 setBillingAddress(prev => ({ ...prev, country: 'other' }));
             } else {
-                setShowCustomCountryInput(true);
+                // For AccountInfo, just set the country to 'other' without showing custom input
                 setBillingInfo(prev => ({ ...prev, country: 'other' }));
             }
         } else {
@@ -991,7 +909,6 @@ const Checkout: React.FC<CheckoutProps> = ({
                 setShowBillingCustomCountryInput(false);
                 setBillingAddress(prev => ({ ...prev, country: selectedOption.value }));
             } else {
-                setShowCustomCountryInput(false);
                 setBillingInfo(prev => ({ ...prev, country: selectedOption.value }));
             }
         }
@@ -1059,7 +976,7 @@ const Checkout: React.FC<CheckoutProps> = ({
             color: '#6B7280'
         })
     };
-    
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" dir={isRTL ? 'rtl' : 'ltr'}>
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -1312,126 +1229,6 @@ const Checkout: React.FC<CheckoutProps> = ({
                                             />
                                         </div>
 
-                                        <div className="space-y-1">
-                                            <label htmlFor="address" className="block text-xs font-medium text-gray-700">
-                                                {t.checkout.account_info.fields.address1} <span className="text-red-500">*</span>
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="address"
-                                                name="address"
-                                                value={billingInfo.address}
-                                                onChange={handleBillingInfoChange}
-                                                className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.address ? 'border-red-500' : 'border-gray-300'
-                                                    }`}
-                                            />
-                                            {errors.billing?.address && (
-                                                <p className="text-xs text-red-600">{getErrorMessage(errors.billing.address)}</p>
-                                            )}
-                                        </div>
-
-                                        <div className="space-y-1">
-                                            <label htmlFor="address2" className="block text-xs font-medium text-gray-700">
-                                                {t.checkout.account_info.fields.address2}
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="address2"
-                                                name="address2"
-                                                value={billingInfo.address2}
-                                                onChange={handleBillingInfoChange}
-                                                className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.address2 ? 'border-red-500' : 'border-gray-300'
-                                                    }`}
-                                            />
-                                        </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="space-y-1">
-                                                <label htmlFor="country" className="block text-xs font-medium text-gray-700">
-                                                    {t.checkout.account_info.fields.country} <span className="text-red-500">*</span>
-                                                </label>
-                                                <Select
-                                                    id="country"
-                                                    value={countryOptions.find(option => option.value === billingInfo.country)}
-                                                    onChange={(option) => handleCountryChange(option)}
-                                                    options={countryOptions}
-                                                    styles={customSelectStyles}
-                                                    placeholder={t.checkout.account_info.fields.select_country}
-                                                    isSearchable
-                                                    className="react-select-container"
-                                                    classNamePrefix="react-select"
-                                                />
-                                                {showCustomCountryInput && (
-                                                    <input
-                                                        type="text"
-                                                        id="customCountry"
-                                                        name="customCountry"
-                                                        value={billingInfo.country === 'other' ? '' : billingInfo.country}
-                                                        onChange={(e) => setBillingInfo(prev => ({ ...prev, country: e.target.value }))}
-                                                        placeholder={t.checkout.account_info.fields.enter_country}
-                                                        className="mt-2 focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 border-gray-300"
-                                                    />
-                                                )}
-                                                {errors.billing?.country && (
-                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billing.country)}</p>
-                                                )}
-                                            </div>
-                                            <div className="space-y-1">
-                                                <label htmlFor="city" className="block text-xs font-medium text-gray-700">
-                                                    {t.checkout.account_info.fields.city} <span className="text-red-500">*</span>
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    id="city"
-                                                    name="city"
-                                                    value={billingInfo.city}
-                                                    onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.city ? 'border-red-500' : 'border-gray-300'
-                                                        }`}
-                                                />
-                                                {errors.billing?.city && (
-                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billing.city)}</p>
-                                                )}
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="space-y-1">
-                                                <label htmlFor="state" className="block text-xs font-medium text-gray-700">
-                                                    {t.checkout.account_info.fields.state} <span className="text-red-500">*</span>
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    id="state"
-                                                    name="state"
-                                                    value={billingInfo.state}
-                                                    onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.state ? 'border-red-500' : 'border-gray-300'
-                                                        }`}
-                                                />
-                                                {errors.billing?.state && (
-                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billing.state)}</p>
-                                                )}
-                                            </div>
-                                            <div className="space-y-1">
-                                                <label htmlFor="zipCode" className="block text-xs font-medium text-gray-700">
-                                                    {t.checkout.account_info.fields.zip} <span className="text-red-500">*</span>
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    id="zipCode"
-                                                    name="zipCode"
-                                                    value={billingInfo.zipCode}
-                                                    onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.zipCode ? 'border-red-500' : 'border-gray-300'
-                                                        }`}
-                                                />
-                                                {errors.billing?.zipCode && (
-                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billing.zipCode)}</p>
-                                                )}
-                                            </div>
-                                        </div>
-
                                         <p className="text-xs text-gray-600"> {t.checkout.account_info.fields.passmsg}</p>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1620,136 +1417,120 @@ const Checkout: React.FC<CheckoutProps> = ({
                                         <h2 className="text-lg font-semibold text-gray-900">{t.checkout.billing_address.title}</h2>
                                     </div>
                                     <div className="p-6">
-                                        <div className="mb-4">
-                                            <label className="flex items-center">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={useSameAddress}
-                                                    onChange={handleUseSameAddressChange}
-                                                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 force-white-bg"
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="space-y-2">
+                                                <label htmlFor="billingCountry" className="block text-xs font-medium text-gray-700">
+                                                    {t.checkout.account_info.fields.country} <span className="text-red-500">*</span>
+                                                </label>
+                                                <Select
+                                                    id="billingCountry"
+                                                    value={countryOptions.find(option => option.value === billingAddress.country)}
+                                                    onChange={(option) => handleCountryChange(option, true)}
+                                                    options={countryOptions}
+                                                    styles={customSelectStyles}
+                                                    placeholder={t.checkout.account_info.fields.select_country}
+                                                    isSearchable
+                                                    className="react-select-container"
+                                                    classNamePrefix="react-select"
                                                 />
-                                                <span className={`text-xs font-medium text-gray-700 ${isRTL ? 'mr-2' : 'ml-2'}`}>
-                                                    {t.checkout.billing_address.checbox}
-                                                </span>
-                                            </label>
-                                        </div>
-
-                                        {!useSameAddress && (
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <div className="space-y-2">
-                                                    <label htmlFor="billingCountry" className="block text-xs font-medium text-gray-700">
-                                                        {t.checkout.account_info.fields.country} <span className="text-red-500">*</span>
-                                                    </label>
-                                                    <Select
-                                                        id="billingCountry"
-                                                        value={countryOptions.find(option => option.value === billingAddress.country)}
-                                                        onChange={(option) => handleCountryChange(option, true)}
-                                                        options={countryOptions}
-                                                        styles={customSelectStyles}
-                                                        placeholder={t.checkout.account_info.fields.select_country}
-                                                        isSearchable
-                                                        className="react-select-container"
-                                                        classNamePrefix="react-select"
-                                                    />
-                                                    {showBillingCustomCountryInput && (
-                                                        <input
-                                                            type="text"
-                                                            id="billingCustomCountry"
-                                                            name="customCountry"
-                                                            value={billingAddress.customCountry}
-                                                            onChange={(e) => handleCustomCountryChange(e, true)}
-                                                            placeholder={t.checkout.account_info.fields.enter_country || "Enter your country"}
-                                                            className={`mt-2 focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billingAddress?.customCountry ? 'border-red-500' : 'border-gray-300'}`}
-                                                        />
-                                                    )}
-                                                    {errors.billingAddress?.country && (
-                                                        <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.country)}</p>
-                                                    )}
-                                                </div>
-                                                <div className="md:col-span-2 space-y-2">
-                                                    <label htmlFor="billingAddress" className="block text-xs font-medium text-gray-700">
-                                                        {t.checkout.account_info.fields.address1}  <span className="text-red-500">*</span>
-                                                    </label>
+                                                {showBillingCustomCountryInput && (
                                                     <input
                                                         type="text"
-                                                        id="billingAddress"
-                                                        name="address"
-                                                        value={billingAddress.address}
-                                                        onChange={handleBillingAddressChange}
-                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.address ? 'border-red-500' : 'border-gray-300'
-                                                            }`}
+                                                        id="billingCustomCountry"
+                                                        name="customCountry"
+                                                        value={billingAddress.customCountry}
+                                                        onChange={(e) => handleCustomCountryChange(e, true)}
+                                                        placeholder={t.checkout.account_info.fields.enter_country || "Enter your country"}
+                                                        className={`mt-2 focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billingAddress?.customCountry ? 'border-red-500' : 'border-gray-300'}`}
                                                     />
-                                                    {errors.billingAddress?.address && (
-                                                        <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.address)}</p>
-                                                    )}
-                                                </div>
-                                                <div className="md:col-span-2 space-y-2">
-                                                    <label htmlFor="billingAddress2" className="block text-xs font-medium text-gray-700">
-                                                        {t.checkout.account_info.fields.address2}
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        id="billingAddress2"
-                                                        name="address2"
-                                                        value={billingAddress.address2}
-                                                        onChange={handleBillingAddressChange}
-                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.address2 ? 'border-red-500' : 'border-gray-300'
-                                                            }`}
-                                                    />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label htmlFor="billingCity" className="block text-xs font-medium text-gray-700">
-                                                        {t.checkout.account_info.fields.city}  <span className="text-red-500">*</span>
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        id="billingCity"
-                                                        name="city"
-                                                        value={billingAddress.city}
-                                                        onChange={handleBillingAddressChange}
-                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.city ? 'border-red-500' : 'border-gray-300'
-                                                            }`}
-                                                    />
-                                                    {errors.billingAddress?.city && (
-                                                        <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.city)}</p>
-                                                    )}
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label htmlFor="billingState" className="block text-xs font-medium text-gray-700">
-                                                        {t.checkout.account_info.fields.state}  <span className="text-red-500">*</span>
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        id="billingState"
-                                                        name="state"
-                                                        value={billingAddress.state}
-                                                        onChange={handleBillingAddressChange}
-                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.state ? 'border-red-500' : 'border-gray-300'
-                                                            }`}
-                                                    />
-                                                    {errors.billingAddress?.state && (
-                                                        <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.state)}</p>
-                                                    )}
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label htmlFor="billingZipCode" className="block text-xs font-medium text-gray-700">
-                                                        {t.checkout.account_info.fields.zip}  <span className="text-red-500">*</span>
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        id="billingZipCode"
-                                                        name="zipCode"
-                                                        value={billingAddress.zipCode}
-                                                        onChange={handleBillingAddressChange}
-                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.zipCode ? 'border-red-500' : 'border-gray-300'
-                                                            }`}
-                                                    />
-                                                    {errors.billingAddress?.zipCode && (
-                                                        <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.zipCode)}</p>
-                                                    )}
-                                                </div>
+                                                )}
+                                                {errors.billingAddress?.country && (
+                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.country)}</p>
+                                                )}
                                             </div>
-                                        )}
+                                            <div className="md:col-span-2 space-y-2">
+                                                <label htmlFor="billingAddress" className="block text-xs font-medium text-gray-700">
+                                                    {t.checkout.account_info.fields.address1}  <span className="text-red-500">*</span>
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="billingAddress"
+                                                    name="address"
+                                                    value={billingAddress.address}
+                                                    onChange={handleBillingAddressChange}
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.address ? 'border-red-500' : 'border-gray-300'
+                                                        }`}
+                                                />
+                                                {errors.billingAddress?.address && (
+                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.address)}</p>
+                                                )}
+                                            </div>
+                                            <div className="md:col-span-2 space-y-2">
+                                                <label htmlFor="billingAddress2" className="block text-xs font-medium text-gray-700">
+                                                    {t.checkout.account_info.fields.address2}
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="billingAddress2"
+                                                    name="address2"
+                                                    value={billingAddress.address2}
+                                                    onChange={handleBillingAddressChange}
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.address2 ? 'border-red-500' : 'border-gray-300'
+                                                        }`}
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label htmlFor="billingCity" className="block text-xs font-medium text-gray-700">
+                                                    {t.checkout.account_info.fields.city}  <span className="text-red-500">*</span>
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="billingCity"
+                                                    name="city"
+                                                    value={billingAddress.city}
+                                                    onChange={handleBillingAddressChange}
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.city ? 'border-red-500' : 'border-gray-300'
+                                                        }`}
+                                                />
+                                                {errors.billingAddress?.city && (
+                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.city)}</p>
+                                                )}
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label htmlFor="billingState" className="block text-xs font-medium text-gray-700">
+                                                    {t.checkout.account_info.fields.state}  <span className="text-red-500">*</span>
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="billingState"
+                                                    name="state"
+                                                    value={billingAddress.state}
+                                                    onChange={handleBillingAddressChange}
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.state ? 'border-red-500' : 'border-gray-300'
+                                                        }`}
+                                                />
+                                                {errors.billingAddress?.state && (
+                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.state)}</p>
+                                                )}
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label htmlFor="billingZipCode" className="block text-xs font-medium text-gray-700">
+                                                    {t.checkout.account_info.fields.zip}  <span className="text-red-500">*</span>
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="billingZipCode"
+                                                    name="zipCode"
+                                                    value={billingAddress.zipCode}
+                                                    onChange={handleBillingAddressChange}
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.zipCode ? 'border-red-500' : 'border-gray-300'
+                                                        }`}
+                                                />
+                                                {errors.billingAddress?.zipCode && (
+                                                    <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.zipCode)}</p>
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
                                 </motion.div>
                             )}
