@@ -218,10 +218,6 @@ input[type="checkbox"].force-white-bg:focus {
 
 /* Mobile touch-friendly button improvements */
 @media (max-width: 640px) {
-    button {
-        min-height: 44px; /* iOS recommended minimum touch target */
-    }
-    
     /* Improve button spacing on mobile */
     .space-y-3 > * + * {
         margin-top: 0.75rem;
