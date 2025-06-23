@@ -120,12 +120,14 @@ export const fr = {
         start_free_trial: "Commencer l'essai gratuit",
         select_plan: "Sélectionner le plan",
         free_trial_badge: "✨ Essai gratuit de {days} jours",
+        max_storage: "Stockage Maximal",
         plans: {
             starter: {
                 name: "Débutant",
                 description: "Parfait pour les centres de tutorat et les petites écoles",
                 monthly_price: "$49",
                 annual_price: "$470",
+                max_storage: "10 Go",
                 features: [
                     "3 Comptes Admin",
                     "25 Comptes Enseignants",
@@ -138,6 +140,7 @@ export const fr = {
                 description: "Parfait pour les institutions éducatives en croissance",
                 monthly_price: "$99",
                 annual_price: "$950",
+                max_storage: "100 Go",
                 features: [
                     "10 Comptes Admin",
                     "150 Comptes Enseignants",
@@ -150,6 +153,7 @@ export const fr = {
                 description: "Pour les institutions de grande taille et à forte demande",
                 monthly_price: "$299",
                 annual_price: "$2,870",
+                max_storage: "Illimité",
                 features: [
                     "Comptes Admin illimités",
                     "Comptes Enseignants illimités",
@@ -552,13 +556,14 @@ export const fr = {
             annual: "Annuel",
             monthly: "Mensuel",
             add_ons: {
-                title: "Ajouter des utilisateurs supplémentaires",
+                title: "Ajouter des Utilisateurs Supplémentaires",
                 admin: "Admin",
                 teacher: "Enseignant",
                 student: "Étudiant",
                 parent: "Parent",
+                storage: "Stockage",
                 per_user: "/utilisateur",
-                total: "Total des suppléments"
+                total: "Total des Suppléments"
             },
             recommendation: {
                 standard: {
@@ -571,12 +576,13 @@ export const fr = {
                     current: "Actuel (Starter + Add-ons):",
                     plan_recommended: "Plan Standard:",
                     you_save: "Vous économisez:",
-                    plan_includes: "Plan Standard inclut:",
+                    plan_includes: "Le Plan Standard inclut :",
                     admin_accounts: "10 Comptes Admin",
                     teacher_accounts: "150 Comptes Enseignants",
                     student_accounts: "1,500 Comptes Étudiants",
                     parent_accounts: "750 Comptes Parents",
-                    upgrade_to_standard: "Passer au Plan Standard"
+                    storage_included: "100 Go de Stockage",
+                    upgrade_to_standard: "Passer au Standard"
                 },
                 enterprise: {
                     title: "💡 Mise à Niveau Intelligente Disponible",
@@ -588,12 +594,13 @@ export const fr = {
                     current: "Actuel (Standard + Add-ons):",
                     plan_recommended: "Plan Entreprise:",
                     you_save: "Vous économisez:",
-                    plan_includes: "Plan Entreprise inclut:",
-                    admin_accounts: "Comptes Admin Illimités",
-                    teacher_accounts: "Comptes Enseignants Illimités",
-                    student_accounts: "Comptes Étudiants Illimités",
-                    parent_accounts: "Comptes Parents Illimités",
-                    upgrade_to_enterprise: "Passer au Plan Entreprise"
+                    plan_includes: "Le Plan Entreprise inclut :",
+                    admin_accounts: "Comptes Admin illimités",
+                    teacher_accounts: "Comptes Enseignants illimités",
+                    student_accounts: "Comptes Étudiants illimités",
+                    parent_accounts: "Comptes Parents illimités",
+                    storage_included: "Stockage illimité",
+                    upgrade_to_enterprise: "Passer à l'Entreprise"
                 }
             }
         }

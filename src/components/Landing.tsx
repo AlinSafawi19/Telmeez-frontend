@@ -278,7 +278,8 @@ const Landing: React.FC = () => {
                 annualPrice: '$39',
                 description: t.header.pricing.starter_desc,
                 details: t.header.pricing.starter_details,
-                savings: t.header.pricing.savings
+                savings: t.header.pricing.savings,
+                maxStorage: '10 GB'
             },
             {
                 label: t.header.pricing.standard,
@@ -287,7 +288,8 @@ const Landing: React.FC = () => {
                 annualPrice: '$79',
                 description: t.header.pricing.standard_desc,
                 details: t.header.pricing.standard_details,
-                savings: t.header.pricing.savings
+                savings: t.header.pricing.savings,
+                maxStorage: '100 GB'
             },
             {
                 label: t.header.pricing.enterprise,
@@ -296,7 +298,8 @@ const Landing: React.FC = () => {
                 annualPrice: '$239',
                 description: t.header.pricing.enterprise_desc,
                 details: t.header.pricing.enterprise_details,
-                savings: t.header.pricing.savings
+                savings: t.header.pricing.savings,
+                maxStorage: 'Unlimited'
             }
         ]
     };
@@ -598,14 +601,21 @@ const Landing: React.FC = () => {
                                                 </div>
                                             </div>
                                             <p className="text-xs text-green-600">{item.savings}</p>
-                                            {item.label === t.header.pricing.starter && (
-                                                <div className="mb-2">
+                                            <div className="flex items-center justify-between mb-2">
+                                                <div className="flex items-center space-x-1">
+                                                    <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                                                    </svg>
+                                                    <span className="text-xs text-gray-500 font-medium">{t.pricing.max_storage}:</span>
+                                                    <span className="text-xs font-semibold text-blue-600">{item.maxStorage}</span>
+                                                </div>
+                                                {item.label === t.header.pricing.starter && (
                                                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                         <span className="mr-1">✨</span>
                                                         {t.header.pricing.free_trial}
                                                     </span>
-                                                </div>
-                                            )}
+                                                )}
+                                            </div>
                                             <p className="text-sm text-gray-600">{item.description}</p>
                                             <p className="text-xs text-gray-500 mt-1">{item.details}</p>
                                         </a>

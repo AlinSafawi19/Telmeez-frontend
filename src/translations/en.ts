@@ -135,12 +135,14 @@ export const en = {
         start_free_trial: "Start Free Trial",
         select_plan: "Select Plan",
         free_trial_badge: "✨ {days}-day free trial",
+        max_storage: "Max Storage",
         plans: {
             starter: {
                 name: "Starter",
                 description: "Perfect for tutoring centers and small schools",
                 monthly_price: "$49",
                 annual_price: "$470",
+                max_storage: "10 GB",
                 features: [
                     "3 Admin Accounts",
                     "25 Teacher Accounts",
@@ -153,6 +155,7 @@ export const en = {
                 description: "Perfect for growing educational institutions",
                 monthly_price: "$99",
                 annual_price: "$950",
+                max_storage: "100 GB",
                 features: [
                     "10 Admin Accounts",
                     "150 Teacher Accounts",
@@ -165,6 +168,7 @@ export const en = {
                 description: "For institutions big in size and high in demands",
                 monthly_price: "$299",
                 annual_price: "$2,870",
+                max_storage: "Unlimited",
                 features: [
                     "Unlimited Admin Accounts",
                     "Unlimited Teacher Accounts",
@@ -572,6 +576,7 @@ export const en = {
                 teacher: "Teacher",
                 student: "Student",
                 parent: "Parent",
+                storage: "Storage",
                 per_user: "/user",
                 total: "Add-ons Total"
             },
@@ -591,6 +596,7 @@ export const en = {
                     teacher_accounts: "150 Teacher Accounts",
                     student_accounts: "1,500 Student Accounts",
                     parent_accounts: "750 Parent Accounts",
+                    storage_included: "100 GB Storage",
                     upgrade_to_standard: "Upgrade to Standard"
                 },
                 enterprise: {
@@ -608,6 +614,7 @@ export const en = {
                     teacher_accounts: "Unlimited Teacher Accounts",
                     student_accounts: "Unlimited Student Accounts",
                     parent_accounts: "Unlimited Parent Accounts",
+                    storage_included: "Unlimited Storage",
                     upgrade_to_enterprise: "Upgrade to Enterprise"
                 }
             }

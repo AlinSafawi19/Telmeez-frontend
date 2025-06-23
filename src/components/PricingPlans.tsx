@@ -14,6 +14,7 @@ interface Plan {
     description: string;
     monthlyPrice: string;
     annualPrice: string;
+    maxStorage: string;
     features: PlanFeature[];
     recommended?: boolean;
 }
@@ -105,6 +106,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
             description: t.plans.starter.description,
             monthlyPrice: t.plans.starter.monthly_price,
             annualPrice: t.plans.starter.annual_price,
+            maxStorage: t.plans.starter.max_storage,
             features: t.plans.starter.features.map(text => ({ text, included: true })),
         },
         {
@@ -113,6 +115,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
             description: t.plans.standard.description,
             monthlyPrice: t.plans.standard.monthly_price,
             annualPrice: t.plans.standard.annual_price,
+            maxStorage: t.plans.standard.max_storage,
             features: t.plans.standard.features.map(text => ({ text, included: true })),
             recommended: true,
         },
@@ -122,6 +125,7 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
             description: t.plans.enterprise.description,
             monthlyPrice: t.plans.enterprise.monthly_price,
             annualPrice: t.plans.enterprise.annual_price,
+            maxStorage: t.plans.enterprise.max_storage,
             features: t.plans.enterprise.features.map(text => ({ text, included: true })),
         },
     ];
@@ -199,6 +203,15 @@ const PricingPlans: React.FC<PricingPlansProps> = ({
                                         </p>
                                     </div>
                                 )}
+                                <div className="mt-3">
+                                    <div className="flex items-center justify-center space-x-2">
+                                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                                        </svg>
+                                        <span className="text-sm text-gray-600 font-medium">{t.max_storage}:</span>
+                                        <span className="text-sm font-semibold text-blue-600">{plan.maxStorage}</span>
+                                    </div>
+                                </div>
                                 {plan.id === 'starter' && (
                                     <div className="mt-2">
                                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">

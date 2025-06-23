@@ -96,13 +96,15 @@ const Checkout: React.FC<CheckoutProps> = ({
             admin: { price: 1.5, maxQuantity: 10 },
             teacher: { price: 0.75, maxQuantity: 50 },
             student: { price: 0.10, maxQuantity: 500 },
-            parent: { price: 0.05, maxQuantity: 250 }
+            parent: { price: 0.05, maxQuantity: 250 },
+            storage: { price: 5.0, maxQuantity: 50 } // $5 per 10GB
         },
         standard: {
             admin: { price: 1.5, maxQuantity: 20 },
             teacher: { price: 0.75, maxQuantity: 200 },
             student: { price: 0.10, maxQuantity: 2000 },
-            parent: { price: 0.05, maxQuantity: 1000 }
+            parent: { price: 0.05, maxQuantity: 1000 },
+            storage: { price: 5.0, maxQuantity: 100 } // $5 per 10GB
         }
     };
 
@@ -110,11 +112,25 @@ const Checkout: React.FC<CheckoutProps> = ({
     const [addOns, setAddOns] = useState<AddOn[]>(() => {
         const cookieConsent = localStorage.getItem('cookieConsent');
         const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+
+        const defaultAddOns = getDefaultAddOns();
+
         if (hasConsent) {
-            const savedAddOns = localStorage.getItem('checkoutAddOns');
-            return savedAddOns ? JSON.parse(savedAddOns) : getDefaultAddOns();
+            const savedAddOnsRaw = localStorage.getItem('checkoutAddOns');
+            if (savedAddOnsRaw) {
+                try {
+                    const savedAddOns = JSON.parse(savedAddOnsRaw) as AddOn[];
+                    return defaultAddOns.map(defaultAddon => {
+                        const saved = savedAddOns.find(s => s.id === defaultAddon.id);
+                        return saved ? { ...defaultAddon, quantity: saved.quantity } : defaultAddon;
+                    });
+                } catch (e) {
+                    console.error("Failed to parse saved add-ons, using defaults.", e);
+                    return defaultAddOns;
+                }
+            }
         }
-        return getDefaultAddOns();
+        return defaultAddOns;
     });
 
     function getDefaultAddOns(): AddOn[] {
@@ -125,7 +141,8 @@ const Checkout: React.FC<CheckoutProps> = ({
             { id: 'admin', name: 'Admin', price: config.admin.price, quantity: 0, maxQuantity: config.admin.maxQuantity },
             { id: 'teacher', name: 'Teacher', price: config.teacher.price, quantity: 0, maxQuantity: config.teacher.maxQuantity },
             { id: 'student', name: 'Student', price: config.student.price, quantity: 0, maxQuantity: config.student.maxQuantity },
-            { id: 'parent', name: 'Parent', price: config.parent.price, quantity: 0, maxQuantity: config.parent.maxQuantity }
+            { id: 'parent', name: 'Parent', price: config.parent.price, quantity: 0, maxQuantity: config.parent.maxQuantity },
+            { id: 'storage', name: 'Storage', price: config.storage.price, quantity: 0, maxQuantity: config.storage.maxQuantity }
         ];
     }
 
@@ -1950,14 +1967,20 @@ const Checkout: React.FC<CheckoutProps> = ({
                                             {/* Show add-ons details when expanded */}
                                             {isAddOnsExpanded && (
                                                 <div className="space-y-3 mb-3">
-                                                    {addOns.map((addOn) => (
+                                                    {addOns.filter(a => a.id !== 'storage').map((addOn: AddOn) => (
                                                         <div key={addOn.id} className="flex items-center justify-between">
                                                             <div className="flex-1">
                                                                 <div className="flex items-center justify-between mb-1">
                                                                     <span className="text-xs font-medium text-gray-700">
-                                                                        {t.checkout.summary.add_ons[addOn.id as keyof typeof t.checkout.summary.add_ons] || addOn.name}
+                                                                        {addOn.id === 'storage'
+                                                                            ? `${t.checkout.summary.add_ons[addOn.id as keyof typeof t.checkout.summary.add_ons] || addOn.name} (10GB)`
+                                                                            : t.checkout.summary.add_ons[addOn.id as keyof typeof t.checkout.summary.add_ons] || addOn.name
+                                                                        }
                                                                     </span>
-                                                                    <span className="text-xs text-gray-500">${addOn.price.toFixed(2)}{t.checkout.summary.add_ons.per_user}</span>
+                                                                    <span className="text-xs text-gray-500">
+                                                                        ${addOn.price.toFixed(2)}
+                                                                        {addOn.id === 'storage' ? '/10GB' : t.checkout.summary.add_ons.per_user}
+                                                                    </span>
                                                                 </div>
                                                                 <div className="flex items-center space-x-2">
                                                                     <button
@@ -1971,7 +1994,9 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                                             <rect x="4" y="11" width="16" height="2" fill="#6B7280" />
                                                                         </svg>
                                                                     </button>
-                                                                    <span className="text-xs font-medium text-gray-900 min-w-[2rem] text-center">{addOn.quantity}</span>
+                                                                    <span className="text-xs font-medium text-gray-900 min-w-[2rem] text-center">
+                                                                        {addOn.id === 'storage' ? `${addOn.quantity * 10}GB` : addOn.quantity}
+                                                                    </span>
                                                                     <button
                                                                         type="button"
                                                                         onClick={() => handleAddOnQuantityChange(addOn.id, addOn.quantity + 1)}
@@ -1993,6 +2018,56 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                             </div>
                                                         </div>
                                                     ))}
+                                                </div>
+                                            )}
+
+                                            {isAddOnsExpanded && addOns.find(a => a.id === 'storage') && (
+                                                <div className="border-t border-gray-100 pt-3 mt-3">
+                                                    {(() => {
+                                                        const storageAddOn = addOns.find(a => a.id === 'storage')!;
+                                                        return (
+                                                            <div className="flex items-center justify-between">
+                                                                <div className="flex-1">
+                                                                    <div className="flex items-center justify-between mb-1">
+                                                                        <span className="text-xs font-medium text-gray-700">
+                                                                            {`${t.checkout.summary.add_ons.storage || 'Storage'} (10GB)`}
+                                                                        </span>
+                                                                        <span className="text-xs text-gray-500">
+                                                                            ${storageAddOn.price.toFixed(2)}/10GB
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className="flex items-center space-x-2">
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={() => handleAddOnQuantityChange(storageAddOn.id, storageAddOn.quantity - 1)}
+                                                                            disabled={storageAddOn.quantity === 0}
+                                                                            className="quantity-button w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+                                                                            aria-label={`Decrease ${storageAddOn.name} quantity`}
+                                                                        >
+                                                                            <svg className="w-3 h-3" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="2" fill="#6B7280" /></svg>
+                                                                        </button>
+                                                                        <span className="text-xs font-medium text-gray-900 min-w-[2rem] text-center">
+                                                                            {`${storageAddOn.quantity * 10}GB`}
+                                                                        </span>
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={() => handleAddOnQuantityChange(storageAddOn.id, storageAddOn.quantity + 1)}
+                                                                            disabled={storageAddOn.quantity >= (storageAddOn.maxQuantity || 999)}
+                                                                            className="quantity-button w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+                                                                            aria-label={`Increase ${storageAddOn.name} quantity`}
+                                                                        >
+                                                                            <svg className="w-3 h-3" viewBox="0 0 24 24"><rect x="11" y="4" width="2" height="16" fill="#6B7280" /><rect x="4" y="11" width="16" height="2" fill="#6B7280" /></svg>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="text-right ml-3">
+                                                                    <span className="text-xs font-medium text-gray-900">
+                                                                        ${(storageAddOn.price * storageAddOn.quantity).toFixed(2)}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })()}
                                                 </div>
                                             )}
 
@@ -2078,6 +2153,12 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                             </svg>
                                                             <span>{t.checkout.summary.recommendation.standard.parent_accounts}</span>
+                                                        </div>
+                                                        <div className="flex items-center col-span-2">
+                                                            <svg className="w-3 h-3 text-green-600 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                            </svg>
+                                                            <span>{t.checkout.summary.recommendation.standard.storage_included}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2165,6 +2246,12 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                             </svg>
                                                             <span>{t.checkout.summary.recommendation.enterprise.parent_accounts}</span>
+                                                        </div>
+                                                        <div className="flex items-center col-span-2">
+                                                            <svg className="w-3 h-3 text-green-600 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                            </svg>
+                                                            <span>{t.checkout.summary.recommendation.enterprise.storage_included}</span>
                                                         </div>
                                                     </div>
                                                 </div>
