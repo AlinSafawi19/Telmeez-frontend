@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import logo from '../assets/images/logo.png';
@@ -13,6 +13,15 @@ import type { Language } from '../translations';
 import { translations } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
 import '../Landing.css';
+
+// Optimized debounce function with proper TypeScript typing
+const debounce = <T extends (...args: any[]) => any>(func: T, wait: number): T => {
+    let timeout: ReturnType<typeof setTimeout>;
+    return ((...args: any[]) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+    }) as T;
+};
 
 interface TestimonialForm {
     name: string;
@@ -35,7 +44,7 @@ const Landing: React.FC = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const [selectedPricingPlan, setSelectedPricingPlan] = useState<string | null>(null);
-    const dropdownTimeoutRef = useRef<number | null>(null);
+    const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const isHoveringRef = useRef(false);
     const pricingSectionRef = useRef<HTMLDivElement>(null);
     const studentManagementRef = useRef<HTMLDivElement>(null);
@@ -43,7 +52,8 @@ const Landing: React.FC = () => {
     const demoSectionRef = useRef<HTMLDivElement>(null);
     const faqSectionRef = useRef<HTMLDivElement>(null);
     const securitySectionRef = useRef<HTMLDivElement>(null);
-    // Add newsletter form states
+    
+    // Newsletter form states
     const [subscribeEmail, setSubscribeEmail] = useState('');
     const [subscribeEmailError, setSubscribeEmailError] = useState('');
     const [isUnsubscribeModalOpen, setIsUnsubscribeModalOpen] = useState(false);
@@ -54,9 +64,9 @@ const Landing: React.FC = () => {
     const languageDropdownRef = useRef<HTMLDivElement>(null);
     const { currentLanguage, setCurrentLanguage } = useLanguage();
     const t = translations[currentLanguage];
-    const [testimonials, /*setTestimonials*/] = useState<any[]>([]);
+    const [testimonials] = useState<any[]>([]);
 
-    // Add testimonial form states
+    // Testimonial form states
     const [isTestimonialModalOpen, setIsTestimonialModalOpen] = useState(false);
     const [testimonialForm, setTestimonialForm] = useState<TestimonialForm>({
         name: '',
@@ -69,8 +79,59 @@ const Landing: React.FC = () => {
     const [showUnsubscribeMessage, setShowUnsubscribeMessage] = useState(false);
     const [testimonialFormErrors, setTestimonialFormErrors] = useState<TestimonialFormErrors>({});
 
+    // Performance optimizations - Memoize static data
+    const floatingParticles = useMemo(() => Array.from({ length: 6 }, (_, i) => i), []);
+    const pulseParticles = useMemo(() => Array.from({ length: 4 }, (_, i) => i + 6), []);
+    const languages = useMemo(() => [
+        { code: 'en', label: 'English' },
+        { code: 'ar', label: 'عربي' },
+        { code: 'fr', label: 'Français' }
+    ], []);
+
+    // Cache DOM elements
+    const contactSectionRef = useRef<Element | null>(null);
+    const testimonialsSectionRef = useRef<Element | null>(null);
+
+    // Optimized scroll handler with throttling
+    const handleScroll = useCallback(() => {
+        const scrollPosition = window.scrollY;
+        setShowBackToTop(scrollPosition > 300);
+    }, []);
+
+    // Throttled scroll handler
+    const throttledScrollHandler = useCallback(
+        debounce(handleScroll, 16), // ~60fps
+        [handleScroll]
+    );
+
+    // Cache DOM elements on mount
     useEffect(() => {
-        localStorage.clear();
+        contactSectionRef.current = document.querySelector('.py-20.bg-gradient-to-r.from-blue-600.to-blue-600');
+        testimonialsSectionRef.current = document.getElementById('testimonials');
+    }, []);
+
+    // Optimized scroll detection with throttling
+    useEffect(() => {
+        let ticking = false;
+        
+        const scrollHandler = () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    throttledScrollHandler();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
+        window.addEventListener('scroll', scrollHandler, { passive: true });
+        return () => {
+            window.removeEventListener('scroll', scrollHandler);
+        };
+    }, [throttledScrollHandler]);
+
+    // Click outside handler
+    useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target as Node)) {
                 setActiveDropdown(null);
@@ -81,134 +142,155 @@ const Landing: React.FC = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const languages = [
-        { code: 'en', label: 'English' },
-        { code: 'ar', label: 'عربي' },
-        { code: 'fr', label: 'Français' }
-    ];
-
-    const handleLanguageChange = (langCode: Language) => {
-        setIsScrolling(true);
-        setTimeout(() => {
-            setIsScrolling(false);
-            setCurrentLanguage(langCode);
-            // Here you would typically also update the document direction for RTL languages
-            if (langCode === 'ar') {
-                document.documentElement.dir = 'rtl';
-            } else {
-                document.documentElement.dir = 'ltr';
+    // Optimized language change handler
+    const handleLanguageChange = useCallback((langCode: Language) => {
+        setCurrentLanguage(langCode);
+        if (langCode === 'ar') {
+            document.documentElement.dir = 'rtl';
+        } else {
+            document.documentElement.dir = 'ltr';
+        }
+        
+        // Only update error messages if they exist
+        if (subscribeEmailError && subscribeEmail.trim()) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(subscribeEmail)) {
+                setSubscribeEmailError(translations[langCode].newsletter.errors.invalid_email);
             }
-            // Update error messages if they exist
-            if (subscribeEmailError) {
-                if (!subscribeEmail.trim()) {
-                    setSubscribeEmailError(translations[langCode].newsletter.errors.email_required);
-                } else if (!validateEmail(subscribeEmail)) {
-                    setSubscribeEmailError(translations[langCode].newsletter.errors.invalid_email);
-                }
-            }
-        }, 500);
-    };
+        }
+    }, [currentLanguage, subscribeEmail, subscribeEmailError, setCurrentLanguage]);
 
-    // Add scroll detection
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollPosition = window.scrollY;
-            setShowBackToTop(scrollPosition > 300);
-        };
-
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
-
-    // Add back to top handler
-    const handleBackToTop = () => {
+    // Optimized back to top handler
+    const handleBackToTop = useCallback(() => {
+        if (isScrolling) return;
+        
         setIsScrolling(true);
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
         });
         setTimeout(() => setIsScrolling(false), 1000);
-    };
+    }, [isScrolling]);
 
-    const handleDropdownEnter = (dropdown: string) => {
+    // Optimized scroll to section handler
+    const scrollToSection = useCallback((ref: React.RefObject<any> | Element | null, delay: number = 1000) => {
+        if (isScrolling) return;
+
+        setIsScrolling(true);
+        
+        requestAnimationFrame(() => {
+            if (ref) {
+                if ('current' in ref && ref.current) {
+                    ref.current.scrollIntoView({ behavior: 'smooth' });
+                } else if (ref instanceof Element) {
+                    ref.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+        
+        setTimeout(() => setIsScrolling(false), delay);
+    }, [isScrolling]);
+
+    // Optimized click handlers
+    const handleLogoClick = useCallback((e: React.MouseEvent) => {
+        e.preventDefault();
+        if (isScrolling) return;
+        
+        setIsScrolling(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(() => setIsScrolling(false), 1000);
+    }, [isScrolling]);
+
+    const handleHomeClick = useCallback((e: React.MouseEvent) => {
+        e.preventDefault();
+        if (isScrolling) return;
+        
+        setIsScrolling(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(() => setIsScrolling(false), 1000);
+    }, [isScrolling]);
+
+    // Optimized dropdown handlers
+    const handleDropdownEnter = useCallback((dropdown: string) => {
         if (dropdownTimeoutRef.current) {
             clearTimeout(dropdownTimeoutRef.current);
         }
         isHoveringRef.current = true;
         setActiveDropdown(dropdown);
-    };
+    }, []);
 
-    const handleDropdownLeave = () => {
+    const handleDropdownLeave = useCallback(() => {
         isHoveringRef.current = false;
-        dropdownTimeoutRef.current = window.setTimeout(() => {
+        dropdownTimeoutRef.current = setTimeout(() => {
             if (!isHoveringRef.current) {
                 setActiveDropdown(null);
             }
         }, 300);
-    };
+    }, []);
 
-    const handleDropdownClick = (e: React.MouseEvent, dropdown: string) => {
+    const handleDropdownClick = useCallback((e: React.MouseEvent, dropdown: string) => {
         e.preventDefault();
         if (dropdown === 'pricing') {
-            pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+            scrollToSection(pricingSectionRef);
             setActiveDropdown(null);
         } else if (activeDropdown === dropdown) {
             setActiveDropdown(null);
         } else {
             setActiveDropdown(dropdown);
         }
-    };
+    }, [activeDropdown, scrollToSection]);
 
-    // Update the handleDropdownItemClick to use loading state
-    const handleDropdownItemClick = (e: React.MouseEvent, name?: string) => {
+    // Optimized dropdown item click handler
+    const handleDropdownItemClick = useCallback((e: React.MouseEvent, name?: string) => {
         e.preventDefault();
         if (name) {
             switch (name) {
                 case t.header.about.our_story:
-                    const ourStorySection = document.getElementById('our-story');
-                    setIsScrolling(true);
-                    ourStorySection?.scrollIntoView({ behavior: 'smooth' });
-                    setTimeout(() => setIsScrolling(false), 1000);
+                    scrollToSection(ourStoryRef);
                     break;
                 case t.header.about.press:
                     const aboutSection = document.getElementById(name.toLowerCase().replace(' ', '-'));
-                    setIsScrolling(true);
-                    aboutSection?.scrollIntoView({ behavior: 'smooth' });
-                    setTimeout(() => setIsScrolling(false), 1000);
+                    scrollToSection(aboutSection);
                     break;
                 case t.header.about.testimonials:
-                    const testimonialsSection = document.getElementById('testimonials');
-                    setIsScrolling(true);
-                    testimonialsSection?.scrollIntoView({ behavior: 'smooth' });
-                    setTimeout(() => setIsScrolling(false), 1000);
+                    scrollToSection(testimonialsSectionRef.current);
                     break;
             }
         }
         setActiveDropdown(null);
-    };
+    }, [t.header.about, scrollToSection]);
 
-    const handlePricingDropdownItemClick = (e: React.MouseEvent, planLabel: string) => {
+    const handlePricingDropdownItemClick = useCallback((e: React.MouseEvent, planLabel: string) => {
         e.preventDefault();
-        // Map the plan label to its corresponding ID
         const planId = planLabel === t.header.pricing.starter ? 'starter' :
             planLabel === t.header.pricing.standard ? 'standard' :
                 planLabel === t.header.pricing.enterprise ? 'enterprise' : null;
 
         if (planId) {
             setSelectedPricingPlan(planId);
-            setIsScrolling(true);
-            pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => setIsScrolling(false), 1000);
+            scrollToSection(pricingSectionRef);
         }
         setActiveDropdown(null);
-    };
+    }, [t.header.pricing, scrollToSection]);
 
-    const dropdownItems = {
-        features: [
-            //{ label: , href: '#' }
-        ],
+    // Optimized mobile scroll handlers
+    const handleMobileScroll = useCallback((ref: React.RefObject<any> | null) => {
+        setIsMobileMenuOpen(false);
+        requestAnimationFrame(() => {
+            scrollToSection(ref);
+        });
+    }, [scrollToSection]);
+
+    const handleMobileContactScroll = useCallback(() => {
+        setIsMobileMenuOpen(false);
+        requestAnimationFrame(() => {
+            scrollToSection(contactSectionRef.current);
+        });
+    }, [scrollToSection]);
+
+    // Memoize dropdown items to prevent recreation
+    const dropdownItems = useMemo(() => ({
+        features: [],
         resources: [
             { label: t.header.resources.demo, href: '#' },
             { label: t.header.resources.faq, href: '#' },
@@ -251,29 +333,30 @@ const Landing: React.FC = () => {
                 maxStorage: 'Unlimited'
             }
         ]
-    };
+    }), [t.header]);
 
-    const validateEmail = (email: string): boolean => {
+    // Optimized email validation
+    const validateEmail = useCallback((email: string): boolean => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
-    };
+    }, []);
 
-    const handleSubscribeEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Optimized form handlers
+    const handleSubscribeEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const email = e.target.value;
         setSubscribeEmail(email);
-        setSubscribeEmailError(''); // Clear any existing error when user types
-    };
+        setSubscribeEmailError('');
+    }, []);
 
-    const handleUnsubscribeEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUnsubscribeEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const email = e.target.value;
         setUnsubscribeEmail(email);
-    };
+    }, []);
 
-    // Update the newsletter subscription handler
-    const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    // Optimized newsletter submission
+    const handleNewsletterSubmit = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Validate email
         if (!subscribeEmail.trim()) {
             setSubscribeEmailError(t.newsletter.errors.email_required);
             return;
@@ -284,21 +367,19 @@ const Landing: React.FC = () => {
         }
 
         try {
-            // Here you would typically make an API call to your backend
             await new Promise(resolve => setTimeout(resolve, 1000));
-
             setUnsubscribeEmail(subscribeEmail);
             setSubscribeEmail('');
             setSubscribeEmailError('');
         } catch (error) {
+            console.error('Newsletter subscription error:', error);
         }
-    };
+    }, [subscribeEmail, t.newsletter.errors, validateEmail]);
 
-    // Update the unsubscribe handler
-    const handleUnsubscribe = async (e: React.FormEvent) => {
+    // Optimized unsubscribe handler
+    const handleUnsubscribe = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Validate email
         if (!unsubscribeEmail.trim()) {
             setUnsubscribeEmailError(t.newsletter.errors.email_required);
             return;
@@ -309,9 +390,7 @@ const Landing: React.FC = () => {
         }
 
         try {
-            // Here you would typically make an API call to your backend
             await new Promise(resolve => setTimeout(resolve, 1000));
-
             setUnsubscribeEmail('');
             setUnsubscribeEmailError('');
             setShowUnsubscribeMessage(true);
@@ -320,63 +399,56 @@ const Landing: React.FC = () => {
                 setShowUnsubscribeMessage(false);
             }, 2000);
         } catch (error) {
-        } finally {
+            console.error('Unsubscribe error:', error);
         }
-    };
+    }, [unsubscribeEmail, t.newsletter.errors, validateEmail]);
 
-    // Add testimonial form change handler
-    const handleTestimonialFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    // Optimized testimonial form handlers
+    const handleTestimonialFormChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        const updatedForm = {
-            ...testimonialForm,
+        setTestimonialForm(prev => ({
+            ...prev,
             [name]: value
-        };
-        setTestimonialForm(updatedForm);
-    };
+        }));
+    }, []);
 
-    const validateTestimonialForm = (): boolean => {
+    const validateTestimonialForm = useCallback((): boolean => {
         const errors: TestimonialFormErrors = {};
         let isValid = true;
 
-        // Name validation
         if (!testimonialForm.name.trim()) {
             errors.name = t.testimonials.modal.errors.email_required;
             isValid = false;
         }
 
-        // Position validation
         if (!testimonialForm.position.trim()) {
             errors.position = t.testimonials.modal.errors.position_required;
             isValid = false;
         }
 
-        // Institution validation
         if (!testimonialForm.institution.trim()) {
             errors.institution = t.testimonials.modal.errors.institution_required;
             isValid = false;
         }
 
-        // Quote validation
         if (!testimonialForm.quote.trim()) {
             errors.quote = t.testimonials.modal.errors.quote_required;
             isValid = false;
         }
 
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!testimonialForm.email.trim()) {
             errors.email = t.testimonials.modal.errors.email_required;
             isValid = false;
-        } else if (!emailRegex.test(testimonialForm.email)) {
+        } else if (!validateEmail(testimonialForm.email)) {
             errors.email = t.testimonials.modal.errors.invalid_email;
             isValid = false;
         }
 
         setTestimonialFormErrors(errors);
         return isValid;
-    };
+    }, [testimonialForm, t.testimonials.modal.errors, validateEmail]);
 
-    const handleTestimonialSubmit = async (e: React.FormEvent) => {
+    const handleTestimonialSubmit = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!validateTestimonialForm()) {
@@ -384,10 +456,7 @@ const Landing: React.FC = () => {
         }
 
         try {
-            // Here you would typically make an API call to your backend
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
-
-            // Clear form and errors after successful submission
+            await new Promise(resolve => setTimeout(resolve, 1000));
             setTestimonialForm({
                 name: '',
                 position: '',
@@ -398,13 +467,60 @@ const Landing: React.FC = () => {
             setTestimonialFormErrors({});
             setIsTestimonialModalOpen(false);
         } catch (error) {
+            console.error('Testimonial submission error:', error);
         }
-    };
+    }, [validateTestimonialForm]);
 
-    const handleCloseTestimonialModal = () => {
+    const handleCloseTestimonialModal = useCallback(() => {
         setIsTestimonialModalOpen(false);
         setTestimonialFormErrors({});
-    };
+    }, []);
+
+    // Memoize security features to prevent recreation
+    const securityFeatures = useMemo(() => [
+        {
+            icon: "🛡️",
+            title: translations[currentLanguage].security.features[0].title,
+            description: translations[currentLanguage].security.features[0].description,
+            details: translations[currentLanguage].security.features[0].tag
+        },
+        {
+            icon: "🌍",
+            title: translations[currentLanguage].security.features[1].title,
+            description: translations[currentLanguage].security.features[1].description,
+            details: translations[currentLanguage].security.features[1].tag
+        },
+        {
+            icon: "🔐",
+            title: translations[currentLanguage].security.features[2].title,
+            description: translations[currentLanguage].security.features[2].description,
+            details: translations[currentLanguage].security.features[2].tag
+        },
+        {
+            icon: "📊",
+            title: translations[currentLanguage].security.features[3].title,
+            description: translations[currentLanguage].security.features[3].description,
+            details: translations[currentLanguage].security.features[3].tag
+        }
+    ], [currentLanguage]);
+
+    // Memoize contact options
+    const contactOptions = useMemo(() => [
+        {
+            icon: "📞",
+            title: translations[currentLanguage].contact.Phone,
+            description: translations[currentLanguage].contact.speak_with_our_experts,
+            action: "+961 1 234 567",
+            href: "tel:+9611234567"
+        },
+        {
+            icon: "📧",
+            title: translations[currentLanguage].contact.Email,
+            description: translations[currentLanguage].contact.send_us_message,
+            action: "contact@telmeezlb.com",
+            href: "mailto:contact@telmeezlb.com"
+        }
+    ], [currentLanguage]);
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
@@ -413,20 +529,12 @@ const Landing: React.FC = () => {
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                            <a href="#" onClick={(e) => {
-                                e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); setIsScrolling(true);
-                                setTimeout(() => setIsScrolling(false), 1000);
-                            }} className="transition-transform hover:scale-105">
+                            <a href="#" onClick={handleLogoClick} className="transition-transform hover:scale-105">
                                 <img src={currentLanguage === 'ar' ? logoarb : logo} alt="Telmeez Logo" className="h-20 w-20" />
                             </a>
                         </div>
                         <nav className={`hidden md:flex ${currentLanguage === 'ar' ? 'space-x-reverse space-x-8' : 'space-x-8'}`}>
-                            <a href="#" onClick={(e) => {
-                                e.preventDefault();
-                                setIsScrolling(true);
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
-                                setTimeout(() => setIsScrolling(false), 1000);
-                            }} className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium">{t.header.home}</a>
+                            <a href="#" onClick={handleHomeClick} className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium">{t.header.home}</a>
                             <div
                                 className="relative group"
                                 onMouseEnter={() => handleDropdownEnter('features')}
@@ -573,15 +681,13 @@ const Landing: React.FC = () => {
                                             href={item.href}
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                if (item.label === 'Demo') {
-                                                    demoSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                                } else if (item.label === 'FAQ') {
-                                                    faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                                } else if (item.label === 'Security & Compliance') {
-                                                    securitySectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                                if (item.label === t.header.resources.demo) {
+                                                    scrollToSection(demoSectionRef);
+                                                } else if (item.label === t.header.resources.faq) {
+                                                    scrollToSection(faqSectionRef);
+                                                } else if (item.label === t.header.resources.security) {
+                                                    scrollToSection(securitySectionRef);
                                                 }
-                                                setIsScrolling(true);
-                                                setTimeout(() => setIsScrolling(false), 1000);
                                                 setActiveDropdown(null);
                                             }}
                                             className="block px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200"
@@ -595,11 +701,7 @@ const Landing: React.FC = () => {
                                 href="#contact"
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    setIsScrolling(true);
-                                    // Scroll to the contact section (which is the contact/support section)
-                                    const contactSection = document.querySelector('.py-20.bg-gradient-to-r.from-blue-600.to-blue-600');
-                                    contactSection?.scrollIntoView({ behavior: 'smooth' });
-                                    setTimeout(() => setIsScrolling(false), 1000);
+                                    scrollToSection(contactSectionRef.current);
                                 }}
                                 className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium hidden md:block"
                             >
@@ -723,9 +825,7 @@ const Landing: React.FC = () => {
                                             e.preventDefault();
                                             setIsMobileMenuOpen(false);
                                             requestAnimationFrame(() => {
-                                                pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                                setIsScrolling(true);
-                                                setTimeout(() => setIsScrolling(false), 1000);
+                                                scrollToSection(pricingSectionRef);
                                             });
                                         }}
                                         className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium"
@@ -755,44 +855,22 @@ const Landing: React.FC = () => {
                                         <ul className="space-y-2">
                                             <li><a href="#demo" onClick={(e) => {
                                                 e.preventDefault();
-                                                setIsMobileMenuOpen(false);
-                                                requestAnimationFrame(() => {
-                                                    demoSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                                    setIsScrolling(true);
-                                                    setTimeout(() => setIsScrolling(false), 1000);
-                                                });
+                                                handleMobileScroll(demoSectionRef);
                                             }} className={`block ${currentLanguage === 'ar' ? 'pr-4' : 'pl-4'} py-1 text-gray-500 hover:text-blue-600 transition-colors duration-300 font-medium`}>{t.header.resources.demo}</a></li>
                                             <li><a href="#" onClick={(e) => {
                                                 e.preventDefault();
-                                                setIsMobileMenuOpen(false);
-                                                requestAnimationFrame(() => {
-                                                    faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                                    setIsScrolling(true);
-                                                    setTimeout(() => setIsScrolling(false), 1000);
-                                                });
+                                                handleMobileScroll(faqSectionRef);
                                             }} className={`block ${currentLanguage === 'ar' ? 'pr-4' : 'pl-4'} py-1 text-gray-500 hover:text-blue-600 transition-colors duration-300 font-medium`}>{t.header.resources.faq}</a></li>
                                             <li><a href="#" onClick={(e) => {
                                                 e.preventDefault();
-                                                setIsMobileMenuOpen(false);
-                                                requestAnimationFrame(() => {
-                                                    securitySectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                                    setIsScrolling(true);
-                                                    setTimeout(() => setIsScrolling(false), 1000);
-                                                });
+                                                handleMobileScroll(securitySectionRef);
                                             }} className={`block ${currentLanguage === 'ar' ? 'pr-4' : 'pl-4'} py-1 text-gray-500 hover:text-blue-600 transition-colors duration-300 font-medium`}>{t.header.resources.security}</a></li>
                                         </ul>
                                         <a
                                             href="#contact"
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                setIsMobileMenuOpen(false);
-                                                requestAnimationFrame(() => {
-                                                    setIsScrolling(true);
-                                                    // Scroll to the contact section (which is the contact/support section)
-                                                    const contactSection = document.querySelector('.py-20.bg-gradient-to-r.from-blue-600.to-blue-600');
-                                                    contactSection?.scrollIntoView({ behavior: 'smooth' });
-                                                    setTimeout(() => setIsScrolling(false), 1000);
-                                                });
+                                                handleMobileContactScroll();
                                             }}
                                             className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium"
                                         >
@@ -818,16 +896,16 @@ const Landing: React.FC = () => {
 
                 {/* Floating particles */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    {[...Array(6)].map((_, i) => (
+                    {floatingParticles.map((i) => (
                         <div
                             key={i}
                             className={`absolute w-2 h-2 bg-blue-400 rounded-full animate-bounce floating-particle-${i + 1}`}
                         />
                     ))}
-                    {[...Array(4)].map((_, i) => (
+                    {pulseParticles.map((i) => (
                         <div
-                            key={i + 6}
-                            className={`absolute w-1 h-1 bg-purple-400 rounded-full animate-pulse floating-particle-${i + 7}`}
+                            key={i}
+                            className={`absolute w-1 h-1 bg-purple-400 rounded-full animate-pulse floating-particle-${i + 1}`}
                         />
                     ))}
                 </div>
@@ -879,11 +957,7 @@ const Landing: React.FC = () => {
                         >
                             <button
                                 type="button"
-                                onClick={() => {
-                                    pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                    setIsScrolling(true);
-                                    setTimeout(() => setIsScrolling(false), 1000);
-                                }}
+                                onClick={() => scrollToSection(pricingSectionRef)}
                                 className="group relative w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-lg text-base sm:text-lg md:text-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-offset-2 min-w-[200px] sm:min-w-0 overflow-hidden btn-gradient-hover animate-glow"
                             >
                                 <span className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -896,11 +970,7 @@ const Landing: React.FC = () => {
                             </button>
                             <button
                                 type="button"
-                                onClick={() => {
-                                    ourStoryRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                    setIsScrolling(true);
-                                    setTimeout(() => setIsScrolling(false), 1000);
-                                }}
+                                onClick={() => scrollToSection(ourStoryRef)}
                                 className="group relative w-full sm:w-auto bg-white/80 backdrop-blur-sm text-blue-600 px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-lg text-base sm:text-lg md:text-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border-2 border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-offset-2 min-w-[200px] sm:min-w-0 overflow-hidden btn-gradient-hover"
                             >
                                 <span className="absolute inset-0 bg-gradient-to-r from-blue-50 to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -1248,11 +1318,7 @@ const Landing: React.FC = () => {
                                     </div>
                                     <div className="pt-4">
                                         <button
-                                            onClick={() => {
-                                                pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                                setIsScrolling(true);
-                                                setTimeout(() => setIsScrolling(false), 1000);
-                                            }}
+                                            onClick={() => scrollToSection(pricingSectionRef)}
                                             className="inline-flex items-center px-6 py-3 rounded-lg text-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                         >
                                             {t.testimonials.nofeedbacks.left.button}
@@ -1371,32 +1437,7 @@ const Landing: React.FC = () => {
                     </div>
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {[
-                            {
-                                icon: "🛡️",
-                                title: translations[currentLanguage].security.features[0].title,
-                                description: translations[currentLanguage].security.features[0].description,
-                                details: translations[currentLanguage].security.features[0].tag
-                            },
-                            {
-                                icon: "🌍",
-                                title: translations[currentLanguage].security.features[1].title,
-                                description: translations[currentLanguage].security.features[1].description,
-                                details: translations[currentLanguage].security.features[1].tag
-                            },
-                            {
-                                icon: "🔐",
-                                title: translations[currentLanguage].security.features[2].title,
-                                description: translations[currentLanguage].security.features[2].description,
-                                details: translations[currentLanguage].security.features[2].tag
-                            },
-                            {
-                                icon: "📊",
-                                title: translations[currentLanguage].security.features[3].title,
-                                description: translations[currentLanguage].security.features[3].description,
-                                details: translations[currentLanguage].security.features[3].tag
-                            }
-                        ].map((security, index) => (
+                        {securityFeatures.map((security, index) => (
                             <motion.div
                                 key={index}
                                 initial={{ opacity: 0, y: 30 }}
@@ -1461,11 +1502,7 @@ const Landing: React.FC = () => {
                     </p>
                     <button
                         type="button"
-                        onClick={() => {
-                            pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                            setIsScrolling(true);
-                            setTimeout(() => setIsScrolling(false), 1000);
-                        }}
+                        onClick={() => scrollToSection(pricingSectionRef)}
                         className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-blue-600 transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white rounded-xl overflow-hidden bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg hover:shadow-xl"
                     >
                         <span className="absolute inset-0 w-full h-full transition duration-300 ease-out transform -translate-x-full bg-gradient-to-r from-blue-50 to-white group-hover:translate-x-0"></span>
@@ -1539,22 +1576,7 @@ const Landing: React.FC = () => {
                     </p>
 
                     <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-                        {[
-                            {
-                                icon: "📞",
-                                title: translations[currentLanguage].contact.Phone,
-                                description: translations[currentLanguage].contact.speak_with_our_experts,
-                                action: "+961 1 234 567",
-                                href: "tel:+9611234567"
-                            },
-                            {
-                                icon: "📧",
-                                title: translations[currentLanguage].contact.Email,
-                                description: translations[currentLanguage].contact.send_us_message,
-                                action: "contact@telmeezlb.com",
-                                href: "mailto:contact@telmeezlb.com"
-                            }
-                        ].map((contact, index) => (
+                        {contactOptions.map((contact, index) => (
                             <motion.div
                                 key={index}
                                 initial={{ opacity: 0, y: 20 }}
@@ -1583,10 +1605,7 @@ const Landing: React.FC = () => {
                 <div className="container mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
                         <div>
-                            <a href="#" onClick={(e) => {
-                                e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); setIsScrolling(true);
-                                setTimeout(() => setIsScrolling(false), 1000);
-                            }} className="inline-block transition-transform hover:scale-105">
+                            <a href="#" onClick={handleLogoClick} className="transition-transform hover:scale-105">
                                 <img src={currentLanguage === 'ar' ? logo2arb : logo2} alt="Telmeez Logo" className="h-16 w-16 mb-4" />
                             </a>
                             <p className="text-gray-400">
@@ -1597,20 +1616,16 @@ const Landing: React.FC = () => {
                             <h3 className="text-lg font-semibold mb-4">{translations[currentLanguage].footer.quick_links.quick_links}</h3>
                             <ul className="space-y-2">
                                 <li><a href="#our-story" onClick={(e) => {
-                                    e.preventDefault(); ourStoryRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
-                                    setTimeout(() => setIsScrolling(false), 1000);
+                                    e.preventDefault(); scrollToSection(ourStoryRef);
                                 }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.about_us}</a></li>
                                 <li><a href="#student-management" onClick={(e) => {
-                                    e.preventDefault(); studentManagementRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
-                                    setTimeout(() => setIsScrolling(false), 1000);
+                                    e.preventDefault(); scrollToSection(studentManagementRef);
                                 }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.features}</a></li>
                                 <li><a href="#pricing" onClick={(e) => {
-                                    e.preventDefault(); pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
-                                    setTimeout(() => setIsScrolling(false), 1000);
+                                    e.preventDefault(); scrollToSection(pricingSectionRef);
                                 }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.pricing}</a></li>
                                 <li><a href="#testimonials" onClick={(e) => {
-                                    e.preventDefault(); document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
-                                    setTimeout(() => setIsScrolling(false), 1000);
+                                    e.preventDefault(); scrollToSection(testimonialsSectionRef.current);
                                 }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.testimonials}</a></li>
                             </ul>
                         </div>
@@ -1619,21 +1634,15 @@ const Landing: React.FC = () => {
                             <ul className="space-y-2">
                                 <li><a href="#demo" onClick={(e) => {
                                     e.preventDefault();
-                                    setIsScrolling(true);
-                                    demoSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                    setTimeout(() => setIsScrolling(false), 1000);
+                                    scrollToSection(demoSectionRef);
                                 }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.resources.demo}</a></li>
                                 <li><a href="#" onClick={(e) => {
                                     e.preventDefault();
-                                    setIsScrolling(true);
-                                    faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                    setTimeout(() => setIsScrolling(false), 1000);
+                                    scrollToSection(faqSectionRef);
                                 }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.resources.faq}</a></li>
                                 <li><a href="#" onClick={(e) => {
                                     e.preventDefault();
-                                    setIsScrolling(true);
-                                    securitySectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                    setTimeout(() => setIsScrolling(false), 1000);
+                                    scrollToSection(securitySectionRef);
                                 }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.resources.security}</a></li>
                             </ul>
                         </div>

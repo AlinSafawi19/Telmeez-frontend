@@ -48,7 +48,7 @@ const About: React.FC<AboutProps> = ({ language = 'en' }) => {
                         <p className="text-xl text-gray-600 leading-relaxed">
                             {t.our_story.description}
                         </p>
-                    </motion.div>
+                    </motion.div>  
                     <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                         {[
                             {
