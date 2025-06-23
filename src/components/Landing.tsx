@@ -191,24 +191,36 @@ const Landing: React.FC = () => {
         setTimeout(() => setIsScrolling(false), delay);
     }, [isScrolling]);
 
-    // Optimized click handlers
-    const handleLogoClick = useCallback((e: React.MouseEvent) => {
-        e.preventDefault();
+    // Improved scroll to top function for mobile compatibility
+    const scrollToTop = useCallback(() => {
         if (isScrolling) return;
         
         setIsScrolling(true);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Try smooth scrolling first
+        try {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        } catch (error) {
+            // Fallback for older browsers
+            window.scrollTo(0, 0);
+        }
+        
         setTimeout(() => setIsScrolling(false), 1000);
     }, [isScrolling]);
 
+    // Optimized click handlers
+    const handleLogoClick = useCallback((e: React.MouseEvent) => {
+        e.preventDefault();
+        scrollToTop();
+    }, [scrollToTop]);
+
     const handleHomeClick = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
-        if (isScrolling) return;
-        
-        setIsScrolling(true);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setTimeout(() => setIsScrolling(false), 1000);
-    }, [isScrolling]);
+        scrollToTop();
+    }, [scrollToTop]);
 
     // Optimized dropdown handlers
     const handleDropdownEnter = useCallback((dropdown: string) => {
@@ -790,15 +802,14 @@ const Landing: React.FC = () => {
                                         </svg>
                                     </button>
                                 </div>
-                                <nav className="flex flex-col space-y-4">
+                                <nav className="flex flex-col space-y-4 p-4">
                                     <a href="#" onClick={(e) => {
                                         e.preventDefault();
                                         setIsMobileMenuOpen(false);
-                                        requestAnimationFrame(() => {
-                                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                                            setIsScrolling(true);
-                                            setTimeout(() => setIsScrolling(false), 1000);
-                                        });
+                                        // Use improved scroll function
+                                        setTimeout(() => {
+                                            scrollToTop();
+                                        }, 100);
                                     }} className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium">{t.header.home}</a>
                                     <div className={`${currentLanguage === 'ar' ? 'pr-4 border-r-2' : 'pl-4 border-l-2'} border-gray-200`}>
                                         <span className="text-gray-600 font-medium block mb-2">{t.header.features.features}</span>

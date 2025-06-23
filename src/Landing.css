@@ -226,6 +226,27 @@ input[type="checkbox"].force-white-bg:focus {
     .space-y-4 > * + * {
         margin-top: 1rem;
     }
+    
+    /* Ensure smooth scrolling works on mobile */
+    html {
+        scroll-behavior: smooth;
+    }
+    
+    /* Improve mobile scroll performance */
+    body {
+        overflow-x: hidden;
+    }
+    
+    /* Ensure hero section is properly positioned on mobile */
+    .min-h-screen.pt-20 {
+        padding-top: 5rem; /* 80px */
+    }
+    
+    @media (min-width: 640px) {
+        .min-h-screen.sm\\:pt-24 {
+            padding-top: 6rem; /* 96px */
+        }
+    }
 }
 
 /* Mobile text readability improvements */
