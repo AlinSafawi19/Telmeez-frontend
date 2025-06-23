@@ -13,7 +13,7 @@ import logoarb from "../assets/images/logo_arb.png";
 import { FaHome, FaLock, FaCreditCard, FaMapMarkerAlt } from 'react-icons/fa';
 import { useLanguage } from '../contexts/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import '../components/Landing.css';
+import '../Landing.css';
 
 interface CheckoutProps {
     language?: Language;
@@ -125,7 +125,6 @@ const Checkout: React.FC<CheckoutProps> = ({
                         return saved ? { ...defaultAddon, quantity: saved.quantity } : defaultAddon;
                     });
                 } catch (e) {
-                    console.error("Failed to parse saved add-ons, using defaults.", e);
                     return defaultAddOns;
                 }
             }

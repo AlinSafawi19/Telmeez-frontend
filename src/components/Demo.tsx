@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { translations } from '../translations';
 import type { Language } from '../translations';
-import './Landing.css';
+import '../Landing.css';
 
 interface DemoProps {
     language: Language;

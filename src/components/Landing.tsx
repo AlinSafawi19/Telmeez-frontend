@@ -13,7 +13,7 @@ import CookieBanner from './CookieBanner';
 import type { Language } from '../translations';
 import { translations } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
-import './Landing.css';
+import '../Landing.css';
 
 interface TestimonialForm {
     name: string;

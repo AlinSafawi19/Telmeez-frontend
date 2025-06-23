@@ -7,7 +7,7 @@ import { translations } from '../translations';
 import type { Language } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
 import logoarb from '../assets/images/logo_arb.png';
-import '../components/Landing.css';
+import '../Landing.css';
 
 const SignIn: React.FC = () => {
     const [email, setEmail] = useState('');

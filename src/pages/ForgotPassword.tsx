@@ -7,7 +7,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import logo from '../assets/images/logo.png';
 import forgetpasssvvg from '../assets/images/forgotpass-illustration.svg';
 import logoarb from '../assets/images/logo_arb.png';
-import '../components/Landing.css';
+import '../Landing.css';
 
 const ForgotPassword: React.FC = () => {
     const [email, setEmail] = useState('');

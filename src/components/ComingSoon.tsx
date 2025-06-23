@@ -6,7 +6,7 @@ import type { Language } from '../translations';
 import logo from '../assets/images/logo.png';
 import logoarb from '../assets/images/logo_arb.png';
 import comingsoon from '../assets/images/comingsoon.svg';
-import '../components/Landing.css';
+import '../Landing.css';
 
 const ComingSoon: React.FC = () => {
     const { currentLanguage, setCurrentLanguage } = useLanguage();
