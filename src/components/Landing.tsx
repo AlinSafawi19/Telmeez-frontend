@@ -20,7 +20,6 @@ interface TestimonialForm {
     position: string;
     institution: string;
     quote: string;
-    rating: number;
     email: string;
 }
 
@@ -29,7 +28,6 @@ interface TestimonialFormErrors {
     position?: string;
     institution?: string;
     quote?: string;
-    rating?: string;
     email?: string;
 }
 
@@ -74,7 +72,6 @@ const Landing: React.FC = () => {
                 position: '',
                 institution: '',
                 quote: '',
-                rating: 0,
                 email: ''
             };
         }
@@ -83,7 +80,6 @@ const Landing: React.FC = () => {
             position: '',
             institution: '',
             quote: '',
-            rating: 0,
             email: ''
         };
     });
@@ -95,7 +91,6 @@ const Landing: React.FC = () => {
     });
     const [showUnsubscribeMessage, setShowUnsubscribeMessage] = useState(false);
     const [testimonialFormErrors, setTestimonialFormErrors] = useState<TestimonialFormErrors>({});
-    const [hoveredRating, setHoveredRating] = useState(0);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -415,22 +410,6 @@ const Landing: React.FC = () => {
         }
     };
 
-    // Add rating change handler
-    const handleRatingChange = (rating: number) => {
-        const updatedForm = {
-            ...testimonialForm,
-            rating
-        };
-        setTestimonialForm(updatedForm);
-
-        // Save form data as a necessary cookie
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-        if (hasConsent) {
-            localStorage.setItem('testimonialForm', JSON.stringify(updatedForm));
-        }
-    };
-
     useEffect(() => {
         // Check if we should scroll to pricing (from register button)
         const shouldScrollToPricing = localStorage.getItem('scrollToPricing');
@@ -487,12 +466,6 @@ const Landing: React.FC = () => {
             isValid = false;
         }
 
-        // Rating validation
-        if (testimonialForm.rating === 0) {
-            errors.rating = t.testimonials.modal.errors.rating_required;
-            isValid = false;
-        }
-
         // Email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!testimonialForm.email.trim()) {
@@ -524,7 +497,6 @@ const Landing: React.FC = () => {
                 position: '',
                 institution: '',
                 quote: '',
-                rating: 0,
                 email: ''
             });
             setTestimonialFormErrors({});
@@ -1843,7 +1815,7 @@ const Landing: React.FC = () => {
                                                 name="position"
                                                 value={testimonialForm.position}
                                                 onChange={handleTestimonialFormChange}
-                                                className={`w-full text-sm rounded-xl border force-white-bg${testimonialFormErrors.position ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
+                                                className={`w-full text-sm rounded-xl border force-white-bg ${testimonialFormErrors.position ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                                 placeholder={t.testimonials.modal.form.role_placeholder}
                                             />
                                             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -1931,37 +1903,6 @@ const Landing: React.FC = () => {
                                     </div>
                                     {testimonialFormErrors.quote && (
                                         <p className="mt-1 text-xs text-red-500">{testimonialFormErrors.quote}</p>
-                                    )}
-                                </div>
-
-                                <div className="group">
-                                    <label className="block text-xs font-medium text-gray-700 mb-1 group-focus-within:text-blue-600 transition-colors duration-200">
-                                        {t.testimonials.modal.form.rating}
-                                    </label>
-                                    <div className="flex items-center space-x-1">
-                                        {[1, 2, 3, 4, 5].map((rating) => (
-                                            <button
-                                                key={rating}
-                                                type="button"
-                                                onClick={() => handleRatingChange(rating)}
-                                                onMouseEnter={() => setHoveredRating(rating)}
-                                                onMouseLeave={() => setHoveredRating(0)}
-                                                onTouchStart={() => setHoveredRating(rating)}
-                                                onTouchEnd={() => setHoveredRating(0)}
-                                                className={`p-2 rounded-lg border-none force-white-bg focus:outline-none transition-all duration-200 transform hover:scale-110 active:scale-95 ${(hoveredRating >= rating || testimonialForm.rating >= rating)
-                                                    ? 'text-yellow-400'
-                                                    : 'text-gray-300'
-                                                    }`}
-                                                aria-label={`Rate ${rating} out of 5`}
-                                            >
-                                                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                </svg>
-                                            </button>
-                                        ))}
-                                    </div>
-                                    {testimonialFormErrors.rating && (
-                                        <p className="mt-1 text-xs text-red-500">{testimonialFormErrors.rating}</p>
                                     )}
                                 </div>
 
