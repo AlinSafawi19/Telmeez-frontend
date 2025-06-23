@@ -29,8 +29,10 @@ export const fr = {
         resources: {
             resources: "Ressources",
             demo: "Démo",
-            faq: "FAQ"
+            faq: "FAQ",
+            security: "Sécurité & Conformité"
         },
+        contact: "Contact",
         signin: "Se Connecter",
         not_member: "Pas encore membre de Telmeez ?",
         register: "Inscrivez-vous !",
@@ -227,7 +229,8 @@ export const fr = {
         resources: {
             resources: "Ressources",
             demo: "Démo",
-            faq: "FAQ"
+            faq: "FAQ",
+            security: "Sécurité & Conformité"
         },
         contact_us: {
             contact_us: "Contactez-nous"
@@ -821,5 +824,43 @@ export const fr = {
         coming_soon: "Bientôt Disponible",
         scan_qr: "Scanner le Code QR",
         qr_description: "Scannez ce code QR avec votre appareil mobile pour télécharger l'application"
+    },
+    contact: {
+        Title: "Besoin d'aide pour commencer?",
+        SubTitle: "Notre équipe de support est là pour vous aider à démarrer avec Telmeez. Nous sommes disponibles 24/7 pour répondre à toutes vos questions.",
+        Email: "Envoyez-nous un email",
+        Phone: "Appelez-nous",
+        speak_with_our_experts: "Parlez à nos experts",
+        send_us_message: "Envoyez-nous un message"
+    },
+    security: {
+        tag: "Sécurité de Niveau Entreprise",
+        title: "Sécurisé et Conforme",
+        subtitle: "Nous comprenons que les écoles, universités et institutions éducatives gèrent des informations sensibles. C'est pourquoi nous avons construit Telmeez avec les plus hauts standards de sécurité et les exigences de conformité.",
+        features: [
+            {
+                title: "Audits Réguliers",
+                description: "Audits de sécurité tiers et tests de pénétration effectués régulièrement.",
+                tag: "Surveillance et amélioration continues"
+            },
+            {
+                title: "Contrôle d'Accès",
+                description: "Les permissions basées sur les rôles garantissent que seuls les utilisateurs autorisés peuvent accéder aux informations sensibles.",
+                tag: "Contrôle granulaire de qui voit quoi"
+            },
+            {
+                title: "Conforme au RGPD",
+                description: "Conformité complète avec le RGPD et autres réglementations internationales de protection des données.",
+                tag: "Vos droits à la vie privée sont protégés par la loi"
+            },
+            {
+                title: "Chiffrement des Données",
+                description: "Toutes les données sont chiffrées en transit et au repos en utilisant le chiffrement AES-256 standard de l'industrie.",
+                tag: "Le chiffrement de bout en bout garantit que vos données restent sécurisées"
+            }
+        ],
+        uptime_guarantee: "Garantie de Disponibilité",
+        security_monitoring: "Surveillance de Sécurité",
+        security_breaches: "Violations de Sécurité"
     }
 };

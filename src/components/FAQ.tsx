@@ -39,7 +39,7 @@ const FAQ: React.FC<FAQProps> = ({ language = 'en' }) => {
     };
 
     return (
-        <div id="faq-section" className="min-h-screen bg-gray-50 py-10">
+        <div id="faq-section" className="bg-gray-50 py-10">
             <div className="container mx-auto px-4">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

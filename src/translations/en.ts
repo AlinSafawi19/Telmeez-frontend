@@ -1,3 +1,5 @@
+import { SubTitle, Title } from "chart.js";
+
 export const en = {
     header: {
         home: "Home",
@@ -29,8 +31,10 @@ export const en = {
         resources: {
             resources: "Resources",
             demo: "Demo",
-            faq: "FAQ"
+            faq: "FAQ",
+            security: "Security & Compliance"
         },
+        contact: "Contact",
         signin: "Sign In",
         not_member: "Not a Telmeez member?",
         register: "Register!",
@@ -242,7 +246,8 @@ export const en = {
         resources: {
             resources: "Resources",
             demo: "Demo",
-            faq: "FAQ"
+            faq: "FAQ",
+            security: "Security & Compliance"
         },
         contact_us: {
             contact_us: "Contact Us"
@@ -821,5 +826,43 @@ export const en = {
     days: "days",
     hours: "hours",
     minutes: "minutes",
-    seconds: "seconds"
+    seconds: "seconds",
+    contact: {
+        Title: "Need Help Getting Started?",
+        SubTitle: "Our support team is here to help you get started with Telmeez. We're available 24/7 to answer any questions you have.",
+        Email: "Email Us",
+        Phone: "Call Us",
+        speak_with_our_experts: "Speak with our experts",
+        send_us_message: "Send us a message"
+    },
+    security: {
+        tag: "Enterprise-grade Security",
+        title: "Secure and Compliant",
+        subtitle: "We understand that schools, universities and educational institutions handle sensitive information. That's why we've built Telmeez with the highest security standards and compliance requirements.",
+        features: [
+            {
+                title: "Regular Audits",
+                description: "Third-party security audits and penetration testing conducted regularly.",
+                tag: "Continuous monitoring and improvement"
+            },
+            {
+                title: "Access Control",
+                description: "Role-based permissions ensure only authorized users can access sensitive information.",
+                tag: "Granular control over who sees what"
+            },
+            {
+                title: "GDPR Compliant",
+                description: "Full compliance with GDPR and other international data protection regulations.",
+                tag: "Your privacy rights are protected by law"
+            },
+            {
+                title: "Data Encryption",
+                description: "All data is encrypted in transit and at rest using industry-standard AES-256 encryption.",
+                tag: "End-to-end encryption ensures your data remains secure"
+            }
+        ],
+        uptime_guarantee: "Uptime Guarantee",
+        security_monitoring: "Security Monitoring",
+        security_breaches: "Security Breaches"
+    }
 }; 

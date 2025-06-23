@@ -26,15 +26,30 @@ export const CookieConsentProvider: React.FC<{ children: ReactNode }> = ({ child
     const [hasUserConsent, setHasUserConsent] = useState(false);
 
     useEffect(() => {
-        const savedPreferences = localStorage.getItem('cookieConsent');
-        if (savedPreferences) {
-            const parsedPreferences = JSON.parse(savedPreferences);
-            // Ensure necessary cookies are always enabled
-            setPreferences({
-                ...parsedPreferences,
-                necessary: true
-            });
-            setHasUserConsent(true);
+        // Use requestAnimationFrame for better performance
+        const loadPreferences = () => {
+            const savedPreferences = localStorage.getItem('cookieConsent');
+            if (savedPreferences) {
+                try {
+                    const parsedPreferences = JSON.parse(savedPreferences);
+                    // Ensure necessary cookies are always enabled
+                    setPreferences({
+                        ...parsedPreferences,
+                        necessary: true
+                    });
+                    setHasUserConsent(true);
+                } catch (error) {
+                    // Ignore parsing errors
+                }
+            }
+        };
+
+        // Use requestAnimationFrame instead of setTimeout for better performance
+        if (typeof requestAnimationFrame !== 'undefined') {
+            requestAnimationFrame(loadPreferences);
+        } else {
+            // Fallback for older browsers
+            setTimeout(loadPreferences, 0);
         }
     }, []);
 

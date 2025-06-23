@@ -43,15 +43,12 @@ const Landing: React.FC = () => {
     const ourStoryRef = useRef<HTMLDivElement>(null);
     const demoSectionRef = useRef<HTMLDivElement>(null);
     const faqSectionRef = useRef<HTMLDivElement>(null);
+    const securitySectionRef = useRef<HTMLDivElement>(null);
     // Add newsletter form states
     const [subscribeEmail, setSubscribeEmail] = useState('');
     const [subscribeEmailError, setSubscribeEmailError] = useState('');
     const [isUnsubscribeModalOpen, setIsUnsubscribeModalOpen] = useState(false);
-    const [unsubscribeEmail, setUnsubscribeEmail] = useState(() => {
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-        return hasConsent ? localStorage.getItem('newsletterEmail') || '' : '';
-    });
+    const [unsubscribeEmail, setUnsubscribeEmail] = useState('');
     const [unsubscribeEmailError, setUnsubscribeEmailError] = useState('');
     const [isScrolling, setIsScrolling] = useState(false);
     const [showBackToTop, setShowBackToTop] = useState(false);
@@ -62,35 +59,57 @@ const Landing: React.FC = () => {
 
     // Add testimonial form states
     const [isTestimonialModalOpen, setIsTestimonialModalOpen] = useState(false);
-    const [testimonialForm, setTestimonialForm] = useState<TestimonialForm>(() => {
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-        if (hasConsent) {
-            const savedForm = localStorage.getItem('testimonialForm');
-            return savedForm ? JSON.parse(savedForm) : {
-                name: '',
-                position: '',
-                institution: '',
-                quote: '',
-                email: ''
-            };
-        }
-        return {
-            name: '',
-            position: '',
-            institution: '',
-            quote: '',
-            email: ''
-        };
+    const [testimonialForm, setTestimonialForm] = useState<TestimonialForm>({
+        name: '',
+        position: '',
+        institution: '',
+        quote: '',
+        email: ''
     });
 
-    const [isNewsletterSubscribed, setIsNewsletterSubscribed] = useState(() => {
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
-        return hasConsent ? localStorage.getItem('newsletterSubscribed') === 'true' : false;
-    });
+    const [isNewsletterSubscribed, setIsNewsletterSubscribed] = useState(false);
     const [showUnsubscribeMessage, setShowUnsubscribeMessage] = useState(false);
     const [testimonialFormErrors, setTestimonialFormErrors] = useState<TestimonialFormErrors>({});
+
+    // Load localStorage data after component mounts
+    useEffect(() => {
+        // Use requestAnimationFrame for better performance
+        const loadLocalStorageData = () => {
+            const cookieConsent = localStorage.getItem('cookieConsent');
+            const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+
+            if (hasConsent) {
+                // Load unsubscribe email
+                const savedUnsubscribeEmail = localStorage.getItem('newsletterEmail');
+                if (savedUnsubscribeEmail) {
+                    setUnsubscribeEmail(savedUnsubscribeEmail);
+                }
+
+                // Load testimonial form
+                const savedForm = localStorage.getItem('testimonialForm');
+                if (savedForm) {
+                    try {
+                        const parsedForm = JSON.parse(savedForm);
+                        setTestimonialForm(parsedForm);
+                    } catch (error) {
+                        // Ignore parsing errors
+                    }
+                }
+
+                // Load newsletter subscription status
+                const isSubscribed = localStorage.getItem('newsletterSubscribed') === 'true';
+                setIsNewsletterSubscribed(isSubscribed);
+            }
+        };
+
+        // Use requestAnimationFrame instead of setTimeout for better performance
+        if (typeof requestAnimationFrame !== 'undefined') {
+            requestAnimationFrame(loadLocalStorageData);
+        } else {
+            // Fallback for older browsers
+            setTimeout(loadLocalStorageData, 0);
+        }
+    }, []);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -132,44 +151,61 @@ const Landing: React.FC = () => {
     };
 
     useEffect(() => {
-        //localStorage.clear();
+        // Only run localStorage operations in development and only if needed
         if (import.meta.env.DEV) {
-            const logKey = 'lastLocalStorageLog';
-            const lastLog = localStorage.getItem(logKey);
-            const now = Date.now();
+            // Use a much more efficient approach - only log if explicitly requested
+            const shouldLog = localStorage.getItem('debugLocalStorage') === 'true';
+            if (shouldLog) {
+                // Use setTimeout to defer the operation completely
+                setTimeout(() => {
+                    const logKey = 'lastLocalStorageLog';
+                    const lastLog = localStorage.getItem(logKey);
+                    const now = Date.now();
 
-            // Only log if it's been more than 1 second since last log
-            if (!lastLog || (now - parseInt(lastLog)) > 1000) {
-                console.log('LocalStorage contents:', Object.entries(localStorage).reduce((obj, [key, value]) => {
-                    try {
-                        obj[key] = JSON.parse(value);
-                    } catch {
-                        obj[key] = value;
+                    // Only log if it's been more than 5 seconds since last log
+                    if (!lastLog || (now - parseInt(lastLog)) > 5000) {
+                        console.log('LocalStorage contents:', Object.fromEntries(
+                            Object.entries(localStorage).map(([key, value]) => [
+                                key,
+                                (() => {
+                                    try { return JSON.parse(value); }
+                                    catch { return value; }
+                                })()
+                            ])
+                        ));
+                        localStorage.setItem(logKey, now.toString());
                     }
-                    return obj;
-                }, {} as Record<string, any>));
-                localStorage.setItem(logKey, now.toString());
+                }, 1000); // Defer by 1 second
             }
         }
     }, []);
 
     // Add scroll detection
     useEffect(() => {
+        let scrollTimeout: number;
+
         const handleScroll = () => {
             const scrollPosition = window.scrollY;
             setShowBackToTop(scrollPosition > 300);
 
-            // Save scroll position to localStorage as a necessary cookie
-            const cookieConsent = localStorage.getItem('cookieConsent');
-            const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+            // Throttle localStorage operations
+            clearTimeout(scrollTimeout);
+            scrollTimeout = window.setTimeout(() => {
+                // Save scroll position to localStorage as a necessary cookie
+                const cookieConsent = localStorage.getItem('cookieConsent');
+                const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
 
-            if (hasConsent) {
-                localStorage.setItem('scrollPosition', scrollPosition.toString());
-            }
+                if (hasConsent) {
+                    localStorage.setItem('scrollPosition', scrollPosition.toString());
+                }
+            }, 100); // Throttle to 100ms
         };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            clearTimeout(scrollTimeout);
+        };
     }, []);
 
     // Add back to top handler
@@ -263,7 +299,8 @@ const Landing: React.FC = () => {
         ],
         resources: [
             { label: t.header.resources.demo, href: '#' },
-            { label: t.header.resources.faq, href: '#' }
+            { label: t.header.resources.faq, href: '#' },
+            { label: t.header.resources.security, href: '#' }
         ],
         about: [
             { label: t.header.about.our_story, href: '#' },
@@ -428,15 +465,25 @@ const Landing: React.FC = () => {
                 setTimeout(() => setIsScrolling(false), 1000);
             }, 100);
         } else {
-            // Restore scroll position if it exists and no specific scroll target
-            const cookieConsent = localStorage.getItem('cookieConsent');
-            const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
+            // Defer scroll position restoration to avoid blocking
+            const restoreScrollPosition = () => {
+                const cookieConsent = localStorage.getItem('cookieConsent');
+                const hasConsent = cookieConsent ? JSON.parse(cookieConsent).necessary : false;
 
-            if (hasConsent) {
-                const savedScrollPosition = localStorage.getItem('scrollPosition');
-                if (savedScrollPosition) {
-                    window.scrollTo(0, parseInt(savedScrollPosition));
+                if (hasConsent) {
+                    const savedScrollPosition = localStorage.getItem('scrollPosition');
+                    if (savedScrollPosition) {
+                        window.scrollTo(0, parseInt(savedScrollPosition));
+                    }
                 }
+            };
+
+            // Use requestAnimationFrame instead of setTimeout for better performance
+            if (typeof requestAnimationFrame !== 'undefined') {
+                requestAnimationFrame(restoreScrollPosition);
+            } else {
+                // Fallback for older browsers
+                setTimeout(restoreScrollPosition, 0);
             }
         }
     }, []);
@@ -684,6 +731,8 @@ const Landing: React.FC = () => {
                                                     demoSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
                                                 } else if (item.label === 'FAQ') {
                                                     faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                                } else if (item.label === 'Security & Compliance') {
+                                                    securitySectionRef.current?.scrollIntoView({ behavior: 'smooth' });
                                                 }
                                                 setIsScrolling(true);
                                                 setTimeout(() => setIsScrolling(false), 1000);
@@ -696,6 +745,20 @@ const Landing: React.FC = () => {
                                     ))}
                                 </div>
                             </div>
+                            <a
+                                href="#contact"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setIsScrolling(true);
+                                    // Scroll to the contact section (which is the contact/support section)
+                                    const contactSection = document.querySelector('.py-20.bg-gradient-to-r.from-blue-600.to-blue-600');
+                                    contactSection?.scrollIntoView({ behavior: 'smooth' });
+                                    setTimeout(() => setIsScrolling(false), 1000);
+                                }}
+                                className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium hidden md:block"
+                            >
+                                {t.header.contact || 'Contact'}
+                            </a>
                         </nav>
                         <div className={`flex items-center ${currentLanguage === 'ar' ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                             <div className="relative group">
@@ -780,7 +843,15 @@ const Landing: React.FC = () => {
                                     </button>
                                 </div>
                                 <nav className="flex flex-col space-y-4">
-                                    <a href="#" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium">{t.header.home}</a>
+                                    <a href="#" onClick={(e) => {
+                                        e.preventDefault();
+                                        setIsMobileMenuOpen(false);
+                                        requestAnimationFrame(() => {
+                                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                                            setIsScrolling(true);
+                                            setTimeout(() => setIsScrolling(false), 1000);
+                                        });
+                                    }} className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium">{t.header.home}</a>
                                     <div className={`${currentLanguage === 'ar' ? 'pr-4 border-r-2' : 'pl-4 border-l-2'} border-gray-200`}>
                                         <span className="text-gray-600 font-medium block mb-2">{t.header.features.features}</span>
                                         {dropdownItems.features.map((/*item,*/ index) => (
@@ -788,9 +859,11 @@ const Landing: React.FC = () => {
                                                 key={index}
                                                 //href={item.href}
                                                 onClick={(/*e*/) => {
-                                                    // handleDropdownItemClick(e, item.label);
-                                                    setIsScrolling(true);
-                                                    setTimeout(() => setIsScrolling(false), 1000); setIsMobileMenuOpen(false);
+                                                    setIsMobileMenuOpen(false);
+                                                    requestAnimationFrame(() => {
+                                                        setIsScrolling(true);
+                                                        setTimeout(() => setIsScrolling(false), 1000);
+                                                    });
                                                 }}
                                                 className={`block ${currentLanguage === 'ar' ? 'pr-4' : 'pl-4'} py-1 text-gray-500 hover:text-blue-600 transition-colors duration-200`}
                                             >
@@ -802,10 +875,12 @@ const Landing: React.FC = () => {
                                         href="#"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                            setIsScrolling(true);
-                                            setTimeout(() => setIsScrolling(false), 1000); setIsMobileMenuOpen(false);
                                             setIsMobileMenuOpen(false);
+                                            requestAnimationFrame(() => {
+                                                pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                                setIsScrolling(true);
+                                                setTimeout(() => setIsScrolling(false), 1000);
+                                            });
                                         }}
                                         className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium"
                                     >
@@ -818,8 +893,10 @@ const Landing: React.FC = () => {
                                                 key={index}
                                                 href={item.href}
                                                 onClick={(e) => {
-                                                    handleDropdownItemClick(e, item.label);
                                                     setIsMobileMenuOpen(false);
+                                                    requestAnimationFrame(() => {
+                                                        handleDropdownItemClick(e, item.label);
+                                                    });
                                                 }}
                                                 className={`block ${currentLanguage === 'ar' ? 'pr-4' : 'pl-4'} py-1 text-gray-500 hover:text-blue-600 transition-colors duration-200`}
                                             >
@@ -831,14 +908,50 @@ const Landing: React.FC = () => {
                                         <span className="text-gray-600 font-medium block mb-2">{t.header.resources.resources}</span>
                                         <ul className="space-y-2">
                                             <li><a href="#demo" onClick={(e) => {
-                                                e.preventDefault(); demoSectionRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
-                                                setTimeout(() => setIsScrolling(false), 1000); setIsMobileMenuOpen(false);
+                                                e.preventDefault();
+                                                setIsMobileMenuOpen(false);
+                                                requestAnimationFrame(() => {
+                                                    demoSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                                    setIsScrolling(true);
+                                                    setTimeout(() => setIsScrolling(false), 1000);
+                                                });
                                             }} className={`block ${currentLanguage === 'ar' ? 'pr-4' : 'pl-4'} py-1 text-gray-500 hover:text-blue-600 transition-colors duration-300 font-medium`}>{t.header.resources.demo}</a></li>
                                             <li><a href="#" onClick={(e) => {
-                                                e.preventDefault(); faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
-                                                setTimeout(() => setIsScrolling(false), 1000); setIsMobileMenuOpen(false);
+                                                e.preventDefault();
+                                                setIsMobileMenuOpen(false);
+                                                requestAnimationFrame(() => {
+                                                    faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                                    setIsScrolling(true);
+                                                    setTimeout(() => setIsScrolling(false), 1000);
+                                                });
                                             }} className={`block ${currentLanguage === 'ar' ? 'pr-4' : 'pl-4'} py-1 text-gray-500 hover:text-blue-600 transition-colors duration-300 font-medium`}>{t.header.resources.faq}</a></li>
+                                            <li><a href="#" onClick={(e) => {
+                                                e.preventDefault();
+                                                setIsMobileMenuOpen(false);
+                                                requestAnimationFrame(() => {
+                                                    securitySectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                                    setIsScrolling(true);
+                                                    setTimeout(() => setIsScrolling(false), 1000);
+                                                });
+                                            }} className={`block ${currentLanguage === 'ar' ? 'pr-4' : 'pl-4'} py-1 text-gray-500 hover:text-blue-600 transition-colors duration-300 font-medium`}>{t.header.resources.security}</a></li>
                                         </ul>
+                                        <a
+                                            href="#contact"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setIsMobileMenuOpen(false);
+                                                requestAnimationFrame(() => {
+                                                    setIsScrolling(true);
+                                                    // Scroll to the contact section (which is the contact/support section)
+                                                    const contactSection = document.querySelector('.py-20.bg-gradient-to-r.from-blue-600.to-blue-600');
+                                                    contactSection?.scrollIntoView({ behavior: 'smooth' });
+                                                    setTimeout(() => setIsScrolling(false), 1000);
+                                                });
+                                            }}
+                                            className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium"
+                                        >
+                                            {t.header.contact}
+                                        </a>
                                     </div>
                                 </nav>
                             </motion.div>
@@ -1095,7 +1208,7 @@ const Landing: React.FC = () => {
                                                         className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
                                                     />
                                                 </div>
-                                                <h3 className="text-base sm:text-lg font-semibold text-gray-900">Telmeez</h3>
+                                                <h3 className="text-base sm:text-lg font-semibold text-gray-900">{currentLanguage === 'ar' ? 'تلميز' : 'Telmeez'}</h3>
                                                 <p className="text-xs sm:text-sm text-gray-600 text-center">
                                                     {t.app_download.coming_soon}
                                                 </p>
@@ -1388,6 +1501,104 @@ const Landing: React.FC = () => {
                 <FAQ language={currentLanguage} />
             </div>
 
+            {/* Security & Trust Section */}
+            <div ref={securitySectionRef} className="py-10 bg-white relative overflow-hidden">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-16">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                            viewport={{ once: true }}
+                        >
+                            <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-blue-100 text-blue-800 mb-4">
+                                <span className="mr-2">🔒</span>
+                                {translations[currentLanguage].security.tag}
+                            </span>
+                            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                                {translations[currentLanguage].security.title}
+                            </h2>
+                            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                                {translations[currentLanguage].security.subtitle}
+                            </p>
+                        </motion.div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {[
+                            {
+                                icon: "🛡️",
+                                title: translations[currentLanguage].security.features[0].title,
+                                description: translations[currentLanguage].security.features[0].description,
+                                details: translations[currentLanguage].security.features[0].tag
+                            },
+                            {
+                                icon: "🌍",
+                                title: translations[currentLanguage].security.features[1].title,
+                                description: translations[currentLanguage].security.features[1].description,
+                                details: translations[currentLanguage].security.features[1].tag
+                            },
+                            {
+                                icon: "🔐",
+                                title: translations[currentLanguage].security.features[2].title,
+                                description: translations[currentLanguage].security.features[2].description,
+                                details: translations[currentLanguage].security.features[2].tag
+                            },
+                            {
+                                icon: "📊",
+                                title: translations[currentLanguage].security.features[3].title,
+                                description: translations[currentLanguage].security.features[3].description,
+                                details: translations[currentLanguage].security.features[3].tag
+                            }
+                        ].map((security, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: index * 0.1 }}
+                                viewport={{ once: true }}
+                                className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                            >
+                                <div className="text-center mb-4">
+                                    <div className="text-3xl mb-3">{security.icon}</div>
+                                    <h3 className="text-lg font-bold text-gray-900 mb-2">{security.title}</h3>
+                                    <p className="text-gray-600 text-sm mb-3">{security.description}</p>
+                                    <div className="inline-flex items-center px-3 py-1 bg-blue-50 rounded-full">
+                                        <svg className="w-4 h-4 text-blue-600 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span className="text-blue-800 text-xs font-medium">{security.details}</span>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+
+
+                    {/* Trust indicators */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.6 }}
+                        viewport={{ once: true }}
+                        className="mt-16 grid md:grid-cols-3 gap-8"
+                    >
+                        <div className="text-center">
+                            <div className="text-4xl font-bold text-blue-600 mb-2">99.9%</div>
+                            <div className="text-gray-600">{translations[currentLanguage].security.uptime_guarantee}</div>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-4xl font-bold text-blue-600 mb-2">24/7</div>
+                            <div className="text-gray-600">{translations[currentLanguage].security.security_monitoring}</div>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-4xl font-bold text-blue-600 mb-2">0</div>
+                            <div className="text-gray-600">{translations[currentLanguage].security.security_breaches}</div>
+                        </div>
+                    </motion.div>
+                </div>
+            </div>
+
             {/* CTA Section */}
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 py-20 relative overflow-hidden">
                 {/* Add decorative elements */}
@@ -1414,7 +1625,7 @@ const Landing: React.FC = () => {
                         <span className="absolute inset-0 w-full h-full transition duration-300 ease-out transform -translate-x-full bg-gradient-to-r from-blue-50 to-white group-hover:translate-x-0"></span>
                         <span className="relative flex items-center">
                             {translations[currentLanguage].cta.button}
-                            <svg className="w-5 h-5 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className={`w-5 h-5 ${currentLanguage === 'ar' ? 'mr-2' : 'ml-2'} transform transition-transform duration-300 ${currentLanguage === 'ar' ? 'group-hover:-translate-x-1' : 'group-hover:translate-x-1'} ${currentLanguage === 'ar' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                             </svg>
                         </span>
@@ -1495,24 +1706,24 @@ const Landing: React.FC = () => {
             {/* Contact/Support Section */}
             <div className="py-20 bg-gradient-to-r from-blue-600 to-blue-600">
                 <div className="container mx-auto px-4 text-center">
-                    <h2 className="text-4xl font-bold text-white mb-4">Need Help Getting Started?</h2>
+                    <h2 className="text-4xl font-bold text-white mb-4">{translations[currentLanguage].contact.Title}</h2>
                     <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                        Our team is here to help you set up Telmeez and answer any questions you might have.
+                        {translations[currentLanguage].contact.SubTitle}
                     </p>
 
                     <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
                         {[
                             {
                                 icon: "📞",
-                                title: "Call Us",
-                                description: "Speak with our experts",
+                                title: translations[currentLanguage].contact.Phone,
+                                description: translations[currentLanguage].contact.speak_with_our_experts,
                                 action: "+961 1 234 567",
                                 href: "tel:+9611234567"
                             },
                             {
                                 icon: "📧",
-                                title: "Email Us",
-                                description: "Send us a message",
+                                title: translations[currentLanguage].contact.Email,
+                                description: translations[currentLanguage].contact.send_us_message,
                                 action: "contact@telmeezlb.com",
                                 href: "mailto:contact@telmeezlb.com"
                             }
@@ -1528,7 +1739,7 @@ const Landing: React.FC = () => {
                                 <div className="text-4xl mb-4">{contact.icon}</div>
                                 <h3 className="text-xl font-semibold text-white mb-2">{contact.title}</h3>
                                 <p className="text-orange-100 mb-4">{contact.description}</p>
-                                <a 
+                                <a
                                     href={contact.href}
                                     className="text-white font-medium hover:text-orange-200 transition-colors duration-300 cursor-pointer"
                                 >
@@ -1591,6 +1802,12 @@ const Landing: React.FC = () => {
                                     faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
                                     setTimeout(() => setIsScrolling(false), 1000);
                                 }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.resources.faq}</a></li>
+                                <li><a href="#" onClick={(e) => {
+                                    e.preventDefault();
+                                    setIsScrolling(true);
+                                    securitySectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                    setTimeout(() => setIsScrolling(false), 1000);
+                                }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.resources.security}</a></li>
                             </ul>
                         </div>
                         <div>

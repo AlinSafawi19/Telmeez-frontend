@@ -9,11 +9,25 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [currentLanguage, setCurrentLanguage] = useState<Language>(() => {
-        // Try to get language from localStorage, default to 'en'
-        const savedLanguage = localStorage.getItem('language') as Language;
-        return savedLanguage || 'en';
-    });
+    const [currentLanguage, setCurrentLanguage] = useState<Language>('en'); // Default to 'en'
+
+    useEffect(() => {
+        // Use requestAnimationFrame for better performance
+        const loadLanguage = () => {
+            const savedLanguage = localStorage.getItem('language') as Language;
+            if (savedLanguage) {
+                setCurrentLanguage(savedLanguage);
+            }
+        };
+
+        // Use requestAnimationFrame instead of setTimeout for better performance
+        if (typeof requestAnimationFrame !== 'undefined') {
+            requestAnimationFrame(loadLanguage);
+        } else {
+            // Fallback for older browsers
+            setTimeout(loadLanguage, 0);
+        }
+    }, []);
 
     useEffect(() => {
         // Check if user has given cookie consent
