@@ -1641,7 +1641,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                         name="address"
                                                         value={billingAddress.address}
                                                         onChange={handleBillingAddressChange}
-                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg${errors.billingAddress?.address ? 'border-red-500' : 'border-gray-300'
+                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.address ? 'border-red-500' : 'border-gray-300'
                                                             }`}
                                                     />
                                                     {errors.billingAddress?.address && (

@@ -95,6 +95,7 @@ const Landing: React.FC = () => {
     });
     const [showUnsubscribeMessage, setShowUnsubscribeMessage] = useState(false);
     const [testimonialFormErrors, setTestimonialFormErrors] = useState<TestimonialFormErrors>({});
+    const [hoveredRating, setHoveredRating] = useState(0);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -1796,7 +1797,7 @@ const Landing: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={handleCloseTestimonialModal}
-                                    className="text-gray-400 hover:text-gray-500 focus:outline-none transition-colors duration-200 p-2 hover:bg-gray-100 rounded-md"
+                                    className="text-gray-400 hover:text-gray-500 focus:outline-none transition-colors duration-200 p-2 hover:bg-gray-100 rounded-md force-white-bg"
                                     aria-label="Close testimonial modal"
                                 >
                                     <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1818,7 +1819,7 @@ const Landing: React.FC = () => {
                                                 name="name"
                                                 value={testimonialForm.name}
                                                 onChange={handleTestimonialFormChange}
-                                                className={`w-full text-sm rounded-xl border ${testimonialFormErrors.name ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
+                                                className={`w-full text-sm rounded-xl border force-white-bg ${testimonialFormErrors.name ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                                 placeholder={t.testimonials.modal.form.name_placeholder}
                                             />
                                             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -1842,7 +1843,7 @@ const Landing: React.FC = () => {
                                                 name="position"
                                                 value={testimonialForm.position}
                                                 onChange={handleTestimonialFormChange}
-                                                className={`w-full text-sm rounded-xl border ${testimonialFormErrors.position ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
+                                                className={`w-full text-sm rounded-xl border force-white-bg${testimonialFormErrors.position ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                                 placeholder={t.testimonials.modal.form.role_placeholder}
                                             />
                                             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -1869,7 +1870,7 @@ const Landing: React.FC = () => {
                                                 name="institution"
                                                 value={testimonialForm.institution}
                                                 onChange={handleTestimonialFormChange}
-                                                className={`w-full text-sm rounded-xl border ${testimonialFormErrors.institution ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
+                                                className={`w-full text-sm rounded-xl border force-white-bg ${testimonialFormErrors.institution ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                                 placeholder={t.testimonials.modal.form.institution_placeholder}
                                             />
                                             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -1893,7 +1894,7 @@ const Landing: React.FC = () => {
                                                 name="email"
                                                 value={testimonialForm.email}
                                                 onChange={handleTestimonialFormChange}
-                                                className={`w-full text-sm rounded-xl border ${testimonialFormErrors.email ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
+                                                className={`w-full text-sm rounded-xl border force-white-bg ${testimonialFormErrors.email ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                                 placeholder="john@example.com"
                                             />
                                             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -1919,7 +1920,7 @@ const Landing: React.FC = () => {
                                             value={testimonialForm.quote}
                                             onChange={handleTestimonialFormChange}
                                             rows={4}
-                                            className={`w-full text-sm rounded-xl border ${testimonialFormErrors.quote ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md resize-none ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
+                                            className={`w-full text-sm rounded-xl border force-white-bg ${testimonialFormErrors.quote ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md resize-none ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
                                             placeholder={t.testimonials.modal.form.testimonial_placeholder}
                                         />
                                         <div className="absolute top-2 right-2 pointer-events-none">
@@ -1943,31 +1944,17 @@ const Landing: React.FC = () => {
                                                 key={rating}
                                                 type="button"
                                                 onClick={() => handleRatingChange(rating)}
-                                                onMouseEnter={() => {
-                                                    const stars = document.querySelectorAll('.star-rating');
-                                                    stars.forEach((star, index) => {
-                                                        if (index < rating) {
-                                                            star.classList.add('text-yellow-400');
-                                                            star.classList.remove('text-gray-300');
-                                                        }
-                                                    });
-                                                }}
-                                                onMouseLeave={() => {
-                                                    const stars = document.querySelectorAll('.star-rating');
-                                                    stars.forEach((star, index) => {
-                                                        if (index >= testimonialForm.rating) {
-                                                            star.classList.remove('text-yellow-400');
-                                                            star.classList.add('text-gray-300');
-                                                        }
-                                                    });
-                                                }}
-                                                className={`p-1 rounded-lg border-none focus:outline-none transition-all duration-200 transform hover:scale-110 ${testimonialForm.rating >= rating
+                                                onMouseEnter={() => setHoveredRating(rating)}
+                                                onMouseLeave={() => setHoveredRating(0)}
+                                                onTouchStart={() => setHoveredRating(rating)}
+                                                onTouchEnd={() => setHoveredRating(0)}
+                                                className={`p-2 rounded-lg border-none force-white-bg focus:outline-none transition-all duration-200 transform hover:scale-110 active:scale-95 ${(hoveredRating >= rating || testimonialForm.rating >= rating)
                                                     ? 'text-yellow-400'
                                                     : 'text-gray-300'
                                                     }`}
                                                 aria-label={`Rate ${rating} out of 5`}
                                             >
-                                                <svg className="w-6 h-6 star-rating" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
                                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                                 </svg>
                                             </button>
@@ -1982,7 +1969,7 @@ const Landing: React.FC = () => {
                                     <button
                                         type="button"
                                         onClick={handleCloseTestimonialModal}
-                                        className={`px-4 py-2 text-sm text-gray-700 hover:text-gray-900 focus:outline-none transition-colors duration-200 font-medium ${currentLanguage === 'ar' ? 'ml-3' : 'mr-3'}`}
+                                        className={`px-4 py-2 text-sm text-gray-700 hover:text-gray-900 focus:outline-none transition-colors duration-200 font-medium force-white-bg ${currentLanguage === 'ar' ? 'ml-3' : 'mr-3'}`}
                                     >
                                         {t.testimonials.modal.form.cancel}
                                     </button>
