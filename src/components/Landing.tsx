@@ -36,7 +36,6 @@ interface TestimonialFormErrors {
 const Landing: React.FC = () => {
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [isVisible, setIsVisible] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const [selectedPricingPlan, setSelectedPricingPlan] = useState<string | null>(null);
     const dropdownTimeoutRef = useRef<number | null>(null);
@@ -137,7 +136,6 @@ const Landing: React.FC = () => {
     };
 
     useEffect(() => {
-        setIsVisible(true);
         //localStorage.clear();
         if (import.meta.env.DEV) {
             const logKey = 'lastLocalStorageLog';
@@ -881,25 +879,13 @@ const Landing: React.FC = () => {
                     {[...Array(6)].map((_, i) => (
                         <div
                             key={i}
-                            className="absolute w-2 h-2 bg-blue-400 rounded-full animate-bounce"
-                            style={{
-                                left: `${Math.random() * 100}%`,
-                                top: `${Math.random() * 100}%`,
-                                animationDelay: `${Math.random() * 2}s`,
-                                animationDuration: `${2 + Math.random() * 2}s`
-                            }}
+                            className={`absolute w-2 h-2 bg-blue-400 rounded-full animate-bounce floating-particle-${i + 1}`}
                         />
                     ))}
                     {[...Array(4)].map((_, i) => (
                         <div
                             key={i + 6}
-                            className="absolute w-1 h-1 bg-purple-400 rounded-full animate-pulse"
-                            style={{
-                                left: `${Math.random() * 100}%`,
-                                top: `${Math.random() * 100}%`,
-                                animationDelay: `${Math.random() * 3}s`,
-                                animationDuration: `${3 + Math.random() * 2}s`
-                            }}
+                            className={`absolute w-1 h-1 bg-purple-400 rounded-full animate-pulse floating-particle-${i + 7}`}
                         />
                     ))}
                 </div>
@@ -914,9 +900,7 @@ const Landing: React.FC = () => {
                             className="mb-8"
                         >
                             <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 border border-blue-200 shadow-sm">
-                                <span className="mr-2">🚀</span>
-                                {currentLanguage === 'ar' ? 'منصة تعليمية متطورة' : 'Advanced Educational Platform'}
-                                <span className="ml-2">✨</span>
+                                {t.hero.tag}
                             </span>
                         </motion.div>
 
@@ -998,19 +982,19 @@ const Landing: React.FC = () => {
                                 <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span>{currentLanguage === 'ar' ? 'أمان عالي المستوى' : 'Enterprise-grade Security'}</span>
+                                <span>{t.hero.bottom_tags.tag1}</span>
                             </div>
                             <div className="flex items-center">
                                 <svg className="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                                 </svg>
-                                <span>{currentLanguage === 'ar' ? 'سرعة في الأداء' : 'Lightning Fast'}</span>
+                                <span>{t.hero.bottom_tags.tag2}</span>
                             </div>
                             <div className="flex items-center">
                                 <svg className="w-5 h-5 text-purple-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
-                                <span>{currentLanguage === 'ar' ? 'سهولة في الاستخدام' : 'Easy to Use'}</span>
+                                <span>{t.hero.bottom_tags.tag3}</span>
                             </div>
                         </motion.div>
                     </div>

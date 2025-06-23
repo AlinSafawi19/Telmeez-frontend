@@ -52,10 +52,16 @@ export const fr = {
         }
     },
     hero: {
+        tag: "🚀 Plateforme Éducative Avancée ✨",
         title: "Autonomiser les Institutions Éducatives",
         subtitle: "Une plateforme tout-en-un conçue pour répondre aux besoins des écoles, collèges et institutions éducatives. Simplifiez vos opérations et votre communication au sein de votre organisation.",
         getStarted: "Commencer",
-        learnMore: "En Savoir Plus"
+        learnMore: "En Savoir Plus",
+        bottom_tags: {
+            tag1: "Sécurité Entreprise",
+            tag2: "Rapide comme la foudre",
+            tag3: "Facile à Utiliser"
+        }
     },
     faq: {
         title: "Questions Fréquemment Posées",

@@ -52,10 +52,16 @@ export const en = {
         }
     },
     hero: {
+        tag: "🚀 Advanced Educational Platform ✨",
         title: "Empowering Educational Institutions",
         subtitle: "A one-stop platform designed to cater to schools, colleges, and educational institutions. Streamline your operations and communication within your organization.",
         getStarted: "Get Started",
-        learnMore: "Learn More"
+        learnMore: "Learn More",
+        bottom_tags: {
+            tag1: "Enterprise-grade Security",
+            tag2: "Lightning Fast",
+            tag3: "Easy to Use"
+        }
     },
     app_download: {
         title: "Get Telmeez on Your Mobile Device",
