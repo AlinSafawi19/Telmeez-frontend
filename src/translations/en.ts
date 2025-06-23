@@ -266,59 +266,59 @@ export const en = {
     close: "Close",
     demo: {
         roles: {
-            subscriber: {
+            superadmin: {
                 title: "Superadmin",
                 description: "Complete system control and management",
                 features: {
-                    feature1: "Manage all the school/institution/University",
-                    feature2: "Configure system-wide settings",
-                    feature3: "Monitor platform performance",
-                    feature4: "Manage user roles and permissions",
-                    feature5: "Access advanced analytics"
+                    feature1: "",
+                    feature2: "",
+                    feature3: "",
+                    feature4: "",
+                    feature5: ""
                 }
             },
             admin: {
                 title: "School Admin",
                 description: "School-level administration and management",
                 features: {
-                    feature1: "Manage school staff and students",
-                    feature2: "Configure school settings",
-                    feature3: "Monitor school performance",
-                    feature4: "Generate school reports",
-                    feature5: "Manage school resources"
+                    feature1: "",
+                    feature2: "",
+                    feature3: "",
+                    feature4: "",
+                    feature5: ""
                 }
             },
             teacher: {
                 title: "Teacher",
                 description: "Classroom management and teaching tools",
                 features: {
-                    feature1: "Manage class schedules",
-                    feature2: "Create and grade assignments",
-                    feature3: "Track student progress",
-                    feature4: "Communicate with parents",
-                    feature5: "Access teaching resources"
+                    feature1: "",
+                    feature2: "",
+                    feature3: "",
+                    feature4: "",
+                    feature5: ""
                 }
             },
             student: {
                 title: "Student",
                 description: "Learning and academic management",
                 features: {
-                    feature1: "Access course materials",
-                    feature2: "Submit assignments",
-                    feature3: "Track academic progress",
-                    feature4: "Communicate with teachers",
-                    feature5: "Access learning resources"
+                    feature1: "",
+                    feature2: "",
+                    feature3: "",
+                    feature4: "",
+                    feature5: ""
                 }
             },
             parent: {
                 title: "Parent",
                 description: "Monitor and support student progress",
                 features: {
-                    feature1: "Track child\'s academic progress",
-                    feature2: "Communicate with teachers",
-                    feature3: "View attendance records",
-                    feature4: "Access school announcements",
-                    feature5: "Monitor assignments"
+                    feature1: "",
+                    feature2: "",
+                    feature3: "",
+                    feature4: "",
+                    feature5: ""
                 }
             }
         },
@@ -333,40 +333,40 @@ export const en = {
         },
         guide_title: "Quick Start Guide",
         getting_started_steps: {
-            subscriber: {
+            superadmin: {
                 step1: {
-                    title: "Choose Your Plan",
-                    description: "Select the subscription plan that best fits your institution's needs"
+                    title: "",
+                    description: ""
                 },
                 step2: {
-                    title: "Set Up Credentials",
-                    description: "Create your super admin account and configure security settings"
+                    title: "",
+                    description: ""
                 },
                 step3: {
-                    title: "Configure System",
-                    description: "Set up system-wide settings and customize platform features"
+                    title: "",
+                    description: ""
                 },
                 step4: {
-                    title: "Create Roles",
-                    description: "Create and configure roles for school admins, teachers, and other users"
+                    title: "",
+                    description: ""
                 }
             },
             other_roles: {
                 step1: {
-                    title: "Receive Credentials",
-                    description: "Get your login credentials from your super admin"
+                    title: "",
+                    description: ""
                 },
                 step2: {
-                    title: "Complete Profile",
-                    description: "Set up your profile and configure your preferences"
+                    title: "",
+                    description: ""
                 },
                 step3: {
-                    title: "Role-Specific Setup",
-                    description: "Complete the setup process specific to your role"
+                    title: "",
+                    description: ""
                 },
                 step4: {
-                    title: "Start Using",
-                    description: "Begin exploring the platform's features and capabilities"
+                    title: "",
+                    description: ""
                 }
             }
         },

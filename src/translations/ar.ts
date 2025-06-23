@@ -266,59 +266,59 @@ export const ar = {
     close: "إغلاق",
     demo: {
         roles: {
-            subscriber: {
+            superadmin: {
                 title: "المشرف الرئيسي",
                 description: "التحكم الكامل في النظام والإدارة",
                 features: {
-                    feature1: "إدارة جميع المدارس والمؤسسات",
-                    feature2: "تكوين إعدادات النظام",
-                    feature3: "مراقبة أداء المنصة",
-                    feature4: "إدارة الأدوار والصلاحيات",
-                    feature5: "الوصول إلى التحليلات المتقدمة"
+                    feature1: "",
+                    feature2: "",
+                    feature3: "",
+                    feature4: "",
+                    feature5: ""
                 }
             },
             admin: {
                 title: "مشرف المدرسة",
                 description: "الإدارة على مستوى المدرسة",
                 features: {
-                    feature1: "إدارة موظفي وطلاب المدرسة",
-                    feature2: "تكوين إعدادات المدرسة",
-                    feature3: "مراقبة أداء المدرسة",
-                    feature4: "إنشاء تقارير المدرسة",
-                    feature5: "إدارة موارد المدرسة"
+                    feature1: "",
+                    feature2: "",
+                    feature3: "",
+                    feature4: "",
+                    feature5: ""
                 }
             },
             teacher: {
                 title: "المعلم",
                 description: "إدارة الفصول الدراسية وأدوات التدريس",
                 features: {
-                    feature1: "إدارة جداول الفصول",
-                    feature2: "إنشاء وتقييم الواجبات",
-                    feature3: "تتبع تقدم الطلاب",
-                    feature4: "التواصل مع أولياء الأمور",
-                    feature5: "الوصول إلى موارد التدريس"
+                    feature1: "",
+                    feature2: "",
+                    feature3: "",
+                    feature4: "",
+                    feature5: ""
                 }
             },
             student: {
                 title: "الطالب",
                 description: "إدارة التعلم والأكاديمية",
                 features: {
-                    feature1: "الوصول إلى المواد الدراسية",
-                    feature2: "تقديم الواجبات",
-                    feature3: "تتبع التقدم الأكاديمي",
-                    feature4: "التواصل مع المعلمين",
-                    feature5: "الوصول إلى موارد التعلم"
+                    feature1: "",
+                    feature2: "",
+                    feature3: "",
+                    feature4: "",
+                    feature5: ""
                 }
             },
             parent: {
                 title: "ولي الأمر",
                 description: "مراقبة ودعم تقدم الطالب",
                 features: {
-                    feature1: "تتبع التقدم الأكاديمي للطفل",
-                    feature2: "التواصل مع المعلمين",
-                    feature3: "عرض سجلات الحضور",
-                    feature4: "الوصول إلى إعلانات المدرسة",
-                    feature5: "مراقبة الواجبات"
+                    feature1: "",
+                    feature2: "",
+                    feature3: "",
+                    feature4: "",
+                    feature5: ""
                 }
             }
         },
@@ -333,40 +333,40 @@ export const ar = {
         },
         guide_title: "دليل البدء السريع",
         getting_started_steps: {
-            subscriber: {
+            superadmin: {
                 step1: {
-                    title: "اختر خطتك",
-                    description: "حدد خطة الاشتراك التي تناسب احتياجات مؤسستك"
+                    title: "",
+                    description: ""
                 },
                 step2: {
-                    title: "إعداد بيانات الاعتماد",
-                    description: "أنشئ حساب المشرف الرئيسي وقم بتكوين إعدادات الأمان"
+                    title: "",
+                    description: ""
                 },
                 step3: {
-                    title: "تكوين النظام",
-                    description: "قم بإعداد إعدادات النظام وتخصيص ميزات المنصة"
+                    title: "",
+                    description: ""
                 },
                 step4: {
-                    title: "إنشاء الأدوار",
-                    description: "إنشاء وتكوين الأدوار لمشرفي المدارس والمعلمين والمستخدمين الآخرين"
+                    title: "",
+                    description: ""
                 }
             },
             admin: {
                 step1: {
-                    title: "استلام بيانات الاعتماد",
-                    description: "احصل على بيانات تسجيل الدخول من المشرف الرئيسي"
+                    title: "",
+                    description: ""
                 },
                 step2: {
-                    title: "إكمال الملف الشخصي",
-                    description: "قم بإعداد ملفك الشخصي وتكوين تفضيلاتك"
+                    title: "",
+                    description: ""
                 },
                 step3: {
-                    title: "إعداد محدد للدور",
-                    description: "أكمل عملية الإعداد الخاصة بدورك"
+                    title: "",
+                    description: ""
                 },
                 step4: {
-                    title: "ابدأ الاستخدام",
-                    description: "ابدأ في استكشاف ميزات وقدرات المنصة"
+                    title: "",
+                    description: ""
                 }
             }
         },

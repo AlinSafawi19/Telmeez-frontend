@@ -9,7 +9,7 @@ interface DemoProps {
 }
 
 const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
-    const [activeRole, setActiveRole] = useState<string>('subscriber');
+    const [activeRole, setActiveRole] = useState<string>('superadmin');
     const [isHovered, setIsHovered] = useState<string | null>(null);
     type TabType = 'features' | 'getting_started' | 'mobile_preview' | 'videos_tutorials';
     const [activeTab, setActiveTab] = useState<TabType>('features');
@@ -17,15 +17,15 @@ const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
 
     const roles = [
         {
-            id: 'subscriber',
-            title: t.roles.subscriber.title,
-            description: t.roles.subscriber.description,
+            id: 'superadmin',
+            title: t.roles.superadmin.title,
+            description: t.roles.superadmin.description,
             features: [
-                t.roles.subscriber.features.feature1,
-                t.roles.subscriber.features.feature2,
-                t.roles.subscriber.features.feature3,
-                t.roles.subscriber.features.feature4,
-                t.roles.subscriber.features.feature5
+                t.roles.superadmin.features.feature1,
+                t.roles.superadmin.features.feature2,
+                t.roles.superadmin.features.feature3,
+                t.roles.superadmin.features.feature4,
+                t.roles.superadmin.features.feature5
             ],
             icon: '👑',
             color: 'from-purple-500 to-indigo-600',
@@ -225,6 +225,22 @@ const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
                             >
                                 {activeTab === 'features' && (
                                     <>
+                                        {/* Coming Soon Section */}
+                                        <div className="flex flex-col items-center justify-center py-12 bg-gray-50 rounded-xl">
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                className="text-6xl mb-4"
+                                            >
+                                                🚧
+                                            </motion.div>
+                                            <h4 className="text-xl font-semibold text-gray-900 mb-2">Coming Soon</h4>
+                                            <p className="text-gray-600 text-center max-w-md">
+                                                Features for this role are being developed. Stay tuned for updates!
+                                            </p>
+                                        </div>
+
+                                        {/* Original Features Content - Commented Out
                                         <div className="mb-6">
                                             <div className="flex items-center space-x-4 mb-4">
                                                 <motion.span
@@ -277,11 +293,28 @@ const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
                                                 </motion.div>
                                             ))}
                                         </div>
+                                        */}
                                     </>
                                 )}
 
                                 {activeTab === 'getting_started' && (
                                     <div className="space-y-6">
+                                        {/* Coming Soon Section */}
+                                        <div className="flex flex-col items-center justify-center py-12 bg-gray-50 rounded-xl">
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                className="text-6xl mb-4"
+                                            >
+                                                🚧
+                                            </motion.div>
+                                            <h4 className="text-xl font-semibold text-gray-900 mb-2">Coming Soon</h4>
+                                            <p className="text-gray-600 text-center max-w-md">
+                                                Getting started guide for this role is being prepared. Check back soon!
+                                            </p>
+                                        </div>
+
+                                        {/* Original Getting Started Content - Commented Out
                                         <div className="flex items-center space-x-4 mb-6">
                                             <motion.div
                                                 initial={{ opacity: 0, scale: 0.9 }}
@@ -296,47 +329,47 @@ const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
                                         </div>
 
                                         <div className="space-y-4">
-                                            {(activeRole === 'subscriber' ? [
+                                            {(activeRole === 'superadmin' ? [
                                                 {
                                                     step: 1,
-                                                    title: t.getting_started_steps.subscriber.step1.title,
-                                                    description: t.getting_started_steps.subscriber.step1.description
+                                                    title: t.getting_started_steps.superadmin.step1.title,
+                                                    description: t.getting_started_steps.superadmin.step1.description
                                                 },
                                                 {
                                                     step: 2,
-                                                    title: t.getting_started_steps.subscriber.step2.title,
-                                                    description: t.getting_started_steps.subscriber.step2.description
+                                                    title: t.getting_started_steps.superadmin.step2.title,
+                                                    description: t.getting_started_steps.superadmin.step2.description
                                                 },
                                                 {
                                                     step: 3,
-                                                    title: t.getting_started_steps.subscriber.step3.title,
-                                                    description: t.getting_started_steps.subscriber.step3.description
+                                                    title: t.getting_started_steps.superadmin.step3.title,
+                                                    description: t.getting_started_steps.superadmin.step3.description
                                                 },
                                                 {
                                                     step: 4,
-                                                    title: t.getting_started_steps.subscriber.step4.title,
-                                                    description: t.getting_started_steps.subscriber.step4.description
+                                                    title: t.getting_started_steps.superadmin.step4.title,
+                                                    description: t.getting_started_steps.superadmin.step4.description
                                                 }
                                             ] : [
                                                 {
                                                     step: 1,
-                                                    title: t.getting_started_steps.subscriber.step1.title,
-                                                    description: t.getting_started_steps.subscriber.step1.description
+                                                    title: t.getting_started_steps.superadmin.step1.title,
+                                                    description: t.getting_started_steps.superadmin.step1.description
                                                 },
                                                 {
                                                     step: 2,
-                                                    title: t.getting_started_steps.subscriber.step2.title,
-                                                    description: t.getting_started_steps.subscriber.step2.description
+                                                    title: t.getting_started_steps.superadmin.step2.title,
+                                                    description: t.getting_started_steps.superadmin.step2.description
                                                 },
                                                 {
                                                     step: 3,
-                                                    title: t.getting_started_steps.subscriber.step3.title,
-                                                    description: t.getting_started_steps.subscriber.step3.description
+                                                    title: t.getting_started_steps.superadmin.step3.title,
+                                                    description: t.getting_started_steps.superadmin.step3.description
                                                 },
                                                 {
                                                     step: 4,
-                                                    title: t.getting_started_steps.subscriber.step4.title,
-                                                    description: t.getting_started_steps.subscriber.step4.description
+                                                    title: t.getting_started_steps.superadmin.step4.title,
+                                                    description: t.getting_started_steps.superadmin.step4.description
                                                 }
                                             ]).map((item, index) => (
                                                 <motion.div
@@ -356,6 +389,7 @@ const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
                                                 </motion.div>
                                             ))}
                                         </div>
+                                        */}
                                     </div>
                                 )}
 
@@ -423,7 +457,7 @@ const Demo: React.FC<DemoProps> = ({ language = 'en' }) => {
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                         className={`w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-300 ${roles.find(r => r.id === activeRole)?.gradient} focus:outline-none shadow-lg hover:shadow-xl`}
-                                        onClick={() => window.open(`/demo-dashboard/${activeRole}/overview`, '_blank')}
+                                    //onClick={() => window.open(`/demo-dashboard/${activeRole}/overview`, '_blank')}
                                     >
                                         {t.try} {roles.find(r => r.id === activeRole)?.title} {t.dashboard}
                                     </motion.button>

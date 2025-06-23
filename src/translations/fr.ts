@@ -251,59 +251,59 @@ export const fr = {
     close: "Fermer",
     demo: {
         roles: {
-            subscriber: {
+            superadmin: {
                 title: "Superadmin",
                 description: "Contrôle et gestion complets du système",
                 features: {
-                    feature1: "Gérer toutes les écoles/institutions/Universités",
-                    feature2: "Configurer les paramètres système",
-                    feature3: "Surveiller les performances de la plateforme",
-                    feature4: "Gérer les rôles et les permissions",
-                    feature5: "Accéder aux analyses avancées"
+                    feature1: "",
+                    feature2: "",
+                    feature3: "",
+                    feature4: "",
+                    feature5: ""
                 }
             },
             admin: {
                 title: "Administrateur d'École",
                 description: "Administration et gestion au niveau de l'école",
                 features: {
-                    feature1: "Gérer le personnel et les étudiants de l'école",
-                    feature2: "Configurer les paramètres de l'école",
-                    feature3: "Surveiller les performances de l'école",
-                    feature4: "Générer des rapports d'école",
-                    feature5: "Gérer les ressources de l'école"
+                    feature1: "",
+                    feature2: "",
+                    feature3: "",
+                    feature4: "",
+                    feature5: ""
                 }
             },
             teacher: {
                 title: "Enseignant",
                 description: "Gestion de classe et outils d'enseignement",
                 features: {
-                    feature1: "Gérer les emplois du temps des classes",
-                    feature2: "Créer et noter les devoirs",
-                    feature3: "Suivre les progrès des étudiants",
-                    feature4: "Communiquer avec les parents",
-                    feature5: "Accéder aux ressources pédagogiques"
+                    feature1: "",
+                    feature2: "",
+                    feature3: "",
+                    feature4: "",
+                    feature5: ""
                 }
             },
             student: {
                 title: "Étudiant",
                 description: "Gestion de l'apprentissage et académique",
                 features: {
-                    feature1: "Accéder aux supports de cours",
-                    feature2: "Soumettre les devoirs",
-                    feature3: "Suivre les progrès académiques",
-                    feature4: "Communiquer avec les enseignants",
-                    feature5: "Accéder aux ressources d'apprentissage"
+                    feature1: "",
+                    feature2: "",
+                    feature3: "",
+                    feature4: "",
+                    feature5: ""
                 }
             },
             parent: {
                 title: "Parent",
                 description: "Surveiller et soutenir les progrès de l'étudiant",
                 features: {
-                    feature1: "Suivre les progrès académiques de l'enfant",
-                    feature2: "Communiquer avec les enseignants",
-                    feature3: "Voir les registres de présence",
-                    feature4: "Accéder aux annonces de l'école",
-                    feature5: "Surveiller les devoirs"
+                    feature1: "",
+                    feature2: "",
+                    feature3: "",
+                    feature4: "",
+                    feature5: ""
                 }
             }
         },
@@ -318,40 +318,40 @@ export const fr = {
         },
         guide_title: "Guide de Démarrage Rapide",
         getting_started_steps: {
-            subscriber: {
+            superadmin: {
                 step1: {
-                    title: "Choisissez Votre Plan",
-                    description: "Sélectionnez le plan d'abonnement qui correspond aux besoins de votre institution"
+                    title: "",
+                    description: ""
                 },
                 step2: {
-                    title: "Configurez Vos Identifiants",
-                    description: "Créez votre compte super administrateur et configurez les paramètres de sécurité"
+                    title: "",
+                    description: ""
                 },
                 step3: {
-                    title: "Configurez le Système",
-                    description: "Configurez les paramètres système et personnalisez les fonctionnalités de la plateforme"
+                    title: "",
+                    description: ""
                 },
                 step4: {
-                    title: "Créez les Rôles",
-                    description: "Créez et configurez les rôles pour les administrateurs d'école, les enseignants et autres utilisateurs"
+                    title: "",
+                    description: ""
                 }
             },
             other_roles: {
                 step1: {
-                    title: "Recevez Vos Identifiants",
-                    description: "Obtenez vos identifiants de connexion de votre super administrateur"
+                    title: "",
+                    description: ""
                 },
                 step2: {
-                    title: "Complétez Votre Profil",
-                    description: "Configurez votre profil et vos préférences"
+                    title: "",
+                    description: ""
                 },
                 step3: {
-                    title: "Configuration Spécifique au Rôle",
-                    description: "Terminez le processus de configuration spécifique à votre rôle"
+                    title: "",
+                    description: ""
                 },
                 step4: {
-                    title: "Commencez à Utiliser",
-                    description: "Commencez à explorer les fonctionnalités et capacités de la plateforme"
+                    title: "",
+                    description: ""
                 }
             }
         },
