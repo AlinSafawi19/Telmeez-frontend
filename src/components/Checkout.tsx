@@ -909,21 +909,21 @@ const Checkout: React.FC<CheckoutProps> = ({
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" dir={isRTL ? 'rtl' : 'ltr'}>
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Header Section */}
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex flex-wrap items-center justify-center sm:justify-between gap-y-4 mb-8">
                     <img
                         src={currentLanguage === 'ar' ? logoarb : logo}
                         alt="Company Logo"
-                        className="h-20 w-20 transition-transform hover:scale-105"
+                        className="h-16 w-16 sm:h-20 sm:w-20 transition-transform hover:scale-105"
                     />
-                    <div className="max-w-2xl mx-auto text-center">
-                        <h1 className="text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
+                    <div className="w-full sm:w-auto max-w-2xl text-center order-3 sm:order-none">
+                        <h1 className="text-2xl sm:text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
                             {t.checkout.title}
                         </h1>
                         <p className="text-sm text-gray-600">
                             {t.checkout.subtitle}
                         </p>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 sm:gap-4 order-2 sm:order-none">
                         <div className="relative" ref={dropdownRef}>
                             <button
                                 onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
@@ -958,11 +958,11 @@ const Checkout: React.FC<CheckoutProps> = ({
                         </div>
                         <button
                             onClick={() => navigate('/')}
-                            className="group focus:outline-none flex items-center gap-2 px-6 py-3 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-full hover:bg-indigo-50 force-white-bg"
+                            className="group focus:outline-none flex items-center gap-2 px-3 sm:px-6 py-3 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-full hover:bg-indigo-50 force-white-bg"
                             aria-label="Back to home"
                         >
                             <FaHome className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                            <span className="text-sm font-medium">{t.header.back_to_home}</span>
+                            <span className="hidden sm:inline text-sm font-medium">{t.header.back_to_home}</span>
                         </button>
                     </div>
                 </div>
@@ -993,7 +993,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                         <FaLock className="w-4 h-4" />
                                     </div>
                                     <span className={`${isRTL ? 'mr-2' : 'ml-2'} text-xs font-medium transition-colors duration-300 ${currentStep >= 1 ? 'text-gray-900' : 'text-gray-400'
-                                        }`}>{t.checkout.account_info.title}</span>
+                                        } hidden sm:inline`}>{t.checkout.account_info.title}</span>
                                 </div>
                                 <div className={`flex-1 h-0.5 mx-4 transition-colors duration-300 ${currentStep >= 2 ? 'bg-gradient-to-r from-blue-600 to-indigo-600' : 'bg-gray-200'
                                     }`}></div>
@@ -1005,7 +1005,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                         <FaCreditCard className="w-4 h-4" />
                                     </div>
                                     <span className={`${isRTL ? 'mr-2' : 'ml-2'} text-xs font-medium transition-colors duration-300 ${currentStep >= 2 ? 'text-gray-900' : 'text-gray-400'
-                                        }`}>{t.checkout.payment_details.title}</span>
+                                        } hidden sm:inline`}>{t.checkout.payment_details.title}</span>
                                 </div>
                                 <div className={`flex-1 h-0.5 mx-4 transition-colors duration-300 ${currentStep >= 3 ? 'bg-gradient-to-r from-blue-600 to-indigo-600' : 'bg-gray-200'
                                     }`}></div>
@@ -1017,7 +1017,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                         <FaMapMarkerAlt className="w-4 h-4" />
                                     </div>
                                     <span className={`${isRTL ? 'mr-2' : 'ml-2'} text-xs font-medium transition-colors duration-300 ${currentStep >= 3 ? 'text-gray-900' : 'text-gray-400'
-                                        }`}>{t.checkout.billing_address.title}</span>
+                                        } hidden sm:inline`}>{t.checkout.billing_address.title}</span>
                                 </div>
                             </div>
                         </div>
@@ -1361,7 +1361,7 @@ const Checkout: React.FC<CheckoutProps> = ({
 
                                         {paymentMethod === 'card' ? (
                                             <>
-                                                <div className="flex items-center space-x-4 mb-6">
+                                                <div className="flex items-center justify-center sm:justify-start space-x-4 mb-6">
                                                     <img src={visa} alt="Visa" className="h-8 transition-transform hover:scale-110" />
                                                     <img src={mastercard} alt="Mastercard" className="h-8 transition-transform hover:scale-110" />
                                                     <img src={amex} alt="Amex" className="h-8 transition-transform hover:scale-110" />
@@ -1386,7 +1386,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     )}
                                                 </div>
 
-                                                <div className="grid grid-cols-2 gap-4">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                     <div className="space-y-2">
                                                         <label htmlFor="expiryDate" className="block text-xs font-medium text-gray-700">
                                                             {t.checkout.payment_details.payment_types.card.expiration} <span className="text-red-500">*</span>
@@ -1697,7 +1697,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                         <span className="text-xl font-bold text-gray-900">{getTotalPrice()}</span>
                                     </div>
                                     <div className="space-y-2">
-                                        <div className="flex gap-2">
+                                        <div className="flex flex-col sm:flex-row gap-2">
                                             {currentStep > 1 && (
                                                 <button
                                                     type="button"

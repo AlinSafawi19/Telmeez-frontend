@@ -867,16 +867,90 @@ const Landing: React.FC = () => {
             </header>
 
             {/* Hero Section */}
-            <div className="min-h-screen pt-20 sm:pt-24 pb-12 sm:pb-16 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 flex items-center">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center max-w-4xl mx-auto">
-                        <h1 className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl font-bold text-gray-900 mb-6 sm:mb-8 md:mb-10 leading-tight px-2 sm:px-0 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
-                            {t.hero.title}
-                        </h1>
-                        <p className={`text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-600 mb-8 sm:mb-10 md:mb-14 max-w-3xl mx-auto leading-relaxed px-4 sm:px-6 lg:px-0 ${isVisible ? 'animate-fadeInUp delay-200' : 'opacity-0'}`}>
-                            {t.hero.subtitle}
-                        </p>
-                        <div className={`flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-6 rtl:space-x-reverse px-4 sm:px-6 lg:px-0 ${isVisible ? 'animate-fadeInUp delay-300' : 'opacity-0'}`}>
+            <div className="min-h-screen pt-20 sm:pt-24 pb-12 sm:pb-16 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 flex items-center relative overflow-hidden">
+                {/* Enhanced decorative background elements */}
+                <div className="absolute inset-0">
+                    <div className="absolute top-0 left-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+                    <div className="absolute -bottom-8 left-20 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+                </div>
+
+                {/* Floating particles */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    {[...Array(6)].map((_, i) => (
+                        <div
+                            key={i}
+                            className="absolute w-2 h-2 bg-blue-400 rounded-full animate-bounce"
+                            style={{
+                                left: `${Math.random() * 100}%`,
+                                top: `${Math.random() * 100}%`,
+                                animationDelay: `${Math.random() * 2}s`,
+                                animationDuration: `${2 + Math.random() * 2}s`
+                            }}
+                        />
+                    ))}
+                    {[...Array(4)].map((_, i) => (
+                        <div
+                            key={i + 6}
+                            className="absolute w-1 h-1 bg-purple-400 rounded-full animate-pulse"
+                            style={{
+                                left: `${Math.random() * 100}%`,
+                                top: `${Math.random() * 100}%`,
+                                animationDelay: `${Math.random() * 3}s`,
+                                animationDuration: `${3 + Math.random() * 2}s`
+                            }}
+                        />
+                    ))}
+                </div>
+
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="text-center max-w-5xl mx-auto">
+                        {/* Badge */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                            className="mb-8"
+                        >
+                            <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 border border-blue-200 shadow-sm">
+                                <span className="mr-2">🚀</span>
+                                {currentLanguage === 'ar' ? 'منصة تعليمية متطورة' : 'Advanced Educational Platform'}
+                                <span className="ml-2">✨</span>
+                            </span>
+                        </motion.div>
+
+                        {/* Enhanced Title */}
+                        <motion.h1
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
+                        >
+                            <span className="animate-text-shimmer bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600">
+                                {t.hero.title}
+                            </span>
+                        </motion.h1>
+
+                        {/* Enhanced Subtitle */}
+                        <motion.h2
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.4 }}
+                            className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-700 mb-8 max-w-4xl mx-auto leading-relaxed font-medium animate-float"
+                        >
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-600 via-gray-700 to-gray-800">
+                                {t.hero.subtitle}
+                            </span>
+                        </motion.h2>
+
+                        {/* Enhanced CTA Buttons */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.6 }}
+                            className={`flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 lg:space-x-8 rtl:space-x-reverse px-4 sm:px-6 lg:px-0`}
+                        >
                             <button
                                 type="button"
                                 onClick={() => {
@@ -884,9 +958,15 @@ const Landing: React.FC = () => {
                                     setIsScrolling(true);
                                     setTimeout(() => setIsScrolling(false), 1000);
                                 }}
-                                className="w-full sm:w-auto bg-blue-600 text-white px-6 sm:px-8 md:px-10 lg:px-12 py-4 sm:py-4 md:py-5 rounded-lg text-lg sm:text-xl md:text-2xl font-semibold hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 min-w-[250px] sm:min-w-0"
+                                className="group relative w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-lg text-base sm:text-lg md:text-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-offset-2 min-w-[200px] sm:min-w-0 overflow-hidden btn-gradient-hover animate-glow"
                             >
-                                {t.hero.getStarted}
+                                <span className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                                <span className="relative flex items-center justify-center">
+                                    {t.hero.getStarted}
+                                    <svg className="w-4 h-4 sm:w-5 sm:h-5 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </span>
                             </button>
                             <button
                                 type="button"
@@ -895,11 +975,44 @@ const Landing: React.FC = () => {
                                     setIsScrolling(true);
                                     setTimeout(() => setIsScrolling(false), 300);
                                 }}
-                                className="w-full sm:w-auto bg-white text-blue-600 px-6 sm:px-8 md:px-10 lg:px-12 py-4 sm:py-4 md:py-5 rounded-lg text-lg sm:text-xl md:text-2xl font-semibold hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border-2 border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 min-w-[250px] sm:min-w-0"
+                                className="group relative w-full sm:w-auto bg-white/80 backdrop-blur-sm text-blue-600 px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-lg text-base sm:text-lg md:text-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border-2 border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-offset-2 min-w-[200px] sm:min-w-0 overflow-hidden btn-gradient-hover"
                             >
-                                {t.hero.learnMore}
+                                <span className="absolute inset-0 bg-gradient-to-r from-blue-50 to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                                <span className="relative flex items-center justify-center">
+                                    {t.hero.learnMore}
+                                    <svg className="w-4 h-4 sm:w-5 sm:h-5 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </span>
                             </button>
-                        </div>
+                        </motion.div>
+
+                        {/* Trust indicators */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.8 }}
+                            className="mt-12 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-8 text-sm text-gray-600"
+                        >
+                            <div className="flex items-center">
+                                <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>{currentLanguage === 'ar' ? 'أمان عالي المستوى' : 'Enterprise-grade Security'}</span>
+                            </div>
+                            <div className="flex items-center">
+                                <svg className="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                                <span>{currentLanguage === 'ar' ? 'سرعة في الأداء' : 'Lightning Fast'}</span>
+                            </div>
+                            <div className="flex items-center">
+                                <svg className="w-5 h-5 text-purple-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                                <span>{currentLanguage === 'ar' ? 'سهولة في الاستخدام' : 'Easy to Use'}</span>
+                            </div>
+                        </motion.div>
                     </div>
                 </div>
             </div>
@@ -1441,7 +1554,7 @@ const Landing: React.FC = () => {
                                 <li><a href="#pricing" onClick={(e) => {
                                     e.preventDefault(); pricingSectionRef.current?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
                                     setTimeout(() => setIsScrolling(false), 1000);
-                                }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.pricing}</a></li>    
+                                }} className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.pricing}</a></li>
                                 <li><a href="#testimonials" onClick={(e) => {
                                     e.preventDefault(); document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' }); setIsScrolling(true);
                                     setTimeout(() => setIsScrolling(false), 1000);

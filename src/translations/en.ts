@@ -245,10 +245,10 @@ export const en = {
     demo: {
         roles: {
             subscriber: {
-                title: "Subscriber",
+                title: "Superadmin",
                 description: "Complete system control and management",
                 features: {
-                    feature1: "Manage all schools and institutions",
+                    feature1: "Manage all the school/institution/University",
                     feature2: "Configure system-wide settings",
                     feature3: "Monitor platform performance",
                     feature4: "Manage user roles and permissions",

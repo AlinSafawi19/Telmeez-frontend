@@ -245,8 +245,8 @@ export const ar = {
     demo: {
         roles: {
             subscriber: {
-                title: "المشترك",
-                description: "التحكم الكامل في النظام وإدارته",
+                title: "المشرف الرئيسي",
+                description: "التحكم الكامل في النظام والإدارة",
                 features: {
                     feature1: "إدارة جميع المدارس والمؤسسات",
                     feature2: "تكوين إعدادات النظام",

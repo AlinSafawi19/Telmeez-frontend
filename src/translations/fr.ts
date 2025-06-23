@@ -230,10 +230,10 @@ export const fr = {
     demo: {
         roles: {
             subscriber: {
-                title: "Abonné",
+                title: "Superadmin",
                 description: "Contrôle et gestion complets du système",
                 features: {
-                    feature1: "Gérer toutes les écoles et institutions",
+                    feature1: "Gérer toutes les écoles/institutions/Universités",
                     feature2: "Configurer les paramètres système",
                     feature3: "Surveiller les performances de la plateforme",
                     feature4: "Gérer les rôles et les permissions",
