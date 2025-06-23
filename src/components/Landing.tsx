@@ -955,9 +955,9 @@ const Landing: React.FC = () => {
                             <button
                                 type="button"
                                 onClick={() => {
-                                    document.getElementById('features-section')?.scrollIntoView({ behavior: 'smooth' });
+                                    ourStoryRef.current?.scrollIntoView({ behavior: 'smooth' });
                                     setIsScrolling(true);
-                                    setTimeout(() => setIsScrolling(false), 300);
+                                    setTimeout(() => setIsScrolling(false), 1000);
                                 }}
                                 className="group relative w-full sm:w-auto bg-white/80 backdrop-blur-sm text-blue-600 px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-lg text-base sm:text-lg md:text-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border-2 border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-offset-2 min-w-[200px] sm:min-w-0 overflow-hidden btn-gradient-hover"
                             >
