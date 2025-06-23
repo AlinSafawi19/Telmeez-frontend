@@ -194,12 +194,102 @@ const Checkout: React.FC<CheckoutProps> = ({
     const [promoError, setPromoError] = useState('');
     const [discount, setDiscount] = useState(0);
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
+    const [detectedCardType, setDetectedCardType] = useState<string>('');
 
     const [errors, setErrors] = useState<{
         billing?: Partial<Record<keyof BillingInfo, string>>;
         billingAddress?: Partial<Record<keyof BillingAddress, string>>;
         payment?: Partial<Record<keyof PaymentInfo, string>>;
     }>({});
+
+    // Card type detection functions
+    const getCardTypeFromNumber = (cardNumber: string): string => {
+        const cleanNumber = cardNumber.replace(/\s/g, '');
+
+        // Visa: starts with 4
+        if (cleanNumber.startsWith('4')) {
+            return 'visa';
+        }
+
+        // Mastercard: starts with 5
+        if (cleanNumber.startsWith('5')) {
+            return 'mastercard';
+        }
+
+        // American Express: starts with 3, followed by 4 or 7
+        if (cleanNumber.startsWith('3')) {
+            const secondDigit = cleanNumber.charAt(1);
+            if (secondDigit === '4' || secondDigit === '7') {
+                return 'amex';
+            }
+        }
+
+        return '';
+    };
+
+    const getCardTypeName = (cardType: string): string => {
+        switch (cardType) {
+            case 'visa':
+                return 'Visa';
+            case 'mastercard':
+                return 'Mastercard';
+            case 'amex':
+                return 'American Express';
+            default:
+                return '';
+        }
+    };
+
+    const getCardNumberFormat = (cardType: string): string => {
+        switch (cardType) {
+            case 'amex':
+                return 'XXXX XXXXXX XXXXX'; // 15 digits: 4-6-5 format
+            case 'visa':
+            case 'mastercard':
+            default:
+                return 'XXXX XXXX XXXX XXXX'; // 16 digits: 4-4-4-4 format
+        }
+    };
+
+    const getCardNumberMaxLength = (cardType: string): number => {
+        switch (cardType) {
+            case 'amex':
+                return 15;
+            case 'visa':
+            case 'mastercard':
+            default:
+                return 16;
+        }
+    };
+
+    const getCVVMaxLength = (cardType: string): number => {
+        switch (cardType) {
+            case 'amex':
+                return 4;
+            case 'visa':
+            case 'mastercard':
+            default:
+                return 3;
+        }
+    };
+
+    const formatCardNumber = (value: string, cardType: string): string => {
+        const digitsOnly = value.replace(/\D/g, '');
+
+        if (cardType === 'amex') {
+            // American Express format: XXXX XXXXXX XXXXX
+            if (digitsOnly.length <= 4) {
+                return digitsOnly;
+            } else if (digitsOnly.length <= 10) {
+                return `${digitsOnly.slice(0, 4)} ${digitsOnly.slice(4)}`;
+            } else {
+                return `${digitsOnly.slice(0, 4)} ${digitsOnly.slice(4, 10)} ${digitsOnly.slice(10, 15)}`;
+            }
+        } else {
+            // Visa/Mastercard format: XXXX XXXX XXXX XXXX
+            return digitsOnly.replace(/(\d{4})/g, '$1 ').trim();
+        }
+    };
 
     // Save form data to cookies when it changes
     useEffect(() => {
@@ -224,6 +314,13 @@ const Checkout: React.FC<CheckoutProps> = ({
             setShowBillingCustomCountryInput(true);
         }
     }, []);
+
+    // Clear detected card type when card number is cleared
+    useEffect(() => {
+        if (!paymentInfo.cardNumber.trim()) {
+            setDetectedCardType('');
+        }
+    }, [paymentInfo.cardNumber]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -413,11 +510,18 @@ const Checkout: React.FC<CheckoutProps> = ({
         if (name === 'cardNumber') {
             // Remove all non-digit characters
             const digitsOnly = value.replace(/\D/g, '');
-            // Format as XXXX XXXX XXXX XXXX
-            formattedValue = digitsOnly.replace(/(\d{4})/g, '$1 ').trim();
-            // Limit to 16 digits
-            if (digitsOnly.length > 16) {
-                formattedValue = formattedValue.slice(0, 19); // 16 digits + 3 spaces
+
+            // Detect card type
+            const cardType = getCardTypeFromNumber(digitsOnly);
+            setDetectedCardType(cardType);
+
+            // Format based on card type
+            formattedValue = formatCardNumber(digitsOnly, cardType);
+
+            // Limit to max length for detected card type
+            const maxLength = getCardNumberMaxLength(cardType);
+            if (digitsOnly.length > maxLength) {
+                formattedValue = formatCardNumber(digitsOnly.slice(0, maxLength), cardType);
             }
         } else if (name === 'expiryDate') {
             // Remove all non-digit characters
@@ -442,8 +546,9 @@ const Checkout: React.FC<CheckoutProps> = ({
                 }
             }
         } else if (name === 'cvv') {
-            // Only allow digits, max 4
-            formattedValue = value.replace(/\D/g, '').slice(0, 4);
+            // Only allow digits, max length depends on card type
+            const maxLength = getCVVMaxLength(detectedCardType);
+            formattedValue = value.replace(/\D/g, '').slice(0, maxLength);
         }
 
         setPaymentInfo(prev => ({
@@ -453,7 +558,9 @@ const Checkout: React.FC<CheckoutProps> = ({
 
         // CVV instant validation
         if (name === 'cvv') {
-            if (!/^\d{3,4}$/.test(formattedValue)) {
+            const maxLength = getCVVMaxLength(detectedCardType);
+            const minLength = detectedCardType === 'amex' ? 4 : 3;
+            if (!new RegExp(`^\\d{${minLength},${maxLength}}$`).test(formattedValue)) {
                 setErrors(prev => ({
                     ...prev,
                     payment: {
@@ -484,8 +591,18 @@ const Checkout: React.FC<CheckoutProps> = ({
     const validateCardNumber = (cardNumber: string): boolean => {
         // Remove spaces and non-digit characters
         const digitsOnly = cardNumber.replace(/\D/g, '');
-        // Check if it's exactly 16 digits
-        if (digitsOnly.length !== 16) return false;
+
+        // Check if it's a valid length for the detected card type
+        const cardType = getCardTypeFromNumber(digitsOnly);
+        const expectedLength = getCardNumberMaxLength(cardType);
+
+        // For unknown card types, allow 13-19 digits (standard range)
+        if (!cardType) {
+            if (digitsOnly.length < 13 || digitsOnly.length > 19) return false;
+        } else {
+            // For known card types, check exact length
+            if (digitsOnly.length !== expectedLength) return false;
+        }
 
         // Luhn algorithm for card number validation
         let sum = 0;
@@ -642,8 +759,13 @@ const Checkout: React.FC<CheckoutProps> = ({
             // CVV validation
             if (!paymentInfo.cvv.trim()) {
                 paymentErrors.cvv = 'required';
-            } else if (!/^\d{3,4}$/.test(paymentInfo.cvv)) {
-                paymentErrors.cvv = 'invalid_cvv';
+            } else {
+                const cardType = getCardTypeFromNumber(paymentInfo.cardNumber);
+                const minLength = cardType === 'amex' ? 4 : 3;
+                const maxLength = getCVVMaxLength(cardType);
+                if (!new RegExp(`^\\d{${minLength},${maxLength}}$`).test(paymentInfo.cvv)) {
+                    paymentErrors.cvv = 'invalid_cvv';
+                }
             }
 
             if (Object.keys(paymentErrors).length > 0) {
@@ -1371,18 +1493,36 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                     <label htmlFor="cardNumber" className="block text-xs font-medium text-gray-700">
                                                         {t.checkout.payment_details.payment_types.card.card_nb} <span className="text-red-500">*</span>
                                                     </label>
-                                                    <input
-                                                        type="text"
-                                                        id="cardNumber"
-                                                        name="cardNumber"
-                                                        value={paymentInfo.cardNumber}
-                                                        onChange={handlePaymentInfoChange}
-                                                        placeholder="1234 5678 9012 3456"
-                                                        dir="ltr"
-                                                        className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.payment?.cardNumber ? 'border-red-500' : 'border-gray-300'} ${isRTL ? 'text-right' : ''}`}
-                                                    />
+                                                    <div className="relative">
+                                                        <input
+                                                            type="text"
+                                                            id="cardNumber"
+                                                            name="cardNumber"
+                                                            value={paymentInfo.cardNumber}
+                                                            onChange={handlePaymentInfoChange}
+                                                            placeholder={detectedCardType ? getCardNumberFormat(detectedCardType) : "1234 5678 9012 3456"}
+                                                            dir="ltr"
+                                                            className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.payment?.cardNumber ? 'border-red-500' : 'border-gray-300'} ${isRTL ? 'text-right' : ''}`}
+                                                        />
+                                                        {detectedCardType && (
+                                                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                                                <div className="w-8 h-5 bg-gradient-to-r from-blue-600 to-blue-700 rounded flex items-center justify-center">
+                                                                    <span className="text-white font-bold text-xs">
+                                                                        {detectedCardType === 'visa' ? 'VISA' :
+                                                                            detectedCardType === 'mastercard' ? 'MC' :
+                                                                                detectedCardType === 'amex' ? 'AMEX' : 'CARD'}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    {detectedCardType && (
+                                                        <p className="text-xs text-green-600">
+                                                            ✓ Detected: {getCardTypeName(detectedCardType)}
+                                                        </p>
+                                                    )}
                                                     {errors.payment?.cardNumber && (
-                                                        <p className="text-xs text-red-600">{getErrorMessage(errors.payment.cardNumber)}</p>
+                                                        <p className="text-xs text-red-600">{getErrorMessage(errors.payment.cardNumber || '')}</p>
                                                     )}
                                                 </div>
 
@@ -1415,7 +1555,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                                             name="cvv"
                                                             value={paymentInfo.cvv}
                                                             onChange={handlePaymentInfoChange}
-                                                            placeholder="123"
+                                                            placeholder={detectedCardType === 'amex' ? '1234' : '123'}
                                                             className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.payment?.cvv ? 'border-red-500' : 'border-gray-300'
                                                                 }`}
                                                         />
