@@ -12,6 +12,8 @@ import FAQ from './FAQ';
 import type { Language } from '../translations';
 import { translations } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
+import { testimonialService } from '../services/testimonialService';
+import type { Testimonial, TestimonialForm } from '../services/testimonialService';
 import '../Landing.css';
 
 // Optimized debounce function with proper TypeScript typing
@@ -22,14 +24,6 @@ const debounce = <T extends (...args: any[]) => any>(func: T, wait: number): T =
         timeout = setTimeout(() => func(...args), wait);
     }) as T;
 };
-
-interface TestimonialForm {
-    name: string;
-    position: string;
-    institution: string;
-    quote: string;
-    email: string;
-}
 
 interface TestimonialFormErrors {
     name?: string;
@@ -52,7 +46,7 @@ const Landing: React.FC = () => {
     const demoSectionRef = useRef<HTMLDivElement>(null);
     const faqSectionRef = useRef<HTMLDivElement>(null);
     const securitySectionRef = useRef<HTMLDivElement>(null);
-    
+
     // Newsletter form states
     const [subscribeEmail, setSubscribeEmail] = useState('');
     const [subscribeEmailError, setSubscribeEmailError] = useState('');
@@ -64,9 +58,9 @@ const Landing: React.FC = () => {
     const languageDropdownRef = useRef<HTMLDivElement>(null);
     const { currentLanguage, setCurrentLanguage } = useLanguage();
     const t = translations[currentLanguage];
-    const [testimonials] = useState<any[]>([]);
 
-    // Testimonial form states
+    // Testimonial states
+    const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
     const [isTestimonialModalOpen, setIsTestimonialModalOpen] = useState(false);
     const [testimonialForm, setTestimonialForm] = useState<TestimonialForm>({
         name: '',
@@ -75,9 +69,10 @@ const Landing: React.FC = () => {
         quote: '',
         email: ''
     });
+    const [testimonialFormErrors, setTestimonialFormErrors] = useState<TestimonialFormErrors>({});
 
     const [showUnsubscribeMessage, setShowUnsubscribeMessage] = useState(false);
-    const [testimonialFormErrors, setTestimonialFormErrors] = useState<TestimonialFormErrors>({});
+    const [isLoadingTestimonials, setIsLoadingTestimonials] = useState(false);
 
     // Performance optimizations - Memoize static data
     const floatingParticles = useMemo(() => Array.from({ length: 6 }, (_, i) => i), []);
@@ -113,7 +108,7 @@ const Landing: React.FC = () => {
     // Optimized scroll detection with throttling
     useEffect(() => {
         let ticking = false;
-        
+
         const scrollHandler = () => {
             if (!ticking) {
                 requestAnimationFrame(() => {
@@ -142,6 +137,31 @@ const Landing: React.FC = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    // Fetch testimonials on component mount
+    useEffect(() => {
+        fetchTestimonials();
+    }, []);
+
+    const fetchTestimonials = async () => {
+        try {
+            console.log('🔍 Fetching latest testimonials from API...');
+            setIsLoadingTestimonials(true);
+            
+            const response = await testimonialService.getLatestTestimonials();
+            
+            if (response.success && response.data) {
+                console.log('✅ Testimonials fetched successfully:', response.data);
+                setTestimonials(response.data);
+            } else {
+                console.log('❌ Failed to fetch testimonials:', response.message);
+            }
+        } catch (error) {
+            console.error('❌ Error fetching testimonials:', error);
+        } finally {
+            setIsLoadingTestimonials(false);
+        }
+    };
+
     // Optimized language change handler
     const handleLanguageChange = useCallback((langCode: Language) => {
         setCurrentLanguage(langCode);
@@ -150,7 +170,7 @@ const Landing: React.FC = () => {
         } else {
             document.documentElement.dir = 'ltr';
         }
-        
+
         // Only update error messages if they exist
         if (subscribeEmailError && subscribeEmail.trim()) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -163,7 +183,7 @@ const Landing: React.FC = () => {
     // Optimized back to top handler
     const handleBackToTop = useCallback(() => {
         if (isScrolling) return;
-        
+
         setIsScrolling(true);
         window.scrollTo({
             top: 0,
@@ -177,7 +197,7 @@ const Landing: React.FC = () => {
         if (isScrolling) return;
 
         setIsScrolling(true);
-        
+
         requestAnimationFrame(() => {
             if (ref) {
                 if ('current' in ref && ref.current) {
@@ -187,16 +207,16 @@ const Landing: React.FC = () => {
                 }
             }
         });
-        
+
         setTimeout(() => setIsScrolling(false), delay);
     }, [isScrolling]);
 
     // Improved scroll to top function for mobile compatibility
     const scrollToTop = useCallback(() => {
         if (isScrolling) return;
-        
+
         setIsScrolling(true);
-        
+
         // Try smooth scrolling first
         try {
             window.scrollTo({
@@ -207,7 +227,7 @@ const Landing: React.FC = () => {
             // Fallback for older browsers
             window.scrollTo(0, 0);
         }
-        
+
         setTimeout(() => setIsScrolling(false), 1000);
     }, [isScrolling]);
 
@@ -464,24 +484,38 @@ const Landing: React.FC = () => {
         e.preventDefault();
 
         if (!validateTestimonialForm()) {
+            console.log('❌ Form validation failed');
             return;
         }
 
         try {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            setTestimonialForm({
-                name: '',
-                position: '',
-                institution: '',
-                quote: '',
-                email: ''
-            });
-            setTestimonialFormErrors({});
-            setIsTestimonialModalOpen(false);
+            console.log('🔄 Submitting testimonial...', testimonialForm);
+            
+            const response = await testimonialService.submitTestimonial(testimonialForm);
+            
+            if (response.success) {
+                console.log('✅ Testimonial submitted successfully!', response.data);
+                
+                // Reset form
+                setTestimonialForm({
+                    name: '',
+                    position: '',
+                    institution: '',
+                    quote: '',
+                    email: ''
+                });
+                setTestimonialFormErrors({});
+                setIsTestimonialModalOpen(false);
+                
+                // Refresh testimonials to show the new one (if approved)
+                fetchTestimonials();
+            } else {
+                console.log('❌ Testimonial submission failed:', response.message);
+            }
         } catch (error) {
-            console.error('Testimonial submission error:', error);
+            console.error('❌ Testimonial submission error:', error);
         }
-    }, [validateTestimonialForm]);
+    }, [testimonialForm, validateTestimonialForm, fetchTestimonials]);
 
     const handleCloseTestimonialModal = useCallback(() => {
         setIsTestimonialModalOpen(false);
@@ -1206,11 +1240,27 @@ const Landing: React.FC = () => {
                         </motion.div>
                     </div>
 
-                    {testimonials.length >= 3 ? (
+                    {isLoadingTestimonials ? (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            viewport={{ once: true }}
+                            className="flex justify-center items-center py-12"
+                        >
+                            <div className="flex items-center space-x-2">
+                                <svg className="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span className="text-gray-600">Loading testimonials...</span>
+                            </div>
+                        </motion.div>
+                    ) : testimonials.length >= 3 ? (
                         <div className="grid md:grid-cols-3 gap-8">
                             {testimonials.slice(-3).map((testimonial, index) => (
                                 <motion.div
-                                    key={index}
+                                    key={testimonial._id || index}
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.5 }}
@@ -1249,7 +1299,9 @@ const Landing: React.FC = () => {
                                                 ))}
                                             </div>
                                             <div className="flex items-center space-x-2">
-                                                <span className="text-sm text-gray-500">{testimonial.date}</span>
+                                                <span className="text-sm text-gray-500">
+                                                    {new Date(testimonial.date).toLocaleDateString()}
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
