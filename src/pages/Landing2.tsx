@@ -7,6 +7,9 @@ import { useLanguage } from '../contexts/LanguageContext';
 import LoadingOverlay from '../components/LoadingOverlay';
 import '../Landing.css';
 import MobileApp from '../components/MobileApp';
+import PricingPlans2 from '../components/PricingPlans2';
+import OurStory from '../components/OurStory';
+import Press from '../components/Press';
 
 const Landing: React.FC = () => {
     const navigate = useNavigate();
@@ -19,6 +22,7 @@ const Landing: React.FC = () => {
     const languageDropdownContainerRef = useRef<HTMLDivElement>(null);
     const { currentLanguage, setCurrentLanguage } = useLanguage();
     const t = translations[currentLanguage];
+    const isRTL = currentLanguage === 'ar'; // Only Arabic is RTL in our supported languages
 
     const floatingParticles = Array.from({ length: 6 }, (_, i) => i);
     const pulseParticles = Array.from({ length: 4 }, (_, i) => i + 6);
@@ -214,13 +218,13 @@ const Landing: React.FC = () => {
     const renderMobileNavigationItem = (item: { label: string; href: string }, hasDropdown = false, dropdownItems?: any[]) => {
         if (hasDropdown && dropdownItems) {
             return (
-                <div className={`${currentLanguage === 'ar' ? 'pr-4 border-r-2' : 'pl-4 border-l-2'} border-gray-200`}>
+                <div className={`${isRTL ? 'pr-4 border-r-2' : 'pl-4 border-l-2'} border-gray-200`}>
                     <span className="text-gray-600 font-medium block mb-2">{item.label}</span>
                     {dropdownItems.map((dropdownItem, index) => (
                         <a
                             key={index}
                             href={dropdownItem.href}
-                            className={`block ${currentLanguage === 'ar' ? 'pr-4' : 'pl-4'} py-1 text-gray-500 hover:text-blue-600 transition-colors duration-200`}
+                            className={`block ${isRTL ? 'pr-4' : 'pl-4'} py-1 text-gray-500 hover:text-blue-600 transition-colors duration-200`}
                         >
                             {dropdownItem.label}
                         </a>
@@ -238,7 +242,7 @@ const Landing: React.FC = () => {
 
     const renderPricingDropdown = () => (
         <div
-            className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-72 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'pricing' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'} force-white-bg z-50`}
+            className={`absolute ${isRTL ? 'right-0' : 'left-0'} mt-2 w-72 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'pricing' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'} force-white-bg z-50`}
         >
             {dropdownItems.pricing.map((item, index) => (
                 <a
@@ -287,7 +291,7 @@ const Landing: React.FC = () => {
 
     const renderAboutDropdown = () => (
         <div
-            className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-48 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'about' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'} force-white-bg z-50`}
+            className={`absolute ${isRTL ? 'right-0' : 'left-0'} mt-2 w-48 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'about' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'} force-white-bg z-50`}
         >
             {dropdownItems.about.map((item, index) => (
                 <a
@@ -314,7 +318,7 @@ const Landing: React.FC = () => {
 
     const renderResourcesDropdown = () => (
         <div
-            className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-48 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'resources' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'} force-white-bg z-50`}
+            className={`absolute ${isRTL ? 'right-0' : 'left-0'} mt-2 w-48 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'resources' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'} force-white-bg z-50`}
         >
             {dropdownItems.resources.map((item, index) => (
                 <a
@@ -350,7 +354,7 @@ const Landing: React.FC = () => {
                                 <img src={logo} alt="Telmeez Logo" className="h-20 w-20" />
                             </a>
                         </div>
-                        <nav className={`hidden md:flex ${currentLanguage === 'ar' ? 'space-x-reverse space-x-8' : 'space-x-8'}`}>
+                        <nav className={`hidden md:flex ${isRTL ? 'space-x-reverse space-x-8' : 'space-x-8'}`}>
                             {renderNavigationItem(headerItems.home)}
                             {renderNavigationItem(headerItems.pricing, true, renderPricingDropdown(), 'pricing')}
                             {renderNavigationItem(headerItems.about, true, renderAboutDropdown(), 'about')}
@@ -358,7 +362,7 @@ const Landing: React.FC = () => {
                             {renderNavigationItem(headerItems.download)}
                             {renderNavigationItem(headerItems.contact)}
                         </nav>
-                        <div className={`flex items-center ${currentLanguage === 'ar' ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
+                        <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                             <div className="relative group" ref={languageDropdownRef}>
                                 <button
                                     key={`language-button-${currentLanguage}`}
@@ -379,7 +383,7 @@ const Landing: React.FC = () => {
                                 <div
                                     ref={languageDropdownContainerRef}
                                     key={`language-dropdown-${currentLanguage}`}
-                                    className={`absolute ${currentLanguage === 'ar' ? 'right-0' : 'left-0'} mt-2 w-40 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'language' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'} force-white-bg z-50`}
+                                    className={`absolute ${isRTL ? 'right-0' : 'left-0'} mt-2 w-40 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'language' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'} force-white-bg z-50`}
                                     role="menu"
                                     aria-orientation="vertical"
                                     aria-labelledby="language-menu"
@@ -549,7 +553,7 @@ const Landing: React.FC = () => {
                                 <span className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                                 <span className="relative flex items-center justify-center">
                                     {t.hero.getStarted}
-                                    <svg className={`w-4 h-4 sm:w-5 sm:h-5 ${currentLanguage === 'ar' ? 'mr-2' : 'ml-2'} transform transition-transform duration-300 ${currentLanguage === 'ar' ? 'rotate-180 group-hover:-translate-x-1' : 'group-hover:translate-x-1'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className={`w-4 h-4 sm:w-5 sm:h-5 ${isRTL ? 'mr-2' : 'ml-2'} transform transition-transform duration-300 ${isRTL ? 'rotate-180 group-hover:-translate-x-1' : 'group-hover:translate-x-1'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                     </svg>
                                 </span>
@@ -603,24 +607,24 @@ const Landing: React.FC = () => {
                 <MobileApp />
             </section>
 
-            {/* Add Testimonials section */}
+            {/* Add Testimonials section 
             <section id="testimonials">
                 Testimonials
-            </section>
+            </section>*/}
 
             {/* Add Pricing section */}
             <section id="pricing">
-                Pricing
+                <PricingPlans2 />
             </section>
 
             {/* Add Our Story section */}
             <section id="our-story">
-                Pricing
+                <OurStory />
             </section>
 
             {/* Add Press section */}
             <section id="press">
-                Press
+                <Press />
             </section>
 
             {/* Add Demo section */}
@@ -664,7 +668,7 @@ const Landing: React.FC = () => {
             {/* Add Back to Top button */}
             <button
                 type='button'
-                className={`fixed bottom-8 ${currentLanguage === 'ar' ? 'left-8' : 'right-8'} p-3 rounded-full bg-blue-600 text-white shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${showBackToTop
+                className={`fixed bottom-8 ${isRTL ? 'left-8' : 'right-8'} p-3 rounded-full bg-blue-600 text-white shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${showBackToTop
                     ? 'opacity-100 translate-y-0'
                     : 'opacity-0 translate-y-16 pointer-events-none'
                     }`}
