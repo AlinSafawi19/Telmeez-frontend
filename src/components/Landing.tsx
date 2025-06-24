@@ -1936,7 +1936,7 @@ const Landing: React.FC = () => {
                                     </div>
                                     <div className="group">
                                         <label htmlFor="position" className="block text-xs font-medium text-gray-700 mb-1 group-focus-within:text-blue-600 transition-colors duration-200">
-                                            {t.testimonials.modal.form.role}
+                                            {t.testimonials.modal.form.position}
                                         </label>
                                         <div className="relative">
                                             <input
@@ -1946,7 +1946,7 @@ const Landing: React.FC = () => {
                                                 value={testimonialForm.position}
                                                 onChange={handleTestimonialFormChange}
                                                 className={`w-full text-sm rounded-xl border force-white-bg ${testimonialFormErrors.position ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
-                                                placeholder={t.testimonials.modal.form.role_placeholder}
+                                                placeholder={t.testimonials.modal.form.position_placeholder}
                                             />
                                             <div className={`absolute inset-y-0 ${currentLanguage === 'ar' ? 'right-0 pr-3' : 'left-0 pl-3'} flex items-center pointer-events-none`}>
                                                 <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -2013,7 +2013,7 @@ const Landing: React.FC = () => {
 
                                 <div className="group">
                                     <label htmlFor="quote" className="block text-xs font-medium text-gray-700 mb-1 group-focus-within:text-blue-600 transition-colors duration-200">
-                                        {t.testimonials.modal.form.testimonial}
+                                        {t.testimonials.modal.form.quote}
                                     </label>
                                     <div className="relative">
                                         <textarea
@@ -2023,7 +2023,7 @@ const Landing: React.FC = () => {
                                             onChange={handleTestimonialFormChange}
                                             rows={4}
                                             className={`w-full text-sm rounded-xl border force-white-bg ${testimonialFormErrors.quote ? 'border-red-500' : 'border-gray-200'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md resize-none ${currentLanguage === 'ar' ? 'pl-3 pr-10' : 'pr-3 pl-10'} py-2`}
-                                            placeholder={t.testimonials.modal.form.testimonial_placeholder}
+                                            placeholder={t.testimonials.modal.form.quote_placeholder}
                                         />
                                         <div className={`absolute top-2 ${currentLanguage === 'ar' ? 'right-2' : 'left-2'} pointer-events-none`}>
                                             <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
