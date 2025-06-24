@@ -8,6 +8,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Checkout from './components/Checkout';
 import { LanguageProvider } from './contexts/LanguageContext';
 import Landing from './components/Landing';
+import Landing2 from './pages/Landing2';
 
 const App: React.FC = () => {
   //const [apiMessage, setApiMessage] = useState("");
@@ -27,6 +28,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Navigate to="/coming-soon" replace />} />
           <Route path="/landing" element={<Landing />} />
+          <Route path="/landing2" element={<Landing2 />} />
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

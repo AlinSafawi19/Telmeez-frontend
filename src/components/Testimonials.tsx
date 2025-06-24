@@ -94,7 +94,7 @@ const Testimonials: React.FC = () => {
 
     // Fetch testimonials on component mount
     useEffect(() => {
-        //fetchTestimonials();
+        fetchTestimonials();
     }, []);
 
     const fetchTestimonials = async () => {
