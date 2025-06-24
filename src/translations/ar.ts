@@ -1,6 +1,7 @@
 export const ar = {
     header: {
         home: "الرئيسية",
+        download: "تحميل التطبيق",
         features: {
             features: "الميزات"
         },

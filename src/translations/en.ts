@@ -1,6 +1,7 @@
 export const en = {
     header: {
         home: "Home",
+        download: "Download",
         features: {
             features: "Features"
         },

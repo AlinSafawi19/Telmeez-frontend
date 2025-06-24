@@ -1,6 +1,7 @@
 export const fr = {
     header: {
         home: "Accueil",
+        download: "Télécharger",
         features: {
             features: "Fonctionnalités"
         },
