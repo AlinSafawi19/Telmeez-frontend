@@ -5,6 +5,7 @@ import logo from '../assets/images/logo.png';
 import logo2 from '../assets/images/logo2.png';
 import { translations } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LANGUAGES, getLanguageDirection } from '../constants/languages';
 import LoadingOverlay from '../components/LoadingOverlay';
 import '../Landing.css';
 import MobileApp from '../components/MobileApp';
@@ -36,12 +37,6 @@ const Landing: React.FC = () => {
 
     const floatingParticles = Array.from({ length: 6 }, (_, i) => i);
     const pulseParticles = Array.from({ length: 4 }, (_, i) => i + 6);
-
-    const languages = [
-        { code: 'en' as const, label: 'English' },
-        { code: 'ar' as const, label: 'عربي' },
-        { code: 'fr' as const, label: 'Français' }
-    ];
 
     // Toggle mobile dropdown expansion
     const toggleMobileDropdown = (dropdownKey: string) => {
@@ -165,6 +160,9 @@ const Landing: React.FC = () => {
         setTimeout(() => {
             setIsLoading(false);
             setCurrentLanguage(newLanguage);
+            // Set document direction based on language
+            const direction = getLanguageDirection(newLanguage);
+            document.documentElement.dir = direction;
         }, 500);
     };
 
@@ -664,7 +662,7 @@ const Landing: React.FC = () => {
                                     aria-label="Select language"
                                 >
                                     <span className="font-medium">
-                                        {languages.find(lang => lang.code === currentLanguage)?.label}
+                                        {LANGUAGES.find(lang => lang.code === currentLanguage)?.label}
                                     </span>
                                     <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -678,7 +676,7 @@ const Landing: React.FC = () => {
                                     aria-orientation="vertical"
                                     aria-labelledby="language-menu"
                                 >
-                                    {languages.map((lang) => (
+                                    {LANGUAGES.map((lang) => (
                                         <button
                                             type="button"
                                             key={lang.code}
@@ -1086,7 +1084,7 @@ const Landing: React.FC = () => {
                         <div>
                             <h3 className="text-lg font-semibold mb-4">{translations[currentLanguage].footer.language}</h3>
                             <div className="grid grid-cols-3 gap-3">
-                                {languages.map((lang) => (
+                                {LANGUAGES.map((lang) => (
                                     <button
                                         type='button'
                                         key={lang.code}

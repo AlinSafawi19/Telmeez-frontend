@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { translations } from '../translations';
 import type { Language } from '../translations';
+import { LANGUAGES, getLanguageDirection } from '../constants/languages';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import Select from 'react-select';
@@ -9,7 +10,6 @@ import visa from "../assets/images/visa.png";
 import mastercard from "../assets/images/mastercard.png";
 import amex from "../assets/images/amex.png";
 import logo from "../assets/images/logo.png";
-import logoarb from "../assets/images/logo_arb.png";
 import { FaHome, FaLock, FaCreditCard, FaMapMarkerAlt } from 'react-icons/fa';
 import { useLanguage } from '../contexts/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -68,12 +68,6 @@ const Checkout: React.FC<CheckoutProps> = ({
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
     const [isScrolling, setIsScrolling] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-
-    const languages = [
-        { code: 'en', label: 'English' },
-        { code: 'ar', label: 'عربي' },
-        { code: 'fr', label: 'Français' }
-    ];
 
     const countryOptions = [
         ...Object.entries(t.countries).map(([value, label]) => ({
@@ -311,11 +305,8 @@ const Checkout: React.FC<CheckoutProps> = ({
         setTimeout(() => {
             setIsScrolling(false);
             setCurrentLanguage(langCode);
-            if (langCode === 'ar') {
-                document.documentElement.dir = 'rtl';
-            } else {
-                document.documentElement.dir = 'ltr';
-            }
+            const direction = getLanguageDirection(langCode);
+            document.documentElement.dir = direction;
         }, 500);
         setIsLanguageDropdownOpen(false);
     };
@@ -984,7 +975,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                 <div className="flex flex-wrap items-center justify-center sm:justify-between gap-4 sm:gap-y-4 mb-8">
                     <Link to="/" className="transition-transform hover:scale-105 order-1">
                         <img
-                            src={currentLanguage === 'ar' ? logoarb : logo}
+                            src={logo}
                             alt="Company Logo"
                             className="h-16 w-16 sm:h-20 sm:w-20"
                         />
@@ -1005,7 +996,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                 aria-label="Select language"
                             >
                                 <span className="font-medium">
-                                    {languages.find(lang => lang.code === currentLanguage)?.label}
+                                    {LANGUAGES.find(lang => lang.code === currentLanguage)?.label}
                                 </span>
                                 <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -1013,10 +1004,10 @@ const Checkout: React.FC<CheckoutProps> = ({
                             </button>
                             {isLanguageDropdownOpen && (
                                 <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2 z-50">
-                                    {languages.map((lang) => (
+                                    {LANGUAGES.map((lang) => (
                                         <button
                                             key={lang.code}
-                                            onClick={() => handleLanguageChange(lang.code as Language)}
+                                            onClick={() => handleLanguageChange(lang.code)}
                                             className={`flex items-center w-full text-left px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none ${currentLanguage === lang.code ? 'bg-blue-50 text-blue-600' : 'bg-transparent'}`}
                                         >
                                             <span>{lang.label}</span>

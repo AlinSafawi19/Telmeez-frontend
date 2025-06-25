@@ -4,9 +4,9 @@ import { FaHome, FaEnvelope } from 'react-icons/fa';
 import { translations } from '../translations';
 import type { Language } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LANGUAGES, getLanguageDirection } from '../constants/languages';
 import logo from '../assets/images/logo.png';
 import forgetpasssvvg from '../assets/images/forgotpass-illustration.svg';
-import logoarb from '../assets/images/logo_arb.png';
 import '../Landing.css';
 
 const ForgotPassword: React.FC = () => {
@@ -33,23 +33,14 @@ const ForgotPassword: React.FC = () => {
         };
     }, []);
 
-    const languages = [
-        { code: 'en', label: 'English' },
-        { code: 'ar', label: 'عربي' },
-        { code: 'fr', label: 'Français' }
-    ];
-
     const handleLanguageChange = (langCode: Language) => {
         setIsScrolling(true);
         setTimeout(() => {
             setIsScrolling(false);
             setCurrentLanguage(langCode);
-            // Update document direction for RTL languages
-            if (langCode === 'ar') {
-                document.documentElement.dir = 'rtl';
-            } else {
-                document.documentElement.dir = 'ltr';
-            }
+            // Set document direction based on language
+            const direction = getLanguageDirection(langCode);
+            document.documentElement.dir = direction;
         }, 500);
         setIsLanguageDropdownOpen(false);
     };
@@ -85,7 +76,7 @@ const ForgotPassword: React.FC = () => {
                 <div className="flex items-center justify-between">
                     <Link to="/">
                         <img
-                            src={currentLanguage === 'ar' ? logoarb : logo}
+                            src={logo}
                             alt="Company Logo"
                             className="h-20 w-20 transition-transform cursor-pointer hover:opacity-80"
                         />
@@ -98,7 +89,7 @@ const ForgotPassword: React.FC = () => {
                                 aria-label="Select language"
                             >
                                 <span className="text-sm font-medium">
-                                    {languages.find(lang => lang.code === currentLanguage)?.label}
+                                    {LANGUAGES.find(lang => lang.code === currentLanguage)?.label}
                                 </span>
                                 <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -106,10 +97,10 @@ const ForgotPassword: React.FC = () => {
                             </button>
                             {isLanguageDropdownOpen && (
                                 <div className="absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-lg py-2 z-50 border border-gray-200">
-                                    {languages.map((lang) => (
+                                    {LANGUAGES.map((lang) => (
                                         <button
                                             key={lang.code}
-                                            onClick={() => handleLanguageChange(lang.code as Language)}
+                                            onClick={() => handleLanguageChange(lang.code)}
                                             className={`flex items-center w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none ${currentLanguage === lang.code ? 'bg-blue-50 text-blue-600' : 'bg-transparent'}`}
                                         >
                                             <span>{lang.label}</span>
@@ -142,7 +133,7 @@ const ForgotPassword: React.FC = () => {
                     <div className="hidden lg:flex items-center justify-between mb-8">
                         <Link to="/">
                             <img
-                                src={currentLanguage === 'ar' ? logoarb : logo}
+                                src={logo}
                                 alt="Company Logo"
                                 className="h-16 w-auto transition-transform cursor-pointer hover:opacity-80"
                             />
@@ -155,7 +146,7 @@ const ForgotPassword: React.FC = () => {
                                     aria-label="Select language"
                                 >
                                     <span className="font-medium">
-                                        {languages.find(lang => lang.code === currentLanguage)?.label}
+                                        {LANGUAGES.find(lang => lang.code === currentLanguage)?.label}
                                     </span>
                                     <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -163,10 +154,10 @@ const ForgotPassword: React.FC = () => {
                                 </button>
                                 {isLanguageDropdownOpen && (
                                     <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2 z-50">
-                                        {languages.map((lang) => (
+                                        {LANGUAGES.map((lang) => (
                                             <button
                                                 key={lang.code}
-                                                onClick={() => handleLanguageChange(lang.code as Language)}
+                                                onClick={() => handleLanguageChange(lang.code)}
                                                 className={`flex items-center w-full text-left px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none force-white-bg ${currentLanguage === lang.code ? 'bg-blue-50 text-blue-600' : 'bg-transparent'}`}
                                             >
                                                 <span>{lang.label}</span>
