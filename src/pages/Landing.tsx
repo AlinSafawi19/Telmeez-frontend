@@ -110,7 +110,10 @@ const Landing: React.FC = () => {
             setSelectedPlanFromMenu(selectedPlan);
         }
 
-        // Add a small delay to ensure DOM is ready
+        // Show loading overlay
+        setIsLoading(true);
+
+        // Add a small delay to ensure DOM is ready and show loading
         setTimeout(() => {
             const element = document.getElementById(sectionId);
 
@@ -130,7 +133,12 @@ const Landing: React.FC = () => {
                 // Close any open dropdowns
                 setActiveDropdown(null);
             }
-        }, 100);
+
+            // Hide loading overlay after a short delay to ensure smooth scrolling is complete
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 800);
+        }, 300);
     };
 
     // Handle language change function
@@ -247,10 +255,14 @@ const Landing: React.FC = () => {
 
     // Handle back to top click
     const handleBackToTop = () => {
+        setIsLoading(true);
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
         });
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 1000);
     };
 
     const renderNavigationItem = (item: { label: string; href: string }, hasDropdown = false, dropdownContent?: React.ReactNode, dropdownKey?: string) => {
@@ -622,9 +634,7 @@ const Landing: React.FC = () => {
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                            <a href="#" className="transition-transform hover:scale-105">
-                                <img src={logo} alt="Telmeez Logo" className="h-20 w-20" />
-                            </a>
+                            <img src={logo} alt="Telmeez Logo" className="h-20 w-20" onClick={handleBackToTop} />
                         </div>
                         <nav className={`hidden md:flex ${isRTL ? 'space-x-reverse space-x-8' : 'space-x-8'}`}>
                             {renderNavigationItem(headerItems.home)}
@@ -967,9 +977,7 @@ const Landing: React.FC = () => {
                 <div className="container mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
                         <div>
-                            <a href="#" className="transition-transform hover:scale-105">
-                                <img src={logo2} alt="Telmeez Logo" className="h-16 w-16 mb-4" />
-                            </a>
+                            <img src={logo2} alt="Telmeez Logo" className="h-16 w-16 mb-4" onClick={handleBackToTop} />
                             <p className="text-gray-400">
                                 {translations[currentLanguage].footer.text}
                             </p>
@@ -977,18 +985,67 @@ const Landing: React.FC = () => {
                         <div>
                             <h3 className="text-lg font-semibold mb-4">{translations[currentLanguage].footer.quick_links.quick_links}</h3>
                             <ul className="space-y-2">
-                                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.about_us}</a></li>
-                                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.features}</a></li>
-                                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.pricing}</a></li>
-                                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.quick_links.testimonials}</a></li>
+                                <li><a
+                                    href="#our-story"
+                                    className="text-gray-400 hover:text-white transition-colors cursor-pointer"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        scrollToSection('our-story');
+                                    }}
+                                >{translations[currentLanguage].footer.quick_links.our_story}</a></li>
+                                <li><a
+                                    href="#press"
+                                    className="text-gray-400 hover:text-white transition-colors cursor-pointer"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        scrollToSection('press');
+                                    }}
+                                >{translations[currentLanguage].footer.quick_links.press}</a></li>
+                                <li><a
+                                    href="#pricing"
+                                    className="text-gray-400 hover:text-white transition-colors cursor-pointer"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        scrollToSection('pricing');
+                                    }}
+                                >{translations[currentLanguage].footer.quick_links.pricing}</a></li>
+                                <li><a
+                                    href="#testimonials"
+                                    className="text-gray-400 hover:text-white transition-colors cursor-pointer"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        scrollToSection('testimonials');
+                                    }}
+                                >{translations[currentLanguage].footer.quick_links.testimonials}</a></li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="text-lg font-semibold mb-4">{translations[currentLanguage].footer.resources.resources}</h3>
                             <ul className="space-y-2">
-                                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.resources.demo}</a></li>
-                                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.resources.faq}</a></li>
-                                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">{translations[currentLanguage].footer.resources.security}</a></li>
+                                <li><a
+                                    href="#demo"
+                                    className="text-gray-400 hover:text-white transition-colors cursor-pointer"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        scrollToSection('demo');
+                                    }}
+                                >{translations[currentLanguage].footer.resources.demo}</a></li>
+                                <li><a
+                                    href="#faq"
+                                    className="text-gray-400 hover:text-white transition-colors cursor-pointer"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        scrollToSection('faq');
+                                    }}
+                                >{translations[currentLanguage].footer.resources.faq}</a></li>
+                                <li><a
+                                    href="#security"
+                                    className="text-gray-400 hover:text-white transition-colors cursor-pointer"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        scrollToSection('security');
+                                    }}
+                                >{translations[currentLanguage].footer.resources.security}</a></li>
                             </ul>
                         </div>
                         <div>

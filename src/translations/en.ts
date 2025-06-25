@@ -238,8 +238,8 @@ export const en = {
         text: "Empowering educational institutions through creative solutions.",
         quick_links: {
             quick_links: "Quick Links",
-            about_us: "About Us",
-            features: "Features",
+            our_story: "Our Story",
+            press: "Press",
             pricing: "Pricing",
             testimonials: "Testimonials"
         },

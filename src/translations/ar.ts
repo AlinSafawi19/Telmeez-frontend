@@ -238,10 +238,10 @@ export const ar = {
         text: "تمكين المؤسسات التعليمية من خلال حلول مبتكرة.",
         quick_links: {
             quick_links: "روابط سريعة",
-            about_us: "من نحن",
-            features: "الميزات",
+            our_story: "قصتنا",
             pricing: "الأسعار",
-            testimonials: "الشهادات"
+            testimonials: "الشهادات",
+            press: "الصحافة والأخبار"
         },
         resources: {
             resources: "الموارد",

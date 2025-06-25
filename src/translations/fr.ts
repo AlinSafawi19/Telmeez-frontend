@@ -222,8 +222,8 @@ export const fr = {
         text: "Renforcer les institutions éducatives grâce à des solutions innovantes.",
         quick_links: {
             quick_links: "Liens Rapides",
-            about_us: "À Propos",
-            features: "Fonctionnalités",
+            our_story: "Notre Histoire",
+            press: "Presse",
             pricing: "Tarification",
             testimonials: "Témoignages"
         },
