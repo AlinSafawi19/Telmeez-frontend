@@ -25,7 +25,7 @@ export const fr = {
             about: "À Propos",
             our_story: "Notre Histoire",
             press: "Presse",
-            testimonials: "Témoignages"
+            pioneersOffer: "Offre Pionniers"
         },
         resources: {
             resources: "Ressources",
@@ -225,7 +225,7 @@ export const fr = {
             our_story: "Notre Histoire",
             press: "Presse",
             pricing: "Tarification",
-            testimonials: "Témoignages"
+            pioneersOffer: "Offre Pionniers"
         },
         resources: {
             resources: "Ressources",
@@ -370,7 +370,7 @@ export const fr = {
         try: "Essayer",
         dashboard: "Tableau de Bord"
     },
-    testimonials: {
+    pioneersOffer: {
         hasfeedbacks: {
             title: "Histoires de Réussite",
             subtitle: "Découvrez comment les institutions éducatives transforment leur communication avec Telmeez"

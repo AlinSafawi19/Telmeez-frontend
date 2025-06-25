@@ -4,7 +4,7 @@ import '../Landing.css';
 import { translations } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const Testimonials: React.FC = () => {
+const PioneersOffer: React.FC = () => {
     const { currentLanguage } = useLanguage();
     const t = translations[currentLanguage];
 
@@ -25,10 +25,10 @@ const Testimonials: React.FC = () => {
                         viewport={{ once: true }}
                     >
                         <h2 className="text-5xl font-bold text-gray-900 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
-                            {t.testimonials.nofeedbacks.title}
+                            {t.pioneersOffer.nofeedbacks.title}
                         </h2>
                         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                            {t.testimonials.nofeedbacks.subtitle}
+                            {t.pioneersOffer.nofeedbacks.subtitle}
                         </p>
                     </motion.div>
                 </div>
@@ -46,14 +46,14 @@ const Testimonials: React.FC = () => {
                             <div className="inline-block">
                                 <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                                     <span className="mr-2 rtl:mr-0 rtl:ml-2">✨</span>
-                                    {t.testimonials.nofeedbacks.left.tag}
+                                    {t.pioneersOffer.nofeedbacks.left.tag}
                                 </span>
                             </div>
                             <h3 className="text-3xl font-bold text-gray-900 leading-tight">
-                                {t.testimonials.nofeedbacks.left.offer}
+                                {t.pioneersOffer.nofeedbacks.left.offer}
                             </h3>
                             <p className="text-lg text-gray-600">
-                                {t.testimonials.nofeedbacks.left.description}
+                                {t.pioneersOffer.nofeedbacks.left.description}
                             </p>
                             <div className="flex flex-col space-y-4">
                                 <div className="flex items-start space-x-4 rtl:space-x-reverse">
@@ -61,25 +61,25 @@ const Testimonials: React.FC = () => {
                                         <span className="text-2xl">🎯</span>
                                     </div>
                                     <div>
-                                        <h4 className="font-semibold text-gray-900">{t.testimonials.nofeedbacks.left.benifets.title}</h4>
+                                        <h4 className="font-semibold text-gray-900">{t.pioneersOffer.nofeedbacks.left.benifets.title}</h4>
                                         <ul className="text-gray-600 space-y-2 mt-2">
                                             <li className="flex items-center">
                                                 <svg className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                 </svg>
-                                                {t.testimonials.nofeedbacks.left.benifets.ben1}
+                                                {t.pioneersOffer.nofeedbacks.left.benifets.ben1}
                                             </li>
                                             <li className="flex items-center">
                                                 <svg className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                 </svg>
-                                                {t.testimonials.nofeedbacks.left.benifets.ben2}
+                                                {t.pioneersOffer.nofeedbacks.left.benifets.ben2}
                                             </li>
                                             <li className="flex items-center">
                                                 <svg className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                 </svg>
-                                                {t.testimonials.nofeedbacks.left.benifets.ben3}
+                                                {t.pioneersOffer.nofeedbacks.left.benifets.ben3}
                                             </li>
                                         </ul>
                                     </div>
@@ -89,8 +89,8 @@ const Testimonials: React.FC = () => {
                                         <span className="text-2xl">💡</span>
                                     </div>
                                     <div>
-                                        <h4 className="font-semibold text-gray-900">{t.testimonials.nofeedbacks.left.shape_your_future}</h4>
-                                        <p className="text-gray-600">{t.testimonials.nofeedbacks.left.shape_your_future_desc}</p>
+                                        <h4 className="font-semibold text-gray-900">{t.pioneersOffer.nofeedbacks.left.shape_your_future}</h4>
+                                        <p className="text-gray-600">{t.pioneersOffer.nofeedbacks.left.shape_your_future_desc}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-start space-x-4 rtl:space-x-reverse">
@@ -98,16 +98,17 @@ const Testimonials: React.FC = () => {
                                         <span className="text-2xl">🌟</span>
                                     </div>
                                     <div>
-                                        <h4 className="font-semibold text-gray-900">{t.testimonials.nofeedbacks.left.recog}</h4>
-                                        <p className="text-gray-600">{t.testimonials.nofeedbacks.left.recog_desc}</p>
+                                        <h4 className="font-semibold text-gray-900">{t.pioneersOffer.nofeedbacks.left.recog}</h4>
+                                        <p className="text-gray-600">{t.pioneersOffer.nofeedbacks.left.recog_desc}</p>
                                     </div>
                                 </div>
                             </div>
                             <div className="pt-4">
                                 <button
+                                    type='button'
                                     className="inline-flex items-center px-6 py-3 rounded-lg text-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 >
-                                    {t.testimonials.nofeedbacks.left.button}
+                                    {t.pioneersOffer.nofeedbacks.left.button}
                                     {currentLanguage === 'ar' ? (
                                         <svg className="w-5 h-5 ml-2 rtl:ml-0 rtl:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 17l-5-5m0 0l5-5m-5 5h12" />
@@ -131,8 +132,8 @@ const Testimonials: React.FC = () => {
                                             1
                                         </div>
                                         <div>
-                                            <h4 className="font-semibold text-gray-900">{t.testimonials.nofeedbacks.right.info1.title}</h4>
-                                            <p className="text-sm text-gray-600">{t.testimonials.nofeedbacks.right.info1.subtitle}</p>
+                                            <h4 className="font-semibold text-gray-900">{t.pioneersOffer.nofeedbacks.right.info1.title}</h4>
+                                            <p className="text-sm text-gray-600">{t.pioneersOffer.nofeedbacks.right.info1.subtitle}</p>
                                         </div>
                                     </div>
                                     <div className="h-8 w-0.5 bg-gradient-to-b from-blue-400 to-purple-400 mx-6"></div>
@@ -141,8 +142,8 @@ const Testimonials: React.FC = () => {
                                             2
                                         </div>
                                         <div>
-                                            <h4 className="font-semibold text-gray-900">{t.testimonials.nofeedbacks.right.info2.title}</h4>
-                                            <p className="text-sm text-gray-600">{t.testimonials.nofeedbacks.right.info2.subtitle}</p>
+                                            <h4 className="font-semibold text-gray-900">{t.pioneersOffer.nofeedbacks.right.info2.title}</h4>
+                                            <p className="text-sm text-gray-600">{t.pioneersOffer.nofeedbacks.right.info2.subtitle}</p>
                                         </div>
                                     </div>
                                     <div className="h-8 w-0.5 bg-gradient-to-b from-purple-400 to-pink-400 mx-6"></div>
@@ -151,8 +152,8 @@ const Testimonials: React.FC = () => {
                                             3
                                         </div>
                                         <div>
-                                            <h4 className="font-semibold text-gray-900">{t.testimonials.nofeedbacks.right.info3.title}</h4>
-                                            <p className="text-sm text-gray-600">{t.testimonials.nofeedbacks.right.info3.subtitle}</p>
+                                            <h4 className="font-semibold text-gray-900">{t.pioneersOffer.nofeedbacks.right.info3.title}</h4>
+                                            <p className="text-sm text-gray-600">{t.pioneersOffer.nofeedbacks.right.info3.subtitle}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -161,9 +162,9 @@ const Testimonials: React.FC = () => {
                                         <div className="flex -space-x-2 rtl:space-x-reverse">
                                             {[...Array(3)].map((_, i) => (
                                                 <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-white font-bold text-sm">
-                                                    {i === 0 ? t.testimonials.nofeedbacks.right.pioneers.first :
-                                                        i === 1 ? t.testimonials.nofeedbacks.right.pioneers.second :
-                                                            t.testimonials.nofeedbacks.right.pioneers.third}
+                                                    {i === 0 ? t.pioneersOffer.nofeedbacks.right.pioneers.first :
+                                                        i === 1 ? t.pioneersOffer.nofeedbacks.right.pioneers.second :
+                                                            t.pioneersOffer.nofeedbacks.right.pioneers.third}
                                                 </div>
                                             ))}
                                         </div>
@@ -172,7 +173,7 @@ const Testimonials: React.FC = () => {
                                                 <svg className="w-4 h-4 mr-1.5 rtl:mr-0 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                 </svg>
-                                                {t.testimonials.nofeedbacks.right.tag}
+                                                {t.pioneersOffer.nofeedbacks.right.tag}
                                             </span>
                                         </div>
                                     </div>
@@ -186,4 +187,4 @@ const Testimonials: React.FC = () => {
     );
 };
 
-export default Testimonials; 
+export default PioneersOffer; 

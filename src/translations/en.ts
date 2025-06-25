@@ -25,7 +25,7 @@ export const en = {
             about: "About",
             our_story: "Our Story",
             press: "Press",
-            testimonials: "Testimonials"
+            pioneersOffer: "Pioneers Offer"
         },
         resources: {
             resources: "Resources",
@@ -241,7 +241,7 @@ export const en = {
             our_story: "Our Story",
             press: "Press",
             pricing: "Pricing",
-            testimonials: "Testimonials"
+            pioneersOffer: "Pioneers Offer"
         },
         resources: {
             resources: "Resources",
@@ -386,7 +386,7 @@ export const en = {
         try: "Try",
         dashboard: "Dashboard"
     },
-    testimonials: {
+    pioneersOffer: {
         hasfeedbacks: {
             title: "Success Stories",
             subtitle: "Discover how educational institutions are transforming their communication with Telmeez",

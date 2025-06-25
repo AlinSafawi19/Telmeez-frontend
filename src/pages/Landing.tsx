@@ -17,7 +17,7 @@ import Contact from '../components/Contact';
 import CTA from '../components/CTA';
 import Newsletter from '../components/Newsletter';
 import Security from '../components/Security';
-import Testimonials from '../components/Testimonials';
+import PioneersOffer from '../components/PioneersOffer';
 
 const Landing: React.FC = () => {
     const navigate = useNavigate();
@@ -204,7 +204,7 @@ const Landing: React.FC = () => {
         about: [
             { label: t.header.about.our_story, href: '#our-story' },
             { label: t.header.about.press, href: '#press' },
-            { label: t.header.about.testimonials, href: '#testimonials' }
+            { label: t.header.about.pioneersOffer, href: '#pioneers-offer' }
         ],
         pricing: [
             {
@@ -897,9 +897,9 @@ const Landing: React.FC = () => {
                 <MobileApp />
             </section>
 
-            {/* Add Testimonials section */}
-            <section id="testimonials">
-                <Testimonials />
+            {/* Add Pioneers Offer section */}
+            <section id="pioneers-offer">
+                <PioneersOffer />
             </section>
 
             {/* Add Pricing section */}
@@ -1018,13 +1018,13 @@ const Landing: React.FC = () => {
                                     }}
                                 >{translations[currentLanguage].footer.quick_links.pricing}</a></li>
                                 <li><a
-                                    href="#testimonials"
+                                    href="#pioneers-offer"
                                     className="text-gray-400 hover:text-white transition-colors cursor-pointer"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        scrollToSection('testimonials');
+                                        scrollToSection('pioneers-offer');
                                     }}
-                                >{translations[currentLanguage].footer.quick_links.testimonials}</a></li>
+                                >{translations[currentLanguage].footer.quick_links.pioneersOffer}</a></li>
                             </ul>
                         </div>
                         <div>

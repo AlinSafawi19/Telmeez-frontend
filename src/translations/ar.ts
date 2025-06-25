@@ -25,7 +25,7 @@ export const ar = {
             about: "من نحن",
             our_story: "قصتنا",
             press: "الصحافة",
-            testimonials: "آراء العملاء"
+            pioneersOffer: "العرض الخاص للمبتكرين"
         },
         resources: {
             resources: "الموارد",
@@ -240,7 +240,7 @@ export const ar = {
             quick_links: "روابط سريعة",
             our_story: "قصتنا",
             pricing: "الأسعار",
-            testimonials: "الشهادات",
+            pioneersOffer: "العرض الخاص للمبتكرين",
             press: "الصحافة والأخبار"
         },
         resources: {
@@ -386,7 +386,7 @@ export const ar = {
         try: "جرب",
         dashboard: "لوحة التحكم"
     },
-    testimonials: {
+    pioneersOffer: {
         hasfeedbacks: {
             title: "قصص النجاح",
             subtitle: "اكتشف كيف تقوم المؤسسات التعليمية بتحويل تواصلها مع تلميز"
