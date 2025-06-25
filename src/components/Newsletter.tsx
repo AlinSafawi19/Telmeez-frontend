@@ -24,6 +24,7 @@ const Newsletter: React.FC = () => {
                             <input
                                 type="text"
                                 value={subscribeEmail}
+                                onChange={(e) => setSubscribeEmail(e.target.value)}
                                 placeholder={t.email_placeholder}
                                 className={`w-full px-4 py-3 rounded-lg border force-white-bg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
                             />

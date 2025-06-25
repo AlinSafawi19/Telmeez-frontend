@@ -3,7 +3,12 @@ import { translations } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
 import logo from '../assets/images/logo.png';
 
-const AppFeatureList = ({ features, isRTL }) => (
+interface AppFeatureListProps {
+    features: string[];
+    isRTL: boolean;
+}
+
+const AppFeatureList = ({ features, isRTL }: AppFeatureListProps) => (
     <ul className="space-y-3">
         {features.map((feature, index) => (
             <li key={index} className="flex items-center">
@@ -16,7 +21,14 @@ const AppFeatureList = ({ features, isRTL }) => (
     </ul>
 );
 
-const AppDownloadButtons = ({ t }) => (
+interface AppDownloadButtonsProps {
+    t: {
+        download_ios: string;
+        download_android: string;
+    };
+}
+
+const AppDownloadButtons = ({ t }: AppDownloadButtonsProps) => (
     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
         {[t.download_ios, t.download_android].map((label, i) => (
             <button
@@ -34,7 +46,15 @@ const AppDownloadButtons = ({ t }) => (
     </div>
 );
 
-const MobileMockup = ({ isRTL, t }) => (
+interface MobileMockupProps {
+    isRTL: boolean;
+    t: {
+        coming_soon: string;
+        qr_description: string;
+    };
+}
+
+const MobileMockup = ({ isRTL, t }: MobileMockupProps) => (
     <div className="relative mx-auto max-w-xs sm:max-w-sm">
         <div className="relative w-48 sm:w-64 h-[400px] sm:h-[500px] mx-auto bg-gray-900 rounded-[32px] sm:rounded-[40px] p-4 shadow-2xl">
             <div className="w-full h-full bg-white rounded-[24px] sm:rounded-[32px] overflow-hidden relative">

@@ -22,6 +22,26 @@ const Press: React.FC = () => {
     const isRTL = currentLanguage === 'ar';
     const [isLoading, setIsLoading] = useState(false);
 
+    // Function to scroll to newsletter section
+    const scrollToNewsletter = () => {
+        setIsLoading(true);
+        setTimeout(() => {
+            const element = document.getElementById('newsletter');
+            if (element) {
+                const headerHeight = 80; // Approximate header height
+                const elementPosition = element.offsetTop - headerHeight;
+                
+                window.scrollTo({
+                    top: elementPosition,
+                    behavior: 'smooth'
+                });
+            }
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 800);
+        }, 300);
+    };
+
     return (
         <div className="bg-gradient-to-b from-blue-50 to-indigo-100 py-20" dir={isRTL ? 'rtl' : 'ltr'}>
             <div className="container mx-auto px-4">
@@ -38,7 +58,8 @@ const Press: React.FC = () => {
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="inline-flex focus:outline-none items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-lg"
+                        onClick={scrollToNewsletter}
+                        className="inline-flex focus:outline-none items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-lg cursor-pointer"
                     >
                         <span className="rtl:ml-2 ltr:mr-2">📰</span>
                         {translations[currentLanguage].newsletter.title}
