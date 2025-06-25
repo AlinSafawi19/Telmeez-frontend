@@ -932,11 +932,6 @@ const Landing: React.FC = () => {
                 <Security />
             </section>
 
-            {/* Add Stats section */}
-            <section id="stats">
-                Stats
-            </section>
-
             {/* Add CTA section */}
             <section id="cta">
                 <CTA />
