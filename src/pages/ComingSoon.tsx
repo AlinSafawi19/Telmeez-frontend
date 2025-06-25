@@ -12,10 +12,8 @@ const ComingSoon: React.FC = () => {
     const { currentLanguage, setCurrentLanguage } = useLanguage();
     const t = translations[currentLanguage];
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
-    const [isScrolling, setIsScrolling] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Inside the component, before return
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
     useEffect(() => {
         const timer = setInterval(() => {
@@ -25,7 +23,7 @@ const ComingSoon: React.FC = () => {
     }, []);
 
     function calculateTimeLeft() {
-        const targetDate = new Date('2025-12-01T00:00:00'); // example date
+        const targetDate = new Date('2025-12-01T00:00:00');
         const now = new Date();
         const difference = +targetDate - +now;
 
@@ -53,14 +51,10 @@ const ComingSoon: React.FC = () => {
     }, []);
 
     const handleLanguageChange = (langCode: Language) => {
-        setIsScrolling(true);
-        setTimeout(() => {
-            setIsScrolling(false);
-            setCurrentLanguage(langCode);
-            // Set document direction based on language
-            const direction = getLanguageDirection(langCode);
-            document.documentElement.dir = direction;
-        }, 500);
+        setCurrentLanguage(langCode);
+        // Set document direction based on language
+        const direction = getLanguageDirection(langCode);
+        document.documentElement.dir = direction;
         setIsLanguageDropdownOpen(false);
     };
 
@@ -80,6 +74,7 @@ const ComingSoon: React.FC = () => {
                         />
                         <div className="relative" ref={dropdownRef}>
                             <button
+                                type='button'
                                 onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
                                 className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium focus:outline-none force-white-bg"
                                 aria-label="Select language"
@@ -95,6 +90,7 @@ const ComingSoon: React.FC = () => {
                                 <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2 z-50">
                                     {LANGUAGES.map((lang) => (
                                         <button
+                                            type='button'
                                             key={lang.code}
                                             onClick={() => handleLanguageChange(lang.code)}
                                             className={`flex items-center w-full text-left px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none ${currentLanguage === lang.code ? 'bg-blue-50 text-blue-600' : 'bg-transparent'}`}
@@ -162,18 +158,6 @@ const ComingSoon: React.FC = () => {
                         </motion.div>
                     </motion.div>
                 </div>
-
-                {/* Loading overlay for smooth scrolling */}
-                {isScrolling && (
-                    <div className="fixed inset-0 bg-black bg-opacity-10 z-40 pointer-events-none">
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                            <svg className="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
     );

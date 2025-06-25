@@ -14,10 +14,7 @@ import { FaHome, FaLock, FaCreditCard, FaMapMarkerAlt } from 'react-icons/fa';
 import { useLanguage } from '../contexts/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../Landing.css';
-
-interface CheckoutProps {
-    language?: Language;
-}
+import LoadingOverlay from '../components/LoadingOverlay';
 
 interface AccountInfo {
     firstName: string;
@@ -53,20 +50,18 @@ interface AddOn {
     maxQuantity?: number;
 }
 
-type PaymentMethod = 'card';
+type PayBy = 'card';
 
-const Checkout: React.FC<CheckoutProps> = ({
-    language = 'en'
-}) => {
+const Checkout: React.FC = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const { currentLanguage, setCurrentLanguage } = useLanguage();
     const selectedPlan = searchParams.get('plan') || 'standard';
     const isAnnual = searchParams.get('billing') === 'annual';
-    const t = translations[currentLanguage || language];
+    const t = translations[currentLanguage];
     const isRTL = currentLanguage === 'ar';
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
-    const [isScrolling, setIsScrolling] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const countryOptions = [
@@ -157,7 +152,7 @@ const Checkout: React.FC<CheckoutProps> = ({
     const [showPromoInput, setShowPromoInput] = useState(false);
     const [promoError, setPromoError] = useState('');
     const [discount, setDiscount] = useState(0);
-    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
+    const [payBy, setPayBy] = useState<PayBy>('card');
     const [detectedCardType, setDetectedCardType] = useState<string>('');
     const [isAddOnsExpanded, setIsAddOnsExpanded] = useState(() => {
         return false;
@@ -301,9 +296,9 @@ const Checkout: React.FC<CheckoutProps> = ({
     }, []);
 
     const handleLanguageChange = (langCode: Language) => {
-        setIsScrolling(true);
+        setIsLoading(true);
         setTimeout(() => {
-            setIsScrolling(false);
+            setIsLoading(false);
             setCurrentLanguage(langCode);
             const direction = getLanguageDirection(langCode);
             document.documentElement.dir = direction;
@@ -882,8 +877,8 @@ const Checkout: React.FC<CheckoutProps> = ({
         navigate(`/checkout?plan=enterprise&billing=${isAnnual ? 'annual' : 'monthly'}`);
     };
 
-    const handlePaymentMethodChange = (method: PaymentMethod) => {
-        setPaymentMethod(method);
+    const handlePayByChange = (payBy: PayBy) => {
+        setPayBy(payBy);
     };
 
     const handleCountryChange = (selectedOption: any, isBillingAddress: boolean = false) => {
@@ -991,6 +986,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                     <div className="flex items-center gap-3 sm:gap-4 order-2 sm:order-none">
                         <div className="relative" ref={dropdownRef}>
                             <button
+                                type='button'
                                 onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
                                 className="flex items-center text-gray-600 hover:text-indigo-600 transition-colors focus:outline-none force-white-bg"
                                 aria-label="Select language"
@@ -1006,6 +1002,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                 <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2 z-50">
                                     {LANGUAGES.map((lang) => (
                                         <button
+                                            type='button'
                                             key={lang.code}
                                             onClick={() => handleLanguageChange(lang.code)}
                                             className={`flex items-center w-full text-left px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none ${currentLanguage === lang.code ? 'bg-blue-50 text-blue-600' : 'bg-transparent'}`}
@@ -1022,6 +1019,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                             )}
                         </div>
                         <button
+                            type='button'
                             onClick={() => navigate('/')}
                             className="group focus:outline-none flex items-center gap-2 px-3 sm:px-6 py-3 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-full hover:bg-indigo-50 force-white-bg"
                             aria-label="Back to home"
@@ -1032,16 +1030,8 @@ const Checkout: React.FC<CheckoutProps> = ({
                     </div>
                 </div>
 
-                {/* Add loading overlay for smooth scrolling */}
-                {isScrolling && (
-                    <div className="fixed inset-0 bg-black bg-opacity-10 z-40 pointer-events-none">
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                            <svg className="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </div>
-                    </div>
+                {isLoading && (
+                    <LoadingOverlay isLoading={isLoading} />
                 )}
 
                 <form onSubmit={handleStepSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -1283,16 +1273,16 @@ const Checkout: React.FC<CheckoutProps> = ({
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <button
                                                     type="button"
-                                                    onClick={() => handlePaymentMethodChange('card')}
-                                                    className={`focus:outline-none p-4 rounded-xl border-2 transition-all duration-300 ${paymentMethod === 'card'
+                                                    onClick={() => handlePayByChange('card')}
+                                                    className={`focus:outline-none p-4 rounded-xl border-2 transition-all duration-300 ${payBy === 'card'
                                                         ? 'border-blue-600 bg-blue-50'
                                                         : 'border-gray-200 hover:border-blue-200'
                                                         }`}
                                                 >
                                                     <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                                        <div className={`p-2 rounded-full ${paymentMethod === 'card' ? 'bg-blue-600' : 'bg-gray-100'
+                                                        <div className={`p-2 rounded-full ${payBy === 'card' ? 'bg-blue-600' : 'bg-gray-100'
                                                             }`}>
-                                                            <FaCreditCard className={`w-6 h-6 ${paymentMethod === 'card' ? 'text-white' : 'text-gray-600'
+                                                            <FaCreditCard className={`w-6 h-6 ${payBy === 'card' ? 'text-white' : 'text-gray-600'
                                                                 }`} />
                                                         </div>
                                                         <div className="text-left">
@@ -1304,7 +1294,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                             </div>
                                         </div>
 
-                                        {paymentMethod === 'card' ? (
+                                        {payBy === 'card' ? (
                                             <>
                                                 <div className="flex items-center justify-center sm:justify-start space-x-4 mb-6">
                                                     <img src={visa} alt="Visa" className="h-8 transition-transform hover:scale-110" />
