@@ -293,6 +293,14 @@ const Landing: React.FC = () => {
                     >
                         <div className="flex items-center">
                             {item.label}
+                            <svg
+                                className={`w-4 h-4 ${isRTL ? 'mr-1' : 'ml-1'} text-gray-400 transition-transform duration-300 ${activeDropdown === dropdownKey ? 'rotate-180' : ''}`}
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
                         </div>
                     </a>
                     <div
