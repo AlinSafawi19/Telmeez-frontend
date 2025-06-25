@@ -8,6 +8,25 @@ const PioneersOffer: React.FC = () => {
     const { currentLanguage } = useLanguage();
     const t = translations[currentLanguage];
 
+    // Scroll to section function
+    const scrollToSection = (sectionId: string) => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            const headerHeight = 80; // Approximate header height
+            const elementPosition = element.offsetTop - headerHeight;
+
+            window.scrollTo({
+                top: elementPosition,
+                behavior: 'smooth'
+            });
+        }
+    };
+
+    // Handle button click to scroll to pricing
+    const handleScrollToPricing = () => {
+        scrollToSection('pricing');
+    };
+
     return (
         <div className="py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
             {/* Enhanced decorative elements */}
@@ -106,6 +125,7 @@ const PioneersOffer: React.FC = () => {
                             <div className="pt-4">
                                 <button
                                     type='button'
+                                    onClick={handleScrollToPricing}
                                     className="inline-flex items-center px-6 py-3 rounded-lg text-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 >
                                     {t.pioneersOffer.nofeedbacks.left.button}
