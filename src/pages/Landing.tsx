@@ -25,6 +25,8 @@ const Landing: React.FC = () => {
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [showBackToTop, setShowBackToTop] = useState(false);
+    const [expandedMobileDropdowns, setExpandedMobileDropdowns] = useState<Set<string>>(new Set());
+    const [selectedPlanFromMenu, setSelectedPlanFromMenu] = useState<string | null>(null);
 
     const languageDropdownRef = useRef<HTMLDivElement>(null);
     const languageDropdownContainerRef = useRef<HTMLDivElement>(null);
@@ -40,6 +42,96 @@ const Landing: React.FC = () => {
         { code: 'ar' as const, label: 'عربي' },
         { code: 'fr' as const, label: 'Français' }
     ];
+
+    // Toggle mobile dropdown expansion
+    const toggleMobileDropdown = (dropdownKey: string) => {
+        setExpandedMobileDropdowns(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(dropdownKey)) {
+                newSet.delete(dropdownKey);
+            } else {
+                newSet.add(dropdownKey);
+            }
+            return newSet;
+        });
+    };
+
+    // Close all mobile dropdowns when menu closes
+    const closeMobileMenu = () => {
+        setIsMobileMenuOpen(false);
+        setExpandedMobileDropdowns(new Set());
+    };
+
+    // Close mobile dropdowns when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target as Node)) {
+                setActiveDropdown(null);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    // Reset active dropdown when language changes
+    useEffect(() => {
+        setActiveDropdown(null);
+    }, [currentLanguage]);
+
+    // Close mobile menu when clicking on backdrop
+    useEffect(() => {
+        const handleEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                closeMobileMenu();
+            }
+        };
+
+        if (isMobileMenuOpen) {
+            document.addEventListener('keydown', handleEscape);
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+
+        return () => {
+            document.removeEventListener('keydown', handleEscape);
+            document.body.style.overflow = 'unset';
+        };
+    }, [isMobileMenuOpen]);
+
+    // Scroll to section function
+    const scrollToSection = (sectionId: string, closeMenu: boolean = true, selectedPlan?: string) => {
+
+        // If scrolling to pricing section and a plan is selected, store it
+        if (sectionId === 'pricing' && selectedPlan) {
+            setSelectedPlanFromMenu(selectedPlan);
+        }
+
+        // Add a small delay to ensure DOM is ready
+        setTimeout(() => {
+            const element = document.getElementById(sectionId);
+
+            if (element) {
+                const headerHeight = 80; // Approximate header height
+                const elementPosition = element.offsetTop - headerHeight;
+
+                window.scrollTo({
+                    top: elementPosition,
+                    behavior: 'smooth'
+                });
+
+                // Close mobile menu if open and closeMenu is true
+                if (closeMenu) {
+                    setIsMobileMenuOpen(false);
+                }
+                // Close any open dropdowns
+                setActiveDropdown(null);
+            }
+        }, 100);
+    };
 
     // Handle language change function
     const handleLanguageChange = (newLanguage: 'en' | 'ar' | 'fr') => {
@@ -71,47 +163,47 @@ const Landing: React.FC = () => {
     const headerItems = {
         home: {
             label: t.header.home,
-            href: '#'
+            href: '#hero'
         },
         pricing: {
             label: t.header.pricing.pricing,
-            href: '#'
+            href: '#pricing'
         },
         about: {
             label: t.header.about.about,
-            href: '#'
+            href: '#our-story'
         },
         resources: {
             label: t.header.resources.resources,
-            href: '#'
+            href: '#demo'
         },
         download: {
             label: t.header.download,
-            href: '#'
+            href: '#mobile-app'
         },
         contact: {
             label: t.header.contact,
-            href: '#'
+            href: '#contact'
         }
     };
 
     const dropdownItems = {
         resources: [
-            { label: t.header.resources.demo, href: '#' },
-            { label: t.header.resources.faq, href: '#' },
-            { label: t.header.resources.security, href: '#' }
+            { label: t.header.resources.demo, href: '#demo' },
+            { label: t.header.resources.faq, href: '#faq' },
+            { label: t.header.resources.security, href: '#security' }
         ],
         about: [
-            { label: t.header.about.our_story, href: '#' },
-            { label: t.header.about.press, href: '#' },
-            { label: t.header.about.testimonials, href: '#' }
+            { label: t.header.about.our_story, href: '#our-story' },
+            { label: t.header.about.press, href: '#press' },
+            { label: t.header.about.testimonials, href: '#testimonials' }
         ],
         pricing: [
             {
                 label: t.header.pricing.starter,
-                href: '#',
+                href: '#pricing',
                 monthlyPrice: '$49',
-                annualPrice: '$39',
+                annualPrice: '$39.20',
                 description: t.header.pricing.starter_desc,
                 details: t.header.pricing.starter_details,
                 savings: t.header.pricing.savings,
@@ -119,9 +211,9 @@ const Landing: React.FC = () => {
             },
             {
                 label: t.header.pricing.standard,
-                href: '#',
+                href: '#pricing',
                 monthlyPrice: '$99',
-                annualPrice: '$79',
+                annualPrice: '$79.20',
                 description: t.header.pricing.standard_desc,
                 details: t.header.pricing.standard_details,
                 savings: t.header.pricing.savings,
@@ -129,9 +221,9 @@ const Landing: React.FC = () => {
             },
             {
                 label: t.header.pricing.enterprise,
-                href: '#',
+                href: '#pricing',
                 monthlyPrice: '$299',
-                annualPrice: '$239',
+                annualPrice: '$239.20',
                 description: t.header.pricing.enterprise_desc,
                 details: t.header.pricing.enterprise_details,
                 savings: t.header.pricing.savings,
@@ -139,24 +231,6 @@ const Landing: React.FC = () => {
             }
         ]
     };
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target as Node)) {
-                setActiveDropdown(null);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    // Reset active dropdown when language changes
-    useEffect(() => {
-        setActiveDropdown(null);
-    }, [currentLanguage]);
 
     // Handle scroll events for back-to-top button
     useEffect(() => {
@@ -198,13 +272,16 @@ const Landing: React.FC = () => {
                         className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium flex items-center cursor-pointer"
                         onClick={(e) => {
                             e.preventDefault();
+                            // Navigate to the main section
+                            const sectionId = item.href.replace('#', '');
+                            scrollToSection(sectionId);
+                            // Toggle dropdown if it's not already open
                             setActiveDropdown(activeDropdown === dropdownKey ? null : dropdownKey || null);
                         }}
                     >
-                        {item.label}
-                        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
+                        <div className="flex items-center">
+                            {item.label}
+                        </div>
                     </a>
                     <div
                         onMouseEnter={() => setActiveDropdown(dropdownKey || null)}
@@ -217,34 +294,110 @@ const Landing: React.FC = () => {
         }
 
         return (
-            <a href={item.href} className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium">
-                {item.label}
+            <a
+                href={item.href}
+                className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium"
+                onClick={(e) => {
+                    e.preventDefault();
+                    const sectionId = item.href.replace('#', '');
+                    scrollToSection(sectionId);
+                }}
+            >
+                <div className="flex items-center">
+                    {item.label}
+                </div>
             </a>
         );
     };
 
-    const renderMobileNavigationItem = (item: { label: string; href: string }, hasDropdown = false, dropdownItems?: any[]) => {
+    const renderMobileNavigationItem = (item: { label: string; href: string }, hasDropdown = false, dropdownItems?: any[], dropdownKey?: string) => {
         if (hasDropdown && dropdownItems) {
+            const isExpanded = expandedMobileDropdowns.has(dropdownKey || '');
+
             return (
-                <div className={`${isRTL ? 'pr-4 border-r-2' : 'pl-4 border-l-2'} border-gray-200`}>
-                    <span className="text-gray-600 font-medium block mb-2">{item.label}</span>
-                    {dropdownItems.map((dropdownItem, index) => (
-                        <a
-                            key={index}
-                            href={dropdownItem.href}
-                            className={`block ${isRTL ? 'pr-4' : 'pl-4'} py-1 text-gray-500 hover:text-blue-600 transition-colors duration-200`}
+                <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <button
+                        type="button"
+                        className="w-full flex items-center justify-between px-4 py-3 text-left bg-gradient-to-r from-gray-50 to-white hover:from-blue-50 hover:to-blue-100 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
+                        onClick={() => {
+                            // Navigate to the main section
+                            const sectionId = item.href.replace('#', '');
+                            scrollToSection(sectionId, false); // Don't close mobile menu
+                            // Toggle dropdown (don't close mobile menu)
+                            toggleMobileDropdown(dropdownKey || '');
+                        }}
+                    >
+                        <div className="flex items-center">
+                            {item.label}
+                        </div>
+                        <svg
+                            className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
                         >
-                            {dropdownItem.label}
-                        </a>
-                    ))}
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <AnimatePresence>
+                        {isExpanded && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.3, ease: "easeInOut" }}
+                                className="overflow-hidden bg-gray-50"
+                            >
+                                <div className="py-2">
+                                    {dropdownItems.map((dropdownItem, index) => (
+                                        <motion.a
+                                            key={index}
+                                            href={dropdownItem.href}
+                                            className={`block py-2.5 px-1.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 border-l-2 border-transparent relative group`}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                const sectionId = dropdownItem.href.replace('#', '');
+                                                scrollToSection(sectionId, true); // Close mobile menu for dropdown items
+                                                closeMobileMenu();
+                                            }}
+                                            initial={{ opacity: 0, x: -10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ duration: 0.2, delay: index * 0.05 }}
+                                        >
+                                            <div className="flex items-center">
+                                                <span className="font-medium">{dropdownItem.label}</span>
+                                                <svg className="w-4 h-4 ml-auto text-gray-400 group-hover:text-blue-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                </svg>
+                                            </div>
+                                        </motion.a>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             );
         }
 
         return (
-            <a href={item.href} className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium">
-                {item.label}
-            </a>
+            <motion.a
+                href={item.href}
+                className="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium border border-gray-200 rounded-lg bg-white shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
+                onClick={(e) => {
+                    e.preventDefault();
+                    const sectionId = item.href.replace('#', '');
+                    scrollToSection(sectionId, true); // Close mobile menu for regular items
+                    closeMobileMenu();
+                }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+            >
+                <div className="flex items-center">
+                    {item.label}
+                </div>
+            </motion.a>
         );
     };
 
@@ -265,6 +418,15 @@ const Landing: React.FC = () => {
                     }}
                     onClick={(e) => {
                         e.preventDefault();
+                        const sectionId = item.href.replace('#', '');
+                        // Map the plan label to plan ID
+                        let planId = 'standard'; // default
+                        if (item.label === t.header.pricing.starter) {
+                            planId = 'starter';
+                        } else if (item.label === t.header.pricing.enterprise) {
+                            planId = 'enterprise';
+                        }
+                        scrollToSection(sectionId, true, planId);
                     }}
                 >
                     <div className="flex justify-between items-center mb-1">
@@ -316,6 +478,8 @@ const Landing: React.FC = () => {
                     }}
                     onClick={(e) => {
                         e.preventDefault();
+                        const sectionId = item.href.replace('#', '');
+                        scrollToSection(sectionId);
                     }}
                 >
                     {item.label}
@@ -343,6 +507,8 @@ const Landing: React.FC = () => {
                     }}
                     onClick={(e) => {
                         e.preventDefault();
+                        const sectionId = item.href.replace('#', '');
+                        scrollToSection(sectionId);
                     }}
                 >
                     {item.label}
@@ -350,6 +516,104 @@ const Landing: React.FC = () => {
             ))}
         </div>
     );
+
+    const renderMobilePricingDropdown = () => {
+        const isExpanded = expandedMobileDropdowns.has('pricing');
+
+        return (
+            <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                <button
+                    type="button"
+                    className="w-full flex items-center justify-between px-4 py-3 text-left bg-gradient-to-r from-gray-50 to-white hover:from-blue-50 hover:to-blue-100 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
+                    onClick={() => toggleMobileDropdown('pricing')}
+                >
+                    <div className="flex items-center">
+                        {headerItems.pricing.label}
+                    </div>
+                    <svg
+                        className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <AnimatePresence>
+                    {isExpanded && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="overflow-hidden bg-gray-50"
+                        >
+                            <div className="py-2">
+                                {dropdownItems.pricing.map((item, index) => (
+                                    <motion.div
+                                        key={index}
+                                        className={`px-3 py-3 border-b border-gray-100 last:border-b-0`}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ duration: 0.2, delay: index * 0.05 }}
+                                    >
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="font-semibold text-gray-800">{item.label}</span>
+                                            {item.label === t.header.pricing.starter && (
+                                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    <span className="mr-1">✨</span>
+                                                    {t.header.pricing.free_trial}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="flex items-center justify-between mb-2">
+                                            <div className="text-right">
+                                                <div className="text-blue-600 font-bold text-lg">{item.monthlyPrice}{t.header.pricing.permonth}</div>
+                                                <div className="text-sm text-gray-600">{item.annualPrice}{t.header.pricing.peryear}</div>
+                                            </div>
+                                            <div className="text-xs text-green-600 font-medium">{item.savings}</div>
+                                        </div>
+                                        <div className="flex items-center justify-between mb-2">
+                                            <div className="flex items-center space-x-1">
+                                                <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                                                </svg>
+                                                <span className="text-xs text-gray-500">{t.pricing.max_storage}:</span>
+                                                <span className="text-xs font-semibold text-blue-600">{item.maxStorage}</span>
+                                            </div>
+                                        </div>
+                                        <p className="text-sm text-gray-600 mb-1">{item.description}</p>
+                                        <p className="text-xs text-gray-500">{item.details}</p>
+                                        <button
+                                            type="button"
+                                            className="w-full mt-2 bg-blue-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                const sectionId = item.href.replace('#', '');
+                                                // Map the plan label to plan ID
+                                                let planId = 'standard'; // default
+                                                if (item.label === t.header.pricing.starter) {
+                                                    planId = 'starter';
+                                                } else if (item.label === t.header.pricing.enterprise) {
+                                                    planId = 'enterprise';
+                                                }
+                                                scrollToSection(sectionId, true, planId);
+                                                closeMobileMenu();
+                                            }}
+                                        >
+                                            Select Plan
+                                        </button>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
+        );
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
@@ -453,13 +717,13 @@ const Landing: React.FC = () => {
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                                className="md:hidden mt-4 py-4 border-t overflow-hidden bg-white force-white-bg"
+                                className="md:hidden mt-4 py-4 border-t max-h-[calc(100vh-100px)] overflow-y-auto bg-gradient-to-b from-white to-gray-50 force-white-bg rounded-lg shadow-lg"
                             >
-                                <div className="flex justify-end mb-4">
+                                <div className="flex justify-end mb-6 px-4">
                                     <button
                                         type="button"
-                                        className="text-gray-600 bg-white p-2 rounded-lg border border-gray-300 focus:outline-none hover:bg-gray-100"
-                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        className="text-gray-600 bg-white p-2 rounded-lg border border-gray-300 focus:outline-none hover:bg-gray-100 transition-all duration-200 hover:scale-105"
+                                        onClick={closeMobileMenu}
                                         aria-label="Close mobile menu"
                                     >
                                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -467,11 +731,11 @@ const Landing: React.FC = () => {
                                         </svg>
                                     </button>
                                 </div>
-                                <nav className="flex flex-col space-y-4 p-4">
+                                <nav className="flex flex-col space-y-3 px-4 pb-4">
                                     {renderMobileNavigationItem(headerItems.home)}
-                                    {renderMobileNavigationItem(headerItems.pricing)}
-                                    {renderMobileNavigationItem(headerItems.about, true, dropdownItems.about)}
-                                    {renderMobileNavigationItem(headerItems.resources, true, dropdownItems.resources)}
+                                    {renderMobilePricingDropdown()}
+                                    {renderMobileNavigationItem(headerItems.about, true, dropdownItems.about, 'about')}
+                                    {renderMobileNavigationItem(headerItems.resources, true, dropdownItems.resources, 'resources')}
                                     {renderMobileNavigationItem(headerItems.download)}
                                     {renderMobileNavigationItem(headerItems.contact)}
                                 </nav>
@@ -555,6 +819,7 @@ const Landing: React.FC = () => {
                             <button
                                 type="button"
                                 className="group relative w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-lg text-base sm:text-lg md:text-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-offset-2 min-w-[200px] sm:min-w-0 overflow-hidden btn-gradient-hover animate-glow"
+                                onClick={() => scrollToSection('pricing')}
                             >
                                 <span className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                                 <span className="relative flex items-center justify-center">
@@ -567,6 +832,7 @@ const Landing: React.FC = () => {
                             <button
                                 type="button"
                                 className="group relative w-full sm:w-auto bg-white/80 backdrop-blur-sm text-blue-600 px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-lg text-base sm:text-lg md:text-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border-2 border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-offset-2 min-w-[200px] sm:min-w-0 overflow-hidden btn-gradient-hover"
+                                onClick={() => scrollToSection('demo')}
                             >
                                 <span className="absolute inset-0 bg-gradient-to-r from-blue-50 to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                                 <span className="relative flex items-center justify-center">
@@ -620,7 +886,7 @@ const Landing: React.FC = () => {
 
             {/* Add Pricing section */}
             <section id="pricing">
-                <PricingPlans2 />
+                <PricingPlans2 initialSelectedPlan={selectedPlanFromMenu} />
             </section>
 
             {/* Add Our Story section */}

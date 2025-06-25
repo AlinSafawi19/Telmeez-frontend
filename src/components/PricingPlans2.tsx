@@ -72,6 +72,28 @@ const PricingPlans2: React.FC<PricingPlansProps> = ({
         }
     }, [currentLanguage, initialSelectedPlan]);
 
+    // Scroll to selected plan when it's set from menu
+    useEffect(() => {
+        if (initialSelectedPlan && selectedPlan === initialSelectedPlan) {
+            // Add a small delay to ensure the component is rendered
+            setTimeout(() => {
+                const planElement = document.querySelector(`[data-plan-id="${selectedPlan}"]`);
+                if (planElement) {
+                    planElement.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                    
+                    // Add a temporary highlight effect
+                    planElement.classList.add('ring-4', 'ring-blue-300', 'ring-offset-4');
+                    setTimeout(() => {
+                        planElement.classList.remove('ring-4', 'ring-blue-300', 'ring-offset-4');
+                    }, 2000);
+                }
+            }, 500);
+        }
+    }, [initialSelectedPlan, selectedPlan]);
+
     const handlePlanSelect = (planId: string) => {
         setSelectedPlan(planId);
     };
@@ -164,6 +186,7 @@ const PricingPlans2: React.FC<PricingPlansProps> = ({
                     {plans.map((plan) => (
                         <div
                             key={plan.id}
+                            data-plan-id={plan.id}
                             onClick={() => handlePlanSelect(plan.id)}
                             className={`relative rounded-xl bg-white p-5 shadow-lg cursor-pointer focus:outline-none transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${plan.recommended
                                 ? 'transform scale-[1.02] hover:scale-[1.03]'
