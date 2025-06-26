@@ -221,7 +221,7 @@ const SignIn: React.FC = () => {
                                 <input
                                     id="email-address"
                                     name="email"
-                                    type="email"
+                                    type="text"
                                     autoComplete="email"
                                     className={`appearance-none relative block w-full px-3 py-3 border rounded-lg force-white-bg ${errors.email ? 'border-red-500' : 'border-gray-300'} placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-base`}
                                     placeholder={t.email}

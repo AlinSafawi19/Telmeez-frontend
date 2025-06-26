@@ -486,7 +486,14 @@ export const ar = {
             password_mismatch: "كلمات المرور غير متطابقة",
             invalid_card: "يرجى إدخال رقم بطاقة صالح",
             invalid_expiry: "يرجى إدخال تاريخ انتهاء صالح (MM/YY)",
-            invalid_cvv: "يرجى إدخال رمز CVV صالح"
+            invalid_cvv: "يرجى إدخال رمز CVV صالح",
+            first_name_length: "يجب أن يكون الاسم الأول حرفين على الأقل",
+            last_name_length: "يجب أن يكون الاسم الأخير حرفين على الأقل",
+            invalid_phone: "يرجى إدخال رقم هاتف صالح",
+            need_help: "إذا كنت بحاجة إلى مساعدة، يرجى الاتصال بفريق الدعم:",
+            address_length: "يجب أن يكون العنوان على الأقل 5 أحرف",
+            city_length: "يجب أن يكون المدينة على الأقل 2 أحرف",
+            zip_code_length: "يجب أن يكون الرمز البريدي على الأقل 3 أحرف"
         },
         account_info: {
             title: "معلومات الحساب",
@@ -525,7 +532,8 @@ export const ar = {
                     desc: "ادفع بأمان باستخدام بطاقتك",
                     card_nb: "رقم البطاقة",
                     expiration: "تاريخ الانتهاء",
-                    cvv: "رمز الأمان"
+                    cvv: "رمز الأمان",
+                    detected: "تم التعرف على:"
                 },
                 whish: {
                     name: "دفع Whish",
@@ -581,7 +589,7 @@ export const ar = {
                 seven_days_badge: "7 أيام"
             },
             annual_saving: "التوفير السنوي",
-            promo_code_required: "يرجى إدخال رمز ترويجي",
+            validating: "يتم التحقق...",
             apply: "تطبيق",
             annual: "سنوي",
             monthly: "شهري",
@@ -633,6 +641,26 @@ export const ar = {
                     upgrade_to_enterprise: "الترقية إلى المؤسسات"
                 }
             }
+        },
+        server_errors: {
+            user_already_exists: "المستخدم بهذا البريد الإلكتروني موجود بالفعل. يرجى استخدام بريد إلكتروني مختلف أو التسجيل.",
+            missing_required_fields: "يرجى ملء جميع الحقول المطلوبة.",
+            invalid_plan: "الخطة المختارة غير صالحة.",
+            promo_code_not_valid_yet: "رمز الخصم هذا غير صالح بعد.",
+            promo_code_expired: "رمز الخصم هذا منتهي الصلاحية.",
+            super_admin_role_not_found: "خطأ في النظام: لم يتم العثور على دور المشرف الأعلى.",
+            checkout_error: "حدث خطأ أثناء الدفع. يرجى المحاولة مرة أخرى.",
+            promo_code_required: "يرجى إدخال رمز خصم.",
+            invalid_promo_code: "رمز خصم غير صالح.",
+            promo_code_first_time_only: "رمز الخصم هذا مخصص للمستخدمين الجدد فقط.",
+            email_required_for_promo: "البريد الإلكتروني مطلوب للتحقق من رمز الخصم.",
+            validation_error: "خطأ في التحقق من رمز الخصم.",
+            general_error: "حدث خطأ. يرجى المحاولة مرة أخرى."
+        },
+        user_exists_actions: {
+            sign_in: "تسجيل الدخول",
+            try_another_email: "جرب بريد إلكتروني آخر",
+            support_message: "إذا كنت تعتقد أن هناك خطأ أو لم تقم بإضافة هذا البريد الإلكتروني من قبل، اتصل بالدعم:"
         }
     },
     countries: {

@@ -470,7 +470,17 @@ export const fr = {
             password_mismatch: "Les mots de passe ne correspondent pas",
             invalid_card: "Veuillez entrer un numéro de carte valide",
             invalid_expiry: "Veuillez entrer une date d'expiration valide (MM/AA)",
-            invalid_cvv: "Veuillez entrer un code CVV valide"
+            invalid_cvv: "Veuillez entrer un code CVV valide",
+            first_name_length: "Le prénom doit contenir au moins 2 caractères",
+            last_name_length: "Le nom doit contenir au moins 2 caractères",
+            invalid_phone: "Veuillez entrer un numéro de téléphone valide",
+            promo_code_email_error: "Veuillez d'abord entrer votre adresse e-mail",
+            promo_code_required: "Veuillez entrer un code promo",
+            promo_code_validation_error: "Échec de la validation du code promo",
+            need_help: "Si vous avez besoin d'aide, contactez notre équipe de support:",
+            address_length: "L'adresse doit contenir au moins 5 caractères",
+            city_length: "La ville doit contenir au moins 2 caractères",
+            zip_code_length: "Le code postal doit contenir au moins 3 caractères"
         },
         account_info: {
             title: "Informations du compte",
@@ -509,7 +519,8 @@ export const fr = {
                     desc: "Payez en toute sécurité avec votre carte",
                     card_nb: "Numéro de carte",
                     expiration: "Date d'expiration",
-                    cvv: "CVV"
+                    cvv: "CVV",
+                    detected: "Détecté:"
                 },
                 whish: {
                     name: "Paiement Whish",
@@ -566,6 +577,7 @@ export const fr = {
             },
             annual_saving: "Économies annuelles",
             promo_code_required: "Veuillez entrer un code promo",
+            validating: "Validation en cours...",
             apply: "Appliquer",
             annual: "Annuel",
             monthly: "Mensuel",
@@ -617,6 +629,26 @@ export const fr = {
                     upgrade_to_enterprise: "Passer à l'Entreprise"
                 }
             }
+        },
+        server_errors: {
+            user_already_exists: "Un utilisateur avec cet email existe déjà. Veuillez utiliser un email différent ou essayer de vous connecter.",
+            missing_required_fields: "Veuillez remplir tous les champs obligatoires.",
+            invalid_plan: "Le plan sélectionné n'est pas valide.",
+            promo_code_not_valid_yet: "Ce code promo n'est pas encore valide.",
+            promo_code_expired: "Ce code promo a expiré.",
+            super_admin_role_not_found: "Erreur système: Rôle super admin introuvable.",
+            checkout_error: "Une erreur s'est produite lors du paiement. Veuillez réessayer.",
+            promo_code_required: "Veuillez entrer un code promo.",
+            invalid_promo_code: "Code promo invalide.",
+            promo_code_first_time_only: "Ce code promo est réservé aux nouveaux utilisateurs.",
+            email_required_for_promo: "L'email est requis pour valider le code promo.",
+            validation_error: "Erreur lors de la validation du code promo.",
+            general_error: "Une erreur s'est produite. Veuillez réessayer."
+        },
+        user_exists_actions: {
+            sign_in: "Se Connecter",
+            try_another_email: "Essayer Un Autre Email",
+            support_message: "Si vous pensez qu'il y a une erreur ou que vous n'avez pas ajouté cet email auparavant, contactez le support :"
         }
     },
     countries: {

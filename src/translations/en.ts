@@ -486,7 +486,17 @@ export const en = {
             password_mismatch: "Passwords do not match",
             invalid_card: "Please enter a valid card number",
             invalid_expiry: "Please enter a valid expiry date (MM/YY)",
-            invalid_cvv: "Please enter a valid CVV"
+            invalid_cvv: "Please enter a valid CVV",
+            first_name_length: "First name must be at least 2 characters long",
+            last_name_length: "Last name must be at least 2 characters long",
+            invalid_phone: "Please enter a valid phone number",
+            promo_code_email_error: "Please enter a valid email address",
+            promo_code_required: "Please enter a promo code",
+            promo_code_validation_error: "Failed to validate promo code",
+            need_help: "If you need help, contact our support team:",
+            address_length: "Address must be at least 5 characters long",
+            city_length: "City must be at least 2 characters long",
+            zip_code_length: "ZIP code must be at least 3 characters long"
         },
         account_info: {
             title: "Account Information",
@@ -525,7 +535,8 @@ export const en = {
                     desc: "Pay securely with your card",
                     card_nb: "Card Number",
                     expiration: "Expiry Date",
-                    cvv: "CVV"
+                    cvv: "CVV",
+                    detected: "Detected:"
                 },
                 whish: {
                     name: "Whish Payment",
@@ -582,6 +593,7 @@ export const en = {
             },
             annual_saving: "Annual Savings",
             promo_code_required: "Please enter a promo code",
+            validating: "Validating...",
             apply: "Apply",
             annual: "Annual",
             monthly: "Monthly",
@@ -633,6 +645,26 @@ export const en = {
                     upgrade_to_enterprise: "Upgrade to Enterprise"
                 }
             }
+        },
+        server_errors: {
+            user_already_exists: "User with this email already exists. Please use a different email or try signing in.",
+            missing_required_fields: "Please fill in all required fields.",
+            invalid_plan: "Selected plan is not valid.",
+            promo_code_not_valid_yet: "This promo code is not valid yet.",
+            promo_code_expired: "This promo code has expired.",
+            super_admin_role_not_found: "System error: Super admin role not found.",
+            checkout_error: "An error occurred during checkout. Please try again.",
+            promo_code_required: "Please enter a promo code.",
+            invalid_promo_code: "Invalid promo code.",
+            promo_code_first_time_only: "This promo code is only for first-time users.",
+            email_required_for_promo: "Email is required to validate promo code.",
+            validation_error: "Error validating promo code.",
+            general_error: "An error occurred. Please try again."
+        },
+        user_exists_actions: {
+            sign_in: "Sign In",
+            try_another_email: "Try Another Email",
+            support_message: "If you think something is wrong or you didn't add this email before, contact support:"
         }
     },
     countries: {

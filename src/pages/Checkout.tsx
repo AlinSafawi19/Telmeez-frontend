@@ -72,6 +72,7 @@ const Checkout: React.FC = () => {
     const [isSubmittingCheckout, setIsSubmittingCheckout] = useState(false);
     const [plans, setPlans] = useState<Plan[]>([]);
     const [apiError, setApiError] = useState('');
+    const [isUserAlreadyExists, setIsUserAlreadyExists] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     // Password visibility state
@@ -137,7 +138,11 @@ const Checkout: React.FC = () => {
     useEffect(() => {
         const fetchPlans = async () => {
             try {
-                const response = await fetch('/api/checkout/plans');
+                const response = await fetch('/api/checkout/plans', {
+                    headers: {
+                        'Accept-Language': currentLanguage
+                    }
+                });
                 const data = await response.json();
                 if (data.success) {
                     setPlans(data.data);
@@ -149,7 +154,7 @@ const Checkout: React.FC = () => {
         };
 
         fetchPlans();
-    }, []);
+    }, [currentLanguage]);
 
     // Helper function to get plan ID
     const getPlanId = (planName: string): string => {
@@ -414,6 +419,12 @@ const Checkout: React.FC = () => {
                 return t.checkout.validation.password_length;
             case 'password_mismatch':
                 return t.checkout.validation.password_mismatch;
+            case 'first_name_length':
+                return t.checkout.validation.first_name_length;
+            case 'last_name_length':
+                return t.checkout.validation.last_name_length;
+            case 'invalid_phone':
+                return t.checkout.validation.invalid_phone;
             case 'invalid_card':
                 return t.checkout.validation.invalid_card;
             case 'invalid_expiry':
@@ -438,6 +449,12 @@ const Checkout: React.FC = () => {
                         updatedBillingErrors[field] = t.checkout.validation.password_length;
                     } else if (field === 'confirmPassword' && value === t.checkout.validation.password_mismatch) {
                         updatedBillingErrors[field] = t.checkout.validation.password_mismatch;
+                    } else if (field === 'firstName' && value === t.checkout.validation.first_name_length) {
+                        updatedBillingErrors[field] = t.checkout.validation.first_name_length;
+                    } else if (field === 'lastName' && value === t.checkout.validation.last_name_length) {
+                        updatedBillingErrors[field] = t.checkout.validation.last_name_length;
+                    } else if (field === 'phone' && value === t.checkout.validation.invalid_phone) {
+                        updatedBillingErrors[field] = t.checkout.validation.invalid_phone;
                     } else if (value === t.checkout.validation.required) {
                         updatedBillingErrors[field] = t.checkout.validation.required;
                     }
@@ -486,11 +503,26 @@ const Checkout: React.FC = () => {
 
         // Update promo code error
         if (promoError) {
-            if (promoError === t.checkout.summary.promo_code_required) {
-                setPromoError(t.checkout.summary.promo_code_required);
+            // Map backend error messages to translation keys for promo code errors
+            if (promoError === t.checkout.server_errors.promo_code_required) {
+                setPromoError(t.checkout.server_errors.promo_code_required);
+            } else if (promoError === t.checkout.server_errors.invalid_promo_code) {
+                setPromoError(t.checkout.server_errors.invalid_promo_code);
+            } else if (promoError === t.checkout.server_errors.promo_code_not_valid_yet) {
+                setPromoError(t.checkout.server_errors.promo_code_not_valid_yet);
+            } else if (promoError === t.checkout.server_errors.promo_code_expired) {
+                setPromoError(t.checkout.server_errors.promo_code_expired);
+            } else if (promoError === t.checkout.server_errors.promo_code_first_time_only) {
+                setPromoError(t.checkout.server_errors.promo_code_first_time_only);
+            } else if (promoError === t.checkout.server_errors.email_required_for_promo) {
+                setPromoError(t.checkout.server_errors.email_required_for_promo);
+            } else if (promoError === t.checkout.server_errors.validation_error) {
+                setPromoError(t.checkout.server_errors.validation_error);
+            } else if (promoError === t.checkout.server_errors.general_error) {
+                setPromoError(t.checkout.server_errors.general_error);
             }
         }
-    }, [currentLanguage, t.checkout.validation, t.checkout.summary]);
+    }, [currentLanguage, t.checkout.validation, t.checkout.server_errors]);
 
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setBillingInfo(prev => ({
@@ -694,6 +726,22 @@ const Checkout: React.FC = () => {
         return true;
     };
 
+    const validatePhoneNumber = (phone: string): boolean => {
+        // Remove all non-digit characters except + for international format
+        const cleanPhone = phone.replace(/[^\d+]/g, '');
+
+        // Check if it starts with + (international format)
+        if (cleanPhone.startsWith('+')) {
+            // International format: +[country code][number] (minimum 8 digits total)
+            const digitsOnly = cleanPhone.substring(1).replace(/\D/g, '');
+            return digitsOnly.length >= 7 && digitsOnly.length <= 15;
+        } else {
+            // Local format: just digits (minimum 7 digits)
+            const digitsOnly = cleanPhone.replace(/\D/g, '');
+            return digitsOnly.length >= 7 && digitsOnly.length <= 15;
+        }
+    };
+
     const handlePromoCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPromoCode(e.target.value);
         setPromoError('');
@@ -702,12 +750,12 @@ const Checkout: React.FC = () => {
 
     const handleApplyPromo = async () => {
         if (!promoCode.trim()) {
-            setPromoError('promo_code_required');
+            setPromoError(t.checkout.server_errors.promo_code_required);
             return;
         }
 
         if (!billingInfo.email.trim()) {
-            setPromoError('Please enter your email address first');
+            setPromoError(t.checkout.server_errors.email_required_for_promo);
             return;
         }
 
@@ -717,7 +765,10 @@ const Checkout: React.FC = () => {
 
             const response = await fetch('/api/checkout/validate-promo', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept-Language': currentLanguage
+                },
                 body: JSON.stringify({
                     promoCode: promoCode.trim(),
                     email: billingInfo.email
@@ -732,15 +783,143 @@ const Checkout: React.FC = () => {
                 setPromoCode(''); // Clear the input
                 setPromoError('');
             } else {
-                setPromoError(data.message);
-                setDiscount(0);
-                setPromoCodeApplied(false);
+                setIsValidatingPromo(false);
+                // Handle different types of server errors
+                let errorMessage = data.message;
+
+                // Check if this is a user already exists error
+                if (data.message === (t.checkout as any).server_errors.user_already_exists) {
+                    setIsUserAlreadyExists(true);
+                    setApiError('');
+                    return;
+                }
+
+                // Map backend error messages to translation keys for specific errors
+                if (data.message === t.checkout.server_errors.missing_required_fields) {
+                    errorMessage = t.checkout.server_errors.missing_required_fields;
+                } else if (data.message === t.checkout.server_errors.invalid_plan) {
+                    errorMessage = t.checkout.server_errors.invalid_plan;
+                } else if (data.message === t.checkout.server_errors.checkout_error) {
+                    errorMessage = t.checkout.server_errors.checkout_error;
+                } else if (data.message === t.checkout.server_errors.promo_code_required) {
+                    errorMessage = t.checkout.server_errors.promo_code_required;
+                } else if (data.message === t.checkout.server_errors.invalid_promo_code) {
+                    errorMessage = t.checkout.server_errors.invalid_promo_code;
+                } else if (data.message === t.checkout.server_errors.promo_code_not_valid_yet) {
+                    errorMessage = t.checkout.server_errors.promo_code_not_valid_yet;
+                } else if (data.message === t.checkout.server_errors.promo_code_expired) {
+                    errorMessage = t.checkout.server_errors.promo_code_expired;
+                } else if (data.message === t.checkout.server_errors.promo_code_first_time_only) {
+                    errorMessage = t.checkout.server_errors.promo_code_first_time_only;
+                } else if (data.message === t.checkout.server_errors.email_required_for_promo) {
+                    errorMessage = t.checkout.server_errors.email_required_for_promo;
+                } else if (data.message === t.checkout.server_errors.validation_error) {
+                    errorMessage = t.checkout.server_errors.validation_error;
+                } else if (data.message === t.checkout.server_errors.general_error) {
+                    errorMessage = t.checkout.server_errors.general_error;
+                } else if (data.message === t.checkout.server_errors.super_admin_role_not_found) {
+                    errorMessage = t.checkout.server_errors.super_admin_role_not_found;
+                }
+
+                // Handle validation errors from backend
+                if (data.errors && Array.isArray(data.errors)) {
+                    const validationErrors: {
+                        billing?: Partial<Record<keyof AccountInfo, string>>;
+                        billingAddress?: Partial<Record<keyof BillingAddress, string>>;
+                        payment?: Partial<Record<keyof PaymentInfo, string>>;
+                    } = {};
+
+                    data.errors.forEach((error: string) => {
+                        // Map backend validation errors to frontend field errors
+                        if (error.includes('First name')) {
+                            if (!validationErrors.billing) validationErrors.billing = {};
+                            validationErrors.billing.firstName = 'required';
+                        } else if (error.includes('Last name')) {
+                            if (!validationErrors.billing) validationErrors.billing = {};
+                            validationErrors.billing.lastName = 'required';
+                        } else if (error.includes('Valid email') || error.includes('email')) {
+                            if (!validationErrors.billing) validationErrors.billing = {};
+                            validationErrors.billing.email = 'invalid_email';
+                        } else if (error.includes('phone')) {
+                            if (!validationErrors.billing) validationErrors.billing = {};
+                            validationErrors.billing.phone = 'required';
+                        } else if (error.includes('Password')) {
+                            if (!validationErrors.billing) validationErrors.billing = {};
+                            validationErrors.billing.password = 'password_length';
+                        } else if (error.includes('Valid billing address') || error.includes('address')) {
+                            if (!validationErrors.billingAddress) validationErrors.billingAddress = {};
+                            validationErrors.billingAddress.address = t.checkout.validation.required;
+                        } else if (error.includes('City')) {
+                            if (!validationErrors.billingAddress) validationErrors.billingAddress = {};
+                            validationErrors.billingAddress.city = t.checkout.validation.required;
+                        } else if (error.includes('State')) {
+                            if (!validationErrors.billingAddress) validationErrors.billingAddress = {};
+                            validationErrors.billingAddress.state = t.checkout.validation.required;
+                        } else if (error.includes('ZIP code') || error.includes('zip')) {
+                            if (!validationErrors.billingAddress) validationErrors.billingAddress = {};
+                            validationErrors.billingAddress.zipCode = t.checkout.validation.required;
+                        } else if (error.includes('Country')) {
+                            if (!validationErrors.billingAddress) validationErrors.billingAddress = {};
+                            validationErrors.billingAddress.country = t.checkout.validation.required;
+                        } else if (error.includes('card number')) {
+                            if (!validationErrors.payment) validationErrors.payment = {};
+                            validationErrors.payment.cardNumber = 'invalid_card';
+                        } else if (error.includes('expiry date')) {
+                            if (!validationErrors.payment) validationErrors.payment = {};
+                            validationErrors.payment.expiryDate = 'invalid_expiry';
+                        } else if (error.includes('CVV')) {
+                            if (!validationErrors.payment) validationErrors.payment = {};
+                            validationErrors.payment.cvv = 'invalid_cvv';
+                        }
+                    });
+
+                    // Set the validation errors and navigate to the appropriate step
+                    if (Object.keys(validationErrors).length > 0) {
+                        setErrors(validationErrors);
+
+                        // Navigate to the appropriate step based on which errors occurred
+                        if (validationErrors.billing) {
+                            setCurrentStep(1);
+                        } else if (validationErrors.payment) {
+                            setCurrentStep(2);
+                        } else if (validationErrors.billingAddress) {
+                            setCurrentStep(3);
+                        }
+
+                        // Scroll to error message
+                        setTimeout(() => {
+                            const errorElement = document.getElementById('checkout-error');
+                            if (errorElement) {
+                                errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        }, 100);
+                        return;
+                    }
+                }
+
+                setApiError(errorMessage);
+
+                // Scroll to error message
+                setTimeout(() => {
+                    const errorElement = document.getElementById('checkout-error');
+                    if (errorElement) {
+                        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 100);
             }
-        } catch (error) {
-            console.error('Promo code validation error:', error);
-            setPromoError('Failed to validate promo code');
-            setDiscount(0);
-            setPromoCodeApplied(false);
+        } catch (error: any) {
+            setIsValidatingPromo(false);
+            console.error('Checkout error:', error)
+
+            setApiError(t.checkout.server_errors.general_error);
+
+            // Scroll to error message
+            setTimeout(() => {
+                const errorElement = document.getElementById('checkout-error');
+                if (errorElement) {
+                    errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
         } finally {
             setIsValidatingPromo(false);
         }
@@ -754,9 +933,13 @@ const Checkout: React.FC = () => {
             // Required fields validation
             if (!billingInfo.firstName.trim()) {
                 billingErrors.firstName = 'required';
+            } else if (billingInfo.firstName.trim().length < 2) {
+                billingErrors.firstName = 'first_name_length';
             }
             if (!billingInfo.lastName.trim()) {
                 billingErrors.lastName = 'required';
+            } else if (billingInfo.lastName.trim().length < 2) {
+                billingErrors.lastName = 'last_name_length';
             }
             if (!billingInfo.email.trim()) {
                 billingErrors.email = 'required';
@@ -769,6 +952,8 @@ const Checkout: React.FC = () => {
             }
             if (!billingInfo.phone.trim()) {
                 billingErrors.phone = 'required';
+            } else if (!validatePhoneNumber(billingInfo.phone)) {
+                billingErrors.phone = 'invalid_phone';
             }
             if (!billingInfo.password.trim()) {
                 billingErrors.password = 'required';
@@ -829,15 +1014,21 @@ const Checkout: React.FC = () => {
 
             if (!billingAddress.address.trim()) {
                 billingAddressErrors.address = t.checkout.validation.required;
+            } else if (billingAddress.address.trim().length < 5) {
+                billingAddressErrors.address = t.checkout.validation.address_length;
             }
             if (!billingAddress.city.trim()) {
                 billingAddressErrors.city = t.checkout.validation.required;
+            } else if (billingAddress.city.trim().length < 2) {
+                billingAddressErrors.city = t.checkout.validation.city_length;
             }
             if (!billingAddress.state.trim()) {
                 billingAddressErrors.state = t.checkout.validation.required;
             }
             if (!billingAddress.zipCode.trim()) {
                 billingAddressErrors.zipCode = t.checkout.validation.required;
+            } else if (billingAddress.zipCode.trim().length < 3) {
+                billingAddressErrors.zipCode = t.checkout.validation.zip_code_length;
             }
             if (!billingAddress.country) {
                 billingAddressErrors.country = t.checkout.validation.required;
@@ -880,150 +1071,6 @@ const Checkout: React.FC = () => {
         } else {
             // Submit checkout to backend
             await handleFinalCheckout();
-        }
-    };
-
-    const handleFinalCheckout = async () => {
-        try {
-            setIsSubmittingCheckout(true);
-            setApiError('');
-
-            const planId = getPlanId(selectedPlan);
-            if (!planId) {
-                setApiError('Invalid plan selected');
-                return;
-            }
-
-            const totalAmountBeforePromo = getTotalPriceBeforePromo();
-            console.log('Checkout Debug:', {
-                planPrice: getPlanPrice(),
-                addOnsCost: getAddOnsTotal(),
-                totalAmountBeforePromo,
-                discount: discount * 100,
-                finalPrice: getTotalPrice()
-            });
-
-            const checkoutData = {
-                firstName: billingInfo.firstName,
-                lastName: billingInfo.lastName,
-                email: billingInfo.email,
-                phone: billingInfo.phone,
-                institutionName: billingInfo.institutionName,
-                password: billingInfo.password,
-                billingAddress: {
-                    address: billingAddress.address,
-                    address2: billingAddress.address2,
-                    city: billingAddress.city,
-                    state: billingAddress.state,
-                    zipCode: billingAddress.zipCode,
-                    country: billingAddress.country,
-                    customCountry: billingAddress.customCountry
-                },
-                paymentInfo: {
-                    cardNumber: paymentInfo.cardNumber,
-                    expiryDate: paymentInfo.expiryDate,
-                    cvv: paymentInfo.cvv
-                },
-                planId: planId,
-                billingCycle: isAnnual ? 'annual' : 'monthly',
-                addOns: addOns
-                    .filter(addOn => addOn.quantity > 0)
-                    .map(addOn => ({
-                        type: addOn.id as 'admin' | 'teacher' | 'student' | 'parent' | 'storage',
-                        quantity: addOn.quantity,
-                        price: addOn.price
-                    })),
-                totalAmount: totalAmountBeforePromo,
-                promoCode: promoCodeApplied ? 'WELCOME10' : undefined,
-                discount: promoCodeApplied ? discount * 100 : undefined,
-                paymentMethod: payBy
-            };
-
-            const response = await fetch('/api/checkout', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(checkoutData),
-                signal: AbortSignal.timeout(30000) // 30 second timeout
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                // Redirect to success page
-                navigate('/success', {
-                    state: {
-                        user: data.data.user,
-                        subscription: data.data.subscription
-                    }
-                });
-            } else {
-                // Handle different types of server errors
-                let errorMessage = data.message || 'Checkout failed';
-
-                // Handle specific error types
-                if (data.message?.includes('already exists')) {
-                    errorMessage = 'An account with this email already exists. Please use a different email or try signing in.';
-                } else if (data.message?.includes('Invalid plan')) {
-                    errorMessage = 'The selected plan is no longer available. Please refresh the page and try again.';
-                } else if (data.message?.includes('Super Admin role not found')) {
-                    errorMessage = 'System configuration error. Please contact support.';
-                } else if (data.message?.includes('Missing required fields')) {
-                    errorMessage = 'Please fill in all required fields before proceeding.';
-                } else if (data.message?.includes('Promo code')) {
-                    errorMessage = 'The promo code is no longer valid. Please remove it and try again.';
-                } else if (response.status === 400) {
-                    errorMessage = 'Please check your information and try again.';
-                } else if (response.status === 500) {
-                    errorMessage = 'Server error. Please try again in a few moments.';
-                } else if (response.status === 503) {
-                    errorMessage = 'Service temporarily unavailable. Please try again later.';
-                }
-
-                setApiError(errorMessage);
-
-                // Scroll to error message
-                setTimeout(() => {
-                    const errorElement = document.getElementById('checkout-error');
-                    if (errorElement) {
-                        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
-                }, 100);
-            }
-        } catch (error) {
-            console.error('Checkout error:', error);
-
-            // Handle network errors
-            let errorMessage = 'An error occurred during checkout';
-
-            if (error instanceof TypeError && error.message.includes('fetch')) {
-                errorMessage = 'Network error. Please check your internet connection and try again.';
-            } else if (error instanceof Error && error.name === 'AbortError') {
-                errorMessage = 'Request timed out. Please check your internet connection and try again.';
-            } else if (error instanceof Error) {
-                errorMessage = error.message || 'An unexpected error occurred. Please try again.';
-            }
-
-            setApiError(errorMessage);
-
-            // Scroll to error message
-            setTimeout(() => {
-                const errorElement = document.getElementById('checkout-error');
-                if (errorElement) {
-                    errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }, 100);
-        } finally {
-            setIsSubmittingCheckout(false);
-        }
-    };
-
-    const handleBackStep = () => {
-        if (currentStep > 1) {
-            setCurrentStep(prev => prev - 1);
-            // Clear API error when going back
-            if (apiError) {
-                setApiError('');
-            }
         }
     };
 
@@ -1115,6 +1162,232 @@ const Checkout: React.FC = () => {
         }
 
         return `$${finalPrice.toFixed(2)}`;
+    };
+
+    const handleFinalCheckout = async () => {
+        try {
+            setIsSubmittingCheckout(true);
+            setApiError('');
+
+            const planId = getPlanId(selectedPlan);
+            if (!planId) {
+                return;
+            }
+
+            const totalAmountBeforePromo = getTotalPriceBeforePromo();
+            console.log('Checkout Debug:', {
+                planPrice: getPlanPrice(),
+                addOnsCost: getAddOnsTotal(),
+                totalAmountBeforePromo,
+                discount: discount * 100,
+                finalPrice: getTotalPrice()
+            });
+
+            const checkoutData = {
+                firstName: billingInfo.firstName,
+                lastName: billingInfo.lastName,
+                email: billingInfo.email,
+                phone: billingInfo.phone,
+                institutionName: billingInfo.institutionName,
+                password: billingInfo.password,
+                billingAddress: {
+                    address: billingAddress.address,
+                    address2: billingAddress.address2,
+                    city: billingAddress.city,
+                    state: billingAddress.state,
+                    zipCode: billingAddress.zipCode,
+                    country: billingAddress.country,
+                    customCountry: billingAddress.customCountry
+                },
+                paymentInfo: {
+                    cardNumber: paymentInfo.cardNumber,
+                    expiryDate: paymentInfo.expiryDate,
+                    cvv: paymentInfo.cvv
+                },
+                planId: planId,
+                billingCycle: isAnnual ? 'annual' : 'monthly',
+                addOns: addOns
+                    .filter(addOn => addOn.quantity > 0)
+                    .map(addOn => ({
+                        type: addOn.id as 'admin' | 'teacher' | 'student' | 'parent' | 'storage',
+                        quantity: addOn.quantity,
+                        price: addOn.price
+                    })),
+                totalAmount: totalAmountBeforePromo,
+                promoCode: promoCodeApplied ? 'WELCOME10' : undefined,
+                discount: promoCodeApplied ? discount * 100 : undefined,
+                paymentMethod: payBy
+            };
+
+            const response = await fetch('/api/checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept-Language': currentLanguage
+                },
+                body: JSON.stringify(checkoutData),
+                signal: AbortSignal.timeout(30000) // 30 second timeout
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Redirect to success page
+                navigate('/success', {
+                    state: {
+                        user: data.data.user,
+                        subscription: data.data.subscription
+                    }
+                });
+            } else {
+                // Handle different types of server errors
+                let errorMessage = data.message;
+
+                // Check if this is a user already exists error
+                if (data.message === (t.checkout as any).server_errors.user_already_exists) {
+                    setIsUserAlreadyExists(true);
+                    setApiError('');
+                    return;
+                }
+
+                // Map backend error messages to translation keys for specific errors
+                if (data.message === t.checkout.server_errors.missing_required_fields) {
+                    errorMessage = t.checkout.server_errors.missing_required_fields;
+                } else if (data.message === t.checkout.server_errors.invalid_plan) {
+                    errorMessage = t.checkout.server_errors.invalid_plan;
+                } else if (data.message === t.checkout.server_errors.checkout_error) {
+                    errorMessage = t.checkout.server_errors.checkout_error;
+                } else if (data.message === t.checkout.server_errors.promo_code_required) {
+                    errorMessage = t.checkout.server_errors.promo_code_required;
+                } else if (data.message === t.checkout.server_errors.invalid_promo_code) {
+                    errorMessage = t.checkout.server_errors.invalid_promo_code;
+                } else if (data.message === t.checkout.server_errors.promo_code_not_valid_yet) {
+                    errorMessage = t.checkout.server_errors.promo_code_not_valid_yet;
+                } else if (data.message === t.checkout.server_errors.promo_code_expired) {
+                    errorMessage = t.checkout.server_errors.promo_code_expired;
+                } else if (data.message === t.checkout.server_errors.promo_code_first_time_only) {
+                    errorMessage = t.checkout.server_errors.promo_code_first_time_only;
+                } else if (data.message === t.checkout.server_errors.email_required_for_promo) {
+                    errorMessage = t.checkout.server_errors.email_required_for_promo;
+                } else if (data.message === t.checkout.server_errors.validation_error) {
+                    errorMessage = t.checkout.server_errors.validation_error;
+                } else if (data.message === t.checkout.server_errors.general_error) {
+                    errorMessage = t.checkout.server_errors.general_error;
+                } else if (data.message === t.checkout.server_errors.super_admin_role_not_found) {
+                    errorMessage = t.checkout.server_errors.super_admin_role_not_found;
+                }
+
+                // Handle validation errors from backend
+                if (data.errors && Array.isArray(data.errors)) {
+                    const validationErrors: {
+                        billing?: Partial<Record<keyof AccountInfo, string>>;
+                        billingAddress?: Partial<Record<keyof BillingAddress, string>>;
+                        payment?: Partial<Record<keyof PaymentInfo, string>>;
+                    } = {};
+
+                    data.errors.forEach((error: string) => {
+                        // Map backend validation errors to frontend field errors
+                        if (error.includes('First name')) {
+                            if (!validationErrors.billing) validationErrors.billing = {};
+                            validationErrors.billing.firstName = 'required';
+                        } else if (error.includes('Last name')) {
+                            if (!validationErrors.billing) validationErrors.billing = {};
+                            validationErrors.billing.lastName = 'required';
+                        } else if (error.includes('Valid email') || error.includes('email')) {
+                            if (!validationErrors.billing) validationErrors.billing = {};
+                            validationErrors.billing.email = 'invalid_email';
+                        } else if (error.includes('phone')) {
+                            if (!validationErrors.billing) validationErrors.billing = {};
+                            validationErrors.billing.phone = 'required';
+                        } else if (error.includes('Password')) {
+                            if (!validationErrors.billing) validationErrors.billing = {};
+                            validationErrors.billing.password = 'password_length';
+                        } else if (error.includes('Valid billing address') || error.includes('address')) {
+                            if (!validationErrors.billingAddress) validationErrors.billingAddress = {};
+                            validationErrors.billingAddress.address = t.checkout.validation.required;
+                        } else if (error.includes('City')) {
+                            if (!validationErrors.billingAddress) validationErrors.billingAddress = {};
+                            validationErrors.billingAddress.city = t.checkout.validation.required;
+                        } else if (error.includes('State')) {
+                            if (!validationErrors.billingAddress) validationErrors.billingAddress = {};
+                            validationErrors.billingAddress.state = t.checkout.validation.required;
+                        } else if (error.includes('ZIP code') || error.includes('zip')) {
+                            if (!validationErrors.billingAddress) validationErrors.billingAddress = {};
+                            validationErrors.billingAddress.zipCode = t.checkout.validation.required;
+                        } else if (error.includes('Country')) {
+                            if (!validationErrors.billingAddress) validationErrors.billingAddress = {};
+                            validationErrors.billingAddress.country = t.checkout.validation.required;
+                        } else if (error.includes('card number')) {
+                            if (!validationErrors.payment) validationErrors.payment = {};
+                            validationErrors.payment.cardNumber = 'invalid_card';
+                        } else if (error.includes('expiry date')) {
+                            if (!validationErrors.payment) validationErrors.payment = {};
+                            validationErrors.payment.expiryDate = 'invalid_expiry';
+                        } else if (error.includes('CVV')) {
+                            if (!validationErrors.payment) validationErrors.payment = {};
+                            validationErrors.payment.cvv = 'invalid_cvv';
+                        }
+                    });
+
+                    // Set the validation errors and navigate to the appropriate step
+                    if (Object.keys(validationErrors).length > 0) {
+                        setErrors(validationErrors);
+
+                        // Navigate to the appropriate step based on which errors occurred
+                        if (validationErrors.billing) {
+                            setCurrentStep(1);
+                        } else if (validationErrors.payment) {
+                            setCurrentStep(2);
+                        } else if (validationErrors.billingAddress) {
+                            setCurrentStep(3);
+                        }
+
+                        // Scroll to error message
+                        setTimeout(() => {
+                            const errorElement = document.getElementById('checkout-error');
+                            if (errorElement) {
+                                errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        }, 100);
+                        return;
+                    }
+                }
+
+                setApiError(errorMessage);
+
+                // Scroll to error message
+                setTimeout(() => {
+                    const errorElement = document.getElementById('checkout-error');
+                    if (errorElement) {
+                        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 100);
+            }
+        } catch (error: any) {
+            console.error('Checkout error:', error)
+
+            setApiError(t.checkout.server_errors.general_error);
+
+            // Scroll to error message
+            setTimeout(() => {
+                const errorElement = document.getElementById('checkout-error');
+                if (errorElement) {
+                    errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
+        } finally {
+            setIsSubmittingCheckout(false);
+        }
+    };
+
+    const handleBackStep = () => {
+        if (currentStep > 1) {
+            setCurrentStep(prev => prev - 1);
+            // Clear API error when going back
+            if (apiError) {
+                setApiError('');
+            }
+        }
     };
 
     // Calculate if Standard plan recommendation should be shown
@@ -1221,6 +1494,37 @@ const Checkout: React.FC = () => {
         } else {
             setBillingInfo(prev => ({ ...prev, customCountry: value }));
         }
+    };
+
+    const handleSignIn = () => {
+        // Navigate to sign in page with email pre-filled
+        navigate('/signin', {
+            state: {
+                email: billingInfo.email
+            }
+        });
+    };
+
+    const handleTryAnotherEmail = () => {
+        // Clear the user already exists error
+        setIsUserAlreadyExists(false);
+        setApiError('');
+
+        // Go to step 1 and focus on email input
+        setCurrentStep(1);
+
+        // Clear the email field
+        setBillingInfo(prev => ({
+            ...prev,
+            email: ''
+        }));
+
+        // Focus on email input after a short delay to ensure the step is rendered
+        setTimeout(() => {
+            if (emailRef.current) {
+                emailRef.current.focus();
+            }
+        }, 100);
     };
 
     const customSelectStyles = {
@@ -1432,7 +1736,7 @@ const Checkout: React.FC = () => {
                                                 </p>
                                                 <div className="bg-red-50 border-none">
                                                     <p className="text-xs text-red-700 mb-2">
-                                                        If you need help, contact our support team:
+                                                        {t.checkout.validation.need_help}
                                                     </p>
                                                     <div className="flex flex-col sm:flex-row gap-2 text-xs">
                                                         <a
@@ -1463,6 +1767,91 @@ const Checkout: React.FC = () => {
                                                 aria-label="Close error message"
                                             >
                                                 <span className="text-red-700 text-lg font-bold transition-transform duration-300 hover:rotate-90">
+                                                    <FaTimes />
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        {/* User Already Exists Error Display */}
+                        <AnimatePresence>
+                            {isUserAlreadyExists && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                                    transition={{ duration: 0.3, ease: "easeOut" }}
+                                    id="user-exists-error"
+                                    className="mb-6 bg-gradient-to-r from-orange-50 to-amber-50 border-l-4 border-orange-500 rounded-xl shadow-lg overflow-hidden"
+                                >
+                                    <div className="p-6">
+                                        <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
+                                            <div className="flex-shrink-0">
+                                                <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
+                                                    <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <h3 className="text-sm font-semibold text-orange-900 mb-2">
+                                                    {t.checkout.server_errors.user_already_exists}
+                                                </h3>
+                                                <p className="text-xs text-orange-700 mb-4">
+                                                    {t.checkout.user_exists_actions.support_message}
+                                                </p>
+                                                <div className="flex flex-col sm:flex-row gap-3">
+                                                    <button
+                                                        type="button"
+                                                        onClick={handleSignIn}
+                                                        className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg text-sm font-semibold hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300"
+                                                    >
+                                                        {t.checkout.user_exists_actions.sign_in}
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={handleTryAnotherEmail}
+                                                        className="flex-1 px-4 py-2 bg-white text-orange-700 border border-orange-300 rounded-lg text-sm font-semibold hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-all duration-300"
+                                                    >
+                                                        {t.checkout.user_exists_actions.try_another_email}
+                                                    </button>
+                                                </div>
+                                                <div className="mt-4 pt-4 border-t border-orange-200">
+                                                    <p className="text-xs text-orange-600 mb-2">
+                                                        {t.checkout.user_exists_actions.support_message}
+                                                    </p>
+                                                    <div className="flex flex-col sm:flex-row gap-2 text-xs">
+                                                        <a
+                                                            href="mailto:contact@telmeezlb.com"
+                                                            className="inline-flex items-center text-orange-600 hover:text-orange-700 transition-colors"
+                                                        >
+                                                            <svg className={`w-3 h-3 ${isRTL ? 'ml-1' : 'mr-1'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                            </svg>
+                                                            contact@telmeezlb.com
+                                                        </a>
+                                                        <a
+                                                            href="tel:+9611234567"
+                                                            className="inline-flex items-center text-orange-600 hover:text-orange-700 transition-colors"
+                                                        >
+                                                            <svg className={`w-3 h-3 ${isRTL ? 'ml-1' : 'mr-1'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                            </svg>
+                                                            +961 1 234 567
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsUserAlreadyExists(false)}
+                                                className="flex-shrink-0 w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 hover:shadow-lg hover:scale-110 active:scale-95 border border-orange-200 hover:border-orange-300"
+                                                aria-label="Close error message"
+                                            >
+                                                <span className="text-orange-700 text-lg font-bold transition-transform duration-300 hover:rotate-90">
                                                     <FaTimes />
                                                 </span>
                                             </button>
@@ -1534,7 +1923,7 @@ const Checkout: React.FC = () => {
                                                     {t.checkout.account_info.fields.email} <span className="text-red-500">*</span>
                                                 </label>
                                                 <input
-                                                    type="email"
+                                                    type="text"
                                                     id="email"
                                                     name="email"
                                                     value={billingInfo.email}
@@ -1762,11 +2151,6 @@ const Checkout: React.FC = () => {
                                                             </div>
                                                         )}
                                                     </div>
-                                                    {detectedCardType && (
-                                                        <p className="text-xs text-green-600">
-                                                            ✓ Detected: {getCardTypeName(detectedCardType)}
-                                                        </p>
-                                                    )}
                                                     {errors.payment?.cardNumber && (
                                                         <p className="text-xs text-red-600">{getErrorMessage(errors.payment.cardNumber || '')}</p>
                                                     )}
@@ -2556,7 +2940,7 @@ const Checkout: React.FC = () => {
                                                     disabled={isValidatingPromo}
                                                     className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                                 >
-                                                    {isValidatingPromo ? 'Validating...' : t.checkout.summary.apply}
+                                                    {isValidatingPromo ? t.checkout.summary.validating : t.checkout.summary.apply}
                                                 </button>
                                             </div>
                                             {promoError && (
