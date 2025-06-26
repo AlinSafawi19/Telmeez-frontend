@@ -50,6 +50,14 @@ interface AddOn {
     maxQuantity?: number;
 }
 
+interface Plan {
+    _id: string;
+    name: string;
+    monthlyPrice: number;
+    annualPrice: number;
+    features: string[];
+}
+
 type PayBy = 'card';
 
 const Checkout: React.FC = () => {
@@ -62,7 +70,35 @@ const Checkout: React.FC = () => {
     const isRTL = currentLanguage === 'ar';
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isValidatingPromo, setIsValidatingPromo] = useState(false);
+    const [isSubmittingCheckout, setIsSubmittingCheckout] = useState(false);
+    const [plans, setPlans] = useState<Plan[]>([]);
+    const [apiError, setApiError] = useState('');
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // Fetch plans from backend on component mount
+    useEffect(() => {
+        const fetchPlans = async () => {
+            try {
+                const response = await fetch('/api/checkout/plans');
+                const data = await response.json();
+                if (data.success) {
+                    setPlans(data.data);
+                    console.log(data.data);
+                }
+            } catch (error) {
+                console.error('Failed to fetch plans:', error);
+            }
+        };
+        
+        fetchPlans();
+    }, []);
+
+    // Helper function to get plan ID
+    const getPlanId = (planName: string): string => {
+        const plan = plans.find(p => p.name.toLowerCase() === planName.toLowerCase());
+        return plan?._id || '';
+    };
 
     const countryOptions = [
         ...Object.entries(t.countries).map(([value, label]) => ({
@@ -576,29 +612,49 @@ const Checkout: React.FC = () => {
     const handlePromoCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPromoCode(e.target.value);
         setPromoError('');
+        setApiError('');
     };
 
-    const handleApplyPromo = () => {
-        // Test promo codes
-        const testPromoCodes = {
-            'TEST10': 0.10, // 10% discount
-            'TEST20': 0.20, // 20% discount
-            'TEST30': 0.30, // 30% discount
-            'TEST50': 0.50  // 50% discount
-        } as const;
-
+    const handleApplyPromo = async () => {
         if (!promoCode.trim()) {
             setPromoError('promo_code_required');
             return;
         }
 
-        const discountPercentage = testPromoCodes[promoCode.toUpperCase() as keyof typeof testPromoCodes];
+        if (!billingInfo.email.trim()) {
+            setPromoError('Please enter your email address first');
+            return;
+        }
 
-        if (discountPercentage) {
-            setDiscount(discountPercentage);
-            setPromoCode(''); // Clear the input
-        } else {
+        try {
+            setIsValidatingPromo(true);
+            setApiError('');
+            
+            const response = await fetch('/api/checkout/validate-promo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    promoCode: promoCode.trim(),
+                    email: billingInfo.email 
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                setDiscount(data.data.discount / 100);
+                setPromoCode(''); // Clear the input
+                setPromoError('');
+            } else {
+                setPromoError(data.message);
+                setDiscount(0);
+            }
+        } catch (error) {
+            console.error('Promo code validation error:', error);
+            setPromoError('Failed to validate promo code');
             setDiscount(0);
+        } finally {
+            setIsValidatingPromo(false);
         }
     };
 
@@ -690,7 +746,7 @@ const Checkout: React.FC = () => {
         }
     };
 
-    const handleStepSubmit = (e: React.FormEvent) => {
+    const handleStepSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (currentStep < 3) {
@@ -729,6 +785,92 @@ const Checkout: React.FC = () => {
                 ...prev,
                 billingAddress: undefined
             }));
+
+            // Submit checkout to backend
+            await handleFinalCheckout();
+        }
+    };
+
+    const handleFinalCheckout = async () => {
+        try {
+            setIsSubmittingCheckout(true);
+            setApiError('');
+
+            const planId = getPlanId(selectedPlan);
+            if (!planId) {
+                setApiError('Invalid plan selected');
+                return;
+            }
+
+            const totalAmountBeforePromo = getTotalPriceBeforePromo();
+            console.log('Checkout Debug:', {
+                planPrice: getPlanPrice(),
+                addOnsCost: getAddOnsTotal(),
+                totalAmountBeforePromo,
+                discount: discount * 100,
+                finalPrice: getTotalPrice()
+            });
+
+            const checkoutData = {
+                firstName: billingInfo.firstName,
+                lastName: billingInfo.lastName,
+                email: billingInfo.email,
+                phone: billingInfo.phone,
+                institutionName: billingInfo.institutionName,
+                password: billingInfo.password,
+                billingAddress: {
+                    address: billingAddress.address,
+                    address2: billingAddress.address2,
+                    city: billingAddress.city,
+                    state: billingAddress.state,
+                    zipCode: billingAddress.zipCode,
+                    country: billingAddress.country,
+                    customCountry: billingAddress.customCountry
+                },
+                paymentInfo: {
+                    cardNumber: paymentInfo.cardNumber,
+                    expiryDate: paymentInfo.expiryDate,
+                    cvv: paymentInfo.cvv
+                },
+                planId: planId,
+                billingCycle: isAnnual ? 'annual' : 'monthly',
+                addOns: addOns
+                    .filter(addOn => addOn.quantity > 0)
+                    .map(addOn => ({
+                        type: addOn.id as 'admin' | 'teacher' | 'student' | 'parent' | 'storage',
+                        quantity: addOn.quantity,
+                        price: addOn.price
+                    })),
+                totalAmount: totalAmountBeforePromo,
+                promoCode: discount > 0 ? 'WELCOME10' : undefined,
+                discount: discount > 0 ? discount * 100 : undefined,
+                paymentMethod: payBy
+            };
+
+            const response = await fetch('/api/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(checkoutData)
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                // Redirect to success page
+                navigate('/success', { 
+                    state: { 
+                        user: data.data.user,
+                        subscription: data.data.subscription 
+                    } 
+                });
+            } else {
+                setApiError(data.message || 'Checkout failed');
+            }
+        } catch (error) {
+            console.error('Checkout error:', error);
+            setApiError('An error occurred during checkout');
+        } finally {
+            setIsSubmittingCheckout(false);
         }
     };
 
@@ -743,8 +885,8 @@ const Checkout: React.FC = () => {
         const monthlyPrice = parseFloat(plan.monthly_price.replace(/[^0-9.-]+/g, ''));
 
         if (isAnnual) {
-            // Calculate annual price: monthly price × 12 months × 0.8 (20% discount)
-            const annualPrice = monthlyPrice * 12 * 0.8;
+            // Show original annual price (no discount)
+            const annualPrice = monthlyPrice * 12;
             return `$${annualPrice.toFixed(2)}`;
         } else {
             return `$${monthlyPrice.toFixed(2)}`;
@@ -757,21 +899,25 @@ const Checkout: React.FC = () => {
         let annualSavings = 0;
         let promoCodeSavings = 0;
 
+        // Calculate base plan price (with annual discount if applicable)
+        let basePlanPrice = 0;
         if (isAnnual) {
             // Calculate annual savings: full annual price - discounted annual price
             const fullAnnualPrice = monthlyPrice * 12; // $49 × 12 = $588
             const discountedAnnualPrice = monthlyPrice * 12 * 0.8; // $49 × 12 × 0.8 = $470.40
             annualSavings = fullAnnualPrice - discountedAnnualPrice; // $588 - $470.40 = $117.60
-
-            // Calculate promo code savings on the discounted annual price
-            if (discount > 0) {
-                promoCodeSavings = discountedAnnualPrice * discount;
-            }
+            basePlanPrice = discountedAnnualPrice;
         } else {
-            // For monthly plans, only calculate promo code savings
-            if (discount > 0) {
-                promoCodeSavings = monthlyPrice * discount;
-            }
+            basePlanPrice = monthlyPrice;
+        }
+
+        // Add add-ons cost to get total amount before promo code
+        const addOnsCost = getAddOnsTotal();
+        const totalAmountBeforePromo = basePlanPrice + addOnsCost;
+
+        // Calculate promo code savings on the total amount (plan + add-ons)
+        if (discount > 0) {
+            promoCodeSavings = totalAmountBeforePromo * discount;
         }
 
         return {
@@ -779,6 +925,25 @@ const Checkout: React.FC = () => {
             promoCodeSavings: promoCodeSavings,
             totalSavings: annualSavings + promoCodeSavings
         };
+    };
+
+    const getTotalPriceBeforePromo = () => {
+        const plan = t.pricing.plans[selectedPlan as keyof typeof t.pricing.plans];
+        const monthlyPrice = parseFloat(plan.monthly_price.replace(/[^0-9.-]+/g, ''));
+        let finalPrice = 0;
+
+        if (isAnnual) {
+            // Calculate discounted annual price
+            finalPrice = monthlyPrice * 12 * 0.8; // $49 × 12 × 0.8 = $470.40
+        } else {
+            finalPrice = monthlyPrice; // $49
+        }
+
+        // Add add-ons cost
+        const addOnsCost = getAddOnsTotal();
+        finalPrice += addOnsCost;
+
+        return finalPrice;
     };
 
     const getTotalPrice = () => {
@@ -1879,19 +2044,6 @@ const Checkout: React.FC = () => {
                                         </div>
                                     )}
 
-                                    {/* Annual Savings */}
-                                    {isAnnual && (
-                                        <div className="space-y-2">
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-sm text-gray-600">{t.checkout.summary.annual_saving} (20%)</span>
-                                                <span className="text-sm font-medium text-green-600">-${getTotalSavings().annualSavings.toFixed(2)}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center pt-2 border-t border-gray-200">
-                                                <span className="text-sm font-semibold text-gray-900">{t.checkout.summary.total_savings}</span>
-                                                <span className="text-sm font-bold text-green-600">-${getTotalSavings().totalSavings.toFixed(2)}</span>
-                                            </div>
-                                        </div>
-                                    )}
                                 </div>
 
                                 {/* Free Trial Banner */}
@@ -1952,13 +2104,17 @@ const Checkout: React.FC = () => {
                                                 <button
                                                     type="button"
                                                     onClick={handleApplyPromo}
-                                                    className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300"
+                                                    disabled={isValidatingPromo}
+                                                    className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                                 >
-                                                    {t.checkout.summary.apply}
+                                                    {isValidatingPromo ? 'Validating...' : t.checkout.summary.apply}
                                                 </button>
                                             </div>
                                             {promoError && (
-                                                <p className="mt-2 text-sm text-red-600">{t.checkout.summary.promo_code_required}</p>
+                                                <p className="mt-2 text-sm text-red-600">{promoError}</p>
+                                            )}
+                                            {apiError && (
+                                                <p className="mt-2 text-sm text-red-600">{apiError}</p>
                                             )}
                                         </div>
                                     )}
@@ -1988,8 +2144,24 @@ const Checkout: React.FC = () => {
                                 )}
 
                                 <div className="border-t border-gray-200 pt-4">
+                                    {isAnnual && (
+                                        <div className="flex justify-between items-center mb-2">
+                                            <span className="text-sm text-gray-600">Annual Savings (20%)</span>
+                                            <span className="text-sm font-medium text-green-600">-${getTotalSavings().annualSavings.toFixed(2)}</span>
+                                        </div>
+                                    )}
+                                    {discount > 0 && (
+                                        <div className="flex justify-between items-center mb-2">
+                                            <span className="text-sm text-gray-600">Promo Code Savings</span>
+                                            <span className="text-sm font-medium text-green-600">-${getTotalSavings().promoCodeSavings.toFixed(2)}</span>
+                                        </div>
+                                    )}
+                                    <div className="flex justify-between items-center mb-2">
+                                        <span className="text-sm font-semibold text-gray-900">Total Savings</span>
+                                        <span className="text-sm font-bold text-green-600">-${getTotalSavings().totalSavings.toFixed(2)}</span>
+                                    </div>
                                     <div className="flex justify-between items-center mb-4">
-                                        <span className="text-base font-semibold text-gray-900">{t.checkout.summary.total}</span>
+                                        <span className="text-base font-semibold text-gray-900">Final Total</span>
                                         <span className="text-xl font-bold text-gray-900">{getTotalPrice()}</span>
                                     </div>
                                     <div className="space-y-2">
@@ -2005,9 +2177,10 @@ const Checkout: React.FC = () => {
                                             )}
                                             <button
                                                 type="submit"
-                                                className="w-full py-3 px-4 rounded-lg text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm"
+                                                disabled={isSubmittingCheckout}
+                                                className="w-full py-3 px-4 rounded-lg text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
-                                                {currentStep < 3 ? t.checkout.summary.continue : t.checkout.summary.activate}
+                                                {isSubmittingCheckout ? 'Processing...' : (currentStep < 3 ? t.checkout.summary.continue : t.checkout.summary.activate)}
                                             </button>
                                         </div>
                                         <p className="text-xs text-gray-500 text-center mt-3">

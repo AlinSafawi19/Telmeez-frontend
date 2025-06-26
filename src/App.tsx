@@ -6,24 +6,14 @@ import ComingSoon from "./pages/ComingSoon";
 import SignIn from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
 import Checkout from './pages/Checkout';
+import Success from './pages/Success';
 import { LanguageProvider } from './contexts/LanguageContext';
 import Landing from './pages/Landing';
 
 const App: React.FC = () => {
-  //const [apiMessage, setApiMessage] = useState("");
-
-  /*useEffect(() => {
-    axios.get("http://localhost:5000/health")
-      .then((res) => setApiMessage(res.data))
-      .catch((err) => console.error("API error:", err));
-  }, []);*/
-
   return (
     <LanguageProvider>
       <Router>
-        {/* <div className="text-xl font-medium text-green-600">
-                        API says: {apiMessage}
-                      </div> */}
         <Routes>
           <Route path="/" element={<Navigate to="/coming-soon" replace />} />
           <Route path="/landing" element={<Landing />} />
@@ -31,6 +21,7 @@ const App: React.FC = () => {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/success" element={<Success />} />
         </Routes>
       </Router>
     </LanguageProvider>

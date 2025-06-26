@@ -24,7 +24,7 @@ interface PricingPlansProps {
     onContinue?: (selectedPlan: string, isAnnual: boolean) => void;
 }
 
-const PricingPlans2: React.FC<PricingPlansProps> = ({
+const PricingPlans: React.FC<PricingPlansProps> = ({
     initialSelectedPlan = null,
     onContinue
 }) => {
@@ -280,4 +280,4 @@ const PricingPlans2: React.FC<PricingPlansProps> = ({
     );
 };
 
-export default PricingPlans2; 
+export default PricingPlans; 

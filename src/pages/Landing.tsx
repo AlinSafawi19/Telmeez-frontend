@@ -9,7 +9,7 @@ import { LANGUAGES, getLanguageDirection } from '../constants/languages';
 import LoadingOverlay from '../components/LoadingOverlay';
 import '../Landing.css';
 import MobileApp from '../components/MobileApp';
-import PricingPlans2 from '../components/PricingPlans2';
+import PricingPlans from '../components/PricingPlans';
 import OurStory from '../components/OurStory';
 import Press from '../components/Press';
 import Demo from '../components/Demo';
@@ -902,7 +902,7 @@ const Landing: React.FC = () => {
 
             {/* Add Pricing section */}
             <section id="pricing">
-                <PricingPlans2 initialSelectedPlan={selectedPlanFromMenu} />
+                <PricingPlans initialSelectedPlan={selectedPlanFromMenu} />
             </section>
 
             {/* Add Our Story section */}
