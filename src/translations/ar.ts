@@ -874,5 +874,6 @@ export const ar = {
         uptime_guarantee: "ضمان توفر الخدمة",
         security_monitoring: "مراقبة الأمان",
         security_breaches: "خرق الأمان"
-    }
+    },
+    and: "و"
 }; 

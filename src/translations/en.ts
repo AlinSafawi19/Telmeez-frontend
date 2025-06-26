@@ -874,5 +874,6 @@ export const en = {
         uptime_guarantee: "Uptime Guarantee",
         security_monitoring: "Security Monitoring",
         security_breaches: "Security Breaches"
-    }
+    },
+    and: "and"
 }; 

@@ -2659,7 +2659,7 @@ const Checkout: React.FC = () => {
                                         </div>
                                         <p className="text-xs text-gray-500 text-center mt-3">
                                             {t.checkout.legal.by_continuing} {' '}
-                                            <a href="#" className="text-blue-600 hover:text-blue-700 underline">{t.checkout.legal.terms}</a> and{' '}
+                                            <a href="#" className="text-blue-600 hover:text-blue-700 underline">{t.checkout.legal.terms}</a> {t.and}{' '}
                                             <a href="#" className="text-blue-600 hover:text-blue-700 underline">{t.checkout.legal.privacy}</a>.{' '}
                                             {t.checkout.legal.payment_secured_with} {' '}
                                             <a href="#" className="text-blue-600 hover:text-blue-700 underline">{t.checkout.legal.pci}</a>
