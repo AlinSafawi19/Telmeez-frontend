@@ -8,7 +8,7 @@ import visa from "../assets/images/visa.png";
 import mastercard from "../assets/images/mastercard.png";
 import amex from "../assets/images/amex.png";
 import logo from "../assets/images/logo.png";
-import { FaHome, FaLock, FaCreditCard, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaHome, FaLock, FaCreditCard, FaMapMarkerAlt, FaTimes } from 'react-icons/fa';
 import { useLanguage } from '../contexts/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../Landing.css';
@@ -97,13 +97,13 @@ const Checkout: React.FC = () => {
     const handleEnterNavigation = (e: React.KeyboardEvent, nextInputRef: React.RefObject<HTMLInputElement | null> | null, action?: () => void) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            
+
             // If there's a specific action (like apply promo), execute it
             if (action) {
                 action();
                 return;
             }
-            
+
             // If there's a next input, focus it
             if (nextInputRef?.current) {
                 nextInputRef.current.focus();
@@ -118,7 +118,7 @@ const Checkout: React.FC = () => {
     const handleStepNavigation = (e: React.KeyboardEvent, nextInputRef: React.RefObject<HTMLInputElement | null> | null) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            
+
             // If there's a next input in the same step, focus it
             if (nextInputRef?.current) {
                 nextInputRef.current.focus();
@@ -143,7 +143,7 @@ const Checkout: React.FC = () => {
                 console.error('Failed to fetch plans:', error);
             }
         };
-        
+
         fetchPlans();
     }, []);
 
@@ -516,6 +516,10 @@ const Checkout: React.FC = () => {
                 }
             }));
         }
+        // Clear API error when user starts typing
+        if (apiError) {
+            setApiError('');
+        }
     };
 
     const handleBillingAddressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -524,6 +528,10 @@ const Checkout: React.FC = () => {
             ...prev,
             [name]: value
         }));
+        // Clear API error when user starts typing
+        if (apiError) {
+            setApiError('');
+        }
     };
 
     const handlePaymentInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -609,6 +617,11 @@ const Checkout: React.FC = () => {
                 }
             }));
         }
+
+        // Clear API error when user starts typing
+        if (apiError) {
+            setApiError('');
+        }
     };
 
     const validateCardNumber = (cardNumber: string): boolean => {
@@ -692,18 +705,18 @@ const Checkout: React.FC = () => {
         try {
             setIsValidatingPromo(true);
             setApiError('');
-            
+
             const response = await fetch('/api/checkout/validate-promo', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     promoCode: promoCode.trim(),
-                    email: billingInfo.email 
+                    email: billingInfo.email
                 })
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
                 setDiscount(data.data.discount / 100);
                 setPromoCode(''); // Clear the input
@@ -806,6 +819,10 @@ const Checkout: React.FC = () => {
                 console.log('Setting step to:', prev + 1);
                 return prev + 1;
             });
+            // Clear API error when moving to next step
+            if (apiError) {
+                setApiError('');
+            }
         }
     };
 
@@ -913,25 +930,76 @@ const Checkout: React.FC = () => {
             const response = await fetch('/api/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(checkoutData)
+                body: JSON.stringify(checkoutData),
+                signal: AbortSignal.timeout(30000) // 30 second timeout
             });
 
             const data = await response.json();
-            
+
             if (data.success) {
                 // Redirect to success page
-                navigate('/success', { 
-                    state: { 
+                navigate('/success', {
+                    state: {
                         user: data.data.user,
-                        subscription: data.data.subscription 
-                    } 
+                        subscription: data.data.subscription
+                    }
                 });
             } else {
-                setApiError(data.message || 'Checkout failed');
+                // Handle different types of server errors
+                let errorMessage = data.message || 'Checkout failed';
+
+                // Handle specific error types
+                if (data.message?.includes('already exists')) {
+                    errorMessage = 'An account with this email already exists. Please use a different email or try signing in.';
+                } else if (data.message?.includes('Invalid plan')) {
+                    errorMessage = 'The selected plan is no longer available. Please refresh the page and try again.';
+                } else if (data.message?.includes('Super Admin role not found')) {
+                    errorMessage = 'System configuration error. Please contact support.';
+                } else if (data.message?.includes('Missing required fields')) {
+                    errorMessage = 'Please fill in all required fields before proceeding.';
+                } else if (data.message?.includes('Promo code')) {
+                    errorMessage = 'The promo code is no longer valid. Please remove it and try again.';
+                } else if (response.status === 400) {
+                    errorMessage = 'Please check your information and try again.';
+                } else if (response.status === 500) {
+                    errorMessage = 'Server error. Please try again in a few moments.';
+                } else if (response.status === 503) {
+                    errorMessage = 'Service temporarily unavailable. Please try again later.';
+                }
+
+                setApiError(errorMessage);
+
+                // Scroll to error message
+                setTimeout(() => {
+                    const errorElement = document.getElementById('checkout-error');
+                    if (errorElement) {
+                        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 100);
             }
         } catch (error) {
             console.error('Checkout error:', error);
-            setApiError('An error occurred during checkout');
+
+            // Handle network errors
+            let errorMessage = 'An error occurred during checkout';
+
+            if (error instanceof TypeError && error.message.includes('fetch')) {
+                errorMessage = 'Network error. Please check your internet connection and try again.';
+            } else if (error instanceof Error && error.name === 'AbortError') {
+                errorMessage = 'Request timed out. Please check your internet connection and try again.';
+            } else if (error instanceof Error) {
+                errorMessage = error.message || 'An unexpected error occurred. Please try again.';
+            }
+
+            setApiError(errorMessage);
+
+            // Scroll to error message
+            setTimeout(() => {
+                const errorElement = document.getElementById('checkout-error');
+                if (errorElement) {
+                    errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
         } finally {
             setIsSubmittingCheckout(false);
         }
@@ -940,6 +1008,10 @@ const Checkout: React.FC = () => {
     const handleBackStep = () => {
         if (currentStep > 1) {
             setCurrentStep(prev => prev - 1);
+            // Clear API error when going back
+            if (apiError) {
+                setApiError('');
+            }
         }
     };
 
@@ -1304,6 +1376,71 @@ const Checkout: React.FC = () => {
                                 </div>
                             </div>
                         </div>
+
+
+                        {/* Global Error Display - Positioned at the top for better visibility */}
+                        <AnimatePresence>
+                            {apiError && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                                    transition={{ duration: 0.3, ease: "easeOut" }}
+                                    id="checkout-error"
+                                    className="mb-6 bg-gradient-to-r from-red-50 to-rose-50 border-l-4 border-red-500 rounded-xl shadow-lg overflow-hidden"
+                                >
+                                    <div className="p-6">
+                                        <div className="flex items-start space-x-4">
+                                            <div className="flex-shrink-0">
+                                                <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                                                    <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm text-red-700 mb-4 leading-relaxed">
+                                                    {apiError}
+                                                </p>
+                                                <div className="bg-red-50 border-none">
+                                                    <p className="text-xs text-red-700 mb-2">
+                                                        If you need help, contact our support team:
+                                                    </p>
+                                                    <div className="flex flex-col sm:flex-row gap-2 text-xs">
+                                                        <a
+                                                            href="mailto:support@telmeez.com"
+                                                            className="inline-flex items-center text-red-600 hover:text-red-700 transition-colors"
+                                                        >
+                                                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                            </svg>
+                                                            contact@telmeezlb.com
+                                                        </a>
+                                                        <a
+                                                            href="tel:+9611234567"
+                                                            className="inline-flex items-center text-red-600 hover:text-red-700 transition-colors"
+                                                        >
+                                                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                            </svg>
+                                                            +961 1 234 567
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => setApiError('')}
+                                                className="flex-shrink-0 w-8 h-8 rounded-full bg-red-100 hover:bg-red-200 flex items-center justify-center transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                                aria-label="Close error message"
+                                            >
+                                                Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
 
                         {/* Show only current step content */}
                         <AnimatePresence mode="wait">
@@ -2232,6 +2369,7 @@ const Checkout: React.FC = () => {
                                         <span className="text-base font-semibold text-gray-900">Final Total</span>
                                         <span className="text-xl font-bold text-gray-900">{getTotalPrice()}</span>
                                     </div>
+
                                     <div className="space-y-2">
                                         <div className="flex flex-col sm:flex-row gap-2">
                                             {currentStep > 1 && (
