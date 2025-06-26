@@ -2130,7 +2130,7 @@ const Checkout: React.FC = () => {
                                                 <svg className={`w-3 h-3 text-green-500 ${isRTL ? 'ml-2' : 'mr-2'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                                                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                 </svg>
-                                                <span>{t.pricing.plans[selectedPlan as keyof typeof t.pricing.plans].max_storage} Storage</span>
+                                                <span>{t.pricing.plans[selectedPlan as keyof typeof t.pricing.plans].max_storage} {t.checkout.summary.storage}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -2659,10 +2659,10 @@ const Checkout: React.FC = () => {
                                         </div>
                                         <p className="text-xs text-gray-500 text-center mt-3">
                                             {t.checkout.legal.by_continuing} {' '}
-                                            <a href="/terms" className="text-blue-600 hover:text-blue-700 underline">{t.checkout.legal.terms}</a> and{' '}
-                                            <a href="/privacy" className="text-blue-600 hover:text-blue-700 underline">{t.checkout.legal.privacy}</a>.{' '}
+                                            <a href="#" className="text-blue-600 hover:text-blue-700 underline">{t.checkout.legal.terms}</a> and{' '}
+                                            <a href="#" className="text-blue-600 hover:text-blue-700 underline">{t.checkout.legal.privacy}</a>.{' '}
                                             {t.checkout.legal.payment_secured_with} {' '}
-                                            <a href="/pci-dss" className="text-blue-600 hover:text-blue-700 underline">{t.checkout.legal.pci}</a>
+                                            <a href="#" className="text-blue-600 hover:text-blue-700 underline">{t.checkout.legal.pci}</a>
                                         </p>
                                     </div>
                                 </div>

@@ -541,6 +541,7 @@ export const fr = {
         },
         summary: {
             title: "Résumé de la commande",
+            storage: "Stockage",
             plan: "Plan",
             billing_period: "Période de facturation",
             price: "Prix",

@@ -557,6 +557,7 @@ export const ar = {
         },
         summary: {
             title: "ملخص الطلب",
+            storage: "التخزين",
             plan: "الخطة",
             billing_period: "فترة الفوترة",
             price: "السعر",

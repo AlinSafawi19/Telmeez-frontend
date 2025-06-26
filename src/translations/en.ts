@@ -557,6 +557,7 @@ export const en = {
         },
         summary: {
             title: "Order Summary",
+            storage: "Storage",
             plan: "Plan",
             billing_period: "Billing Period",
             price: "Price",
