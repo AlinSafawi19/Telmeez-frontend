@@ -71,7 +71,7 @@ const Checkout: React.FC = () => {
     const [isValidatingPromo, setIsValidatingPromo] = useState(false);
     const [isSubmittingCheckout, setIsSubmittingCheckout] = useState(false);
     const [plans, setPlans] = useState<Plan[]>([]);
-    const [apiError, setApiError] = useState('');
+    const [apiErrorKey, setApiErrorKey] = useState('');
     const [isUserAlreadyExists, setIsUserAlreadyExists] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -248,7 +248,7 @@ const Checkout: React.FC = () => {
     const [showBillingCustomCountryInput, setShowBillingCustomCountryInput] = useState(false);
     const [promoCode, setPromoCode] = useState('');
     const [showPromoInput, setShowPromoInput] = useState(false);
-    const [promoError, setPromoError] = useState('');
+    const [promoErrorKey, setPromoErrorKey] = useState('');
     const [discount, setDiscount] = useState(0);
     const [promoCodeApplied, setPromoCodeApplied] = useState(false);
     const [payBy, setPayBy] = useState<PayBy>('card');
@@ -266,6 +266,24 @@ const Checkout: React.FC = () => {
         billingAddress?: Partial<Record<keyof BillingAddress, string>>;
         payment?: Partial<Record<keyof PaymentInfo, string>>;
     }>({});
+
+    // Function to get translated error message from key
+    const getTranslatedError = (errorKey: string): string => {
+        if (!errorKey) return '';
+        
+        // Handle server errors
+        if (errorKey.startsWith('server_')) {
+            const serverErrorKey = errorKey.replace('server_', '');
+            return (t.checkout.server_errors as any)[serverErrorKey] || errorKey;
+        }
+        
+        // Handle validation errors
+        return getErrorMessage(errorKey);
+    };
+
+    // Get translated error messages
+    const apiError = getTranslatedError(apiErrorKey);
+    const promoError = getTranslatedError(promoErrorKey);
 
     // Add-ons handlers
     const handleAddOnQuantityChange = (addOnId: string, newQuantity: number) => {
@@ -436,93 +454,95 @@ const Checkout: React.FC = () => {
         }
     };
 
-    useEffect(() => {
-        // Update billing errors
-        if (errors.billing) {
-            const updatedBillingErrors: Partial<Record<keyof AccountInfo, string>> = {};
-            Object.entries(errors.billing).forEach(([key, value]) => {
-                if (value) {
-                    const field = key as keyof AccountInfo;
-                    if (field === 'email' && value === t.checkout.validation.invalid_email) {
-                        updatedBillingErrors[field] = t.checkout.validation.invalid_email;
-                    } else if (field === 'password' && value === t.checkout.validation.password_length) {
-                        updatedBillingErrors[field] = t.checkout.validation.password_length;
-                    } else if (field === 'confirmPassword' && value === t.checkout.validation.password_mismatch) {
-                        updatedBillingErrors[field] = t.checkout.validation.password_mismatch;
-                    } else if (field === 'firstName' && value === t.checkout.validation.first_name_length) {
-                        updatedBillingErrors[field] = t.checkout.validation.first_name_length;
-                    } else if (field === 'lastName' && value === t.checkout.validation.last_name_length) {
-                        updatedBillingErrors[field] = t.checkout.validation.last_name_length;
-                    } else if (field === 'phone' && value === t.checkout.validation.invalid_phone) {
-                        updatedBillingErrors[field] = t.checkout.validation.invalid_phone;
-                    } else if (value === t.checkout.validation.required) {
-                        updatedBillingErrors[field] = t.checkout.validation.required;
-                    }
-                }
-            });
-            if (Object.keys(updatedBillingErrors).length > 0) {
-                setErrors(prev => ({ ...prev, billing: updatedBillingErrors }));
-            }
-        }
+    // useEffect(() => {
+    //     // Update billing errors
+    //     if (errors.billing) {
+    //         const updatedBillingErrors: Partial<Record<keyof AccountInfo, string>> = {};
+    //         Object.entries(errors.billing).forEach(([key, value]) => {
+    //             if (value) {
+    //                 const field = key as keyof AccountInfo;
+    //                 if (field === 'email' && value === t.checkout.validation.invalid_email) {
+    //                     updatedBillingErrors[field] = t.checkout.validation.invalid_email;
+    //                 } else if (field === 'password' && value === t.checkout.validation.password_length) {
+    //                     updatedBillingErrors[field] = t.checkout.validation.password_length;
+    //                 } else if (field === 'confirmPassword' && value === t.checkout.validation.password_mismatch) {
+    //                     updatedBillingErrors[field] = t.checkout.validation.password_mismatch;
+    //                 } else if (field === 'firstName' && value === t.checkout.validation.first_name_length) {
+    //                     updatedBillingErrors[field] = t.checkout.validation.first_name_length;
+    //                 } else if (field === 'lastName' && value === t.checkout.validation.last_name_length) {
+    //                     updatedBillingErrors[field] = t.checkout.validation.last_name_length;
+    //                 } else if (field === 'phone' && value === t.checkout.validation.invalid_phone) {
+    //                     updatedBillingErrors[field] = t.checkout.validation.invalid_phone;
+    //                 } else if (value === t.checkout.validation.required) {
+    //                     updatedBillingErrors[field] = t.checkout.validation.required;
+    //                 }
+    //             }
+    //         });
+    //         if (Object.keys(updatedBillingErrors).length > 0) {
+    //             setErrors(prev => ({ ...prev, billing: updatedBillingErrors }));
+    //         }
+    //     }
 
-        // Update payment errors
-        if (errors.payment) {
-            const updatedPaymentErrors: Partial<Record<keyof PaymentInfo, string>> = {};
-            Object.entries(errors.payment).forEach(([key, value]) => {
-                if (value) {
-                    const field = key as keyof PaymentInfo;
-                    if (field === 'cardNumber' && value === t.checkout.validation.invalid_card) {
-                        updatedPaymentErrors[field] = t.checkout.validation.invalid_card;
-                    } else if (field === 'expiryDate' && value === t.checkout.validation.invalid_expiry) {
-                        updatedPaymentErrors[field] = t.checkout.validation.invalid_expiry;
-                    } else if (field === 'cvv' && value === t.checkout.validation.invalid_cvv) {
-                        updatedPaymentErrors[field] = t.checkout.validation.invalid_cvv;
-                    } else if (value === t.checkout.validation.required) {
-                        updatedPaymentErrors[field] = t.checkout.validation.required;
-                    }
-                }
-            });
-            if (Object.keys(updatedPaymentErrors).length > 0) {
-                setErrors(prev => ({ ...prev, payment: updatedPaymentErrors }));
-            }
-        }
+    //     // Update payment errors
+    //     if (errors.payment) {
+    //         const updatedPaymentErrors: Partial<Record<keyof PaymentInfo, string>> = {};
+    //         Object.entries(errors.payment).forEach(([key, value]) => {
+    //             if (value) {
+    //                 const field = key as keyof PaymentInfo;
+    //                 if (field === 'cardNumber' && value === t.checkout.validation.invalid_card) {
+    //                     updatedPaymentErrors[field] = t.checkout.validation.invalid_card;
+    //                 } else if (field === 'expiryDate' && value === t.checkout.validation.invalid_expiry) {
+    //                     updatedPaymentErrors[field] = t.checkout.validation.invalid_expiry;
+    //                 } else if (field === 'cvv' && value === t.checkout.validation.invalid_cvv) {
+    //                     updatedPaymentErrors[field] = t.checkout.validation.invalid_cvv;
+    //                 } else if (value === t.checkout.validation.required) {
+    //                     updatedPaymentErrors[field] = t.checkout.validation.required;
+    //                 }
+    //             }
+    //         });
+    //         if (Object.keys(updatedPaymentErrors).length > 0) {
+    //             setErrors(prev => ({ ...prev, payment: updatedPaymentErrors }));
+    //         }
+    //     }
 
-        // Update billing address errors
-        if (errors.billingAddress) {
-            const updatedBillingAddressErrors: Partial<Record<keyof BillingAddress, string>> = {};
-            Object.entries(errors.billingAddress).forEach(([key, value]) => {
-                if (value === t.checkout.validation.required) {
-                    const field = key as keyof BillingAddress;
-                    updatedBillingAddressErrors[field] = t.checkout.validation.required;
-                }
-            });
-            if (Object.keys(updatedBillingAddressErrors).length > 0) {
-                setErrors(prev => ({ ...prev, billingAddress: updatedBillingAddressErrors }));
-            }
-        }
+    //     // Update billing address errors
+    //     if (errors.billingAddress) {
+    //         const updatedBillingAddressErrors: Partial<Record<keyof BillingAddress, string>> = {};
+    //         Object.entries(errors.billingAddress).forEach(([key, value]) => {
+    //             if (value === t.checkout.validation.required) {
+    //                 const field = key as keyof BillingAddress;
+    //                 updatedBillingAddressErrors[field] = t.checkout.validation.required;
+    //             }
+    //         });
+    //         if (Object.keys(updatedBillingAddressErrors).length > 0) {
+    //             setErrors(prev => ({ ...prev, billingAddress: updatedBillingAddressErrors }));
+    //         }
+    //     }
 
-        // Update promo code error
-        if (promoError) {
-            // Map backend error messages to translation keys for promo code errors
-            if (promoError === t.checkout.server_errors.promo_code_required) {
-                setPromoError(t.checkout.server_errors.promo_code_required);
-            } else if (promoError === t.checkout.server_errors.invalid_promo_code) {
-                setPromoError(t.checkout.server_errors.invalid_promo_code);
-            } else if (promoError === t.checkout.server_errors.promo_code_not_valid_yet) {
-                setPromoError(t.checkout.server_errors.promo_code_not_valid_yet);
-            } else if (promoError === t.checkout.server_errors.promo_code_expired) {
-                setPromoError(t.checkout.server_errors.promo_code_expired);
-            } else if (promoError === t.checkout.server_errors.promo_code_first_time_only) {
-                setPromoError(t.checkout.server_errors.promo_code_first_time_only);
-            } else if (promoError === t.checkout.server_errors.email_required_for_promo) {
-                setPromoError(t.checkout.server_errors.email_required_for_promo);
-            } else if (promoError === t.checkout.server_errors.validation_error) {
-                setPromoError(t.checkout.server_errors.validation_error);
-            } else if (promoError === t.checkout.server_errors.general_error) {
-                setPromoError(t.checkout.server_errors.general_error);
-            }
-        }
-    }, [currentLanguage, t.checkout.validation, t.checkout.server_errors]);
+    //     // Update promo code error
+    //     if (promoError) {
+    //         // Map backend error messages to translation keys for promo code errors
+    //         if (promoError === t.checkout.server_errors.promo_code_required) {
+    //             setPromoErrorKey(t.checkout.server_errors.promo_code_required);
+    //         } else if (promoError === t.checkout.server_errors.invalid_promo_code) {
+    //             setPromoErrorKey(t.checkout.server_errors.invalid_promo_code);
+    //         } else if (promoError === t.checkout.server_errors.promo_code_not_valid_yet) {
+    //             setPromoErrorKey(t.checkout.server_errors.promo_code_not_valid_yet);
+    //         } else if (promoError === t.checkout.server_errors.promo_code_expired) {
+    //             setPromoErrorKey(t.checkout.server_errors.promo_code_expired);
+    //         } else if (promoError === t.checkout.server_errors.promo_code_first_time_only) {
+    //             setPromoErrorKey(t.checkout.server_errors.promo_code_first_time_only);
+    //         } else if (promoError === t.checkout.server_errors.email_required_for_promo) {
+    //             setPromoErrorKey(t.checkout.server_errors.email_required_for_promo);
+    //         } else if (promoError === t.checkout.server_errors.validation_error) {
+    //             setPromoErrorKey(t.checkout.server_errors.validation_error);
+    //         } else if (promoError === t.checkout.server_errors.general_error) {
+    //             setPromoErrorKey(t.checkout.server_errors.general_error);
+    //         }
+    //     }
+    // }, [currentLanguage, t.checkout.validation, t.checkout.server_errors]);
+
+    // Error translation is now handled dynamically by getTranslatedError function
 
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setBillingInfo(prev => ({
@@ -558,8 +578,8 @@ const Checkout: React.FC = () => {
             }));
         }
         // Clear API error when user starts typing
-        if (apiError) {
-            setApiError('');
+        if (apiErrorKey) {
+            setApiErrorKey('');
         }
     };
 
@@ -570,8 +590,8 @@ const Checkout: React.FC = () => {
             [name]: value
         }));
         // Clear API error when user starts typing
-        if (apiError) {
-            setApiError('');
+        if (apiErrorKey) {
+            setApiErrorKey('');
         }
     };
 
@@ -660,8 +680,8 @@ const Checkout: React.FC = () => {
         }
 
         // Clear API error when user starts typing
-        if (apiError) {
-            setApiError('');
+        if (apiErrorKey) {
+            setApiErrorKey('');
         }
     };
 
@@ -744,24 +764,24 @@ const Checkout: React.FC = () => {
 
     const handlePromoCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPromoCode(e.target.value);
-        setPromoError('');
-        setApiError('');
+        setPromoErrorKey('');
+        setApiErrorKey('');
     };
 
     const handleApplyPromo = async () => {
         if (!promoCode.trim()) {
-            setPromoError(t.checkout.server_errors.promo_code_required);
+            setPromoErrorKey('server_promo_code_required');
             return;
         }
 
         if (!billingInfo.email.trim()) {
-            setPromoError(t.checkout.server_errors.email_required_for_promo);
+            setPromoErrorKey('server_email_required_for_promo');
             return;
         }
 
         try {
             setIsValidatingPromo(true);
-            setApiError('');
+            setApiErrorKey('');
 
             const response = await fetch('/api/checkout/validate-promo', {
                 method: 'POST',
@@ -781,44 +801,45 @@ const Checkout: React.FC = () => {
                 setDiscount(data.data.discount / 100); // Store the discount percentage
                 setPromoCodeApplied(true); // Mark promo code as applied
                 setPromoCode(''); // Clear the input
-                setPromoError('');
+                setPromoErrorKey('');
             } else {
                 setIsValidatingPromo(false);
                 // Handle different types of server errors
-                let errorMessage = data.message;
 
                 // Check if this is a user already exists error
                 if (data.message === (t.checkout as any).server_errors.user_already_exists) {
                     setIsUserAlreadyExists(true);
-                    setApiError('');
+                    setApiErrorKey('');
                     return;
                 }
 
                 // Map backend error messages to translation keys for specific errors
                 if (data.message === t.checkout.server_errors.missing_required_fields) {
-                    errorMessage = t.checkout.server_errors.missing_required_fields;
+                    setApiErrorKey('server_missing_required_fields');
                 } else if (data.message === t.checkout.server_errors.invalid_plan) {
-                    errorMessage = t.checkout.server_errors.invalid_plan;
+                    setApiErrorKey('server_invalid_plan');
                 } else if (data.message === t.checkout.server_errors.checkout_error) {
-                    errorMessage = t.checkout.server_errors.checkout_error;
+                    setApiErrorKey('server_checkout_error');
                 } else if (data.message === t.checkout.server_errors.promo_code_required) {
-                    errorMessage = t.checkout.server_errors.promo_code_required;
+                    setApiErrorKey('server_promo_code_required');
                 } else if (data.message === t.checkout.server_errors.invalid_promo_code) {
-                    errorMessage = t.checkout.server_errors.invalid_promo_code;
+                    setApiErrorKey('server_invalid_promo_code');
                 } else if (data.message === t.checkout.server_errors.promo_code_not_valid_yet) {
-                    errorMessage = t.checkout.server_errors.promo_code_not_valid_yet;
+                    setApiErrorKey('server_promo_code_not_valid_yet');
                 } else if (data.message === t.checkout.server_errors.promo_code_expired) {
-                    errorMessage = t.checkout.server_errors.promo_code_expired;
+                    setApiErrorKey('server_promo_code_expired');
                 } else if (data.message === t.checkout.server_errors.promo_code_first_time_only) {
-                    errorMessage = t.checkout.server_errors.promo_code_first_time_only;
+                    setApiErrorKey('server_promo_code_first_time_only');
                 } else if (data.message === t.checkout.server_errors.email_required_for_promo) {
-                    errorMessage = t.checkout.server_errors.email_required_for_promo;
+                    setApiErrorKey('server_email_required_for_promo');
                 } else if (data.message === t.checkout.server_errors.validation_error) {
-                    errorMessage = t.checkout.server_errors.validation_error;
+                    setApiErrorKey('server_validation_error');
                 } else if (data.message === t.checkout.server_errors.general_error) {
-                    errorMessage = t.checkout.server_errors.general_error;
+                    setApiErrorKey('server_general_error');
                 } else if (data.message === t.checkout.server_errors.super_admin_role_not_found) {
-                    errorMessage = t.checkout.server_errors.super_admin_role_not_found;
+                    setApiErrorKey('server_super_admin_role_not_found');
+                } else {
+                    setApiErrorKey('server_general_error');
                 }
 
                 // Handle validation errors from backend
@@ -897,7 +918,8 @@ const Checkout: React.FC = () => {
                     }
                 }
 
-                setApiError(errorMessage);
+                // If we reach here, set a fallback error
+                setApiErrorKey('server_general_error');
 
                 // Scroll to error message
                 setTimeout(() => {
@@ -911,7 +933,7 @@ const Checkout: React.FC = () => {
             setIsValidatingPromo(false);
             console.error('Checkout error:', error)
 
-            setApiError(t.checkout.server_errors.general_error);
+            setApiErrorKey('server_general_error');
 
             // Scroll to error message
             setTimeout(() => {
@@ -1057,8 +1079,8 @@ const Checkout: React.FC = () => {
                 return prev + 1;
             });
             // Clear API error when moving to next step
-            if (apiError) {
-                setApiError('');
+            if (apiErrorKey) {
+                setApiErrorKey('');
             }
         }
     };
@@ -1167,7 +1189,7 @@ const Checkout: React.FC = () => {
     const handleFinalCheckout = async () => {
         try {
             setIsSubmittingCheckout(true);
-            setApiError('');
+            setApiErrorKey('');
 
             const planId = getPlanId(selectedPlan);
             if (!planId) {
@@ -1241,40 +1263,42 @@ const Checkout: React.FC = () => {
                 });
             } else {
                 // Handle different types of server errors
-                let errorMessage = data.message;
+                // Removed unused errorMessage variable - using error keys directly
 
                 // Check if this is a user already exists error
                 if (data.message === (t.checkout as any).server_errors.user_already_exists) {
                     setIsUserAlreadyExists(true);
-                    setApiError('');
+                    setApiErrorKey('');
                     return;
                 }
 
                 // Map backend error messages to translation keys for specific errors
                 if (data.message === t.checkout.server_errors.missing_required_fields) {
-                    errorMessage = t.checkout.server_errors.missing_required_fields;
+                    setApiErrorKey('server_missing_required_fields');
                 } else if (data.message === t.checkout.server_errors.invalid_plan) {
-                    errorMessage = t.checkout.server_errors.invalid_plan;
+                    setApiErrorKey('server_invalid_plan');
                 } else if (data.message === t.checkout.server_errors.checkout_error) {
-                    errorMessage = t.checkout.server_errors.checkout_error;
+                    setApiErrorKey('server_checkout_error');
                 } else if (data.message === t.checkout.server_errors.promo_code_required) {
-                    errorMessage = t.checkout.server_errors.promo_code_required;
+                    setApiErrorKey('server_promo_code_required');
                 } else if (data.message === t.checkout.server_errors.invalid_promo_code) {
-                    errorMessage = t.checkout.server_errors.invalid_promo_code;
+                    setApiErrorKey('server_invalid_promo_code');
                 } else if (data.message === t.checkout.server_errors.promo_code_not_valid_yet) {
-                    errorMessage = t.checkout.server_errors.promo_code_not_valid_yet;
+                    setApiErrorKey('server_promo_code_not_valid_yet');
                 } else if (data.message === t.checkout.server_errors.promo_code_expired) {
-                    errorMessage = t.checkout.server_errors.promo_code_expired;
+                    setApiErrorKey('server_promo_code_expired');
                 } else if (data.message === t.checkout.server_errors.promo_code_first_time_only) {
-                    errorMessage = t.checkout.server_errors.promo_code_first_time_only;
+                    setApiErrorKey('server_promo_code_first_time_only');
                 } else if (data.message === t.checkout.server_errors.email_required_for_promo) {
-                    errorMessage = t.checkout.server_errors.email_required_for_promo;
+                    setApiErrorKey('server_email_required_for_promo');
                 } else if (data.message === t.checkout.server_errors.validation_error) {
-                    errorMessage = t.checkout.server_errors.validation_error;
+                    setApiErrorKey('server_validation_error');
                 } else if (data.message === t.checkout.server_errors.general_error) {
-                    errorMessage = t.checkout.server_errors.general_error;
+                    setApiErrorKey('server_general_error');
                 } else if (data.message === t.checkout.server_errors.super_admin_role_not_found) {
-                    errorMessage = t.checkout.server_errors.super_admin_role_not_found;
+                    setApiErrorKey('server_super_admin_role_not_found');
+                } else {
+                    setApiErrorKey('server_general_error');
                 }
 
                 // Handle validation errors from backend
@@ -1353,7 +1377,8 @@ const Checkout: React.FC = () => {
                     }
                 }
 
-                setApiError(errorMessage);
+                // If we reach here, set a fallback error
+                setApiErrorKey('server_general_error');
 
                 // Scroll to error message
                 setTimeout(() => {
@@ -1366,7 +1391,7 @@ const Checkout: React.FC = () => {
         } catch (error: any) {
             console.error('Checkout error:', error)
 
-            setApiError(t.checkout.server_errors.general_error);
+            setApiErrorKey('server_general_error');
 
             // Scroll to error message
             setTimeout(() => {
@@ -1384,8 +1409,8 @@ const Checkout: React.FC = () => {
         if (currentStep > 1) {
             setCurrentStep(prev => prev - 1);
             // Clear API error when going back
-            if (apiError) {
-                setApiError('');
+            if (apiErrorKey) {
+                setApiErrorKey('');
             }
         }
     };
@@ -1508,7 +1533,7 @@ const Checkout: React.FC = () => {
     const handleTryAnotherEmail = () => {
         // Clear the user already exists error
         setIsUserAlreadyExists(false);
-        setApiError('');
+        setApiErrorKey('');
 
         // Go to step 1 and focus on email input
         setCurrentStep(1);
@@ -1762,7 +1787,7 @@ const Checkout: React.FC = () => {
                                             </div>
                                             <button
                                                 type="button"
-                                                onClick={() => setApiError('')}
+                                                onClick={() => setApiErrorKey('')}
                                                 className="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 hover:shadow-lg hover:scale-110 active:scale-95 border border-red-200 hover:border-red-300"
                                                 aria-label="Close error message"
                                             >
