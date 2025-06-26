@@ -8,7 +8,7 @@ import visa from "../assets/images/visa.png";
 import mastercard from "../assets/images/mastercard.png";
 import amex from "../assets/images/amex.png";
 import logo from "../assets/images/logo.png";
-import { FaHome, FaLock, FaCreditCard, FaMapMarkerAlt, FaTimes } from 'react-icons/fa';
+import { FaHome, FaLock, FaCreditCard, FaMapMarkerAlt, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useLanguage } from '../contexts/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../Landing.css';
@@ -73,6 +73,10 @@ const Checkout: React.FC = () => {
     const [plans, setPlans] = useState<Plan[]>([]);
     const [apiError, setApiError] = useState('');
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // Password visibility state
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     // Input refs for navigation
     const firstNameRef = useRef<HTMLInputElement>(null);
@@ -812,26 +816,7 @@ const Checkout: React.FC = () => {
                 }));
                 return;
             }
-        }
-
-        if (currentStep < 3) {
-            setCurrentStep(prev => {
-                console.log('Setting step to:', prev + 1);
-                return prev + 1;
-            });
-            // Clear API error when moving to next step
-            if (apiError) {
-                setApiError('');
-            }
-        }
-    };
-
-    const handleStepSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (currentStep < 3) {
-            handleNextStep();
-        } else {
+        } else if (currentStep === 3) {
             const billingAddressErrors: Partial<Record<keyof BillingAddress, string>> = {};
 
             if (!billingAddress.address.trim()) {
@@ -865,7 +850,26 @@ const Checkout: React.FC = () => {
                 ...prev,
                 billingAddress: undefined
             }));
+        }
 
+        if (currentStep < 4) {
+            setCurrentStep(prev => {
+                console.log('Setting step to:', prev + 1);
+                return prev + 1;
+            });
+            // Clear API error when moving to next step
+            if (apiError) {
+                setApiError('');
+            }
+        }
+    };
+
+    const handleStepSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (currentStep < 4) {
+            handleNextStep();
+        } else {
             // Submit checkout to backend
             await handleFinalCheckout();
         }
@@ -1374,6 +1378,20 @@ const Checkout: React.FC = () => {
                                     <span className={`${isRTL ? 'mr-2' : 'ml-2'} text-xs font-medium transition-colors duration-300 ${currentStep >= 3 ? 'text-gray-900' : 'text-gray-400'
                                         } hidden sm:inline`}>{t.checkout.billing_address.title}</span>
                                 </div>
+                                <div className={`flex-1 h-0.5 mx-4 transition-colors duration-300 ${currentStep >= 4 ? 'bg-gradient-to-r from-blue-600 to-indigo-600' : 'bg-gray-200'
+                                    }`}></div>
+                                <div className="flex items-center">
+                                    <div className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ${currentStep >= 4
+                                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white scale-110'
+                                        : 'bg-gray-100 text-gray-400'
+                                        }`}>
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <span className={`${isRTL ? 'mr-2' : 'ml-2'} text-xs font-medium transition-colors duration-300 ${currentStep >= 4 ? 'text-gray-900' : 'text-gray-400'
+                                        } hidden sm:inline`}>Review</span>
+                                </div>
                             </div>
                         </div>
 
@@ -1519,6 +1537,9 @@ const Checkout: React.FC = () => {
                                                 {errors.billing?.email && (
                                                     <p className="text-xs text-red-600">{getErrorMessage(errors.billing.email)}</p>
                                                 )}
+                                                <p className="text-xs text-gray-500 mt-1">
+                                                    Please enter your real email address - you'll need it for account signing in and verification.
+                                                </p>
                                             </div>
                                             <div className="space-y-1">
                                                 <label htmlFor="phone" className="block text-xs font-medium text-gray-700">
@@ -1559,25 +1580,37 @@ const Checkout: React.FC = () => {
                                             />
                                         </div>
 
-                                        <p className="text-xs text-gray-600"> {t.checkout.account_info.fields.passmsg}</p>
-
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             <div className="space-y-1">
                                                 <label htmlFor="password" className="block text-xs font-medium text-gray-700">
                                                     {t.checkout.account_info.fields.password} <span className="text-red-500">*</span>
                                                 </label>
-                                                <input
-                                                    type="password"
-                                                    id="password"
-                                                    name="password"
-                                                    value={billingInfo.password}
-                                                    onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.password ? 'border-red-500' : 'border-gray-300'
-                                                        }`}
-                                                    placeholder={t.checkout.account_info.fields.password_placeholder}
-                                                    ref={passwordRef}
-                                                    onKeyDown={(e) => handleStepNavigation(e, confirmPasswordRef)}
-                                                />
+                                                <div className="relative">
+                                                    <input
+                                                        type={showPassword ? "text" : "password"}
+                                                        id="password"
+                                                        name="password"
+                                                        value={billingInfo.password}
+                                                        onChange={handleBillingInfoChange}
+                                                        className={`focus:outline-none w-full px-3 py-2 pr-10 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.password ? 'border-red-500' : 'border-gray-300'
+                                                            }`}
+                                                        placeholder={t.checkout.account_info.fields.password_placeholder}
+                                                        ref={passwordRef}
+                                                        onKeyDown={(e) => handleStepNavigation(e, confirmPasswordRef)}
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setShowPassword(!showPassword)}
+                                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors focus:outline-none bg-transparent border-none"
+                                                        aria-label={showPassword ? "Hide password" : "Show password"}
+                                                    >
+                                                        {showPassword ? (
+                                                            <FaEyeSlash className="w-4 h-4" />
+                                                        ) : (
+                                                            <FaEye className="w-4 h-4" />
+                                                        )}
+                                                    </button>
+                                                </div>
                                                 {errors.billing?.password && (
                                                     <p className="text-xs text-red-600">{getErrorMessage(errors.billing.password)}</p>
                                                 )}
@@ -1586,21 +1619,56 @@ const Checkout: React.FC = () => {
                                                 <label htmlFor="confirmPassword" className="block text-xs font-medium text-gray-700">
                                                     {t.checkout.account_info.fields.confirmpass} <span className="text-red-500">*</span>
                                                 </label>
-                                                <input
-                                                    type="password"
-                                                    id="confirmPassword"
-                                                    name="confirmPassword"
-                                                    value={billingInfo.confirmPassword}
-                                                    onChange={handleBillingInfoChange}
-                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.confirmPassword ? 'border-red-500' : 'border-gray-300'
-                                                        }`}
-                                                    placeholder={t.checkout.account_info.fields.password_confirm_placeholder}
-                                                    ref={confirmPasswordRef}
-                                                    onKeyDown={(e) => handleStepNavigation(e, cardNumberRef)}
-                                                />
+                                                <div className="relative">
+                                                    <input
+                                                        type={showConfirmPassword ? "text" : "password"}
+                                                        id="confirmPassword"
+                                                        name="confirmPassword"
+                                                        value={billingInfo.confirmPassword}
+                                                        onChange={handleBillingInfoChange}
+                                                        className={`focus:outline-none w-full px-3 py-2 pr-10 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                                                            }`}
+                                                        placeholder={t.checkout.account_info.fields.password_confirm_placeholder}
+                                                        ref={confirmPasswordRef}
+                                                        onKeyDown={(e) => handleStepNavigation(e, cardNumberRef)}
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors focus:outline-none bg-transparent border-none"
+                                                        aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                                                    >
+                                                        {showConfirmPassword ? (
+                                                            <FaEyeSlash className="w-4 h-4" />
+                                                        ) : (
+                                                            <FaEye className="w-4 h-4" />
+                                                        )}
+                                                    </button>
+                                                </div>
                                                 {errors.billing?.confirmPassword && (
                                                     <p className="text-xs text-red-600">{getErrorMessage(errors.billing.confirmPassword)}</p>
                                                 )}
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Login Credentials Note */}
+                                        <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl">
+                                            <div className="flex items-start space-x-3">
+                                                <div className="flex-shrink-0">
+                                                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                                                        <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm font-medium text-blue-900 mb-1">
+                                                        💡 <strong>Important:</strong> Login Credentials
+                                                    </p>
+                                                    <p className="text-xs text-blue-700">
+                                                        The email and password you entered above will be your login credentials for accessing your Telmeez account. Please save them securely.
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1886,6 +1954,131 @@ const Checkout: React.FC = () => {
                                     </div>
                                 </motion.div>
                             )}
+
+                            {currentStep === 4 && (
+                                <motion.div
+                                    key="step4"
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: 20 }}
+                                    className="bg-white rounded-xl shadow-lg p-6 mb-6"
+                                >
+                                    {/* Review Section */}
+                                    <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                                        <h2 className="text-lg font-semibold text-gray-900">Review Your Information</h2>
+                                        <p className="text-sm text-gray-600 mt-1">Please review all your information before proceeding with the payment</p>
+                                    </div>
+                                    <div className="p-6 space-y-6">
+                                        {/* Account Information Review */}
+                                        <div className="space-y-4">
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                                                    <FaLock className="w-4 h-4 text-blue-600" />
+                                                </div>
+                                                <h3 className="text-lg font-semibold text-gray-900">Account Information</h3>
+                                            </div>
+                                            <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Name</p>
+                                                        <p className="text-sm font-medium text-gray-900">{billingInfo.firstName} {billingInfo.lastName}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Email</p>
+                                                        <p className="text-sm font-medium text-gray-900">{billingInfo.email}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Phone</p>
+                                                        <p className="text-sm font-medium text-gray-900">{billingInfo.phone}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Institution</p>
+                                                        <p className="text-sm font-medium text-gray-900">{billingInfo.institutionName || 'Not specified'}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Payment Information Review */}
+                                        <div className="space-y-4">
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                                                    <FaCreditCard className="w-4 h-4 text-green-600" />
+                                                </div>
+                                                <h3 className="text-lg font-semibold text-gray-900">Payment Information</h3>
+                                            </div>
+                                            <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Card Type</p>
+                                                        <p className="text-sm font-medium text-gray-900">{getCardTypeName(detectedCardType) || 'Card'}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Card Number</p>
+                                                        <p className="text-sm font-medium text-gray-900">
+                                                            {paymentInfo.cardNumber ? 
+                                                                `•••• •••• •••• ${paymentInfo.cardNumber.slice(-4)}` : 
+                                                                'Not provided'
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Expiry Date</p>
+                                                        <p className="text-sm font-medium text-gray-900">{paymentInfo.expiryDate || 'Not provided'}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Payment Method</p>
+                                                        <p className="text-sm font-medium text-gray-900 capitalize">{payBy}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Billing Address Review */}
+                                        <div className="space-y-4">
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                                                    <FaMapMarkerAlt className="w-4 h-4 text-purple-600" />
+                                                </div>
+                                                <h3 className="text-lg font-semibold text-gray-900">Billing Address</h3>
+                                            </div>
+                                            <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div className="md:col-span-2">
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Address</p>
+                                                        <p className="text-sm font-medium text-gray-900">
+                                                            {billingAddress.address}
+                                                            {billingAddress.address2 && <br />}
+                                                            {billingAddress.address2}
+                                                        </p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">City</p>
+                                                        <p className="text-sm font-medium text-gray-900">{billingAddress.city}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">State/Province</p>
+                                                        <p className="text-sm font-medium text-gray-900">{billingAddress.state}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">ZIP/Postal Code</p>
+                                                        <p className="text-sm font-medium text-gray-900">{billingAddress.zipCode}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Country</p>
+                                                        <p className="text-sm font-medium text-gray-900">
+                                                            {billingAddress.country === 'other' 
+                                                                ? billingAddress.customCountry 
+                                                                : t.countries[billingAddress.country as keyof typeof t.countries] || billingAddress.country
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
                         </AnimatePresence>
                     </div>
 
@@ -1922,6 +2115,13 @@ const Checkout: React.FC = () => {
                                                     <span>{feature}</span>
                                                 </div>
                                             ))}
+                                            {/* Add Storage Information */}
+                                            <div className="flex items-center text-xs text-gray-600">
+                                                <svg className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                </svg>
+                                                <span>{t.pricing.plans[selectedPlan as keyof typeof t.pricing.plans].max_storage} Storage</span>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -2320,9 +2520,6 @@ const Checkout: React.FC = () => {
                                             {promoError && (
                                                 <p className="mt-2 text-sm text-red-600">{promoError}</p>
                                             )}
-                                            {apiError && (
-                                                <p className="mt-2 text-sm text-red-600">{apiError}</p>
-                                            )}
                                         </div>
                                     )}
                                 </div>
@@ -2388,7 +2585,7 @@ const Checkout: React.FC = () => {
                                                 disabled={isSubmittingCheckout}
                                                 className="w-full py-3 px-4 rounded-lg text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
-                                                {isSubmittingCheckout ? 'Processing...' : (currentStep < 3 ? t.checkout.summary.continue : t.checkout.summary.activate)}
+                                                {isSubmittingCheckout ? 'Processing...' : (currentStep < 4 ? t.checkout.summary.continue : t.checkout.summary.activate)}
                                             </button>
                                         </div>
                                         <p className="text-xs text-gray-500 text-center mt-3">

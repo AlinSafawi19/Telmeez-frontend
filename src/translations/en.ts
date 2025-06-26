@@ -502,7 +502,6 @@ export const en = {
                 city: "City",
                 state: "State/Province/Region",
                 zip: "ZIP/Postal Code",
-                passmsg: "These credentials will be used to log in to your account",
                 password: "Password",
                 confirmpass: "Confirm Password",
                 password_placeholder: "Create a password",

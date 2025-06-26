@@ -486,7 +486,6 @@ export const fr = {
                 city: "Ville",
                 state: "État/Province/Région",
                 zip: "Code postal",
-                passmsg: "Ces identifiants seront utilisés pour vous connecter à votre compte",
                 password: "Mot de passe",
                 confirmpass: "Confirmer le mot de passe",
                 password_placeholder: "Créer un mot de passe",
