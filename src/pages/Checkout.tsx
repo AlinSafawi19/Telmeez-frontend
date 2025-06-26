@@ -3,8 +3,6 @@ import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { translations } from '../translations';
 import type { Language } from '../translations';
 import { LANGUAGES, getLanguageDirection } from '../constants/languages';
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
 import Select from 'react-select';
 import visa from "../assets/images/visa.png";
 import mastercard from "../assets/images/mastercard.png";
@@ -75,6 +73,61 @@ const Checkout: React.FC = () => {
     const [plans, setPlans] = useState<Plan[]>([]);
     const [apiError, setApiError] = useState('');
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // Input refs for navigation
+    const firstNameRef = useRef<HTMLInputElement>(null);
+    const lastNameRef = useRef<HTMLInputElement>(null);
+    const emailRef = useRef<HTMLInputElement>(null);
+    const phoneRef = useRef<HTMLInputElement>(null);
+    const institutionNameRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+    const confirmPasswordRef = useRef<HTMLInputElement>(null);
+    const cardNumberRef = useRef<HTMLInputElement>(null);
+    const expiryDateRef = useRef<HTMLInputElement>(null);
+    const cvvRef = useRef<HTMLInputElement>(null);
+    const billingCountryRef = useRef<HTMLInputElement>(null);
+    const billingCustomCountryRef = useRef<HTMLInputElement>(null);
+    const billingAddressRef = useRef<HTMLInputElement>(null);
+    const billingAddress2Ref = useRef<HTMLInputElement>(null);
+    const billingCityRef = useRef<HTMLInputElement>(null);
+    const billingStateRef = useRef<HTMLInputElement>(null);
+    const billingZipCodeRef = useRef<HTMLInputElement>(null);
+
+    // Function to handle Enter key navigation
+    const handleEnterNavigation = (e: React.KeyboardEvent, nextInputRef: React.RefObject<HTMLInputElement | null> | null, action?: () => void) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            
+            // If there's a specific action (like apply promo), execute it
+            if (action) {
+                action();
+                return;
+            }
+            
+            // If there's a next input, focus it
+            if (nextInputRef?.current) {
+                nextInputRef.current.focus();
+            } else {
+                // If no next input, try to move to next step
+                handleNextStep();
+            }
+        }
+    };
+
+    // Function to handle Enter key navigation within current step
+    const handleStepNavigation = (e: React.KeyboardEvent, nextInputRef: React.RefObject<HTMLInputElement | null> | null) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            
+            // If there's a next input in the same step, focus it
+            if (nextInputRef?.current) {
+                nextInputRef.current.focus();
+            } else {
+                // If no next input in current step, move to next step
+                handleNextStep();
+            }
+        }
+    };
 
     // Fetch plans from backend on component mount
     useEffect(() => {
@@ -430,11 +483,21 @@ const Checkout: React.FC = () => {
         }
     }, [currentLanguage, t.checkout.validation, t.checkout.summary]);
 
-    const handlePhoneChange = (value: string) => {
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setBillingInfo(prev => ({
             ...prev,
-            phone: value
+            phone: e.target.value
         }));
+        // Clear error when user types
+        if (errors.billing?.phone) {
+            setErrors(prev => ({
+                ...prev,
+                billing: {
+                    ...prev.billing,
+                    phone: undefined
+                }
+            }));
+        }
     };
 
     const handleBillingInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -1270,6 +1333,8 @@ const Checkout: React.FC = () => {
                                                     onChange={handleBillingInfoChange}
                                                     className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.firstName ? 'border-red-500' : 'border-gray-300'
                                                         }`}
+                                                    ref={firstNameRef}
+                                                    onKeyDown={(e) => handleStepNavigation(e, lastNameRef)}
                                                 />
                                                 {errors.billing?.firstName && (
                                                     <p className="text-xs text-red-600">{getErrorMessage(errors.billing.firstName)}</p>
@@ -1287,6 +1352,8 @@ const Checkout: React.FC = () => {
                                                     onChange={handleBillingInfoChange}
                                                     className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.lastName ? 'border-red-500' : 'border-gray-300'
                                                         }`}
+                                                    ref={lastNameRef}
+                                                    onKeyDown={(e) => handleStepNavigation(e, emailRef)}
                                                 />
                                                 {errors.billing?.lastName && (
                                                     <p className="text-xs text-red-600">{getErrorMessage(errors.billing.lastName)}</p>
@@ -1307,6 +1374,8 @@ const Checkout: React.FC = () => {
                                                     onChange={handleBillingInfoChange}
                                                     className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.email ? 'border-red-500' : 'border-gray-300'
                                                         }`}
+                                                    ref={emailRef}
+                                                    onKeyDown={(e) => handleStepNavigation(e, phoneRef)}
                                                 />
                                                 {errors.billing?.email && (
                                                     <p className="text-xs text-red-600">{getErrorMessage(errors.billing.email)}</p>
@@ -1316,42 +1385,16 @@ const Checkout: React.FC = () => {
                                                 <label htmlFor="phone" className="block text-xs font-medium text-gray-700">
                                                     {t.checkout.account_info.fields.phone} <span className="text-red-500">*</span>
                                                 </label>
-                                                <PhoneInput
-                                                    country="lb"
+                                                <input
+                                                    type="text"
+                                                    id="phone"
+                                                    name="phone"
                                                     value={billingInfo.phone}
                                                     onChange={handlePhoneChange}
-                                                    inputClass={`w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.billing?.phone ? 'border-red-500' : 'border-gray-300'}`}
-                                                    buttonClass={`${isRTL ? 'rounded-l-none' : 'rounded-r-none'} border-r-0`}
-                                                    inputStyle={{
-                                                        height: '38px',
-                                                        width: '100%',
-                                                        fontSize: '0.875rem',
-                                                        borderRadius: '0.75rem !important',
-                                                        borderColor: errors.billing?.phone ? '#EF4444' : '#D1D5DB',
-                                                        backgroundColor: 'white'
-                                                    }}
-                                                    buttonStyle={{
-                                                        height: '38px',
-                                                        borderTopRightRadius: '0.75rem',
-                                                        borderBottomRightRadius: '0.75rem',
-                                                        borderTopLeftRadius: '0',
-                                                        borderBottomLeftRadius: '0',
-                                                        borderColor: errors.billing?.phone ? '#EF4444' : '#D1D5DB',
-                                                        backgroundColor: 'white'
-                                                    }}
-                                                    containerClass={`${isRTL ? 'rtl-phone-input' : ''} focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all duration-300`}
-                                                    dropdownStyle={{
-                                                        borderRadius: '0.75rem',
-                                                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                                                        zIndex: 50
-                                                    }}
-                                                    searchStyle={{
-                                                        height: '36px',
-                                                        fontSize: '0.875rem',
-                                                        borderRadius: '0.5rem',
-                                                        borderColor: '#D1D5DB'
-                                                    }}
-                                                    countryCodeEditable={true}
+                                                    placeholder="+961 70 123 456"
+                                                    className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.phone ? 'border-red-500' : 'border-gray-300'}`}
+                                                    ref={phoneRef}
+                                                    onKeyDown={(e) => handleStepNavigation(e, institutionNameRef)}
                                                 />
 
                                                 {errors.billing?.phone && (
@@ -1372,6 +1415,8 @@ const Checkout: React.FC = () => {
                                                 onChange={handleBillingInfoChange}
                                                 className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.institutionName ? 'border-red-500' : 'border-gray-300'
                                                     }`}
+                                                ref={institutionNameRef}
+                                                onKeyDown={(e) => handleStepNavigation(e, passwordRef)}
                                             />
                                         </div>
 
@@ -1391,6 +1436,8 @@ const Checkout: React.FC = () => {
                                                     className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.password ? 'border-red-500' : 'border-gray-300'
                                                         }`}
                                                     placeholder={t.checkout.account_info.fields.password_placeholder}
+                                                    ref={passwordRef}
+                                                    onKeyDown={(e) => handleStepNavigation(e, confirmPasswordRef)}
                                                 />
                                                 {errors.billing?.password && (
                                                     <p className="text-xs text-red-600">{getErrorMessage(errors.billing.password)}</p>
@@ -1409,6 +1456,8 @@ const Checkout: React.FC = () => {
                                                     className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billing?.confirmPassword ? 'border-red-500' : 'border-gray-300'
                                                         }`}
                                                     placeholder={t.checkout.account_info.fields.password_confirm_placeholder}
+                                                    ref={confirmPasswordRef}
+                                                    onKeyDown={(e) => handleStepNavigation(e, cardNumberRef)}
                                                 />
                                                 {errors.billing?.confirmPassword && (
                                                     <p className="text-xs text-red-600">{getErrorMessage(errors.billing.confirmPassword)}</p>
@@ -1481,6 +1530,8 @@ const Checkout: React.FC = () => {
                                                             placeholder={detectedCardType ? getCardNumberFormat(detectedCardType) : "1234 5678 9012 3456"}
                                                             dir="ltr"
                                                             className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.payment?.cardNumber ? 'border-red-500' : 'border-gray-300'} ${isRTL ? 'text-right' : ''}`}
+                                                            ref={cardNumberRef}
+                                                            onKeyDown={(e) => handleStepNavigation(e, expiryDateRef)}
                                                         />
                                                         {detectedCardType && (
                                                             <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -1518,6 +1569,8 @@ const Checkout: React.FC = () => {
                                                             placeholder="MM/YY"
                                                             className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.payment?.expiryDate ? 'border-red-500' : 'border-gray-300'
                                                                 }`}
+                                                            ref={expiryDateRef}
+                                                            onKeyDown={(e) => handleStepNavigation(e, cvvRef)}
                                                         />
                                                         {errors.payment?.expiryDate && (
                                                             <p className="text-xs text-red-600">{getErrorMessage(errors.payment.expiryDate)}</p>
@@ -1536,6 +1589,8 @@ const Checkout: React.FC = () => {
                                                             placeholder={detectedCardType === 'amex' ? '1234' : '123'}
                                                             className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.payment?.cvv ? 'border-red-500' : 'border-gray-300'
                                                                 }`}
+                                                            ref={cvvRef}
+                                                            onKeyDown={(e) => handleStepNavigation(e, billingCountryRef)}
                                                         />
                                                         {errors.payment?.cvv && (
                                                             <p className="text-xs text-red-600">{getErrorMessage(errors.payment.cvv)}</p>
@@ -1588,6 +1643,8 @@ const Checkout: React.FC = () => {
                                                         onChange={(e) => handleCustomCountryChange(e, true)}
                                                         placeholder={t.checkout.account_info.fields.enter_country || "Enter your country"}
                                                         className={`mt-2 focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.billingAddress?.customCountry ? 'border-red-500' : 'border-gray-300'}`}
+                                                        ref={billingCustomCountryRef}
+                                                        onKeyDown={(e) => handleStepNavigation(e, billingAddressRef)}
                                                     />
                                                 )}
                                                 {errors.billingAddress?.country && (
@@ -1606,6 +1663,8 @@ const Checkout: React.FC = () => {
                                                     onChange={handleBillingAddressChange}
                                                     className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.address ? 'border-red-500' : 'border-gray-300'
                                                         }`}
+                                                    ref={billingAddressRef}
+                                                    onKeyDown={(e) => handleStepNavigation(e, billingAddress2Ref)}
                                                 />
                                                 {errors.billingAddress?.address && (
                                                     <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.address)}</p>
@@ -1623,6 +1682,8 @@ const Checkout: React.FC = () => {
                                                     onChange={handleBillingAddressChange}
                                                     className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.address2 ? 'border-red-500' : 'border-gray-300'
                                                         }`}
+                                                    ref={billingAddress2Ref}
+                                                    onKeyDown={(e) => handleStepNavigation(e, billingCityRef)}
                                                 />
                                             </div>
                                             <div className="space-y-2">
@@ -1637,6 +1698,8 @@ const Checkout: React.FC = () => {
                                                     onChange={handleBillingAddressChange}
                                                     className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.city ? 'border-red-500' : 'border-gray-300'
                                                         }`}
+                                                    ref={billingCityRef}
+                                                    onKeyDown={(e) => handleStepNavigation(e, billingStateRef)}
                                                 />
                                                 {errors.billingAddress?.city && (
                                                     <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.city)}</p>
@@ -1654,6 +1717,8 @@ const Checkout: React.FC = () => {
                                                     onChange={handleBillingAddressChange}
                                                     className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.state ? 'border-red-500' : 'border-gray-300'
                                                         }`}
+                                                    ref={billingStateRef}
+                                                    onKeyDown={(e) => handleStepNavigation(e, billingZipCodeRef)}
                                                 />
                                                 {errors.billingAddress?.state && (
                                                     <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.state)}</p>
@@ -1671,6 +1736,8 @@ const Checkout: React.FC = () => {
                                                     onChange={handleBillingAddressChange}
                                                     className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.zipCode ? 'border-red-500' : 'border-gray-300'
                                                         }`}
+                                                    ref={billingZipCodeRef}
+                                                    onKeyDown={(e) => handleStepNavigation(e, null)}
                                                 />
                                                 {errors.billingAddress?.zipCode && (
                                                     <p className="text-xs text-red-600">{getErrorMessage(errors.billingAddress.zipCode)}</p>
@@ -2098,6 +2165,7 @@ const Checkout: React.FC = () => {
                                                     type="text"
                                                     value={promoCode}
                                                     onChange={handlePromoCodeChange}
+                                                    onKeyDown={(e) => handleEnterNavigation(e, null, handleApplyPromo)}
                                                     placeholder={t.checkout.summary.add_promo_placeholder}
                                                     className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.zipCode ? 'border-red-500' : 'border-gray-300'
                                                         }`} />

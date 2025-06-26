@@ -576,7 +576,7 @@ export const en = {
             annual: "Annual",
             monthly: "Monthly",
             add_ons: {
-                title: "Add Additional Users",
+                title: "Add Additional Users & Storage",
                 admin: "Admin",
                 teacher: "Teacher",
                 student: "Student",

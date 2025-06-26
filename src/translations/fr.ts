@@ -560,7 +560,7 @@ export const fr = {
             annual: "Annuel",
             monthly: "Mensuel",
             add_ons: {
-                title: "Ajouter des Utilisateurs Supplémentaires",
+                title: "Ajouter des Utilisateurs et Stockage",
                 admin: "Admin",
                 teacher: "Enseignant",
                 student: "Étudiant",

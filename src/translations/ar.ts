@@ -576,7 +576,7 @@ export const ar = {
             annual: "سنوي",
             monthly: "شهري",
             add_ons: {
-                title: "إضافة مستخدمين إضافيين",
+                title: "إضافة مستخدمين إضافيين وتخزين",
                 admin: "مشرف",
                 teacher: "معلم",
                 student: "طالب",
