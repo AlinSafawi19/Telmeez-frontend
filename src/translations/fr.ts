@@ -492,13 +492,17 @@ export const fr = {
                 password_confirm_placeholder: "Confirmer votre mot de passe",
                 other_country: "Autre",
                 enter_country: "Entrez le nom du pays",
-                select_country: "Sélectionnez un pays"
+                select_country: "Sélectionnez un pays",
+                email_verification_note: "Veuillez entrer votre vraie adresse e-mail - vous en aurez besoin pour vous connecter et vérifier votre compte.",
+                login_credentials_title: "💡 Important : Identifiants de connexion",
+                login_credentials_note: "L'adresse e-mail et le mot de passe que vous avez saisis ci-dessus seront vos identifiants de connexion pour accéder à votre compte Telmeez. Veuillez les conserver en toute sécurité."
             }
         },
         payment_details: {
             title: "Détails du paiement",
             section_title: "Informations de paiement",
             section_subtitle: "Sélectionnez le mode de paiement",
+            card_type: "Type de carte",
             payment_types: {
                 card: {
                     name: "Carte de crédit/débit",
@@ -520,7 +524,13 @@ export const fr = {
         },
         billing_address: {
             title: "Adresse de facturation",
-            checbox: "Utiliser la même adresse que les informations du compte"
+            checbox: "Utiliser la même adresse que les informations du compte",
+            address: "Adresse"
+        },
+        review: {
+            title: "Révision",
+            section_title: "Révisez vos informations",
+            section_subtitle: "Veuillez réviser toutes vos informations avant de procéder au paiement"
         },
         legal: {
             terms: "Conditions d'utilisation",

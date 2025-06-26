@@ -508,13 +508,17 @@ export const en = {
                 password_confirm_placeholder: "Confirm your password",
                 other_country: "Other",
                 enter_country: "Enter your country name",
-                select_country: "Select a country"
+                select_country: "Select a country",
+                email_verification_note: "Please enter your real email address - you'll need it for account signing in and verification.",
+                login_credentials_title: "💡 Important: Login Credentials",
+                login_credentials_note: "The email and password you entered above will be your login credentials for accessing your Telmeez account. Please save them securely."
             }
         },
         payment_details: {
             title: "Payment Details",
             section_title: "Payment Information",
             section_subtitle: "Select Payment Method",
+            card_type: "Card Type",
             payment_types: {
                 card: {
                     name: "Credit/Debit Card",
@@ -536,7 +540,13 @@ export const en = {
         },
         billing_address: {
             title: "Billing Address",
-            checbox: "Use same address as account information"
+            checbox: "Use same address as account information",
+            address: "Address"
+        },
+        review: {
+            title: "Review",
+            section_title: "Review Your Information",
+            section_subtitle: "Please review all your information before proceeding with the payment"
         },
         legal: {
             terms: "Terms & Conditions",

@@ -1298,7 +1298,7 @@ const Checkout: React.FC = () => {
                                 <span className="font-medium">
                                     {LANGUAGES.find(lang => lang.code === currentLanguage)?.label}
                                 </span>
-                                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className={`w-4 h-4 ${isRTL ? 'mr-1' : 'ml-1'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                 </svg>
                             </button>
@@ -1390,7 +1390,7 @@ const Checkout: React.FC = () => {
                                         </svg>
                                     </div>
                                     <span className={`${isRTL ? 'mr-2' : 'ml-2'} text-xs font-medium transition-colors duration-300 ${currentStep >= 4 ? 'text-gray-900' : 'text-gray-400'
-                                        } hidden sm:inline`}>Review</span>
+                                        } hidden sm:inline`}>{t.checkout.review.title}</span>
                                 </div>
                             </div>
                         </div>
@@ -1408,7 +1408,7 @@ const Checkout: React.FC = () => {
                                     className="mb-6 bg-gradient-to-r from-red-50 to-rose-50 border-l-4 border-red-500 rounded-xl shadow-lg overflow-hidden"
                                 >
                                     <div className="p-6">
-                                        <div className="flex items-start space-x-4">
+                                        <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                                             <div className="flex-shrink-0">
                                                 <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
                                                     <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1429,7 +1429,7 @@ const Checkout: React.FC = () => {
                                                             href="mailto:support@telmeez.com"
                                                             className="inline-flex items-center text-red-600 hover:text-red-700 transition-colors"
                                                         >
-                                                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <svg className={`w-3 h-3 ${isRTL ? 'ml-1' : 'mr-1'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                                             </svg>
                                                             contact@telmeezlb.com
@@ -1438,7 +1438,7 @@ const Checkout: React.FC = () => {
                                                             href="tel:+9611234567"
                                                             className="inline-flex items-center text-red-600 hover:text-red-700 transition-colors"
                                                         >
-                                                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <svg className={`w-3 h-3 ${isRTL ? 'ml-1' : 'mr-1'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                                             </svg>
                                                             +961 1 234 567
@@ -1538,7 +1538,7 @@ const Checkout: React.FC = () => {
                                                     <p className="text-xs text-red-600">{getErrorMessage(errors.billing.email)}</p>
                                                 )}
                                                 <p className="text-xs text-gray-500 mt-1">
-                                                    Please enter your real email address - you'll need it for account signing in and verification.
+                                                    {t.checkout.account_info.fields.email_verification_note}
                                                 </p>
                                             </div>
                                             <div className="space-y-1">
@@ -1653,7 +1653,7 @@ const Checkout: React.FC = () => {
                                         
                                         {/* Login Credentials Note */}
                                         <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl">
-                                            <div className="flex items-start space-x-3">
+                                            <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                                                 <div className="flex-shrink-0">
                                                     <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
                                                         <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1663,10 +1663,10 @@ const Checkout: React.FC = () => {
                                                 </div>
                                                 <div>
                                                     <p className="text-sm font-medium text-blue-900 mb-1">
-                                                        💡 <strong>Important:</strong> Login Credentials
+                                                        {t.checkout.account_info.fields.login_credentials_title}
                                                     </p>
                                                     <p className="text-xs text-blue-700">
-                                                        The email and password you entered above will be your login credentials for accessing your Telmeez account. Please save them securely.
+                                                        {t.checkout.account_info.fields.login_credentials_note}
                                                     </p>
                                                 </div>
                                             </div>
@@ -1700,7 +1700,7 @@ const Checkout: React.FC = () => {
                                                         : 'border-gray-200 hover:border-blue-200'
                                                         }`}
                                                 >
-                                                    <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                                    <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                                                         <div className={`p-2 rounded-full ${payBy === 'card' ? 'bg-blue-600' : 'bg-gray-100'
                                                             }`}>
                                                             <FaCreditCard className={`w-6 h-6 ${payBy === 'card' ? 'text-white' : 'text-gray-600'
@@ -1717,7 +1717,7 @@ const Checkout: React.FC = () => {
 
                                         {payBy === 'card' ? (
                                             <>
-                                                <div className="flex items-center justify-center sm:justify-start space-x-4 mb-6">
+                                                <div className={`flex items-center justify-center sm:justify-start ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'} mb-6`}>
                                                     <img src={visa} alt="Visa" className="h-8 transition-transform hover:scale-110" />
                                                     <img src={mastercard} alt="Mastercard" className="h-8 transition-transform hover:scale-110" />
                                                     <img src={amex} alt="Amex" className="h-8 transition-transform hover:scale-110" />
@@ -1965,34 +1965,34 @@ const Checkout: React.FC = () => {
                                 >
                                     {/* Review Section */}
                                     <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-                                        <h2 className="text-lg font-semibold text-gray-900">Review Your Information</h2>
-                                        <p className="text-sm text-gray-600 mt-1">Please review all your information before proceeding with the payment</p>
+                                        <h2 className="text-lg font-semibold text-gray-900">{t.checkout.review.section_title}</h2>
+                                        <p className="text-sm text-gray-600 mt-1">{t.checkout.review.section_subtitle}</p>
                                     </div>
                                     <div className="p-6 space-y-6">
                                         {/* Account Information Review */}
                                         <div className="space-y-4">
-                                            <div className="flex items-center space-x-3">
+                                            <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                                                 <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
                                                     <FaLock className="w-4 h-4 text-blue-600" />
                                                 </div>
-                                                <h3 className="text-lg font-semibold text-gray-900">Account Information</h3>
+                                                <h3 className="text-lg font-semibold text-gray-900">{t.checkout.account_info.title}</h3>
                                             </div>
                                             <div className="bg-gray-50 rounded-lg p-4 space-y-3">
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                     <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Name</p>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.first_name}</p>
                                                         <p className="text-sm font-medium text-gray-900">{billingInfo.firstName} {billingInfo.lastName}</p>
                                                     </div>
                                                     <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Email</p>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.email}</p>
                                                         <p className="text-sm font-medium text-gray-900">{billingInfo.email}</p>
                                                     </div>
                                                     <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Phone</p>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.phone}</p>
                                                         <p className="text-sm font-medium text-gray-900">{billingInfo.phone}</p>
                                                     </div>
                                                     <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Institution</p>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.institution}</p>
                                                         <p className="text-sm font-medium text-gray-900">{billingInfo.institutionName || 'Not specified'}</p>
                                                     </div>
                                                 </div>
@@ -2001,20 +2001,20 @@ const Checkout: React.FC = () => {
 
                                         {/* Payment Information Review */}
                                         <div className="space-y-4">
-                                            <div className="flex items-center space-x-3">
+                                            <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                                                 <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
                                                     <FaCreditCard className="w-4 h-4 text-green-600" />
                                                 </div>
-                                                <h3 className="text-lg font-semibold text-gray-900">Payment Information</h3>
+                                                <h3 className="text-lg font-semibold text-gray-900">{t.checkout.payment_details.title}</h3>
                                             </div>
                                             <div className="bg-gray-50 rounded-lg p-4 space-y-3">
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                     <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Card Type</p>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.payment_details.card_type}</p>
                                                         <p className="text-sm font-medium text-gray-900">{getCardTypeName(detectedCardType) || 'Card'}</p>
                                                     </div>
                                                     <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Card Number</p>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.payment_details.payment_types.card.card_nb}</p>
                                                         <p className="text-sm font-medium text-gray-900">
                                                             {paymentInfo.cardNumber ? 
                                                                 `•••• •••• •••• ${paymentInfo.cardNumber.slice(-4)}` : 
@@ -2023,11 +2023,11 @@ const Checkout: React.FC = () => {
                                                         </p>
                                                     </div>
                                                     <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Expiry Date</p>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.payment_details.payment_types.card.expiration}</p>
                                                         <p className="text-sm font-medium text-gray-900">{paymentInfo.expiryDate || 'Not provided'}</p>
                                                     </div>
                                                     <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Payment Method</p>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.payment_details.payment_types.card.name}</p>
                                                         <p className="text-sm font-medium text-gray-900 capitalize">{payBy}</p>
                                                     </div>
                                                 </div>
@@ -2036,16 +2036,16 @@ const Checkout: React.FC = () => {
 
                                         {/* Billing Address Review */}
                                         <div className="space-y-4">
-                                            <div className="flex items-center space-x-3">
+                                            <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                                                 <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
                                                     <FaMapMarkerAlt className="w-4 h-4 text-purple-600" />
                                                 </div>
-                                                <h3 className="text-lg font-semibold text-gray-900">Billing Address</h3>
+                                                <h3 className="text-lg font-semibold text-gray-900">{t.checkout.billing_address.title}</h3>
                                             </div>
                                             <div className="bg-gray-50 rounded-lg p-4 space-y-3">
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                     <div className="md:col-span-2">
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Address</p>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.billing_address.address}</p>
                                                         <p className="text-sm font-medium text-gray-900">
                                                             {billingAddress.address}
                                                             {billingAddress.address2 && <br />}
@@ -2053,19 +2053,19 @@ const Checkout: React.FC = () => {
                                                         </p>
                                                     </div>
                                                     <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">City</p>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.city}</p>
                                                         <p className="text-sm font-medium text-gray-900">{billingAddress.city}</p>
                                                     </div>
                                                     <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">State/Province</p>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.state}</p>
                                                         <p className="text-sm font-medium text-gray-900">{billingAddress.state}</p>
                                                     </div>
                                                     <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">ZIP/Postal Code</p>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.zip}</p>
                                                         <p className="text-sm font-medium text-gray-900">{billingAddress.zipCode}</p>
                                                     </div>
                                                     <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Country</p>
+                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.country}</p>
                                                         <p className="text-sm font-medium text-gray-900">
                                                             {billingAddress.country === 'other' 
                                                                 ? billingAddress.customCountry 
@@ -2109,7 +2109,7 @@ const Checkout: React.FC = () => {
                                         <div className="space-y-1">
                                             {t.pricing.plans[selectedPlan as keyof typeof t.pricing.plans].features.map((feature, index) => (
                                                 <div key={index} className="flex items-center text-xs text-gray-600">
-                                                    <svg className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                    <svg className={`w-3 h-3 text-green-500 ${isRTL ? 'ml-2' : 'mr-2'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                                                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                     </svg>
                                                     <span>{feature}</span>
@@ -2117,7 +2117,7 @@ const Checkout: React.FC = () => {
                                             ))}
                                             {/* Add Storage Information */}
                                             <div className="flex items-center text-xs text-gray-600">
-                                                <svg className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg className={`w-3 h-3 text-green-500 ${isRTL ? 'ml-2' : 'mr-2'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                                                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                 </svg>
                                                 <span>{t.pricing.plans[selectedPlan as keyof typeof t.pricing.plans].max_storage} Storage</span>
@@ -2137,7 +2137,7 @@ const Checkout: React.FC = () => {
                                                 >
                                                     {t.checkout.summary.add_ons.title}
                                                     <svg
-                                                        className={`ml-1 h-3 w-3 transform transition-transform ${isAddOnsExpanded ? 'rotate-180' : ''}`}
+                                                        className={`${isRTL ? 'mr-1' : 'ml-1'} h-3 w-3 transform transition-transform ${isAddOnsExpanded ? 'rotate-180' : ''}`}
                                                         fill="none"
                                                         viewBox="0 0 24 24"
                                                         stroke="currentColor"
@@ -2165,7 +2165,7 @@ const Checkout: React.FC = () => {
                                                                         {addOn.id === 'storage' ? '/10GB' : t.checkout.summary.add_ons.per_user}
                                                                     </span>
                                                                 </div>
-                                                                <div className="flex items-center space-x-2">
+                                                                <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
                                                                     <button
                                                                         type="button"
                                                                         onClick={() => handleAddOnQuantityChange(addOn.id, addOn.quantity - 1)}
@@ -2194,7 +2194,7 @@ const Checkout: React.FC = () => {
                                                                     </button>
                                                                 </div>
                                                             </div>
-                                                            <div className="text-right ml-3">
+                                                            <div className={`text-right ${isRTL ? 'mr-3' : 'ml-3'}`}>
                                                                 <span className="text-xs font-medium text-gray-900">
                                                                     ${(addOn.price * addOn.quantity).toFixed(2)}
                                                                 </span>
@@ -2219,7 +2219,7 @@ const Checkout: React.FC = () => {
                                                                             ${storageAddOn.price.toFixed(2)}/10GB
                                                                         </span>
                                                                     </div>
-                                                                    <div className="flex items-center space-x-2">
+                                                                    <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
                                                                         <button
                                                                             type="button"
                                                                             onClick={() => handleAddOnQuantityChange(storageAddOn.id, storageAddOn.quantity - 1)}
@@ -2243,7 +2243,7 @@ const Checkout: React.FC = () => {
                                                                         </button>
                                                                     </div>
                                                                 </div>
-                                                                <div className="text-right ml-3">
+                                                                <div className={`text-right ${isRTL ? 'mr-3' : 'ml-3'}`}>
                                                                     <span className="text-xs font-medium text-gray-900">
                                                                         ${(storageAddOn.price * storageAddOn.quantity).toFixed(2)}
                                                                     </span>
@@ -2269,7 +2269,7 @@ const Checkout: React.FC = () => {
                                         <div className="border-t border-gray-100 pt-3">
                                             <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 p-4 border border-green-200">
                                                 <div className="flex items-center justify-between mb-3">
-                                                    <div className="flex items-center space-x-3">
+                                                    <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                                                         <div className="flex-shrink-0">
                                                             <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
                                                                 <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2314,31 +2314,31 @@ const Checkout: React.FC = () => {
                                                     </div>
                                                     <div className="grid grid-cols-2 gap-1 text-xs text-green-700">
                                                         <div className="flex items-center">
-                                                            <svg className="w-3 h-3 text-green-600 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                             </svg>
                                                             <span>{t.checkout.summary.recommendation.standard.admin_accounts}</span>
                                                         </div>
                                                         <div className="flex items-center">
-                                                            <svg className="w-3 h-3 text-green-600 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                             </svg>
                                                             <span>{t.checkout.summary.recommendation.standard.teacher_accounts}</span>
                                                         </div>
                                                         <div className="flex items-center">
-                                                            <svg className="w-3 h-3 text-green-600 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                             </svg>
                                                             <span>{t.checkout.summary.recommendation.standard.student_accounts}</span>
                                                         </div>
                                                         <div className="flex items-center">
-                                                            <svg className="w-3 h-3 text-green-600 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                             </svg>
                                                             <span>{t.checkout.summary.recommendation.standard.parent_accounts}</span>
                                                         </div>
                                                         <div className="flex items-center col-span-2">
-                                                            <svg className="w-3 h-3 text-green-600 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                             </svg>
                                                             <span>{t.checkout.summary.recommendation.standard.storage_included}</span>
@@ -2362,7 +2362,7 @@ const Checkout: React.FC = () => {
                                         <div className="border-t border-gray-100 pt-3">
                                             <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border border-blue-100">
                                                 <div className="flex items-center justify-between mb-3">
-                                                    <div className="flex items-center space-x-3">
+                                                    <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                                                         <div className="flex-shrink-0">
                                                             <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center rtl:ml-4">
                                                                 <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2407,31 +2407,31 @@ const Checkout: React.FC = () => {
                                                     </div>
                                                     <div className="grid grid-cols-2 gap-1 text-xs text-green-700">
                                                         <div className="flex items-center">
-                                                            <svg className="w-3 h-3 text-green-600 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                             </svg>
                                                             <span>{t.checkout.summary.recommendation.enterprise.admin_accounts}</span>
                                                         </div>
                                                         <div className="flex items-center">
-                                                            <svg className="w-3 h-3 text-green-600 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                             </svg>
                                                             <span>{t.checkout.summary.recommendation.enterprise.teacher_accounts}</span>
                                                         </div>
                                                         <div className="flex items-center">
-                                                            <svg className="w-3 h-3 text-green-600 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                             </svg>
                                                             <span>{t.checkout.summary.recommendation.enterprise.student_accounts}</span>
                                                         </div>
                                                         <div className="flex items-center">
-                                                            <svg className="w-3 h-3 text-green-600 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                             </svg>
                                                             <span>{t.checkout.summary.recommendation.enterprise.parent_accounts}</span>
                                                         </div>
                                                         <div className="flex items-center col-span-2">
-                                                            <svg className="w-3 h-3 text-green-600 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                             </svg>
                                                             <span>{t.checkout.summary.recommendation.enterprise.storage_included}</span>
@@ -2456,7 +2456,7 @@ const Checkout: React.FC = () => {
                                 {selectedPlan === 'starter' && (
                                     <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border border-blue-100">
                                         <div className="flex items-center justify-between">
-                                            <div className="flex items-center space-x-3">
+                                            <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                                                 <div className="flex-shrink-0">
                                                     <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center rtl:ml-4">
                                                         <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2489,7 +2489,7 @@ const Checkout: React.FC = () => {
                                     >
                                         {showPromoInput ? t.checkout.summary.hide_promo : t.checkout.summary.add_promo}
                                         <svg
-                                            className={`ml-1 h-4 w-4 transform transition-transform ${showPromoInput ? 'rotate-180' : ''}`}
+                                            className={`${isRTL ? 'mr-1' : 'ml-1'} h-4 w-4 transform transition-transform ${showPromoInput ? 'rotate-180' : ''}`}
                                             fill="none"
                                             viewBox="0 0 24 24"
                                             stroke="currentColor"
@@ -2526,7 +2526,7 @@ const Checkout: React.FC = () => {
                                 {discount > 0 && (
                                     <div className="mt-3 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl shadow-sm">
                                         <div className="flex items-center justify-between">
-                                            <div className="flex items-center space-x-3">
+                                            <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                                                 <div className="flex-shrink-0">
                                                     <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
                                                         <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2550,22 +2550,22 @@ const Checkout: React.FC = () => {
                                 <div className="border-t border-gray-200 pt-4">
                                     {isAnnual && (
                                         <div className="flex justify-between items-center mb-2">
-                                            <span className="text-sm text-gray-600">Annual Savings (20%)</span>
+                                            <span className="text-sm text-gray-600">{t.checkout.summary.annual_saving}</span>
                                             <span className="text-sm font-medium text-green-600">-${getTotalSavings().annualSavings.toFixed(2)}</span>
                                         </div>
                                     )}
                                     {discount > 0 && (
                                         <div className="flex justify-between items-center mb-2">
-                                            <span className="text-sm text-gray-600">Promo Code Savings</span>
+                                            <span className="text-sm text-gray-600">{t.checkout.summary.promo_code_savings}</span>
                                             <span className="text-sm font-medium text-green-600">-${getTotalSavings().promoCodeSavings.toFixed(2)}</span>
                                         </div>
                                     )}
                                     <div className="flex justify-between items-center mb-2">
-                                        <span className="text-sm font-semibold text-gray-900">Total Savings</span>
+                                        <span className="text-sm font-semibold text-gray-900">{t.checkout.summary.total_savings}</span>
                                         <span className="text-sm font-bold text-green-600">-${getTotalSavings().totalSavings.toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between items-center mb-4">
-                                        <span className="text-base font-semibold text-gray-900">Final Total</span>
+                                        <span className="text-base font-semibold text-gray-900">{t.checkout.summary.total}</span>
                                         <span className="text-xl font-bold text-gray-900">{getTotalPrice()}</span>
                                     </div>
 
