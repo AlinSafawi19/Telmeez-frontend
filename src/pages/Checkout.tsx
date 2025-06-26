@@ -245,11 +245,16 @@ const Checkout: React.FC = () => {
     const [showPromoInput, setShowPromoInput] = useState(false);
     const [promoError, setPromoError] = useState('');
     const [discount, setDiscount] = useState(0);
+    const [promoCodeApplied, setPromoCodeApplied] = useState(false);
     const [payBy, setPayBy] = useState<PayBy>('card');
     const [detectedCardType, setDetectedCardType] = useState<string>('');
     const [isAddOnsExpanded, setIsAddOnsExpanded] = useState(() => {
         return false;
     });
+
+    // Add state for recommendation visibility
+    const [showStandardRecommendation, setShowStandardRecommendation] = useState(true);
+    const [showEnterpriseRecommendation, setShowEnterpriseRecommendation] = useState(true);
 
     const [errors, setErrors] = useState<{
         billing?: Partial<Record<keyof AccountInfo, string>>;
@@ -722,17 +727,20 @@ const Checkout: React.FC = () => {
             const data = await response.json();
 
             if (data.success) {
-                setDiscount(data.data.discount / 100);
+                setDiscount(data.data.discount / 100); // Store the discount percentage
+                setPromoCodeApplied(true); // Mark promo code as applied
                 setPromoCode(''); // Clear the input
                 setPromoError('');
             } else {
                 setPromoError(data.message);
                 setDiscount(0);
+                setPromoCodeApplied(false);
             }
         } catch (error) {
             console.error('Promo code validation error:', error);
             setPromoError('Failed to validate promo code');
             setDiscount(0);
+            setPromoCodeApplied(false);
         } finally {
             setIsValidatingPromo(false);
         }
@@ -926,8 +934,8 @@ const Checkout: React.FC = () => {
                         price: addOn.price
                     })),
                 totalAmount: totalAmountBeforePromo,
-                promoCode: discount > 0 ? 'WELCOME10' : undefined,
-                discount: discount > 0 ? discount * 100 : undefined,
+                promoCode: promoCodeApplied ? 'WELCOME10' : undefined,
+                discount: promoCodeApplied ? discount * 100 : undefined,
                 paymentMethod: payBy
             };
 
@@ -1054,8 +1062,8 @@ const Checkout: React.FC = () => {
         const addOnsCost = getAddOnsTotal();
         const totalAmountBeforePromo = basePlanPrice + addOnsCost;
 
-        // Calculate promo code savings on the total amount (plan + add-ons)
-        if (discount > 0) {
+        // Calculate promo code savings on the total amount (plan + add-ons) - now dynamic
+        if (promoCodeApplied && discount > 0) {
             promoCodeSavings = totalAmountBeforePromo * discount;
         }
 
@@ -1101,8 +1109,8 @@ const Checkout: React.FC = () => {
         const addOnsCost = getAddOnsTotal();
         finalPrice += addOnsCost;
 
-        // Apply promo code discount if exists
-        if (discount > 0) {
+        // Apply promo code discount if exists - now dynamic
+        if (promoCodeApplied && discount > 0) {
             finalPrice = finalPrice * (1 - discount);
         }
 
@@ -1112,6 +1120,7 @@ const Checkout: React.FC = () => {
     // Calculate if Standard plan recommendation should be shown
     const shouldShowStandardRecommendation = () => {
         if (selectedPlan !== 'starter') return false;
+        if (!showStandardRecommendation) return false;
 
         const starterBasePrice = 49; // $49/month
         const addOnsCost = getAddOnsTotal();
@@ -1148,6 +1157,7 @@ const Checkout: React.FC = () => {
     // Calculate if Enterprise plan recommendation should be shown
     const shouldShowEnterpriseRecommendation = () => {
         if (selectedPlan !== 'standard') return false;
+        if (!showEnterpriseRecommendation) return false;
 
         const standardBasePrice = 99; // $99/month
         const addOnsCost = getAddOnsTotal();
@@ -1650,7 +1660,7 @@ const Checkout: React.FC = () => {
                                                 )}
                                             </div>
                                         </div>
-                                        
+
                                         {/* Login Credentials Note */}
                                         <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl">
                                             <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
@@ -2016,8 +2026,8 @@ const Checkout: React.FC = () => {
                                                     <div>
                                                         <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.payment_details.payment_types.card.card_nb}</p>
                                                         <p className="text-sm font-medium text-gray-900">
-                                                            {paymentInfo.cardNumber ? 
-                                                                `•••• •••• •••• ${paymentInfo.cardNumber.slice(-4)}` : 
+                                                            {paymentInfo.cardNumber ?
+                                                                `•••• •••• •••• ${paymentInfo.cardNumber.slice(-4)}` :
                                                                 'Not provided'
                                                             }
                                                         </p>
@@ -2067,8 +2077,8 @@ const Checkout: React.FC = () => {
                                                     <div>
                                                         <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.country}</p>
                                                         <p className="text-sm font-medium text-gray-900">
-                                                            {billingAddress.country === 'other' 
-                                                                ? billingAddress.customCountry 
+                                                            {billingAddress.country === 'other'
+                                                                ? billingAddress.customCountry
                                                                 : t.countries[billingAddress.country as keyof typeof t.countries] || billingAddress.country
                                                             }
                                                         </p>
@@ -2253,202 +2263,234 @@ const Checkout: React.FC = () => {
                                                     })()}
                                                 </div>
                                             )}
-
-                                            {/* Always show add-ons total if there are any add-ons */}
-                                            {hasAddOns() && (
-                                                <div className="flex justify-between items-center pt-2 border-t border-gray-100">
-                                                    <span className="text-xs font-medium text-gray-700">{t.checkout.summary.add_ons.total}</span>
-                                                    <span className="text-xs font-semibold text-gray-900">{getAddOnsTotalFormatted()}</span>
-                                                </div>
-                                            )}
                                         </div>
                                     )}
 
                                     {/* Standard Plan Recommendation - Only for Starter plan when add-ons reach threshold */}
-                                    {shouldShowStandardRecommendation() && (
-                                        <div className="border-t border-gray-100 pt-3">
-                                            <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 p-4 border border-green-200">
-                                                <div className="flex items-center justify-between mb-3">
-                                                    <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
-                                                        <div className="flex-shrink-0">
-                                                            <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                                                                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                                </svg>
+                                    <AnimatePresence>
+                                        {shouldShowStandardRecommendation() && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                                                transition={{ duration: 0.4, ease: "easeOut" }}
+                                                className="border-t border-gray-100 pt-3"
+                                            >
+                                                <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 p-4 border border-green-200">
+                                                    {/* Close Button */}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setShowStandardRecommendation(false)}
+                                                        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-green-100 hover:bg-green-200 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 hover:shadow-lg hover:scale-110 active:scale-95 border border-green-200 hover:border-green-300 z-10"
+                                                        aria-label="Close recommendation"
+                                                    >
+                                                        <span className="text-green-700 text-sm font-bold transition-transform duration-300 hover:rotate-90">
+                                                            <FaTimes />
+                                                        </span>
+                                                    </button>
+
+                                                    <div className="flex items-center justify-between mb-3">
+                                                        <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
+                                                            <div className="flex-shrink-0">
+                                                                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                                                                    <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <h3 className="text-sm font-semibold text-green-900">
+                                                                    {t.checkout.summary.recommendation.standard.title}
+                                                                </h3>
+                                                                <p className="text-xs text-green-700">
+                                                                    {t.checkout.summary.recommendation.standard.desc1} ${getStandardUpgradeSavings().currentTotal.toFixed(2)}/{t.checkout.summary.recommendation.standard.month} {t.checkout.summary.recommendation.standard.desc2}
+                                                                </p>
                                                             </div>
                                                         </div>
-                                                        <div>
-                                                            <h3 className="text-sm font-semibold text-green-900">
-                                                                {t.checkout.summary.recommendation.standard.title}
-                                                            </h3>
-                                                            <p className="text-xs text-green-700">
-                                                                {t.checkout.summary.recommendation.standard.desc1} ${getStandardUpgradeSavings().currentTotal.toFixed(2)}/{t.checkout.summary.recommendation.standard.month} {t.checkout.summary.recommendation.standard.desc2}
-                                                            </p>
+                                                        <div className="flex-shrink-0">
+                                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                                {t.checkout.summary.recommendation.standard.save1} ${getStandardUpgradeSavings().priceDifference.toFixed(2)}/{t.checkout.summary.recommendation.standard.save2}
+                                                            </span>
                                                         </div>
                                                     </div>
-                                                    <div className="flex-shrink-0">
-                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                            {t.checkout.summary.recommendation.standard.save1} ${getStandardUpgradeSavings().priceDifference.toFixed(2)}/{t.checkout.summary.recommendation.standard.save2}
-                                                        </span>
-                                                    </div>
-                                                </div>
 
-                                                <div className="space-y-2 mb-3">
-                                                    <div className="flex justify-between items-center text-xs">
-                                                        <span className="text-gray-600">{t.checkout.summary.recommendation.standard.current}</span>
-                                                        <span className="font-medium text-gray-900">${getStandardUpgradeSavings().currentTotal.toFixed(2)}{t.checkout.summary.recommendation.standard.save2}</span>
+                                                    <div className="space-y-2 mb-3">
+                                                        <div className="flex justify-between items-center text-xs">
+                                                            <span className="text-gray-600">{t.checkout.summary.recommendation.standard.current}</span>
+                                                            <span className="font-medium text-gray-900">${getStandardUpgradeSavings().currentTotal.toFixed(2)}{t.checkout.summary.recommendation.standard.save2}</span>
+                                                        </div>
+                                                        <div className="flex justify-between items-center text-xs">
+                                                            <span className="text-gray-600">{t.checkout.summary.recommendation.standard.plan_recommended}</span>
+                                                            <span className="font-medium text-gray-900">${getStandardUpgradeSavings().standardPrice}{t.checkout.summary.recommendation.standard.save2}</span>
+                                                        </div>
+                                                        <div className="flex justify-between items-center text-xs font-semibold text-green-700">
+                                                            <span>{t.checkout.summary.recommendation.standard.you_save}</span>
+                                                            <span>-${getStandardUpgradeSavings().priceDifference.toFixed(2)}{t.checkout.summary.recommendation.standard.save2} ({getStandardUpgradeSavings().percentageSavings}%)</span>
+                                                        </div>
                                                     </div>
-                                                    <div className="flex justify-between items-center text-xs">
-                                                        <span className="text-gray-600">{t.checkout.summary.recommendation.standard.plan_recommended}</span>
-                                                        <span className="font-medium text-gray-900">${getStandardUpgradeSavings().standardPrice}{t.checkout.summary.recommendation.standard.save2}</span>
-                                                    </div>
-                                                    <div className="flex justify-between items-center text-xs font-semibold text-green-700">
-                                                        <span>{t.checkout.summary.recommendation.standard.you_save}</span>
-                                                        <span>-${getStandardUpgradeSavings().priceDifference.toFixed(2)}{t.checkout.summary.recommendation.standard.save2} ({getStandardUpgradeSavings().percentageSavings}%)</span>
-                                                    </div>
-                                                </div>
 
-                                                <div className="space-y-2">
-                                                    <div className="text-xs text-green-800 font-medium">
-                                                        {t.checkout.summary.recommendation.standard.plan_includes}
+                                                    <div className="space-y-2">
+                                                        <div className="text-xs text-green-800 font-medium">
+                                                            {t.checkout.summary.recommendation.standard.plan_includes}
+                                                        </div>
+                                                        <div className="grid grid-cols-2 gap-1 text-xs text-green-700">
+                                                            <div className="flex items-center">
+                                                                <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                                </svg>
+                                                                <span>{t.checkout.summary.recommendation.standard.admin_accounts}</span>
+                                                            </div>
+                                                            <div className="flex items-center">
+                                                                <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                                </svg>
+                                                                <span>{t.checkout.summary.recommendation.standard.teacher_accounts}</span>
+                                                            </div>
+                                                            <div className="flex items-center">
+                                                                <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                                </svg>
+                                                                <span>{t.checkout.summary.recommendation.standard.student_accounts}</span>
+                                                            </div>
+                                                            <div className="flex items-center">
+                                                                <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                                </svg>
+                                                                <span>{t.checkout.summary.recommendation.standard.parent_accounts}</span>
+                                                            </div>
+                                                            <div className="flex items-center col-span-2">
+                                                                <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                                </svg>
+                                                                <span>{t.checkout.summary.recommendation.standard.storage_included}</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div className="grid grid-cols-2 gap-1 text-xs text-green-700">
-                                                        <div className="flex items-center">
-                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
-                                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                                            </svg>
-                                                            <span>{t.checkout.summary.recommendation.standard.admin_accounts}</span>
-                                                        </div>
-                                                        <div className="flex items-center">
-                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
-                                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                                            </svg>
-                                                            <span>{t.checkout.summary.recommendation.standard.teacher_accounts}</span>
-                                                        </div>
-                                                        <div className="flex items-center">
-                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
-                                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                                            </svg>
-                                                            <span>{t.checkout.summary.recommendation.standard.student_accounts}</span>
-                                                        </div>
-                                                        <div className="flex items-center">
-                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
-                                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                                            </svg>
-                                                            <span>{t.checkout.summary.recommendation.standard.parent_accounts}</span>
-                                                        </div>
-                                                        <div className="flex items-center col-span-2">
-                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
-                                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                                            </svg>
-                                                            <span>{t.checkout.summary.recommendation.standard.storage_included}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
-                                                <button
-                                                    type="button"
-                                                    onClick={handleUpgradeToStandard}
-                                                    className="w-full mt-3 py-2 px-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg text-sm font-semibold hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300"
-                                                >
-                                                    {t.checkout.summary.recommendation.standard.upgrade_to_standard}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )}
+                                                    <button
+                                                        type="button"
+                                                        onClick={handleUpgradeToStandard}
+                                                        className="w-full mt-3 py-2 px-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg text-sm font-semibold hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300"
+                                                    >
+                                                        {t.checkout.summary.recommendation.standard.upgrade_to_standard}
+                                                    </button>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
 
                                     {/* Enterprise Plan Recommendation - Only for Standard plan when add-ons reach threshold */}
-                                    {shouldShowEnterpriseRecommendation() && (
-                                        <div className="border-t border-gray-100 pt-3">
-                                            <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border border-blue-100">
-                                                <div className="flex items-center justify-between mb-3">
-                                                    <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
-                                                        <div className="flex-shrink-0">
-                                                            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center rtl:ml-4">
-                                                                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                                </svg>
+                                    <AnimatePresence>
+                                        {shouldShowEnterpriseRecommendation() && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                                                transition={{ duration: 0.4, ease: "easeOut" }}
+                                                className="border-t border-gray-100 pt-3"
+                                            >
+                                                <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border border-blue-100">
+                                                    {/* Close Button */}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setShowEnterpriseRecommendation(false)}
+                                                        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-blue-100 hover:bg-blue-200 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 hover:shadow-lg hover:scale-110 active:scale-95 border border-blue-200 hover:border-blue-300 z-10"
+                                                        aria-label="Close recommendation"
+                                                    >
+                                                        <span className="text-blue-700 text-sm font-bold transition-transform duration-300 hover:rotate-90">
+                                                            <FaTimes />
+                                                        </span>
+                                                    </button>
+
+                                                    <div className="flex items-center justify-between mb-3">
+                                                        <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
+                                                            <div className="flex-shrink-0">
+                                                                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center rtl:ml-4">
+                                                                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <h3 className="text-sm font-semibold text-blue-900">
+                                                                    {t.checkout.summary.recommendation.enterprise.title}
+                                                                </h3>
+                                                                <p className="text-xs text-blue-700">
+                                                                    {t.checkout.summary.recommendation.enterprise.desc1} ${getEnterpriseUpgradeSavings().currentTotal.toFixed(2)}{t.checkout.summary.recommendation.enterprise.month} {t.checkout.summary.recommendation.enterprise.desc2}
+                                                                </p>
                                                             </div>
                                                         </div>
-                                                        <div>
-                                                            <h3 className="text-sm font-semibold text-blue-900">
-                                                                {t.checkout.summary.recommendation.enterprise.title}
-                                                            </h3>
-                                                            <p className="text-xs text-blue-700">
-                                                                {t.checkout.summary.recommendation.enterprise.desc1} ${getEnterpriseUpgradeSavings().currentTotal.toFixed(2)}{t.checkout.summary.recommendation.enterprise.month} {t.checkout.summary.recommendation.enterprise.desc2}
-                                                            </p>
+                                                        <div className="flex-shrink-0">
+                                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                                {t.checkout.summary.recommendation.enterprise.save1} ${getEnterpriseUpgradeSavings().priceDifference.toFixed(2)}{t.checkout.summary.recommendation.enterprise.save2}
+                                                            </span>
                                                         </div>
                                                     </div>
-                                                    <div className="flex-shrink-0">
-                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                            {t.checkout.summary.recommendation.enterprise.save1} ${getEnterpriseUpgradeSavings().priceDifference.toFixed(2)}{t.checkout.summary.recommendation.enterprise.save2}
-                                                        </span>
-                                                    </div>
-                                                </div>
 
-                                                <div className="space-y-2 mb-3">
-                                                    <div className="flex justify-between items-center text-xs">
-                                                        <span className="text-gray-600">{t.checkout.summary.recommendation.enterprise.current}</span>
-                                                        <span className="font-medium text-gray-900">${getEnterpriseUpgradeSavings().currentTotal.toFixed(2)}{t.checkout.summary.recommendation.enterprise.save2}</span>
+                                                    <div className="space-y-2 mb-3">
+                                                        <div className="flex justify-between items-center text-xs">
+                                                            <span className="text-gray-600">{t.checkout.summary.recommendation.enterprise.current}</span>
+                                                            <span className="font-medium text-gray-900">${getEnterpriseUpgradeSavings().currentTotal.toFixed(2)}{t.checkout.summary.recommendation.enterprise.save2}</span>
+                                                        </div>
+                                                        <div className="flex justify-between items-center text-xs">
+                                                            <span className="text-gray-600">{t.checkout.summary.recommendation.enterprise.plan_recommended}</span>
+                                                            <span className="font-medium text-gray-900">${getEnterpriseUpgradeSavings().enterprisePrice}{t.checkout.summary.recommendation.enterprise.save2}</span>
+                                                        </div>
+                                                        <div className="flex justify-between items-center text-xs font-semibold text-green-700">
+                                                            <span>{t.checkout.summary.recommendation.enterprise.you_save}</span>
+                                                            <span>-${getEnterpriseUpgradeSavings().priceDifference.toFixed(2)}{t.checkout.summary.recommendation.enterprise.save2} ({getEnterpriseUpgradeSavings().percentageSavings}%)</span>
+                                                        </div>
                                                     </div>
-                                                    <div className="flex justify-between items-center text-xs">
-                                                        <span className="text-gray-600">{t.checkout.summary.recommendation.enterprise.plan_recommended}</span>
-                                                        <span className="font-medium text-gray-900">${getEnterpriseUpgradeSavings().enterprisePrice}{t.checkout.summary.recommendation.enterprise.save2}</span>
-                                                    </div>
-                                                    <div className="flex justify-between items-center text-xs font-semibold text-green-700">
-                                                        <span>{t.checkout.summary.recommendation.enterprise.you_save}</span>
-                                                        <span>-${getEnterpriseUpgradeSavings().priceDifference.toFixed(2)}{t.checkout.summary.recommendation.enterprise.save2} ({getEnterpriseUpgradeSavings().percentageSavings}%)</span>
-                                                    </div>
-                                                </div>
 
-                                                <div className="space-y-2">
-                                                    <div className="text-xs text-green-800 font-medium">
-                                                        {t.checkout.summary.recommendation.enterprise.plan_includes}
+                                                    <div className="space-y-2">
+                                                        <div className="text-xs text-green-800 font-medium">
+                                                            {t.checkout.summary.recommendation.enterprise.plan_includes}
+                                                        </div>
+                                                        <div className="grid grid-cols-2 gap-1 text-xs text-green-700">
+                                                            <div className="flex items-center">
+                                                                <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                                </svg>
+                                                                <span>{t.checkout.summary.recommendation.enterprise.admin_accounts}</span>
+                                                            </div>
+                                                            <div className="flex items-center">
+                                                                <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                                </svg>
+                                                                <span>{t.checkout.summary.recommendation.enterprise.teacher_accounts}</span>
+                                                            </div>
+                                                            <div className="flex items-center">
+                                                                <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                                </svg>
+                                                                <span>{t.checkout.summary.recommendation.enterprise.student_accounts}</span>
+                                                            </div>
+                                                            <div className="flex items-center">
+                                                                <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                                </svg>
+                                                                <span>{t.checkout.summary.recommendation.enterprise.parent_accounts}</span>
+                                                            </div>
+                                                            <div className="flex items-center col-span-2">
+                                                                <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                                </svg>
+                                                                <span>{t.checkout.summary.recommendation.enterprise.storage_included}</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div className="grid grid-cols-2 gap-1 text-xs text-green-700">
-                                                        <div className="flex items-center">
-                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
-                                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                                            </svg>
-                                                            <span>{t.checkout.summary.recommendation.enterprise.admin_accounts}</span>
-                                                        </div>
-                                                        <div className="flex items-center">
-                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
-                                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                                            </svg>
-                                                            <span>{t.checkout.summary.recommendation.enterprise.teacher_accounts}</span>
-                                                        </div>
-                                                        <div className="flex items-center">
-                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
-                                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                                            </svg>
-                                                            <span>{t.checkout.summary.recommendation.enterprise.student_accounts}</span>
-                                                        </div>
-                                                        <div className="flex items-center">
-                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
-                                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                                            </svg>
-                                                            <span>{t.checkout.summary.recommendation.enterprise.parent_accounts}</span>
-                                                        </div>
-                                                        <div className="flex items-center col-span-2">
-                                                            <svg className={`w-3 h-3 text-green-600 ${isRTL ? 'ml-1' : 'mr-1'} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
-                                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                                            </svg>
-                                                            <span>{t.checkout.summary.recommendation.enterprise.storage_included}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
-                                                <button
-                                                    type="button"
-                                                    onClick={handleUpgradeToEnterprise}
-                                                    className="w-full mt-3 py-2 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg text-sm font-semibold hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300"
-                                                >
-                                                    {t.checkout.summary.recommendation.enterprise.upgrade_to_enterprise}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )}
+                                                    <button
+                                                        type="button"
+                                                        onClick={handleUpgradeToEnterprise}
+                                                        className="w-full mt-3 py-2 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg text-sm font-semibold hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300"
+                                                    >
+                                                        {t.checkout.summary.recommendation.enterprise.upgrade_to_enterprise}
+                                                    </button>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
 
                                 </div>
 
@@ -2480,11 +2522,11 @@ const Checkout: React.FC = () => {
                                     </div>
                                 )}
 
-                                <div className="border-t border-gray-200 pt-4">
+                                <div className="border-t border-b border-gray-200 pt-2 pb-2">
                                     <button
                                         type="button"
                                         onClick={() => setShowPromoInput(!showPromoInput)}
-                                        className="flex items-center text-blue-600 hover:text-blue-700 text-sm font-medium focus:outline-none transition-colors"
+                                        className="flex items-center text-blue-600 hover:text-blue-700 text-sm font-medium mb-2 focus:outline-none transition-colors"
                                         aria-label={showPromoInput ? "Hide promo code input" : "Show promo code input"}
                                     >
                                         {showPromoInput ? t.checkout.summary.hide_promo : t.checkout.summary.add_promo}
@@ -2523,29 +2565,56 @@ const Checkout: React.FC = () => {
                                         </div>
                                     )}
                                 </div>
-                                {discount > 0 && (
-                                    <div className="mt-3 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl shadow-sm">
-                                        <div className="flex items-center justify-between">
-                                            <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
-                                                <div className="flex-shrink-0">
-                                                    <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                                                        <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <p className="text-sm font-medium text-green-800">{t.checkout.summary.promo_code_savings}</p>
-                                                    <p className="text-xs text-green-600">{t.checkout.summary.promo_code_savings_applied}</p>
-                                                </div>
-                                            </div>
-                                            <div className="text-right">
-                                                <span className="text-lg font-bold text-green-600">-${getTotalSavings().promoCodeSavings.toFixed(2)}</span>
-                                                <p className="text-xs text-green-600">{t.checkout.summary.promo_code_savings_saved}</p>
-                                            </div>
-                                        </div>
+                                {hasAddOns() && (
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm text-gray-600">{t.checkout.summary.add_ons.total}</span>
+                                        <span className="text-sm font-medium text-gray-900">+${getAddOnsTotalFormatted()}</span>
                                     </div>
                                 )}
+                                <AnimatePresence>
+                                    {promoCodeApplied && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                                            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                                            transition={{ duration: 0.3, ease: "easeOut" }}
+                                            className="mt-3 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl shadow-sm"
+                                        >
+                                            <div className="flex items-center justify-between">
+                                                <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
+                                                    <div className="flex-shrink-0">
+                                                        <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                                                            <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-sm font-medium text-green-800">{t.checkout.summary.promo_code_savings}</p>
+                                                        <p className="text-xs text-green-600">{t.checkout.summary.promo_code_savings_applied}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <span className="text-lg font-bold text-green-600">-${getTotalSavings().promoCodeSavings.toFixed(2)}</span>
+                                                    <p className="text-xs text-green-600">{t.checkout.summary.promo_code_savings_saved}</p>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setPromoCodeApplied(false);
+                                                        setDiscount(0);
+                                                    }}
+                                                    className="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 hover:bg-green-200 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 hover:shadow-lg hover:scale-110 active:scale-95 border border-green-200 hover:border-green-300 ml-2"
+                                                    aria-label="Remove promo code"
+                                                >
+                                                    <span className="text-green-700 text-sm font-bold transition-transform duration-300 hover:rotate-90">
+                                                        <FaTimes />
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
 
                                 <div className="border-t border-gray-200 pt-4">
                                     {isAnnual && (
@@ -2554,7 +2623,7 @@ const Checkout: React.FC = () => {
                                             <span className="text-sm font-medium text-green-600">-${getTotalSavings().annualSavings.toFixed(2)}</span>
                                         </div>
                                     )}
-                                    {discount > 0 && (
+                                    {promoCodeApplied && (
                                         <div className="flex justify-between items-center mb-2">
                                             <span className="text-sm text-gray-600">{t.checkout.summary.promo_code_savings}</span>
                                             <span className="text-sm font-medium text-green-600">-${getTotalSavings().promoCodeSavings.toFixed(2)}</span>
