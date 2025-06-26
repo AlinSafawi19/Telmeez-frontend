@@ -1431,10 +1431,12 @@ const Checkout: React.FC = () => {
                                             <button
                                                 type="button"
                                                 onClick={() => setApiError('')}
-                                                className="flex-shrink-0 w-8 h-8 rounded-full bg-red-100 hover:bg-red-200 flex items-center justify-center transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                                className="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 hover:shadow-lg hover:scale-110 active:scale-95 border border-red-200 hover:border-red-300"
                                                 aria-label="Close error message"
                                             >
-                                                Close
+                                                <span className="text-red-700 text-lg font-bold transition-transform duration-300 hover:rotate-90">
+                                                    <FaTimes />
+                                                </span>
                                             </button>
                                         </div>
                                     </div>
