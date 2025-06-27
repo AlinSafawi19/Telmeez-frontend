@@ -101,27 +101,6 @@ const Checkout: React.FC = () => {
     // Verification code refs for individual digits
     const verificationCodeRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-    // Function to handle Enter key navigation
-    const handleEnterNavigation = (e: React.KeyboardEvent, nextInputRef: React.RefObject<HTMLInputElement | null> | null, action?: () => void) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-
-            // If there's a specific action (like apply promo), execute it
-            if (action) {
-                action();
-                return;
-            }
-
-            // If there's a next input, focus it
-            if (nextInputRef?.current) {
-                nextInputRef.current.focus();
-            } else {
-                // If no next input, try to move to next step
-                handleNextStep();
-            }
-        }
-    };
-
     // Function to handle Enter key navigation within current step
     const handleStepNavigation = (e: React.KeyboardEvent, nextInputRef: React.RefObject<HTMLInputElement | null> | null) => {
         if (e.key === 'Enter') {
@@ -149,10 +128,10 @@ const Checkout: React.FC = () => {
                 const data = await response.json();
                 if (data.success) {
                     setPlans(data.data);
-                    console.log(data.data);
+                    // Plans data loaded successfully
                 }
             } catch (error) {
-                console.error('Failed to fetch plans:', error);
+                // Silently handle error without logging to console
             }
         };
 
@@ -449,96 +428,6 @@ const Checkout: React.FC = () => {
         }
     };
 
-    // useEffect(() => {
-    //     // Update billing errors
-    //     if (errors.billing) {
-    //         const updatedBillingErrors: Partial<Record<keyof AccountInfo, string>> = {};
-    //         Object.entries(errors.billing).forEach(([key, value]) => {
-    //             if (value) {
-    //                 const field = key as keyof AccountInfo;
-    //                 if (field === 'email' && value === t.checkout.validation.invalid_email) {
-    //                     updatedBillingErrors[field] = t.checkout.validation.invalid_email;
-    //                 } else if (field === 'password' && value === t.checkout.validation.password_length) {
-    //                     updatedBillingErrors[field] = t.checkout.validation.password_length;
-    //                 } else if (field === 'confirmPassword' && value === t.checkout.validation.password_mismatch) {
-    //                     updatedBillingErrors[field] = t.checkout.validation.password_mismatch;
-    //                 } else if (field === 'firstName' && value === t.checkout.validation.first_name_length) {
-    //                     updatedBillingErrors[field] = t.checkout.validation.first_name_length;
-    //                 } else if (field === 'lastName' && value === t.checkout.validation.last_name_length) {
-    //                     updatedBillingErrors[field] = t.checkout.validation.last_name_length;
-    //                 } else if (field === 'phone' && value === t.checkout.validation.invalid_phone) {
-    //                     updatedBillingErrors[field] = t.checkout.validation.invalid_phone;
-    //                 } else if (value === t.checkout.validation.required) {
-    //                     updatedBillingErrors[field] = t.checkout.validation.required;
-    //                 }
-    //             }
-    //         });
-    //         if (Object.keys(updatedBillingErrors).length > 0) {
-    //             setErrors(prev => ({ ...prev, billing: updatedBillingErrors }));
-    //         }
-    //     }
-
-    //     // Update payment errors
-    //     if (errors.payment) {
-    //         const updatedPaymentErrors: Partial<Record<keyof PaymentInfo, string>> = {};
-    //         Object.entries(errors.payment).forEach(([key, value]) => {
-    //             if (value) {
-    //                 const field = key as keyof PaymentInfo;
-    //                 if (field === 'cardNumber' && value === t.checkout.validation.invalid_card) {
-    //                     updatedPaymentErrors[field] = t.checkout.validation.invalid_card;
-    //                 } else if (field === 'expiryDate' && value === t.checkout.validation.invalid_expiry) {
-    //                     updatedPaymentErrors[field] = t.checkout.validation.invalid_expiry;
-    //                 } else if (field === 'cvv' && value === t.checkout.validation.invalid_cvv) {
-    //                     updatedPaymentErrors[field] = t.checkout.validation.invalid_cvv;
-    //                 } else if (value === t.checkout.validation.required) {
-    //                     updatedPaymentErrors[field] = t.checkout.validation.required;
-    //                 }
-    //             }
-    //         });
-    //         if (Object.keys(updatedPaymentErrors).length > 0) {
-    //             setErrors(prev => ({ ...prev, payment: updatedPaymentErrors }));
-    //         }
-    //     }
-
-    //     // Update billing address errors
-    //     if (errors.billingAddress) {
-    //         const updatedBillingAddressErrors: Partial<Record<keyof BillingAddress, string>> = {};
-    //         Object.entries(errors.billingAddress).forEach(([key, value]) => {
-    //             if (value === t.checkout.validation.required) {
-    //                 const field = key as keyof BillingAddress;
-    //                 updatedBillingAddressErrors[field] = t.checkout.validation.required;
-    //             }
-    //         });
-    //         if (Object.keys(updatedBillingAddressErrors).length > 0) {
-    //             setErrors(prev => ({ ...prev, billingAddress: updatedBillingAddressErrors }));
-    //         }
-    //     }
-
-    //     // Update promo code error
-    //     if (promoError) {
-    //         // Map backend error messages to translation keys for promo code errors
-    //         if (promoError === t.checkout.server_errors.promo_code_required) {
-    //             setPromoErrorKey(t.checkout.server_errors.promo_code_required);
-    //         } else if (promoError === t.checkout.server_errors.invalid_promo_code) {
-    //             setPromoErrorKey(t.checkout.server_errors.invalid_promo_code);
-    //         } else if (promoError === t.checkout.server_errors.promo_code_not_valid_yet) {
-    //             setPromoErrorKey(t.checkout.server_errors.promo_code_not_valid_yet);
-    //         } else if (promoError === t.checkout.server_errors.promo_code_expired) {
-    //             setPromoErrorKey(t.checkout.server_errors.promo_code_expired);
-    //         } else if (promoError === t.checkout.server_errors.promo_code_first_time_only) {
-    //             setPromoErrorKey(t.checkout.server_errors.promo_code_first_time_only);
-    //         } else if (promoError === t.checkout.server_errors.email_required_for_promo) {
-    //             setPromoErrorKey(t.checkout.server_errors.email_required_for_promo);
-    //         } else if (promoError === t.checkout.server_errors.validation_error) {
-    //             setPromoErrorKey(t.checkout.server_errors.validation_error);
-    //         } else if (promoError === t.checkout.server_errors.general_error) {
-    //             setPromoErrorKey(t.checkout.server_errors.general_error);
-    //         }
-    //     }
-    // }, [currentLanguage, t.checkout.validation, t.checkout.server_errors]);
-
-    // Error translation is now handled dynamically by getTranslatedError function
-
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setBillingInfo(prev => ({
             ...prev,
@@ -584,7 +473,7 @@ const Checkout: React.FC = () => {
             ...prev,
             [name]: value
         }));
-        
+
         // Clear specific error when user types in the corresponding field
         if (errors.billingAddress?.[name as keyof BillingAddress]) {
             setErrors(prev => ({
@@ -595,7 +484,7 @@ const Checkout: React.FC = () => {
                 }
             }));
         }
-        
+
         // Clear API error when user starts typing
         if (apiErrorKey) {
             setApiErrorKey('');
@@ -776,19 +665,23 @@ const Checkout: React.FC = () => {
     };
 
     const handleApplyPromo = async () => {
+        // Clear previous errors
+        setPromoErrorKey('');
+        setApiErrorKey('');
+
+        // Validate promo code is not empty
         if (!promoCode.trim()) {
             setPromoErrorKey('server_promo_code_required');
             return;
         }
 
+        // Validate email is provided (required for promo code validation)
         if (!billingInfo.email.trim()) {
             setPromoErrorKey('server_email_required_for_promo');
             return;
         }
 
         try {
-            setApiErrorKey('');
-
             const response = await fetch('/api/checkout/validate-promo', {
                 method: 'POST',
                 headers: {
@@ -797,156 +690,65 @@ const Checkout: React.FC = () => {
                 },
                 body: JSON.stringify({
                     promoCode: promoCode.trim(),
-                    email: billingInfo.email
-                })
+                    email: billingInfo.email.trim(),
+                    planId: getPlanId(selectedPlan),
+                    billingCycle: isAnnual ? 'annual' : 'monthly',
+                    addOns: addOns
+                        .filter(addOn => addOn.quantity > 0)
+                        .map(addOn => ({
+                            type: addOn.id as 'admin' | 'teacher' | 'student' | 'parent' | 'storage',
+                            quantity: addOn.quantity,
+                            price: addOn.price
+                        })),
+                    totalAmount: getTotalPriceBeforePromo()
+                }),
+                signal: AbortSignal.timeout(10000) // 10 second timeout
             });
 
             const data = await response.json();
 
             if (data.success) {
-                setDiscount(data.data.discount / 100); // Store the discount percentage
-                setPromoCodeApplied(true); // Mark promo code as applied
-                setPromoCode(''); // Clear the input
-                setPromoErrorKey('');
+                // Apply the promo code
+                setPromoCodeApplied(true);
+                setDiscount(data.data.discount / 100); // Convert percentage to decimal
+                setPromoErrorKey(''); // Clear any existing errors
+
+                // Promo code applied successfully
             } else {
-                // Handle different types of server errors
-
-                // Check if this is a user already exists error
-                if (data.message === (t.checkout as any).server_errors.user_already_exists) {
-                    setIsUserAlreadyExists(true);
-                    setApiErrorKey('');
-                    return;
-                }
-
-                // Map backend error messages to translation keys for specific errors
-                if (data.message === t.checkout.server_errors.missing_required_fields) {
-                    setApiErrorKey('server_missing_required_fields');
-                } else if (data.message === t.checkout.server_errors.invalid_plan) {
-                    setApiErrorKey('server_invalid_plan');
-                } else if (data.message === t.checkout.server_errors.checkout_error) {
-                    setApiErrorKey('server_checkout_error');
-                } else if (data.message === t.checkout.server_errors.promo_code_required) {
+                // Handle different types of promo code errors
+                if (data.message === 'Promo code is required') {
                     setPromoErrorKey('server_promo_code_required');
-                } else if (data.message === t.checkout.server_errors.invalid_promo_code) {
+                } else if (data.message === 'Invalid or inactive promo code') {
                     setPromoErrorKey('server_invalid_promo_code');
-                } else if (data.message === t.checkout.server_errors.promo_code_not_valid_yet) {
+                } else if (data.message === 'Promo code is not yet valid') {
                     setPromoErrorKey('server_promo_code_not_valid_yet');
-                } else if (data.message === t.checkout.server_errors.promo_code_expired) {
+                } else if (data.message === 'Promo code has expired') {
                     setPromoErrorKey('server_promo_code_expired');
-                } else if (data.message === t.checkout.server_errors.promo_code_first_time_only) {
+                } else if (data.message === 'This promo code is only valid for first-time users') {
                     setPromoErrorKey('server_promo_code_first_time_only');
-                } else if (data.message === t.checkout.server_errors.email_required_for_promo) {
+                } else if (data.message === 'Email is required to validate first-time user promo code') {
                     setPromoErrorKey('server_email_required_for_promo');
-                } else if (data.message === t.checkout.server_errors.validation_error) {
+                } else if (data.message === 'An error occurred while validating promo code') {
                     setPromoErrorKey('server_validation_error');
-                } else if (data.message === t.checkout.server_errors.general_error) {
-                    setPromoErrorKey('server_general_error');
-                } else if (data.message === t.checkout.server_errors.super_admin_role_not_found) {
-                    setApiErrorKey('server_super_admin_role_not_found');
                 } else {
                     setPromoErrorKey('server_general_error');
                 }
-
-                // Handle validation errors from backend
-                if (data.errors && Array.isArray(data.errors)) {
-                    const validationErrors: {
-                        billing?: Partial<Record<keyof AccountInfo, string>>;
-                        billingAddress?: Partial<Record<keyof BillingAddress, string>>;
-                        payment?: Partial<Record<keyof PaymentInfo, string>>;
-                    } = {};
-
-                    data.errors.forEach((error: string) => {
-                        // Map backend validation errors to frontend field errors
-                        if (error.includes('First name')) {
-                            if (!validationErrors.billing) validationErrors.billing = {};
-                            validationErrors.billing.firstName = 'required';
-                        } else if (error.includes('Last name')) {
-                            if (!validationErrors.billing) validationErrors.billing = {};
-                            validationErrors.billing.lastName = 'required';
-                        } else if (error.includes('Valid email') || error.includes('email')) {
-                            if (!validationErrors.billing) validationErrors.billing = {};
-                            validationErrors.billing.email = 'invalid_email';
-                        } else if (error.includes('phone')) {
-                            if (!validationErrors.billing) validationErrors.billing = {};
-                            validationErrors.billing.phone = 'required';
-                        } else if (error.includes('Password')) {
-                            if (!validationErrors.billing) validationErrors.billing = {};
-                            validationErrors.billing.password = 'password_length';
-                        } else if (error.includes('Valid billing address') || error.includes('address')) {
-                            if (!validationErrors.billingAddress) validationErrors.billingAddress = {};
-                            validationErrors.billingAddress.address = t.checkout.validation.required;
-                        } else if (error.includes('City')) {
-                            if (!validationErrors.billingAddress) validationErrors.billingAddress = {};
-                            validationErrors.billingAddress.city = t.checkout.validation.required;
-                        } else if (error.includes('State')) {
-                            if (!validationErrors.billingAddress) validationErrors.billingAddress = {};
-                            validationErrors.billingAddress.state = t.checkout.validation.required;
-                        } else if (error.includes('ZIP code') || error.includes('zip')) {
-                            if (!validationErrors.billingAddress) validationErrors.billingAddress = {};
-                            validationErrors.billingAddress.zipCode = t.checkout.validation.required;
-                        } else if (error.includes('Country')) {
-                            if (!validationErrors.billingAddress) validationErrors.billingAddress = {};
-                            validationErrors.billingAddress.country = t.checkout.validation.required;
-                        } else if (error.includes('card number')) {
-                            if (!validationErrors.payment) validationErrors.payment = {};
-                            validationErrors.payment.cardNumber = 'invalid_card';
-                        } else if (error.includes('expiry date')) {
-                            if (!validationErrors.payment) validationErrors.payment = {};
-                            validationErrors.payment.expiryDate = 'invalid_expiry';
-                        } else if (error.includes('CVV')) {
-                            if (!validationErrors.payment) validationErrors.payment = {};
-                            validationErrors.payment.cvv = 'invalid_cvv';
-                        }
-                    });
-
-                    // Set the validation errors and navigate to the appropriate step
-                    if (Object.keys(validationErrors).length > 0) {
-                        setErrors(validationErrors);
-
-                        // Navigate to the appropriate step based on which errors occurred
-                        if (validationErrors.billing) {
-                            setCurrentStep(1);
-                        } else if (validationErrors.payment) {
-                            setCurrentStep(3);
-                        } else if (validationErrors.billingAddress) {
-                            setCurrentStep(4);
-                        }
-
-                        // Scroll to error message
-                        setTimeout(() => {
-                            const errorElement = document.getElementById('checkout-error');
-                            if (errorElement) {
-                                errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            }
-                        }, 100);
-                        return;
-                    }
-                }
-
-                // If we reach here, set a fallback error
-                setPromoErrorKey('server_general_error');
-
-                // Scroll to error message
-                setTimeout(() => {
-                    const errorElement = document.getElementById('checkout-error');
-                    if (errorElement) {
-                        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
-                }, 100);
             }
         } catch (error: any) {
-            console.error('Checkout error:', error)
 
-            setPromoErrorKey('server_general_error');
-
-            // Scroll to error message
-            setTimeout(() => {
-                const errorElement = document.getElementById('checkout-error');
-                if (errorElement) {
-                    errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }, 100);
+            if (error.name === 'AbortError') {
+                setPromoErrorKey('server_timeout_error');
+            } else {
+                setPromoErrorKey('server_general_error');
+            }
         } finally {
+        }
+    };
+
+    const handlePromoKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleApplyPromo();
         }
     };
 
@@ -1080,7 +882,6 @@ const Checkout: React.FC = () => {
 
         if (currentStep < 4) {
             setCurrentStep(prev => {
-                console.log('Setting step to:', prev + 1);
                 return prev + 1;
             });
             // Clear API error when moving to next step
@@ -1224,7 +1025,7 @@ const Checkout: React.FC = () => {
                 ...prev,
                 billingAddress: billingAddressErrors
             }));
-            
+
             // Scroll to error message
             setTimeout(() => {
                 const errorElement = document.getElementById('checkout-error');
@@ -1244,13 +1045,6 @@ const Checkout: React.FC = () => {
             }
 
             const totalAmountBeforePromo = getTotalPriceBeforePromo();
-            console.log('Checkout Debug:', {
-                planPrice: getPlanPrice(),
-                addOnsCost: getAddOnsTotal(),
-                totalAmountBeforePromo,
-                discount: discount * 100,
-                finalPrice: getTotalPrice()
-            });
 
             const checkoutData = {
                 firstName: billingInfo.firstName,
@@ -1313,39 +1107,39 @@ const Checkout: React.FC = () => {
                 // Removed unused errorMessage variable - using error keys directly
 
                 // Check if this is a user already exists error
-                if (data.message === (t.checkout as any).server_errors.user_already_exists) {
+                if (data.message === 'User with this email already exists. Please use a different email or try signing in.') {
                     setIsUserAlreadyExists(true);
                     setApiErrorKey('');
                     return;
                 }
 
                 // Map backend error messages to translation keys for specific errors
-                if (data.message === t.checkout.server_errors.missing_required_fields) {
+                if (data.message === 'Missing required fields') {
                     setApiErrorKey('server_missing_required_fields');
-                } else if (data.message === t.checkout.server_errors.invalid_plan) {
+                } else if (data.message === 'Invalid plan selected') {
                     setApiErrorKey('server_invalid_plan');
-                } else if (data.message === t.checkout.server_errors.checkout_error) {
+                } else if (data.message === 'An error occurred during checkout') {
                     setApiErrorKey('server_checkout_error');
-                } else if (data.message === t.checkout.server_errors.promo_code_required) {
-                    setApiErrorKey('server_promo_code_required');
-                } else if (data.message === t.checkout.server_errors.invalid_promo_code) {
-                    setApiErrorKey('server_invalid_promo_code');
-                } else if (data.message === t.checkout.server_errors.promo_code_not_valid_yet) {
-                    setApiErrorKey('server_promo_code_not_valid_yet');
-                } else if (data.message === t.checkout.server_errors.promo_code_expired) {
-                    setApiErrorKey('server_promo_code_expired');
-                } else if (data.message === t.checkout.server_errors.promo_code_first_time_only) {
-                    setApiErrorKey('server_promo_code_first_time_only');
-                } else if (data.message === t.checkout.server_errors.email_required_for_promo) {
-                    setApiErrorKey('server_email_required_for_promo');
-                } else if (data.message === t.checkout.server_errors.validation_error) {
-                    setApiErrorKey('server_validation_error');
-                } else if (data.message === t.checkout.server_errors.general_error) {
-                    setApiErrorKey('server_general_error');
-                } else if (data.message === t.checkout.server_errors.super_admin_role_not_found) {
+                } else if (data.message === 'Promo code is required') {
+                    setPromoErrorKey('server_promo_code_required');
+                } else if (data.message === 'Invalid or inactive promo code') {
+                    setPromoErrorKey('server_invalid_promo_code');
+                } else if (data.message === 'Promo code is not yet valid') {
+                    setPromoErrorKey('server_promo_code_not_valid_yet');
+                } else if (data.message === 'Promo code has expired') {
+                    setPromoErrorKey('server_promo_code_expired');
+                } else if (data.message === 'This promo code is only valid for first-time users') {
+                    setPromoErrorKey('server_promo_code_first_time_only');
+                } else if (data.message === 'Email is required to validate first-time user promo code') {
+                    setPromoErrorKey('server_email_required_for_promo');
+                } else if (data.message === 'An error occurred while validating promo code') {
+                    setPromoErrorKey('server_validation_error');
+                } else if (data.message === 'An error occurred during checkout') {
+                    setPromoErrorKey('server_general_error');
+                } else if (data.message === 'Super Admin role not found in system') {
                     setApiErrorKey('server_super_admin_role_not_found');
                 } else {
-                    setApiErrorKey('server_general_error');
+                    setPromoErrorKey('server_general_error');
                 }
 
                 // Handle validation errors from backend
@@ -1436,8 +1230,6 @@ const Checkout: React.FC = () => {
                 }, 100);
             }
         } catch (error: any) {
-            console.error('Checkout error:', error)
-
             setApiErrorKey('server_general_error');
 
             // Scroll to error message
@@ -2332,12 +2124,13 @@ const Checkout: React.FC = () => {
                                                                 </span>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         {/* Enhanced resend button */}
                                                         <div className="mt-6">
                                                             <button
                                                                 type="button"
                                                                 className="group relative w-full py-4 px-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 text-blue-700 rounded-xl font-semibold hover:from-blue-100 hover:to-indigo-100 hover:border-blue-300 hover:text-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md active:scale-[0.98]"
+                                                                onClick={handleApplyPromo}
                                                             >
                                                                 <div className={`flex items-center justify-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                                                                     {/* Email icon with pulse animation */}
@@ -2350,7 +2143,7 @@ const Checkout: React.FC = () => {
                                                                             <div className="absolute inset-0 rounded-full bg-blue-400 opacity-0 group-hover:opacity-20 animate-ping"></div>
                                                                         </div>
                                                                     </div>
-                                                                    
+
                                                                     {/* Button text */}
                                                                     <div className="text-left">
                                                                         <div className="text-sm font-semibold">
@@ -2360,7 +2153,7 @@ const Checkout: React.FC = () => {
                                                                             {t.checkout.verify_email.resend_code_subtitle}
                                                                         </div>
                                                                     </div>
-                                                                    
+
                                                                     {/* Arrow icon with enhanced animation */}
                                                                     <div className="flex-shrink-0">
                                                                         <svg className={`w-4 h-4 text-blue-600 group-hover:text-blue-700 transform group-hover:translate-x-1 transition-all duration-300 ${isRTL ? 'rotate-180 group-hover:-translate-x-1' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2368,17 +2161,17 @@ const Checkout: React.FC = () => {
                                                                         </svg>
                                                                     </div>
                                                                 </div>
-                                                                
+
                                                                 {/* Enhanced hover effect overlay */}
                                                                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-indigo-600/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                                                
+
                                                                 {/* Ripple effect on click */}
                                                                 <div className="absolute inset-0 rounded-xl overflow-hidden">
                                                                     <div className="absolute inset-0 bg-white opacity-0 group-active:opacity-20 transition-opacity duration-150"></div>
                                                                 </div>
                                                             </button>
                                                         </div>
-                                                        
+
                                                         {/* Countdown timer (optional) */}
                                                         <div className="mt-3 text-center">
                                                             <div className="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full">
@@ -2390,7 +2183,7 @@ const Checkout: React.FC = () => {
                                                                 </span>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         {/* Additional help text with enhanced styling */}
                                                         <div className="mt-4 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200 shadow-sm">
                                                             <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
@@ -3171,14 +2964,14 @@ const Checkout: React.FC = () => {
                                                     type="text"
                                                     value={promoCode}
                                                     onChange={handlePromoCodeChange}
-                                                    onKeyDown={(e) => handleEnterNavigation(e, null, handleApplyPromo)}
+                                                    onKeyDown={handlePromoKeyDown}
                                                     placeholder={t.checkout.summary.add_promo_placeholder}
                                                     className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.zipCode ? 'border-red-500' : 'border-gray-300'
                                                         }`} />
                                                 <button
                                                     type="button"
                                                     onClick={handleApplyPromo}
-                                                    className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                    className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-[80px]"
                                                 >
                                                     {t.checkout.summary.apply}
                                                 </button>

@@ -673,6 +673,7 @@ export const en = {
             promo_code_first_time_only: "This promo code is only for first-time users.",
             email_required_for_promo: "Email is required to validate promo code.",
             validation_error: "Error validating promo code.",
+            timeout_error: "Request timed out. Please try again.",
             general_error: "An error occurred. Please try again."
         },
         user_exists_actions: {

@@ -657,18 +657,19 @@ export const ar = {
             }
         },
         server_errors: {
-            user_already_exists: "المستخدم بهذا البريد الإلكتروني موجود بالفعل. يرجى استخدام بريد إلكتروني مختلف أو التسجيل.",
+            user_already_exists: "المستخدم بهذا البريد الإلكتروني موجود بالفعل. يرجى استخدام بريد إلكتروني مختلف أو محاولة تسجيل الدخول.",
             missing_required_fields: "يرجى ملء جميع الحقول المطلوبة.",
             invalid_plan: "الخطة المختارة غير صالحة.",
             promo_code_not_valid_yet: "رمز الخصم هذا غير صالح بعد.",
             promo_code_expired: "رمز الخصم هذا منتهي الصلاحية.",
             super_admin_role_not_found: "خطأ في النظام: لم يتم العثور على دور المشرف الأعلى.",
-            checkout_error: "حدث خطأ أثناء الدفع. يرجى المحاولة مرة أخرى.",
-            promo_code_required: "يرجى إدخال رمز خصم.",
-            invalid_promo_code: "رمز خصم غير صالح.",
+            checkout_error: "حدث خطأ أثناء إتمام الشراء. يرجى المحاولة مرة أخرى.",
+            promo_code_required: "يرجى إدخال رمز الخصم.",
+            invalid_promo_code: "رمز الخصم غير صالح.",
             promo_code_first_time_only: "رمز الخصم هذا مخصص للمستخدمين الجدد فقط.",
             email_required_for_promo: "البريد الإلكتروني مطلوب للتحقق من رمز الخصم.",
             validation_error: "خطأ في التحقق من رمز الخصم.",
+            timeout_error: "انتهت مهلة الطلب. يرجى المحاولة مرة أخرى.",
             general_error: "حدث خطأ. يرجى المحاولة مرة أخرى."
         },
         user_exists_actions: {

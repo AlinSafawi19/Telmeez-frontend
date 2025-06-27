@@ -645,18 +645,19 @@ export const fr = {
             }
         },
         server_errors: {
-            user_already_exists: "Un utilisateur avec cet email existe déjà. Veuillez utiliser un email différent ou essayer de vous connecter.",
-            missing_required_fields: "Veuillez remplir tous les champs obligatoires.",
+            user_already_exists: "Un utilisateur avec cet e-mail existe déjà. Veuillez utiliser un e-mail différent ou essayer de vous connecter.",
+            missing_required_fields: "Veuillez remplir tous les champs requis.",
             invalid_plan: "Le plan sélectionné n'est pas valide.",
             promo_code_not_valid_yet: "Ce code promo n'est pas encore valide.",
             promo_code_expired: "Ce code promo a expiré.",
-            super_admin_role_not_found: "Erreur système: Rôle super admin introuvable.",
+            super_admin_role_not_found: "Erreur système : Rôle d'administrateur principal introuvable.",
             checkout_error: "Une erreur s'est produite lors du paiement. Veuillez réessayer.",
-            promo_code_required: "Veuillez entrer un code promo.",
+            promo_code_required: "Veuillez saisir un code promo.",
             invalid_promo_code: "Code promo invalide.",
-            promo_code_first_time_only: "Ce code promo est réservé aux nouveaux utilisateurs.",
-            email_required_for_promo: "L'email est requis pour valider le code promo.",
+            promo_code_first_time_only: "Ce code promo n'est valable que pour les nouveaux utilisateurs.",
+            email_required_for_promo: "L'e-mail est requis pour valider le code promo.",
             validation_error: "Erreur lors de la validation du code promo.",
+            timeout_error: "La requête a expiré. Veuillez réessayer.",
             general_error: "Une erreur s'est produite. Veuillez réessayer."
         },
         user_exists_actions: {
