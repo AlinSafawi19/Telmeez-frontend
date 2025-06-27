@@ -6,7 +6,7 @@ import ComingSoon from "./pages/ComingSoon";
 import SignIn from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
 import Checkout from './pages/Checkout';
-import Success from './pages/Success';
+import Dashboard from './pages/Dashboard';
 import { LanguageProvider } from './contexts/LanguageContext';
 import Landing from './pages/Landing';
 
@@ -21,7 +21,7 @@ const App: React.FC = () => {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/success" element={<Success />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </Router>
     </LanguageProvider>

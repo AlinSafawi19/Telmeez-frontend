@@ -933,5 +933,10 @@ export const ar = {
         security_monitoring: "مراقبة الأمان",
         security_breaches: "خرق الأمان"
     },
-    and: "و"
+    and: "و",
+    dashboard: {
+        signout: "تسجيل الخروج",
+        overview: "نظرة عامة",
+        education: "تعزيز التعليم"
+    }
 }; 

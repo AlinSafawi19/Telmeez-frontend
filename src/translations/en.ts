@@ -937,5 +937,10 @@ export const en = {
         security_monitoring: "Security Monitoring",
         security_breaches: "Security Breaches"
     },
-    and: "and"
+    and: "and",
+    dashboard: {
+        signout: "Sign Out",
+        overview: "Overview",
+        education: "Empowering Education"
+    }
 }; 

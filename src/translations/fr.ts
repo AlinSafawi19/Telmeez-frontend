@@ -937,5 +937,10 @@ export const fr = {
         security_monitoring: "Surveillance de Sécurité",
         security_breaches: "Violations de Sécurité"
     },
-    and: "et"
+    and: "et",
+    dashboard: {
+        signout: "Se Déconnecter",
+        overview: "Vue d'ensemble",
+        education: "Empowering Education"
+    }
 };
