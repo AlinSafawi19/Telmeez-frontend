@@ -941,6 +941,14 @@ export const fr = {
     dashboard: {
         signout: "Se Déconnecter",
         overview: "Vue d'ensemble",
-        education: "Empowering Education"
+        education: "Empowering Education",
+        profileSettings: "Paramètres du Profil",
+        accountSettings: "Paramètres du Compte",
+        welcome: "Bienvenue à {institutionName}, {firstName}! 🎉",
+        welcome_back: "Bienvenue de retour, {firstName}! 👋",
+        welcome_new_user: "Nous sommes ravis de vous accueillir! Faisons-nous découvrir à {institutionName}.",
+        here_whats_happening: "Voici ce qui se passe avec votre compte {institutionName} aujourd'hui.",
+        we_excited_to_have_you: "Nous sommes ravis de vous accueillir! Faisons-nous découvrir à {institutionName}.",
+        here_whats_happening_new_user: "Voici ce qui se passe avec votre compte {institutionName} aujourd'hui."
     }
 };

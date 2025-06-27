@@ -937,6 +937,14 @@ export const ar = {
     dashboard: {
         signout: "تسجيل الخروج",
         overview: "نظرة عامة",
-        education: "تعزيز التعليم"
+        education: "تعزيز التعليم",
+        profileSettings: "إعدادات الحساب",
+        accountSettings: "إعدادات الحساب",
+        welcome: "مرحبا بك في {institutionName}, {firstName}! 🎉",
+        welcome_back: "مرحبا بعودتك, {firstName}! 👋",
+        welcome_new_user: "نحن سعداء بوجودك! لنبدأ بتجربتك في {institutionName}.",
+        here_whats_happening: "هنا ما يحدث في حسابك {institutionName} اليوم.",
+        we_excited_to_have_you: "نحن سعداء بوجودك! لنبدأ بتجربتك في {institutionName}.",
+        here_whats_happening_new_user: "هنا ما يحدث في حسابك {institutionName} اليوم."
     }
 }; 

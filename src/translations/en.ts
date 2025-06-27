@@ -941,6 +941,14 @@ export const en = {
     dashboard: {
         signout: "Sign Out",
         overview: "Overview",
-        education: "Empowering Education"
+        education: "Empowering Education",
+        profileSettings: "Profile Settings",
+        accountSettings: "Account Settings",
+        welcome: "Welcome to Telmeez, {firstName}! 🎉",
+        welcome_back: "Welcome back, {firstName}! 👋",
+        welcome_new_user: "We're excited to have you on board! Let's get you started with your {institutionName} experience.",
+        here_whats_happening: "Here's what's happening with your {institutionName} account today.",
+        we_excited_to_have_you: "We're excited to have you on board! Let's get you started with your {institutionName} experience.",
+        here_whats_happening_new_user: "Here's what's happening with your {institutionName} account today."
     }
 }; 
