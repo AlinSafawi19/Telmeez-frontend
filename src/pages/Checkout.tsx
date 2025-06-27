@@ -107,6 +107,17 @@ const Checkout: React.FC = () => {
     // Add state to track if user has manually navigated back
     const [hasNavigatedBack, setHasNavigatedBack] = useState(false);
 
+    // Add state to track when we're actually advancing to step 2
+    const [isAdvancingToStep2, setIsAdvancingToStep2] = useState(false);
+
+    // Add resend code functionality states
+    const [resendTimer, setResendTimer] = useState(0);
+    const [resendSuccess, setResendSuccess] = useState(false);
+    const [showTroubleshooting, setShowTroubleshooting] = useState(false);
+    const [verificationAttempts, setVerificationAttempts] = useState(0);
+    const [codeExpired, setCodeExpired] = useState(false);
+    const [initialCodeSent, setInitialCodeSent] = useState(false);
+
     // Function to handle Enter key navigation within current step
     const handleStepNavigation = (e: React.KeyboardEvent, nextInputRef: React.RefObject<HTMLInputElement | null> | null) => {
         if (e.key === 'Enter') {
@@ -381,16 +392,19 @@ const Checkout: React.FC = () => {
 
     // Auto-send verification code when reaching step 2, but only if not already verified
     useEffect(() => {
-        if (currentStep === 2 && !isEmailVerified) {
+        if (currentStep === 2 && !isEmailVerified && !hasNavigatedBack && isAdvancingToStep2) {
             handleSendVerificationCode();
+            setIsAdvancingToStep2(false); // Reset the flag after sending
         }
-    }, [currentStep, isEmailVerified]);
+    }, [currentStep, isEmailVerified, hasNavigatedBack, isAdvancingToStep2]);
 
     // Function to send verification code
     const handleSendVerificationCode = async () => {
         try {
             setVerificationError('');
-            
+            setCodeExpired(false);
+            setResendSuccess(false);
+
             const response = await fetch('/api/checkout/send-verification', {
                 method: 'POST',
                 headers: {
@@ -412,6 +426,11 @@ const Checkout: React.FC = () => {
                     return;
                 }
                 setVerificationError(data.message || 'Failed to send verification code');
+            } else {
+                // Start timer for resend functionality
+                setResendTimer(60); // 60 seconds
+                setInitialCodeSent(true);
+                setVerificationAttempts(0);
             }
         } catch (error: any) {
             if (error.name === 'AbortError') {
@@ -421,6 +440,79 @@ const Checkout: React.FC = () => {
             }
         }
     };
+
+    // Function to resend verification code
+    const handleResendCode = async () => {
+        if (resendTimer > 0) return; // Prevent resend if timer is active
+
+        try {
+            setVerificationError('');
+            setCodeExpired(false);
+            setResendSuccess(false);
+
+            const response = await fetch('/api/checkout/send-verification', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept-Language': currentLanguage
+                },
+                body: JSON.stringify({
+                    email: billingInfo.email
+                }),
+                signal: AbortSignal.timeout(10000) // 10 second timeout
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                setResendTimer(60); // 60 seconds
+                setResendSuccess(true);
+                setVerificationAttempts(0);
+                setVerificationCode(''); // Clear previous code
+            } else {
+                setVerificationError(data.message || 'Failed to resend verification code');
+            }
+        } catch (error: any) {
+            if (error.name === 'AbortError') {
+                setVerificationError('Request timeout. Please try again.');
+            } else {
+                setVerificationError('Failed to resend verification code. Please try again.');
+            }
+        } finally {
+        }
+    };
+
+    // Timer effect for resend functionality
+    useEffect(() => {
+        let interval: number;
+        if (resendTimer > 0) {
+            interval = setInterval(() => {
+                setResendTimer(prev => {
+                    if (prev <= 1) {
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+        }
+        return () => {
+            if (interval) {
+                clearInterval(interval);
+            }
+        };
+    }, [resendTimer]);
+
+    // Auto-expire code after 10 minutes
+    useEffect(() => {
+        if (currentStep === 2 && !isEmailVerified && !hasNavigatedBack) {
+            const expireTimer = setTimeout(() => {
+                setCodeExpired(true);
+                setVerificationError('Verification code has expired. Please request a new one.');
+            }, 10 * 60 * 1000); // 10 minutes
+
+            return () => clearTimeout(expireTimer);
+        }
+    }, [currentStep, isEmailVerified, hasNavigatedBack]);
 
     // Handler for the single verification code input
     const handleVerificationCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -434,6 +526,11 @@ const Checkout: React.FC = () => {
             setVerificationError('');
             if (verificationCode.length !== 6) {
                 setVerificationError('Please enter the complete 6-digit code');
+                return;
+            }
+
+            if (codeExpired) {
+                setVerificationError('This code has expired. Please request a new one.');
                 return;
             }
 
@@ -455,8 +552,16 @@ const Checkout: React.FC = () => {
             if (data.success) {
                 setIsEmailVerified(true);
                 setShowEmailVerifiedCelebration(true);
+                setCodeExpired(false);
+                setResendTimer(0);
             } else {
+                setVerificationAttempts(prev => prev + 1);
                 setVerificationError(data.message || 'Invalid verification code');
+
+                // Show troubleshooting after 3 failed attempts
+                if (verificationAttempts >= 2) {
+                    setShowTroubleshooting(true);
+                }
             }
         } catch (error: any) {
             if (error.name === 'AbortError') {
@@ -977,6 +1082,12 @@ const Checkout: React.FC = () => {
             if (currentStep === 2) {
                 setHasNavigatedBack(false);
             }
+
+            // Set flag when advancing from step 1 to step 2
+            if (currentStep === 1) {
+                setIsAdvancingToStep2(true);
+            }
+
             setCurrentStep(prev => {
                 return prev + 1;
             });
@@ -2095,6 +2206,14 @@ const Checkout: React.FC = () => {
                                                 <p className="text-sm text-gray-600 mb-4">
                                                     {t.checkout.verify_email.description}
                                                 </p>
+
+                                                {/* Email Display */}
+                                                <div className="inline-flex items-center px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg mb-4">
+                                                    <svg className="w-4 h-4 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                                                    </svg>
+                                                    <span className="text-sm font-medium text-blue-900">{billingInfo.email}</span>
+                                                </div>
                                             </div>
 
                                             <div className="max-w-md mx-auto space-y-4">
@@ -2121,36 +2240,215 @@ const Checkout: React.FC = () => {
                                                         <p className="text-md text-green-600 z-20">Your email has been successfully verified. Thank you!</p>
                                                     </div>
                                                 ) : (
-                                                    <div className="space-y-2">
-                                                        <div className="flex flex-col items-center gap-3">
-                                                            <input
-                                                                type="text"
-                                                                inputMode="numeric"
-                                                                pattern="[0-9]*"
-                                                                maxLength={6}
-                                                                value={verificationCode}
-                                                                onChange={handleVerificationCodeChange}
-                                                                className={`w-48 h-12 text-center text-lg font-bold border-2 rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-500/20 ${verificationError ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-white text-gray-900 hover:border-blue-300'} force-white-bg`}
-                                                                placeholder="Enter 6-digit code"
-                                                                aria-label="Verification code"
-                                                            />
-                                                            <button
-                                                                type="button"
-                                                                onClick={handleVerifyCode}
-                                                                className="mt-2 px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                                                            >
-                                                                Verify Code
-                                                            </button>
+                                                    <div className="space-y-4">
+                                                        {/* Code Input */}
+                                                        <div className="space-y-2">
+                                                            <div className="flex flex-col items-center gap-3">
+                                                                <input
+                                                                    type="text"
+                                                                    inputMode="numeric"
+                                                                    pattern="[0-9]*"
+                                                                    maxLength={6}
+                                                                    value={verificationCode}
+                                                                    onChange={handleVerificationCodeChange}
+                                                                    onKeyDown={(e) => {
+                                                                        if (e.key === 'Enter') {
+                                                                            e.preventDefault();
+                                                                            handleVerifyCode();
+                                                                        }
+                                                                    }}
+                                                                    className={`w-48 h-12 text-center text-lg font-bold border-2 rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-500/20 ${verificationError ? 'border-red-500 bg-red-50' : codeExpired ? 'border-orange-500 bg-orange-50' : 'border-gray-300 bg-white text-gray-900 hover:border-blue-300'} force-white-bg`}
+                                                                    placeholder="Enter 6-digit code"
+                                                                    aria-label="Verification code"
+                                                                    disabled={codeExpired}
+                                                                />
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={handleVerifyCode}
+                                                                    disabled={verificationCode.length !== 6 || codeExpired}
+                                                                    className="mt-2 px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                                >
+                                                                    Verify Code
+                                                                </button>
+                                                            </div>
                                                         </div>
+
+                                                        {/* Resend Code Section */}
+                                                        <div className="text-center space-y-3">
+                                                            <div className="text-sm text-gray-600 min-h-[32px] flex items-center justify-center">
+                                                                {resendTimer > 0 ? (
+                                                                    <span className="text-gray-600">
+                                                                        Resend available in <span className="text-blue-600 font-bold">{resendTimer} seconds</span>
+                                                                    </span>
+                                                                ) : (
+                                                                    <div className="flex items-center gap-2">
+                                                                        <span className="text-gray-600">
+                                                                            Didn't receive the code?
+                                                                        </span>
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={handleResendCode}
+                                                                            disabled={resendTimer > 0}
+                                                                            className="text-blue-600 hover:text-blue-700 font-medium hover:underline focus:outline-none transition-colors p-0 m-0 border-none bg-transparent"
+                                                                        >
+                                                                            Resend Code
+                                                                        </button>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+
+                                                            {resendSuccess && initialCodeSent && (
+                                                                <motion.div
+                                                                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                                                                    transition={{ duration: 0.3, ease: "easeOut" }}
+                                                                    className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-3 shadow-sm"
+                                                                >
+                                                                    <div className="flex items-center justify-center">
+                                                                        <div className="flex-shrink-0">
+                                                                            <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                                                                                <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                                                </svg>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="ml-3">
+                                                                            <p className="text-sm font-medium text-green-800">
+                                                                                New verification code sent!
+                                                                            </p>
+                                                                            <p className="text-xs text-green-600">
+                                                                                Check your email inbox and spam folder
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </motion.div>
+                                                            )}
+                                                        </div>
+
+                                                        {/* Error Messages */}
                                                         {verificationError && (
-                                                            <motion.p
+                                                            <motion.div
                                                                 initial={{ opacity: 0, y: -10 }}
                                                                 animate={{ opacity: 1, y: 0 }}
-                                                                className="text-sm text-red-600 text-center"
+                                                                className="text-sm text-red-600 text-center bg-red-50 border border-red-200 rounded-lg p-3"
                                                             >
                                                                 {verificationError}
-                                                            </motion.p>
+                                                            </motion.div>
                                                         )}
+
+                                                        {/* Code Expired Message */}
+                                                        {codeExpired && (
+                                                            <motion.div
+                                                                initial={{ opacity: 0, y: -10 }}
+                                                                animate={{ opacity: 1, y: 0 }}
+                                                                className="text-sm text-orange-600 text-center bg-orange-50 border border-orange-200 rounded-lg p-3"
+                                                            >
+                                                                <div className="flex items-center justify-center mb-2">
+                                                                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                    </svg>
+                                                                    Code Expired
+                                                                </div>
+                                                                <p>Your verification code has expired. Please request a new one.</p>
+                                                            </motion.div>
+                                                        )}
+
+                                                        {/* Troubleshooting Section */}
+                                                        {showTroubleshooting && (
+                                                            <motion.div
+                                                                initial={{ opacity: 0, y: -10 }}
+                                                                animate={{ opacity: 1, y: 0 }}
+                                                                className="bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-3"
+                                                            >
+                                                                <h4 className="text-sm font-semibold text-gray-900 flex items-center">
+                                                                    <svg className="w-4 h-4 mr-2 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                    </svg>
+                                                                    Having trouble?
+                                                                </h4>
+
+                                                                <div className="space-y-2 text-sm text-gray-700">
+                                                                    <div className="flex items-start">
+                                                                        <span className="text-blue-600 font-medium mr-2">1.</span>
+                                                                        <span>Check your spam/junk folder</span>
+                                                                    </div>
+                                                                    <div className="flex items-start">
+                                                                        <span className="text-blue-600 font-medium mr-2">2.</span>
+                                                                        <span>Make sure you entered the correct email address</span>
+                                                                    </div>
+                                                                    <div className="flex items-start">
+                                                                        <span className="text-blue-600 font-medium mr-2">3.</span>
+                                                                        <span>Wait a few minutes and try resending the code</span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="pt-3 border-t border-gray-200">
+                                                                    <p className="text-xs text-gray-600 mb-2">
+                                                                        Still having issues? Contact our support team:
+                                                                    </p>
+                                                                    <div className="flex flex-col sm:flex-row gap-2 text-xs">
+                                                                        <a
+                                                                            href="mailto:contact@telmeezlb.com"
+                                                                            className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
+                                                                        >
+                                                                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                                            </svg>
+                                                                            contact@telmeezlb.com
+                                                                        </a>
+                                                                        <a
+                                                                            href="tel:+9611234567"
+                                                                            className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
+                                                                        >
+                                                                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                                            </svg>
+                                                                            +961 1 234 567
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </motion.div>
+                                                        )}
+
+                                                        {/* General Help Section */}
+                                                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                                            <div className="flex items-start">
+                                                                <div className="flex-shrink-0">
+                                                                    <svg className="w-5 h-5 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                    </svg>
+                                                                </div>
+                                                                <div className="ml-3">
+                                                                    <h4 className="text-sm font-medium text-blue-900 mb-1">
+                                                                        Need help?
+                                                                    </h4>
+                                                                    <p className="text-xs text-blue-700 mb-2">
+                                                                        Check your email inbox and spam folder. If you still haven't received the code, contact our support team.
+                                                                    </p>
+                                                                    <div className="flex flex-col sm:flex-row gap-2 text-xs">
+                                                                        <a
+                                                                            href="mailto:contact@telmeezlb.com"
+                                                                            className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
+                                                                        >
+                                                                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                                            </svg>
+                                                                            contact@telmeezlb.com
+                                                                        </a>
+                                                                        <a
+                                                                            href="tel:+9611234567"
+                                                                            className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
+                                                                        >
+                                                                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                                            </svg>
+                                                                            +961 1 234 567
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 )}
                                             </div>
