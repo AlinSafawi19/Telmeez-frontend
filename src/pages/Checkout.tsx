@@ -584,6 +584,18 @@ const Checkout: React.FC = () => {
             ...prev,
             [name]: value
         }));
+        
+        // Clear specific error when user types in the corresponding field
+        if (errors.billingAddress?.[name as keyof BillingAddress]) {
+            setErrors(prev => ({
+                ...prev,
+                billingAddress: {
+                    ...prev.billingAddress,
+                    [name]: undefined
+                }
+            }));
+        }
+        
         // Clear API error when user starts typing
         if (apiErrorKey) {
             setApiErrorKey('');
@@ -1180,6 +1192,49 @@ const Checkout: React.FC = () => {
     };
 
     const handleFinalCheckout = async () => {
+        // Validate billing address before proceeding
+        const billingAddressErrors: Partial<Record<keyof BillingAddress, string>> = {};
+
+        if (!billingAddress.address.trim()) {
+            billingAddressErrors.address = t.checkout.validation.required;
+        } else if (billingAddress.address.trim().length < 5) {
+            billingAddressErrors.address = t.checkout.validation.address_length;
+        }
+        if (!billingAddress.city.trim()) {
+            billingAddressErrors.city = t.checkout.validation.required;
+        } else if (billingAddress.city.trim().length < 2) {
+            billingAddressErrors.city = t.checkout.validation.city_length;
+        }
+        if (!billingAddress.state.trim()) {
+            billingAddressErrors.state = t.checkout.validation.required;
+        }
+        if (!billingAddress.zipCode.trim()) {
+            billingAddressErrors.zipCode = t.checkout.validation.required;
+        } else if (billingAddress.zipCode.trim().length < 3) {
+            billingAddressErrors.zipCode = t.checkout.validation.zip_code_length;
+        }
+        if (!billingAddress.country) {
+            billingAddressErrors.country = t.checkout.validation.required;
+        } else if (billingAddress.country === 'other' && !billingAddress.customCountry.trim()) {
+            billingAddressErrors.customCountry = t.checkout.validation.required;
+        }
+
+        if (Object.keys(billingAddressErrors).length > 0) {
+            setErrors(prev => ({
+                ...prev,
+                billingAddress: billingAddressErrors
+            }));
+            
+            // Scroll to error message
+            setTimeout(() => {
+                const errorElement = document.getElementById('checkout-error');
+                if (errorElement) {
+                    errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
+            return;
+        }
+
         try {
             setApiErrorKey('');
 
@@ -1489,6 +1544,16 @@ const Checkout: React.FC = () => {
             if (isBillingAddress) {
                 setShowBillingCustomCountryInput(true);
                 setBillingAddress(prev => ({ ...prev, country: 'other' }));
+                // Clear country error when user selects a country
+                if (errors.billingAddress?.country) {
+                    setErrors(prev => ({
+                        ...prev,
+                        billingAddress: {
+                            ...prev.billingAddress,
+                            country: undefined
+                        }
+                    }));
+                }
             } else {
                 // For AccountInfo, just set the country to 'other' without showing custom input
                 setBillingInfo(prev => ({ ...prev, country: 'other' }));
@@ -1497,6 +1562,16 @@ const Checkout: React.FC = () => {
             if (isBillingAddress) {
                 setShowBillingCustomCountryInput(false);
                 setBillingAddress(prev => ({ ...prev, country: selectedOption.value }));
+                // Clear country error when user selects a country
+                if (errors.billingAddress?.country) {
+                    setErrors(prev => ({
+                        ...prev,
+                        billingAddress: {
+                            ...prev.billingAddress,
+                            country: undefined
+                        }
+                    }));
+                }
             } else {
                 setBillingInfo(prev => ({ ...prev, country: selectedOption.value }));
             }
@@ -1507,6 +1582,16 @@ const Checkout: React.FC = () => {
         const value = e.target.value;
         if (isBillingAddress) {
             setBillingAddress(prev => ({ ...prev, customCountry: value }));
+            // Clear custom country error when user types
+            if (errors.billingAddress?.customCountry) {
+                setErrors(prev => ({
+                    ...prev,
+                    billingAddress: {
+                        ...prev.billingAddress,
+                        customCountry: undefined
+                    }
+                }));
+            }
         } else {
             setBillingInfo(prev => ({ ...prev, customCountry: value }));
         }
@@ -2354,7 +2439,7 @@ const Checkout: React.FC = () => {
                                 </motion.div>
                             )}
 
-                            {currentStep === 3 && (
+                            {currentStep === 4 && (
                                 <motion.div
                                     key="step3"
                                     initial={{ opacity: 0, x: -20 }}
@@ -2497,7 +2582,7 @@ const Checkout: React.FC = () => {
                                 </motion.div>
                             )}
 
-                            {currentStep === 4 && (
+                            {currentStep === 3 && (
                                 <motion.div
                                     key="step4"
                                     initial={{ opacity: 0, x: -20 }}
