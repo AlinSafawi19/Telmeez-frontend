@@ -11,6 +11,7 @@ import logo from "../assets/images/logo.png";
 import { FaHome, FaLock, FaCreditCard, FaMapMarkerAlt, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useLanguage } from '../contexts/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import ButtonLoader from '../components/ButtonLoader';
 import '../Landing.css';
 
 interface AccountInfo {
@@ -117,6 +118,11 @@ const Checkout: React.FC = () => {
     const [verificationAttempts, setVerificationAttempts] = useState(0);
     const [codeExpired, setCodeExpired] = useState(false);
     const [initialCodeSent, setInitialCodeSent] = useState(false);
+
+    // Loading states
+    const [isCheckingOut, setIsCheckingOut] = useState(false);
+    const [isApplyingPromoCode, setIsApplyingPromoCode] = useState(false);
+    const [isVerifyingCode, setIsVerifyingCode] = useState(false);
 
     // Function to handle Enter key navigation within current step
     const handleStepNavigation = (e: React.KeyboardEvent, nextInputRef: React.RefObject<HTMLInputElement | null> | null) => {
@@ -438,6 +444,7 @@ const Checkout: React.FC = () => {
             } else {
                 setVerificationError('Failed to send verification code. Please try again.');
             }
+        } finally {
         }
     };
 
@@ -522,6 +529,7 @@ const Checkout: React.FC = () => {
 
     const handleVerifyCode = async () => {
         try {
+            setIsVerifyingCode(true);
             setVerificationError('');
             if (verificationCode.length !== 6) {
                 setVerificationError(t.checkout.verify_email.please_enter_the_complete_6_digit_code);
@@ -568,6 +576,8 @@ const Checkout: React.FC = () => {
             } else {
                 setVerificationError(t.checkout.verify_email.failed_to_verify_code);
             }
+        } finally {
+            setIsVerifyingCode(false);
         }
     };
 
@@ -874,6 +884,7 @@ const Checkout: React.FC = () => {
         }
 
         try {
+            setIsApplyingPromoCode(true);
             const response = await fetch('/api/checkout/validate-promo', {
                 method: 'POST',
                 headers: {
@@ -934,6 +945,7 @@ const Checkout: React.FC = () => {
                 setPromoErrorKey('server_general_error');
             }
         } finally {
+            setIsApplyingPromoCode(false);
         }
     };
 
@@ -1243,6 +1255,7 @@ const Checkout: React.FC = () => {
         }
 
         try {
+            setIsCheckingOut(true);
             setApiErrorKey('');
 
             const planId = getPlanId(selectedPlan);
@@ -1446,6 +1459,7 @@ const Checkout: React.FC = () => {
                 }
             }, 100);
         } finally {
+            setIsCheckingOut(false);
         }
     };
 
@@ -2261,14 +2275,15 @@ const Checkout: React.FC = () => {
                                                                     aria-label="Verification code"
                                                                     disabled={codeExpired}
                                                                 />
-                                                                <button
+                                                                <ButtonLoader
                                                                     type="button"
                                                                     onClick={handleVerifyCode}
                                                                     disabled={verificationCode.length !== 6 || codeExpired}
+                                                                    isLoading={isVerifyingCode}
                                                                     className="mt-2 px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                                                 >
                                                                     {t.checkout.verify_email.verify_code}
-                                                                </button>
+                                                                </ButtonLoader>
                                                             </div>
                                                         </div>
 
@@ -2408,44 +2423,44 @@ const Checkout: React.FC = () => {
                                                                     </div>
                                                                 </div>
                                                             </motion.div>
-                                                        ):(
-                                                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                                            <div className="flex items-start">
-                                                                <div className="flex-shrink-0">
-                                                                    <svg className="w-5 h-5 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                                    </svg>
-                                                                </div>
-                                                                <div className="ml-3">
-                                                                    <h4 className="text-sm font-medium text-blue-900 mb-1">
-                                                                        {t.checkout.verify_email.need_help}
-                                                                    </h4>
-                                                                    <p className="text-xs text-blue-700 mb-2">
-                                                                        {t.checkout.verify_email.help_text_2}
-                                                                    </p>
-                                                                    <div className="flex flex-col sm:flex-row gap-2 text-xs">
-                                                                        <a
-                                                                            href="mailto:contact@telmeezlb.com"
-                                                                            className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
-                                                                        >
-                                                                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                                                            </svg>
-                                                                            contact@telmeezlb.com
-                                                                        </a>
-                                                                        <a
-                                                                            href="tel:+9611234567"
-                                                                            className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
-                                                                        >
-                                                                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                                                                            </svg>
-                                                                            +961 1 234 567
-                                                                        </a>
+                                                        ) : (
+                                                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                                                <div className="flex items-start">
+                                                                    <div className="flex-shrink-0">
+                                                                        <svg className="w-5 h-5 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                        </svg>
+                                                                    </div>
+                                                                    <div className="ml-3">
+                                                                        <h4 className="text-sm font-medium text-blue-900 mb-1">
+                                                                            {t.checkout.verify_email.need_help}
+                                                                        </h4>
+                                                                        <p className="text-xs text-blue-700 mb-2">
+                                                                            {t.checkout.verify_email.help_text_2}
+                                                                        </p>
+                                                                        <div className="flex flex-col sm:flex-row gap-2 text-xs">
+                                                                            <a
+                                                                                href="mailto:contact@telmeezlb.com"
+                                                                                className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
+                                                                            >
+                                                                                <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                                                </svg>
+                                                                                contact@telmeezlb.com
+                                                                            </a>
+                                                                            <a
+                                                                                href="tel:+9611234567"
+                                                                                className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
+                                                                            >
+                                                                                <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                                                </svg>
+                                                                                +961 1 234 567
+                                                                            </a>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
                                                         )}
                                                     </div>
                                                 )}
@@ -3191,13 +3206,14 @@ const Checkout: React.FC = () => {
                                                     placeholder={t.checkout.summary.add_promo_placeholder}
                                                     className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 force-white-bg ${errors.billingAddress?.zipCode ? 'border-red-500' : 'border-gray-300'
                                                         }`} />
-                                                <button
+                                                <ButtonLoader
                                                     type="button"
                                                     onClick={handleApplyPromo}
+                                                    isLoading={isApplyingPromoCode}
                                                     className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-[80px]"
                                                 >
                                                     {t.checkout.summary.apply}
-                                                </button>
+                                                </ButtonLoader>
                                             </div>
                                             {promoError && (
                                                 <p className="mt-2 text-sm text-red-600">{promoError}</p>
@@ -3289,12 +3305,13 @@ const Checkout: React.FC = () => {
                                                     {t.checkout.summary.back}
                                                 </button>
                                             )}
-                                            <button
+                                            <ButtonLoader
                                                 type="submit"
+                                                isLoading={isCheckingOut}
                                                 className="w-full py-3 px-4 rounded-lg text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
                                                 {currentStep === 4 ? t.checkout.summary.activate : t.checkout.summary.continue}
-                                            </button>
+                                            </ButtonLoader>
                                         </div>
                                         <p className="text-xs text-gray-500 text-center mt-3">
                                             {t.checkout.legal.by_continuing} {' '}
