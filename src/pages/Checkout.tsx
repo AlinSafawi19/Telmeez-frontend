@@ -12,7 +12,6 @@ import { FaHome, FaLock, FaCreditCard, FaMapMarkerAlt, FaTimes, FaEye, FaEyeSlas
 import { useLanguage } from '../contexts/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../Landing.css';
-import LoadingOverlay from '../components/LoadingOverlay';
 
 interface AccountInfo {
     firstName: string;
@@ -67,9 +66,6 @@ const Checkout: React.FC = () => {
     const t = translations[currentLanguage];
     const isRTL = currentLanguage === 'ar';
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isValidatingPromo, setIsValidatingPromo] = useState(false);
-    const [isSubmittingCheckout, setIsSubmittingCheckout] = useState(false);
     const [plans, setPlans] = useState<Plan[]>([]);
     const [apiErrorKey, setApiErrorKey] = useState('');
     const [isUserAlreadyExists, setIsUserAlreadyExists] = useState(false);
@@ -97,6 +93,13 @@ const Checkout: React.FC = () => {
     const billingCityRef = useRef<HTMLInputElement>(null);
     const billingStateRef = useRef<HTMLInputElement>(null);
     const billingZipCodeRef = useRef<HTMLInputElement>(null);
+
+    // Email verification state
+    const [verificationCode, setVerificationCode] = useState('');
+    const [verificationError, setVerificationError] = useState('');
+
+    // Verification code refs for individual digits
+    const verificationCodeRefs = useRef<(HTMLInputElement | null)[]>([]);
 
     // Function to handle Enter key navigation
     const handleEnterNavigation = (e: React.KeyboardEvent, nextInputRef: React.RefObject<HTMLInputElement | null> | null, action?: () => void) => {
@@ -270,13 +273,13 @@ const Checkout: React.FC = () => {
     // Function to get translated error message from key
     const getTranslatedError = (errorKey: string): string => {
         if (!errorKey) return '';
-        
+
         // Handle server errors
         if (errorKey.startsWith('server_')) {
             const serverErrorKey = errorKey.replace('server_', '');
             return (t.checkout.server_errors as any)[serverErrorKey] || errorKey;
         }
-        
+
         // Handle validation errors
         return getErrorMessage(errorKey);
     };
@@ -332,18 +335,6 @@ const Checkout: React.FC = () => {
         return '';
     };
 
-    const getCardTypeName = (cardType: string): string => {
-        switch (cardType) {
-            case 'visa':
-                return 'Visa';
-            case 'mastercard':
-                return 'Mastercard';
-            case 'amex':
-                return 'American Express';
-            default:
-                return '';
-        }
-    };
 
     const getCardNumberFormat = (cardType: string): string => {
         switch (cardType) {
@@ -403,6 +394,12 @@ const Checkout: React.FC = () => {
         }
     }, [paymentInfo.cardNumber]);
 
+    // Auto-send verification code when reaching step 2
+    useEffect(() => {
+        if (currentStep === 2) {
+        }
+    }, [currentStep]);
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -417,9 +414,7 @@ const Checkout: React.FC = () => {
     }, []);
 
     const handleLanguageChange = (langCode: Language) => {
-        setIsLoading(true);
         setTimeout(() => {
-            setIsLoading(false);
             setCurrentLanguage(langCode);
             const direction = getLanguageDirection(langCode);
             document.documentElement.dir = direction;
@@ -780,7 +775,6 @@ const Checkout: React.FC = () => {
         }
 
         try {
-            setIsValidatingPromo(true);
             setApiErrorKey('');
 
             const response = await fetch('/api/checkout/validate-promo', {
@@ -803,7 +797,6 @@ const Checkout: React.FC = () => {
                 setPromoCode(''); // Clear the input
                 setPromoErrorKey('');
             } else {
-                setIsValidatingPromo(false);
                 // Handle different types of server errors
 
                 // Check if this is a user already exists error
@@ -902,9 +895,9 @@ const Checkout: React.FC = () => {
                         if (validationErrors.billing) {
                             setCurrentStep(1);
                         } else if (validationErrors.payment) {
-                            setCurrentStep(2);
-                        } else if (validationErrors.billingAddress) {
                             setCurrentStep(3);
+                        } else if (validationErrors.billingAddress) {
+                            setCurrentStep(4);
                         }
 
                         // Scroll to error message
@@ -930,7 +923,6 @@ const Checkout: React.FC = () => {
                 }, 100);
             }
         } catch (error: any) {
-            setIsValidatingPromo(false);
             console.error('Checkout error:', error)
 
             setApiErrorKey('server_general_error');
@@ -943,7 +935,6 @@ const Checkout: React.FC = () => {
                 }
             }, 100);
         } finally {
-            setIsValidatingPromo(false);
         }
     };
 
@@ -996,6 +987,8 @@ const Checkout: React.FC = () => {
                 return;
             }
         } else if (currentStep === 2) {
+            // Step 2 is email verification - no validation needed, just proceed
+        } else if (currentStep === 3) {
             const paymentErrors: Partial<Record<keyof PaymentInfo, string>> = {};
 
             // Card number validation
@@ -1031,7 +1024,7 @@ const Checkout: React.FC = () => {
                 }));
                 return;
             }
-        } else if (currentStep === 3) {
+        } else if (currentStep === 4) {
             const billingAddressErrors: Partial<Record<keyof BillingAddress, string>> = {};
 
             if (!billingAddress.address.trim()) {
@@ -1090,8 +1083,8 @@ const Checkout: React.FC = () => {
 
         if (currentStep < 4) {
             handleNextStep();
-        } else {
-            // Submit checkout to backend
+        } else if (currentStep === 4) {
+            // Call handleFinalCheckout when on step 4
             await handleFinalCheckout();
         }
     };
@@ -1188,7 +1181,6 @@ const Checkout: React.FC = () => {
 
     const handleFinalCheckout = async () => {
         try {
-            setIsSubmittingCheckout(true);
             setApiErrorKey('');
 
             const planId = getPlanId(selectedPlan);
@@ -1361,9 +1353,9 @@ const Checkout: React.FC = () => {
                         if (validationErrors.billing) {
                             setCurrentStep(1);
                         } else if (validationErrors.payment) {
-                            setCurrentStep(2);
-                        } else if (validationErrors.billingAddress) {
                             setCurrentStep(3);
+                        } else if (validationErrors.billingAddress) {
+                            setCurrentStep(4);
                         }
 
                         // Scroll to error message
@@ -1401,7 +1393,6 @@ const Checkout: React.FC = () => {
                 }
             }, 100);
         } finally {
-            setIsSubmittingCheckout(false);
         }
     };
 
@@ -1552,6 +1543,65 @@ const Checkout: React.FC = () => {
         }, 100);
     };
 
+
+    // New function to handle individual digit input
+    const handleDigitChange = (index: number, value: string) => {
+        const digit = value.replace(/\D/g, '').slice(0, 1);
+
+        // Update the verification code
+        const newCode = verificationCode.split('');
+        newCode[index] = digit;
+        const updatedCode = newCode.join('');
+        setVerificationCode(updatedCode);
+
+        // Clear error when user types
+        if (verificationError) {
+            setVerificationError('');
+        }
+
+        // Auto-focus next input
+        if (digit && index < 5) {
+            verificationCodeRefs.current[index + 1]?.focus();
+        }
+    };
+
+    // Handle backspace in verification code
+    const handleDigitKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Backspace') {
+            e.preventDefault();
+
+            // If current input is empty, go to previous input
+            if (!verificationCode[index]) {
+                if (index > 0) {
+                    verificationCodeRefs.current[index - 1]?.focus();
+                }
+                return;
+            }
+
+            // Clear current digit and stay in same input
+            const newCode = verificationCode.split('');
+            newCode[index] = '';
+            setVerificationCode(newCode.join(''));
+        } else if (e.key === 'ArrowLeft' && index > 0) {
+            verificationCodeRefs.current[index - 1]?.focus();
+        } else if (e.key === 'ArrowRight' && index < 5) {
+            verificationCodeRefs.current[index + 1]?.focus();
+        }
+    };
+
+    // Handle paste event for verification code
+    const handleVerificationPaste = (e: React.ClipboardEvent) => {
+        e.preventDefault();
+        const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+        setVerificationCode(pastedData);
+
+        // Focus the next empty input or the last input
+        const nextIndex = Math.min(pastedData.length, 5);
+        if (nextIndex < 6) {
+            verificationCodeRefs.current[nextIndex]?.focus();
+        }
+    };
+
     const customSelectStyles = {
         control: (base: any, state: any) => ({
             ...base,
@@ -1673,10 +1723,6 @@ const Checkout: React.FC = () => {
                     </div>
                 </div>
 
-                {isLoading && (
-                    <LoadingOverlay isLoading={isLoading} />
-                )}
-
                 <form onSubmit={handleStepSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                     {/* Main Content - Left Side */}
                     <div className="lg:col-span-8 space-y-6">
@@ -1700,10 +1746,12 @@ const Checkout: React.FC = () => {
                                         ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white scale-110'
                                         : 'bg-gray-100 text-gray-400'
                                         }`}>
-                                        <FaCreditCard className="w-4 h-4" />
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
                                     </div>
                                     <span className={`${isRTL ? 'mr-2' : 'ml-2'} text-xs font-medium transition-colors duration-300 ${currentStep >= 2 ? 'text-gray-900' : 'text-gray-400'
-                                        } hidden sm:inline`}>{t.checkout.payment_details.title}</span>
+                                        } hidden sm:inline`}>{t.checkout.verify_email.title}</span>
                                 </div>
                                 <div className={`flex-1 h-0.5 mx-4 transition-colors duration-300 ${currentStep >= 3 ? 'bg-gradient-to-r from-blue-600 to-indigo-600' : 'bg-gray-200'
                                     }`}></div>
@@ -1712,10 +1760,10 @@ const Checkout: React.FC = () => {
                                         ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white scale-110'
                                         : 'bg-gray-100 text-gray-400'
                                         }`}>
-                                        <FaMapMarkerAlt className="w-4 h-4" />
+                                        <FaCreditCard className="w-4 h-4" />
                                     </div>
                                     <span className={`${isRTL ? 'mr-2' : 'ml-2'} text-xs font-medium transition-colors duration-300 ${currentStep >= 3 ? 'text-gray-900' : 'text-gray-400'
-                                        } hidden sm:inline`}>{t.checkout.billing_address.title}</span>
+                                        } hidden sm:inline`}>{t.checkout.payment_details.title}</span>
                                 </div>
                                 <div className={`flex-1 h-0.5 mx-4 transition-colors duration-300 ${currentStep >= 4 ? 'bg-gradient-to-r from-blue-600 to-indigo-600' : 'bg-gray-200'
                                     }`}></div>
@@ -1724,12 +1772,10 @@ const Checkout: React.FC = () => {
                                         ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white scale-110'
                                         : 'bg-gray-100 text-gray-400'
                                         }`}>
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
+                                        <FaMapMarkerAlt className="w-4 h-4" />
                                     </div>
                                     <span className={`${isRTL ? 'mr-2' : 'ml-2'} text-xs font-medium transition-colors duration-300 ${currentStep >= 4 ? 'text-gray-900' : 'text-gray-400'
-                                        } hidden sm:inline`}>{t.checkout.review.title}</span>
+                                        } hidden sm:inline`}>{t.checkout.billing_address.title}</span>
                                 </div>
                             </div>
                         </div>
@@ -2107,126 +2153,203 @@ const Checkout: React.FC = () => {
                                     exit={{ opacity: 0, x: 20 }}
                                     className="bg-white rounded-xl shadow-lg p-6 mb-6"
                                 >
-                                    {/* Payment Information Section */}
+                                    {/* Email Verification Section */}
                                     <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-                                        <h2 className="text-lg font-semibold text-gray-900"> {t.checkout.payment_details.section_title}</h2>
+                                        <h2 className="text-lg font-semibold text-gray-900">{t.checkout.verify_email.section_title}</h2>
                                     </div>
-                                    <div className="p-6 space-y-4">
-                                        {/* Payment Method Selection */}
-                                        <div className="space-y-3">
-                                            <h3 className="text-sm font-medium text-gray-900">{t.checkout.payment_details.section_subtitle}</h3>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handlePayByChange('card')}
-                                                    className={`focus:outline-none p-4 rounded-xl border-2 transition-all duration-300 ${payBy === 'card'
-                                                        ? 'border-blue-600 bg-blue-50'
-                                                        : 'border-gray-200 hover:border-blue-200'
-                                                        }`}
-                                                >
-                                                    <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
-                                                        <div className={`p-2 rounded-full ${payBy === 'card' ? 'bg-blue-600' : 'bg-gray-100'
-                                                            }`}>
-                                                            <FaCreditCard className={`w-6 h-6 ${payBy === 'card' ? 'text-white' : 'text-gray-600'
-                                                                }`} />
-                                                        </div>
-                                                        <div className="text-left">
-                                                            <h4 className="font-medium text-gray-900">{t.checkout.payment_details.payment_types.card.name}</h4>
-                                                            <p className="text-xs text-gray-500">{t.checkout.payment_details.payment_types.card.desc}</p>
-                                                        </div>
-                                                    </div>
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        {payBy === 'card' ? (
-                                            <>
-                                                <div className={`flex items-center justify-center sm:justify-start ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'} mb-6`}>
-                                                    <img src={visa} alt="Visa" className="h-8 transition-transform hover:scale-110" />
-                                                    <img src={mastercard} alt="Mastercard" className="h-8 transition-transform hover:scale-110" />
-                                                    <img src={amex} alt="Amex" className="h-8 transition-transform hover:scale-110" />
+                                    <div className="p-6">
+                                        <div className="space-y-6">
+                                            <div className="text-center">
+                                                <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
+                                                    <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                    </svg>
                                                 </div>
+                                                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                                                    {t.checkout.verify_email.section_subtitle}
+                                                </h3>
+                                                <p className="text-sm text-gray-600 mb-4">
+                                                    {t.checkout.verify_email.description}
+                                                </p>
+                                            </div>
 
+                                            <div className="max-w-md mx-auto space-y-4">
                                                 <div className="space-y-2">
-                                                    <label htmlFor="cardNumber" className="block text-xs font-medium text-gray-700">
-                                                        {t.checkout.payment_details.payment_types.card.card_nb} <span className="text-red-500">*</span>
-                                                    </label>
-                                                    <div className="relative">
-                                                        <input
-                                                            type="text"
-                                                            id="cardNumber"
-                                                            name="cardNumber"
-                                                            value={paymentInfo.cardNumber}
-                                                            onChange={handlePaymentInfoChange}
-                                                            placeholder={detectedCardType ? getCardNumberFormat(detectedCardType) : "1234 5678 9012 3456"}
-                                                            dir="ltr"
-                                                            className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.payment?.cardNumber ? 'border-red-500' : 'border-gray-300'} ${isRTL ? 'text-right' : ''}`}
-                                                            ref={cardNumberRef}
-                                                            onKeyDown={(e) => handleStepNavigation(e, expiryDateRef)}
-                                                        />
-                                                        {detectedCardType && (
-                                                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                                                                <div className="w-8 h-5 bg-gradient-to-r from-blue-600 to-blue-700 rounded flex items-center justify-center">
-                                                                    <span className="text-white font-bold text-xs">
-                                                                        {detectedCardType === 'visa' ? 'VISA' :
-                                                                            detectedCardType === 'mastercard' ? 'MC' :
-                                                                                detectedCardType === 'amex' ? 'AMEX' : 'CARD'}
-                                                                    </span>
+                                                    {/* Creative Verification Code Input */}
+                                                    <div className="flex justify-center">
+                                                        <div
+                                                            className="flex gap-3"
+                                                            onPaste={handleVerificationPaste}
+                                                        >
+                                                            {[0, 1, 2, 3, 4, 5].map((index) => (
+                                                                <div key={index} className="relative">
+                                                                    <input
+                                                                        type="text"
+                                                                        inputMode="numeric"
+                                                                        pattern="[0-9]*"
+                                                                        maxLength={1}
+                                                                        value={verificationCode[index] || ''}
+                                                                        onChange={(e) => handleDigitChange(index, e.target.value)}
+                                                                        onKeyDown={(e) => handleDigitKeyDown(index, e)}
+                                                                        onFocus={(e) => e.target.select()}
+                                                                        ref={(el) => {
+                                                                            verificationCodeRefs.current[index] = el;
+                                                                        }}
+                                                                        className={`
+                                                                            w-12 h-12 text-center text-lg font-bold border-2 rounded-xl
+                                                                            transition-all duration-300 ease-in-out
+                                                                            focus:outline-none focus:ring-4 focus:ring-blue-500/20
+                                                                            ${verificationCode[index]
+                                                                                ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-lg shadow-blue-500/25'
+                                                                                : 'border-gray-300 bg-white text-gray-900 hover:border-blue-300'
+                                                                            }
+                                                                            ${verificationError ? 'border-red-500 bg-red-50' : ''}
+                                                                            force-white-bg
+                                                                        `}
+                                                                        placeholder=""
+                                                                        aria-label={`Digit ${index + 1} of verification code`}
+                                                                    />
+                                                                    {/* Animated underline */}
+                                                                    <div className={`
+                                                                        absolute bottom-0 left-1/2 transform -translate-x-1/2
+                                                                        w-8 h-0.5 rounded-full transition-all duration-300
+                                                                        ${verificationCode[index]
+                                                                            ? 'bg-blue-500 scale-x-100'
+                                                                            : 'bg-gray-300 scale-x-0'
+                                                                        }
+                                                                    `} />
                                                                 </div>
-                                                            </div>
-                                                        )}
+                                                            ))}
+                                                        </div>
                                                     </div>
-                                                    {errors.payment?.cardNumber && (
-                                                        <p className="text-xs text-red-600">{getErrorMessage(errors.payment.cardNumber || '')}</p>
+
+                                                    {verificationError && (
+                                                        <motion.p
+                                                            initial={{ opacity: 0, y: -10 }}
+                                                            animate={{ opacity: 1, y: 0 }}
+                                                            className="text-sm text-red-600 text-center"
+                                                        >
+                                                            {verificationError}
+                                                        </motion.p>
                                                     )}
                                                 </div>
 
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                    <div className="space-y-2">
-                                                        <label htmlFor="expiryDate" className="block text-xs font-medium text-gray-700">
-                                                            {t.checkout.payment_details.payment_types.card.expiration} <span className="text-red-500">*</span>
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            id="expiryDate"
-                                                            name="expiryDate"
-                                                            value={paymentInfo.expiryDate}
-                                                            onChange={handlePaymentInfoChange}
-                                                            placeholder="MM/YY"
-                                                            className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.payment?.expiryDate ? 'border-red-500' : 'border-gray-300'
-                                                                }`}
-                                                            ref={expiryDateRef}
-                                                            onKeyDown={(e) => handleStepNavigation(e, cvvRef)}
-                                                        />
-                                                        {errors.payment?.expiryDate && (
-                                                            <p className="text-xs text-red-600">{getErrorMessage(errors.payment.expiryDate)}</p>
-                                                        )}
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <label htmlFor="cvv" className="block text-xs font-medium text-gray-700">
-                                                            {t.checkout.payment_details.payment_types.card.cvv} <span className="text-red-500">*</span>
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            id="cvv"
-                                                            name="cvv"
-                                                            value={paymentInfo.cvv}
-                                                            onChange={handlePaymentInfoChange}
-                                                            placeholder={detectedCardType === 'amex' ? '1234' : '123'}
-                                                            className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.payment?.cvv ? 'border-red-500' : 'border-gray-300'
-                                                                }`}
-                                                            ref={cvvRef}
-                                                            onKeyDown={(e) => handleStepNavigation(e, billingCountryRef)}
-                                                        />
-                                                        {errors.payment?.cvv && (
-                                                            <p className="text-xs text-red-600">{getErrorMessage(errors.payment.cvv)}</p>
-                                                        )}
+                                                <div className="text-center space-y-4">
+                                                    <div className="relative">
+                                                        {/* Divider with text */}
+                                                        <div className="relative">
+                                                            <div className="absolute inset-0 flex items-center">
+                                                                <div className="w-full border-t border-gray-200"></div>
+                                                            </div>
+                                                            <div className="relative flex justify-center text-sm">
+                                                                <span className="px-4 bg-white text-gray-500 font-medium">
+                                                                    {t.checkout.verify_email.didnt_receive_title}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        {/* Enhanced resend button */}
+                                                        <div className="mt-6">
+                                                            <button
+                                                                type="button"
+                                                                className="group relative w-full py-4 px-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 text-blue-700 rounded-xl font-semibold hover:from-blue-100 hover:to-indigo-100 hover:border-blue-300 hover:text-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md active:scale-[0.98]"
+                                                            >
+                                                                <div className={`flex items-center justify-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
+                                                                    {/* Email icon with pulse animation */}
+                                                                    <div className="flex-shrink-0">
+                                                                        <div className="w-8 h-8 rounded-full bg-blue-100 group-hover:bg-blue-200 flex items-center justify-center transition-colors duration-300 relative">
+                                                                            <svg className="w-4 h-4 text-blue-600 group-hover:text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                                            </svg>
+                                                                            {/* Pulse ring effect */}
+                                                                            <div className="absolute inset-0 rounded-full bg-blue-400 opacity-0 group-hover:opacity-20 animate-ping"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    {/* Button text */}
+                                                                    <div className="text-left">
+                                                                        <div className="text-sm font-semibold">
+                                                                            {t.checkout.verify_email.resend_code}
+                                                                        </div>
+                                                                        <div className="text-xs text-blue-600 group-hover:text-blue-700">
+                                                                            {t.checkout.verify_email.resend_code_subtitle}
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    {/* Arrow icon with enhanced animation */}
+                                                                    <div className="flex-shrink-0">
+                                                                        <svg className={`w-4 h-4 text-blue-600 group-hover:text-blue-700 transform group-hover:translate-x-1 transition-all duration-300 ${isRTL ? 'rotate-180 group-hover:-translate-x-1' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                                        </svg>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                {/* Enhanced hover effect overlay */}
+                                                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-indigo-600/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                                                
+                                                                {/* Ripple effect on click */}
+                                                                <div className="absolute inset-0 rounded-xl overflow-hidden">
+                                                                    <div className="absolute inset-0 bg-white opacity-0 group-active:opacity-20 transition-opacity duration-150"></div>
+                                                                </div>
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        {/* Countdown timer (optional) */}
+                                                        <div className="mt-3 text-center">
+                                                            <div className="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full">
+                                                                <svg className="w-3 h-3 text-gray-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                </svg>
+                                                                <span className="text-xs text-gray-600">
+                                                                    {t.checkout.verify_email.resend_available_in} <span className="font-semibold text-gray-700">30 {t.checkout.verify_email.seconds}</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        {/* Additional help text with enhanced styling */}
+                                                        <div className="mt-4 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200 shadow-sm">
+                                                            <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
+                                                                <div className="flex-shrink-0">
+                                                                    <div className="w-6 h-6 rounded-full bg-gradient-to-r from-gray-200 to-gray-300 flex items-center justify-center shadow-sm">
+                                                                        <svg className="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                        </svg>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="text-left">
+                                                                    <p className="text-xs font-medium text-gray-700 mb-1">
+                                                                        {t.checkout.verify_email.need_help}
+                                                                    </p>
+                                                                    <p className="text-xs text-gray-600 leading-relaxed">
+                                                                        {t.checkout.verify_email.help_text}
+                                                                    </p>
+                                                                    <div className="flex flex-col sm:flex-row gap-2 text-xs">
+                                                                        <a
+                                                                            href="mailto:contact@telmeezlb.com"
+                                                                            className="inline-flex items-center text-gray-600 hover:text-gray-700 transition-colors"
+                                                                        >
+                                                                            <svg className={`w-3 h-3 ${isRTL ? 'ml-1' : 'mr-1'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                                            </svg>
+                                                                            contact@telmeezlb.com
+                                                                        </a>
+                                                                        <a
+                                                                            href="tel:+9611234567"
+                                                                            className="inline-flex items-center text-gray-600 hover:text-gray-700 transition-colors"
+                                                                        >
+                                                                            <svg className={`w-3 h-3 ${isRTL ? 'ml-1' : 'mr-1'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                                            </svg>
+                                                                            +961 1 234 567
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </>
-                                        ) : (
-                                            null
-                                        )}
+                                            </div>
+                                        </div>
                                     </div>
                                 </motion.div>
                             )}
@@ -2382,122 +2505,130 @@ const Checkout: React.FC = () => {
                                     exit={{ opacity: 0, x: 20 }}
                                     className="bg-white rounded-xl shadow-lg p-6 mb-6"
                                 >
-                                    {/* Review Section */}
+                                    {/* Payment Information Section */}
                                     <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-                                        <h2 className="text-lg font-semibold text-gray-900">{t.checkout.review.section_title}</h2>
-                                        <p className="text-sm text-gray-600 mt-1">{t.checkout.review.section_subtitle}</p>
+                                        <h2 className="text-lg font-semibold text-gray-900"> {t.checkout.payment_details.section_title}</h2>
                                     </div>
-                                    <div className="p-6 space-y-6">
-                                        {/* Account Information Review */}
-                                        <div className="space-y-4">
-                                            <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
-                                                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                                                    <FaLock className="w-4 h-4 text-blue-600" />
-                                                </div>
-                                                <h3 className="text-lg font-semibold text-gray-900">{t.checkout.account_info.title}</h3>
-                                            </div>
-                                            <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.first_name}</p>
-                                                        <p className="text-sm font-medium text-gray-900">{billingInfo.firstName} {billingInfo.lastName}</p>
+                                    <div className="p-6 space-y-4">
+                                        {/* Payment Method Selection */}
+                                        <div className="space-y-3">
+                                            <h3 className="text-sm font-medium text-gray-900">{t.checkout.payment_details.section_subtitle}</h3>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handlePayByChange('card')}
+                                                    className={`focus:outline-none p-4 rounded-xl border-2 transition-all duration-300 ${payBy === 'card'
+                                                        ? 'border-blue-600 bg-blue-50'
+                                                        : 'border-gray-200 hover:border-blue-200'
+                                                        }`}
+                                                >
+                                                    <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
+                                                        <div className={`p-2 rounded-full ${payBy === 'card' ? 'bg-blue-600' : 'bg-gray-100'
+                                                            }`}>
+                                                            <FaCreditCard className={`w-6 h-6 ${payBy === 'card' ? 'text-white' : 'text-gray-600'
+                                                                }`} />
+                                                        </div>
+                                                        <div className="text-left">
+                                                            <h4 className="font-medium text-gray-900">{t.checkout.payment_details.payment_types.card.name}</h4>
+                                                            <p className="text-xs text-gray-500">{t.checkout.payment_details.payment_types.card.desc}</p>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.email}</p>
-                                                        <p className="text-sm font-medium text-gray-900">{billingInfo.email}</p>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.phone}</p>
-                                                        <p className="text-sm font-medium text-gray-900">{billingInfo.phone}</p>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.institution}</p>
-                                                        <p className="text-sm font-medium text-gray-900">{billingInfo.institutionName || 'Not specified'}</p>
-                                                    </div>
-                                                </div>
+                                                </button>
                                             </div>
                                         </div>
 
-                                        {/* Payment Information Review */}
-                                        <div className="space-y-4">
-                                            <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
-                                                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                                                    <FaCreditCard className="w-4 h-4 text-green-600" />
+                                        {payBy === 'card' ? (
+                                            <>
+                                                <div className={`flex items-center justify-center sm:justify-start ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'} mb-6`}>
+                                                    <img src={visa} alt="Visa" className="h-8 transition-transform hover:scale-110" />
+                                                    <img src={mastercard} alt="Mastercard" className="h-8 transition-transform hover:scale-110" />
+                                                    <img src={amex} alt="Amex" className="h-8 transition-transform hover:scale-110" />
                                                 </div>
-                                                <h3 className="text-lg font-semibold text-gray-900">{t.checkout.payment_details.title}</h3>
-                                            </div>
-                                            <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.payment_details.card_type}</p>
-                                                        <p className="text-sm font-medium text-gray-900">{getCardTypeName(detectedCardType) || 'Card'}</p>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.payment_details.payment_types.card.card_nb}</p>
-                                                        <p className="text-sm font-medium text-gray-900">
-                                                            {paymentInfo.cardNumber ?
-                                                                `•••• •••• •••• ${paymentInfo.cardNumber.slice(-4)}` :
-                                                                'Not provided'
-                                                            }
-                                                        </p>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.payment_details.payment_types.card.expiration}</p>
-                                                        <p className="text-sm font-medium text-gray-900">{paymentInfo.expiryDate || 'Not provided'}</p>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.payment_details.payment_types.card.name}</p>
-                                                        <p className="text-sm font-medium text-gray-900 capitalize">{payBy}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
 
-                                        {/* Billing Address Review */}
-                                        <div className="space-y-4">
-                                            <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
-                                                <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-                                                    <FaMapMarkerAlt className="w-4 h-4 text-purple-600" />
+                                                <div className="space-y-2">
+                                                    <label htmlFor="cardNumber" className="block text-xs font-medium text-gray-700">
+                                                        {t.checkout.payment_details.payment_types.card.card_nb} <span className="text-red-500">*</span>
+                                                    </label>
+                                                    <div className="relative">
+                                                        <input
+                                                            type="text"
+                                                            id="cardNumber"
+                                                            name="cardNumber"
+                                                            value={paymentInfo.cardNumber}
+                                                            onChange={handlePaymentInfoChange}
+                                                            placeholder={detectedCardType ? getCardNumberFormat(detectedCardType) : "1234 5678 9012 3456"}
+                                                            dir="ltr"
+                                                            className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.payment?.cardNumber ? 'border-red-500' : 'border-gray-300'} ${isRTL ? 'text-right' : ''}`}
+                                                            ref={cardNumberRef}
+                                                            onKeyDown={(e) => handleStepNavigation(e, expiryDateRef)}
+                                                        />
+                                                        {detectedCardType && (
+                                                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                                                <div className="w-8 h-5 bg-gradient-to-r from-blue-600 to-blue-700 rounded flex items-center justify-center">
+                                                                    <span className="text-white font-bold text-xs">
+                                                                        {detectedCardType === 'visa' ? 'VISA' :
+                                                                            detectedCardType === 'mastercard' ? 'MC' :
+                                                                                detectedCardType === 'amex' ? 'AMEX' : 'CARD'}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    {errors.payment?.cardNumber && (
+                                                        <p className="text-xs text-red-600">{getErrorMessage(errors.payment.cardNumber || '')}</p>
+                                                    )}
                                                 </div>
-                                                <h3 className="text-lg font-semibold text-gray-900">{t.checkout.billing_address.title}</h3>
-                                            </div>
-                                            <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div className="md:col-span-2">
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.billing_address.address}</p>
-                                                        <p className="text-sm font-medium text-gray-900">
-                                                            {billingAddress.address}
-                                                            {billingAddress.address2 && <br />}
-                                                            {billingAddress.address2}
-                                                        </p>
+
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                    <div className="space-y-2">
+                                                        <label htmlFor="expiryDate" className="block text-xs font-medium text-gray-700">
+                                                            {t.checkout.payment_details.payment_types.card.expiration} <span className="text-red-500">*</span>
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            id="expiryDate"
+                                                            name="expiryDate"
+                                                            value={paymentInfo.expiryDate}
+                                                            onChange={handlePaymentInfoChange}
+                                                            placeholder="MM/YY"
+                                                            className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.payment?.expiryDate ? 'border-red-500' : 'border-gray-300'
+                                                                }`}
+                                                            ref={expiryDateRef}
+                                                            onKeyDown={(e) => handleStepNavigation(e, cvvRef)}
+                                                        />
+                                                        {errors.payment?.expiryDate && (
+                                                            <p className="text-xs text-red-600">{getErrorMessage(errors.payment.expiryDate)}</p>
+                                                        )}
                                                     </div>
-                                                    <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.city}</p>
-                                                        <p className="text-sm font-medium text-gray-900">{billingAddress.city}</p>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.state}</p>
-                                                        <p className="text-sm font-medium text-gray-900">{billingAddress.state}</p>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.zip}</p>
-                                                        <p className="text-sm font-medium text-gray-900">{billingAddress.zipCode}</p>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t.checkout.account_info.fields.country}</p>
-                                                        <p className="text-sm font-medium text-gray-900">
-                                                            {billingAddress.country === 'other'
-                                                                ? billingAddress.customCountry
-                                                                : t.countries[billingAddress.country as keyof typeof t.countries] || billingAddress.country
-                                                            }
-                                                        </p>
+                                                    <div className="space-y-2">
+                                                        <label htmlFor="cvv" className="block text-xs font-medium text-gray-700">
+                                                            {t.checkout.payment_details.payment_types.card.cvv} <span className="text-red-500">*</span>
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            id="cvv"
+                                                            name="cvv"
+                                                            value={paymentInfo.cvv}
+                                                            onChange={handlePaymentInfoChange}
+                                                            placeholder={detectedCardType === 'amex' ? '1234' : '123'}
+                                                            className={`focus:outline-none w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 force-white-bg ${errors.payment?.cvv ? 'border-red-500' : 'border-gray-300'
+                                                                }`}
+                                                            ref={cvvRef}
+                                                            onKeyDown={(e) => handleStepNavigation(e, billingCountryRef)}
+                                                        />
+                                                        {errors.payment?.cvv && (
+                                                            <p className="text-xs text-red-600">{getErrorMessage(errors.payment.cvv)}</p>
+                                                        )}
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            </>
+                                        ) : (
+                                            null
+                                        )}
                                     </div>
                                 </motion.div>
                             )}
+
                         </AnimatePresence>
                     </div>
 
@@ -2962,10 +3093,9 @@ const Checkout: React.FC = () => {
                                                 <button
                                                     type="button"
                                                     onClick={handleApplyPromo}
-                                                    disabled={isValidatingPromo}
                                                     className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                                 >
-                                                    {isValidatingPromo ? t.checkout.summary.validating : t.checkout.summary.apply}
+                                                    {t.checkout.summary.apply}
                                                 </button>
                                             </div>
                                             {promoError && (
@@ -3060,10 +3190,9 @@ const Checkout: React.FC = () => {
                                             )}
                                             <button
                                                 type="submit"
-                                                disabled={isSubmittingCheckout}
                                                 className="w-full py-3 px-4 rounded-lg text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
-                                                {isSubmittingCheckout ? 'Processing...' : (currentStep < 4 ? t.checkout.summary.continue : t.checkout.summary.activate)}
+                                                {currentStep === 4 ? t.checkout.summary.activate : t.checkout.summary.continue}
                                             </button>
                                         </div>
                                         <p className="text-xs text-gray-500 text-center mt-3">

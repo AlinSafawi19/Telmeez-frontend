@@ -556,6 +556,19 @@ export const ar = {
             section_title: "راجع معلوماتك",
             section_subtitle: "يرجى مراجعة جميع معلوماتك قبل المتابعة مع الدفع"
         },
+        verify_email: {
+            title: "التحقق من البريد الإلكتروني",
+            section_title: "التحقق من البريد الإلكتروني",
+            section_subtitle: "لقد أرسلنا رمز التحقق 6-رقمي إلى عنوان بريدك الإلكتروني",
+            description: "يرجى التحقق من بريدك الإلكتروني وإدخال رمز التحقق أدناه لإكمال التسجيل.",
+            resend_code: "إعادة إرسال الرمز",
+            need_help: "هل تحتاج مساعدة؟",
+            help_text: "تحقق من مجلد الرسائل غير المرغوب فيها أو اتصل بالدعم إذا استمرت المشكلة.",
+            didnt_receive_title: "لم تستلم الرمز؟",
+            resend_code_subtitle: "اضغط لإرسال رمز تحقق جديد",
+            resend_available_in: "إعادة الإرسال متاحة في",
+            seconds: "ثوان"
+        },
         legal: {
             terms: "الشروط والأحكام",
             privacy: "سياسة الخصوصية",
@@ -581,6 +594,7 @@ export const ar = {
             back: "رجوع",
             continue: "متابعة",
             activate: "تفعيل",
+            verifying: "يتم التحقق...",
             free_trial: {
                 thirty_days: "تجربة مجانية لمدة 30 يوم",
                 seven_days: "تجربة مجانية لمدة 7 أيام",

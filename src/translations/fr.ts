@@ -543,6 +543,19 @@ export const fr = {
             section_title: "Révisez vos informations",
             section_subtitle: "Veuillez réviser toutes vos informations avant de procéder au paiement"
         },
+        verify_email: {
+            title: "Vérifier l'Email",
+            section_title: "Vérification de l'Email",
+            section_subtitle: "Nous avons envoyé un code de vérification 6-chiffres à votre adresse email",
+            description: "Veuillez vérifier votre email et entrer le code de vérification ci-dessous pour compléter votre inscription.",
+            resend_code: "Renvoyer le Code",
+            need_help: "Besoin d'aide ?",
+            help_text: "Vérifiez votre dossier spam ou contactez le support si vous continuez à avoir des problèmes.",
+            didnt_receive_title: "Vous n'avez pas reçu le code ?",
+            resend_code_subtitle: "Cliquez pour envoyer un nouveau code de vérification",
+            resend_available_in: "Renvoyer disponible dans",
+            seconds: "secondes"
+        },
         legal: {
             terms: "Conditions d'utilisation",
             privacy: "Politique de confidentialité",
@@ -568,6 +581,7 @@ export const fr = {
             back: "Retour",
             continue: "Continuer",
             activate: "Activer",
+            verifying: "Vérification en cours...",
             free_trial: {
                 thirty_days: "Essai gratuit de 30 jours",
                 seven_days: "Essai gratuit de 7 jours",
