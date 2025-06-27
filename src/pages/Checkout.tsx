@@ -507,7 +507,6 @@ const Checkout: React.FC = () => {
         if (currentStep === 2 && !isEmailVerified && !hasNavigatedBack) {
             const expireTimer = setTimeout(() => {
                 setCodeExpired(true);
-                setVerificationError('Verification code has expired. Please request a new one.');
             }, 10 * 60 * 1000); // 10 minutes
 
             return () => clearTimeout(expireTimer);
