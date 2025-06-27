@@ -570,7 +570,22 @@ export const en = {
             didnt_receive_title: "Didn't receive the code?",
             resend_code_subtitle: "Click to send a new verification code",
             resend_available_in: "Resend available in",
-            seconds: "seconds"
+            seconds: "seconds",
+            email_verified: "Email Verified!",
+            email_verified_description: "Your email has been successfully verified. Thank you!",
+            verify_code: "Verify Code",
+            new_code_sent: "New verification code sent!",
+            check_email_inbox: "Check your email inbox and spam folder",
+            code_expired: "Code Expired",
+            code_expired_description: "Your verification code has expired. Please request a new one.",
+            help_text_2: "Check your spam folder or contact support if you continue to have issues.",
+            help_text_3: "Make sure you entered the correct email address",
+            still_having_issues: "Still having issues? Contact our support team:",
+            please_enter_the_complete_6_digit_code: "Please enter the complete 6-digit code",
+            invalid_verification_code: "Invalid verification code",
+            request_timeout: "Request timeout. Please try again.",
+            failed_to_verify_code: "Failed to verify code. Please try again.",
+            please_verify_your_email_first: "Please verify your email first"
         },
         legal: {
             terms: "Terms & Conditions",

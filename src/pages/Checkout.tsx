@@ -525,12 +525,12 @@ const Checkout: React.FC = () => {
         try {
             setVerificationError('');
             if (verificationCode.length !== 6) {
-                setVerificationError('Please enter the complete 6-digit code');
+                setVerificationError(t.checkout.verify_email.please_enter_the_complete_6_digit_code);
                 return;
             }
 
             if (codeExpired) {
-                setVerificationError('This code has expired. Please request a new one.');
+                setVerificationError(t.checkout.verify_email.code_expired_description);
                 return;
             }
 
@@ -556,7 +556,7 @@ const Checkout: React.FC = () => {
                 setResendTimer(0);
             } else {
                 setVerificationAttempts(prev => prev + 1);
-                setVerificationError(data.message || 'Invalid verification code');
+                setVerificationError(t.checkout.verify_email.invalid_verification_code);
 
                 // Show troubleshooting after 3 failed attempts
                 if (verificationAttempts >= 2) {
@@ -565,9 +565,9 @@ const Checkout: React.FC = () => {
             }
         } catch (error: any) {
             if (error.name === 'AbortError') {
-                setVerificationError('Request timeout. Please try again.');
+                setVerificationError(t.checkout.verify_email.request_timeout);
             } else {
-                setVerificationError('Failed to verify code. Please try again.');
+                setVerificationError(t.checkout.verify_email.failed_to_verify_code);
             }
         }
     };
@@ -996,7 +996,7 @@ const Checkout: React.FC = () => {
         } else if (currentStep === 2) {
             // Step 2 is email verification - require verification before proceeding
             if (!isEmailVerified) {
-                setVerificationError('Please verify your email first');
+                setVerificationError(t.checkout.verify_email.please_verify_your_email_first);
                 return;
             }
         } else if (currentStep === 3) {
@@ -2236,8 +2236,8 @@ const Checkout: React.FC = () => {
                                                             <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="#d1fae5" />
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2l4-4" stroke="#10b981" />
                                                         </svg>
-                                                        <h3 className="text-2xl font-bold text-green-700 z-20">Email Verified!</h3>
-                                                        <p className="text-md text-green-600 z-20">Your email has been successfully verified. Thank you!</p>
+                                                        <h3 className="text-2xl font-bold text-green-700 z-20">{t.checkout.verify_email.email_verified}</h3>
+                                                        <p className="text-md text-green-600 z-20">{t.checkout.verify_email.email_verified_description}</p>
                                                     </div>
                                                 ) : (
                                                     <div className="space-y-4">
@@ -2268,7 +2268,7 @@ const Checkout: React.FC = () => {
                                                                     disabled={verificationCode.length !== 6 || codeExpired}
                                                                     className="mt-2 px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                                                 >
-                                                                    Verify Code
+                                                                    {t.checkout.verify_email.verify_code}
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -2278,12 +2278,12 @@ const Checkout: React.FC = () => {
                                                             <div className="text-sm text-gray-600 min-h-[32px] flex items-center justify-center">
                                                                 {resendTimer > 0 ? (
                                                                     <span className="text-gray-600">
-                                                                        Resend available in <span className="text-blue-600 font-bold">{resendTimer} seconds</span>
+                                                                        {t.checkout.verify_email.resend_available_in} <span className="text-blue-600 font-bold">{resendTimer} {t.checkout.verify_email.seconds}</span>
                                                                     </span>
                                                                 ) : (
                                                                     <div className="flex items-center gap-2">
                                                                         <span className="text-gray-600">
-                                                                            Didn't receive the code?
+                                                                            {t.checkout.verify_email.didnt_receive_title}
                                                                         </span>
                                                                         <button
                                                                             type="button"
@@ -2291,7 +2291,7 @@ const Checkout: React.FC = () => {
                                                                             disabled={resendTimer > 0}
                                                                             className="text-blue-600 hover:text-blue-700 font-medium hover:underline focus:outline-none transition-colors p-0 m-0 border-none bg-transparent"
                                                                         >
-                                                                            Resend Code
+                                                                            {t.checkout.verify_email.resend_code}
                                                                         </button>
                                                                     </div>
                                                                 )}
@@ -2315,10 +2315,10 @@ const Checkout: React.FC = () => {
                                                                         </div>
                                                                         <div className="ml-3">
                                                                             <p className="text-sm font-medium text-green-800">
-                                                                                New verification code sent!
+                                                                                {t.checkout.verify_email.new_code_sent}
                                                                             </p>
                                                                             <p className="text-xs text-green-600">
-                                                                                Check your email inbox and spam folder
+                                                                                {t.checkout.verify_email.check_email_inbox}
                                                                             </p>
                                                                         </div>
                                                                     </div>
@@ -2348,14 +2348,14 @@ const Checkout: React.FC = () => {
                                                                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                                     </svg>
-                                                                    Code Expired
+                                                                    {t.checkout.verify_email.code_expired}
                                                                 </div>
-                                                                <p>Your verification code has expired. Please request a new one.</p>
+                                                                <p>{t.checkout.verify_email.code_expired_description}</p>
                                                             </motion.div>
                                                         )}
 
                                                         {/* Troubleshooting Section */}
-                                                        {showTroubleshooting && (
+                                                        {showTroubleshooting ? (
                                                             <motion.div
                                                                 initial={{ opacity: 0, y: -10 }}
                                                                 animate={{ opacity: 1, y: 0 }}
@@ -2365,27 +2365,27 @@ const Checkout: React.FC = () => {
                                                                     <svg className="w-4 h-4 mr-2 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                                     </svg>
-                                                                    Having trouble?
+                                                                    {t.checkout.verify_email.need_help}
                                                                 </h4>
 
                                                                 <div className="space-y-2 text-sm text-gray-700">
                                                                     <div className="flex items-start">
                                                                         <span className="text-blue-600 font-medium mr-2">1.</span>
-                                                                        <span>Check your spam/junk folder</span>
+                                                                        <span>{t.checkout.verify_email.help_text}</span>
                                                                     </div>
                                                                     <div className="flex items-start">
                                                                         <span className="text-blue-600 font-medium mr-2">2.</span>
-                                                                        <span>Make sure you entered the correct email address</span>
+                                                                        <span>{t.checkout.verify_email.help_text_2}</span>
                                                                     </div>
                                                                     <div className="flex items-start">
                                                                         <span className="text-blue-600 font-medium mr-2">3.</span>
-                                                                        <span>Wait a few minutes and try resending the code</span>
+                                                                        <span>{t.checkout.verify_email.help_text_3}</span>
                                                                     </div>
                                                                 </div>
 
                                                                 <div className="pt-3 border-t border-gray-200">
                                                                     <p className="text-xs text-gray-600 mb-2">
-                                                                        Still having issues? Contact our support team:
+                                                                        {t.checkout.verify_email.still_having_issues}
                                                                     </p>
                                                                     <div className="flex flex-col sm:flex-row gap-2 text-xs">
                                                                         <a
@@ -2409,9 +2409,7 @@ const Checkout: React.FC = () => {
                                                                     </div>
                                                                 </div>
                                                             </motion.div>
-                                                        )}
-
-                                                        {/* General Help Section */}
+                                                        ):(
                                                         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                                                             <div className="flex items-start">
                                                                 <div className="flex-shrink-0">
@@ -2421,10 +2419,10 @@ const Checkout: React.FC = () => {
                                                                 </div>
                                                                 <div className="ml-3">
                                                                     <h4 className="text-sm font-medium text-blue-900 mb-1">
-                                                                        Need help?
+                                                                        {t.checkout.verify_email.need_help}
                                                                     </h4>
                                                                     <p className="text-xs text-blue-700 mb-2">
-                                                                        Check your email inbox and spam folder. If you still haven't received the code, contact our support team.
+                                                                        {t.checkout.verify_email.help_text_2}
                                                                     </p>
                                                                     <div className="flex flex-col sm:flex-row gap-2 text-xs">
                                                                         <a
@@ -2449,6 +2447,7 @@ const Checkout: React.FC = () => {
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        )}
                                                     </div>
                                                 )}
                                             </div>

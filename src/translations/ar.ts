@@ -567,7 +567,22 @@ export const ar = {
             didnt_receive_title: "لم تستلم الرمز؟",
             resend_code_subtitle: "اضغط لإرسال رمز تحقق جديد",
             resend_available_in: "إعادة الإرسال متاحة في",
-            seconds: "ثوان"
+            seconds: "ثوان",
+            email_verified: "تم التحقق من البريد الإلكتروني!",
+            email_verified_description: "تم التحقق من البريد الإلكتروني بنجاح. شكراً لك!",
+            verify_code: "التحقق من الرمز",
+            new_code_sent: "تم إرسال رمز التحقق الجديد!",
+            check_email_inbox: "تحقق من مجلد البريد الإلكتروني ومجلد الرسائل غير المرغوب فيها",
+            code_expired: "رمز التحقق منتهي الصلاحية",
+            code_expired_description: "رمز التحقق الخاص بك منتهي الصلاحية. يرجى طلب رمز جديد.",
+            help_text_2: "تحقق من مجلد الرسائل غير المرغوب فيها أو اتصل بالدعم إذا استمرت المشكلة.",
+            help_text_3: "تأكد من أنك أدخلت عنوان البريد الإلكتروني الصحيح",
+            still_having_issues: "لا تزال لديك مشكلات؟ اتصل بفريق الدعم:",
+            please_enter_the_complete_6_digit_code: "يرجى إدخال رمز التحقق الكامل",
+            invalid_verification_code: "رمز التحقق غير صالح",
+            request_timeout: "انتهت مهلة الطلب. يرجى المحاولة مرة أخرى.",
+            failed_to_verify_code: "فشل في التحقق من رمز التحقق. يرجى المحاولة مرة أخرى.",
+            please_verify_your_email_first: "يرجى التحقق من البريد الإلكتروني أولاً"
         },
         legal: {
             terms: "الشروط والأحكام",

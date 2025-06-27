@@ -554,7 +554,22 @@ export const fr = {
             didnt_receive_title: "Vous n'avez pas reçu le code ?",
             resend_code_subtitle: "Cliquez pour envoyer un nouveau code de vérification",
             resend_available_in: "Renvoyer disponible dans",
-            seconds: "secondes"
+            seconds: "secondes",
+            email_verified: "Email Vérifié !",
+            email_verified_description: "Votre email a été vérifié avec succès. Merci !",
+            verify_code: "Vérifier le Code",
+            new_code_sent: "Nouveau code de vérification envoyé !",
+            check_email_inbox: "Vérifiez votre boîte de réception et votre dossier spam",
+            code_expired: "Code Expiré",
+            code_expired_description: "Votre code de vérification a expiré. Veuillez en demander un nouveau.",
+            help_text_2: "Vérifiez votre dossier spam/junk",
+            help_text_3: "Assurez-vous que vous avez entré l'adresse e-mail correcte",
+            still_having_issues: "Vous avez encore des problèmes ? Contactez notre équipe de support :",
+            please_enter_the_complete_6_digit_code: "Veuillez entrer le code de vérification complet",
+            invalid_verification_code: "Code de vérification invalide",
+            request_timeout: "Temps d'attente de la requête. Veuillez réessayer.",
+            failed_to_verify_code: "Échec de la vérification du code. Veuillez réessayer.",
+            please_verify_your_email_first: "Veuillez vérifier votre email d'abord"
         },
         legal: {
             terms: "Conditions d'utilisation",
