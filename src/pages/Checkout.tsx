@@ -826,25 +826,25 @@ const Checkout: React.FC = () => {
                 } else if (data.message === t.checkout.server_errors.checkout_error) {
                     setApiErrorKey('server_checkout_error');
                 } else if (data.message === t.checkout.server_errors.promo_code_required) {
-                    setApiErrorKey('server_promo_code_required');
+                    setPromoErrorKey('server_promo_code_required');
                 } else if (data.message === t.checkout.server_errors.invalid_promo_code) {
-                    setApiErrorKey('server_invalid_promo_code');
+                    setPromoErrorKey('server_invalid_promo_code');
                 } else if (data.message === t.checkout.server_errors.promo_code_not_valid_yet) {
-                    setApiErrorKey('server_promo_code_not_valid_yet');
+                    setPromoErrorKey('server_promo_code_not_valid_yet');
                 } else if (data.message === t.checkout.server_errors.promo_code_expired) {
-                    setApiErrorKey('server_promo_code_expired');
+                    setPromoErrorKey('server_promo_code_expired');
                 } else if (data.message === t.checkout.server_errors.promo_code_first_time_only) {
-                    setApiErrorKey('server_promo_code_first_time_only');
+                    setPromoErrorKey('server_promo_code_first_time_only');
                 } else if (data.message === t.checkout.server_errors.email_required_for_promo) {
-                    setApiErrorKey('server_email_required_for_promo');
+                    setPromoErrorKey('server_email_required_for_promo');
                 } else if (data.message === t.checkout.server_errors.validation_error) {
-                    setApiErrorKey('server_validation_error');
+                    setPromoErrorKey('server_validation_error');
                 } else if (data.message === t.checkout.server_errors.general_error) {
-                    setApiErrorKey('server_general_error');
+                    setPromoErrorKey('server_general_error');
                 } else if (data.message === t.checkout.server_errors.super_admin_role_not_found) {
                     setApiErrorKey('server_super_admin_role_not_found');
                 } else {
-                    setApiErrorKey('server_general_error');
+                    setPromoErrorKey('server_general_error');
                 }
 
                 // Handle validation errors from backend
@@ -924,7 +924,7 @@ const Checkout: React.FC = () => {
                 }
 
                 // If we reach here, set a fallback error
-                setApiErrorKey('server_general_error');
+                setPromoErrorKey('server_general_error');
 
                 // Scroll to error message
                 setTimeout(() => {
@@ -937,7 +937,7 @@ const Checkout: React.FC = () => {
         } catch (error: any) {
             console.error('Checkout error:', error)
 
-            setApiErrorKey('server_general_error');
+            setPromoErrorKey('server_general_error');
 
             // Scroll to error message
             setTimeout(() => {
