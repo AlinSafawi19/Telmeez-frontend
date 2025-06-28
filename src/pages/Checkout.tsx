@@ -491,7 +491,7 @@ const Checkout: React.FC = () => {
 
     // Timer effect for resend functionality
     useEffect(() => {
-        let interval: number;
+        let interval: NodeJS.Timeout;
         if (resendTimer > 0) {
             interval = setInterval(() => {
                 setResendTimer(prev => {
