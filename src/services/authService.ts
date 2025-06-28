@@ -118,9 +118,9 @@ class AuthService {
   }
 
   // Set token (not used with cookie-based auth)
-  setToken(token: string): void {
+  /*setToken(token: string): void {
     // Not used with cookie-based authentication
-  }
+  }*/
 }
 
 export const authService = new AuthService();

@@ -21,7 +21,7 @@ import {
 import '../Landing.css';
 import LoadingOverlay from '../components/LoadingOverlay';
 
-interface User {
+/*interface User {
     _id: string;
     firstName: string;
     lastName: string;
@@ -36,7 +36,7 @@ interface User {
     isActive: boolean;
     lastLogin?: Date;
     createdAt: Date;
-}
+}*/
 
 interface Subscription {
     _id: string;
@@ -99,7 +99,7 @@ const Dashboard: React.FC = () => {
     const profileDropdownRef = useRef<HTMLDivElement>(null);
 
     // State management
-    const [subscription, setSubscription] = useState<Subscription | null>(subscriptionData || null);
+    //const [subscription, setSubscription] = useState<Subscription | null>(subscriptionData || null);
     const [isLoading, setIsLoading] = useState(true);
     const [isLanguageChanging, setIsLanguageChanging] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
@@ -146,7 +146,7 @@ const Dashboard: React.FC = () => {
             
             // Process subscription data if available
             if (subscriptionData) {
-                const processedSubscription = {
+                /*const processedSubscription = {
                     ...subscriptionData,
                     _id: subscriptionData._id,
                     planId: subscriptionData.planId,
@@ -158,8 +158,8 @@ const Dashboard: React.FC = () => {
                     nextBillingDate: subscriptionData.nextBillingDate,
                     amount: subscriptionData.amount,
                     currency: subscriptionData.currency
-                };
-                setSubscription(processedSubscription);
+                };*/
+                //setSubscription(processedSubscription);
             }
         }
     }, [authLoading, subscriptionData]);
