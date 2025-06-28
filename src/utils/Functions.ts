@@ -27,3 +27,30 @@ export const translateNewsletterError = (serverMessage: string, translations: an
 
     return errorMapping[serverMessage] || serverMessage;
 };
+
+// Remember Me utility functions
+export const getRememberMePreference = (): boolean => {
+    try {
+        const saved = localStorage.getItem('rememberMe');
+        return saved ? JSON.parse(saved) : false;
+    } catch (error) {
+        console.error('Error reading remember me preference:', error);
+        return false;
+    }
+};
+
+export const setRememberMePreference = (value: boolean): void => {
+    try {
+        localStorage.setItem('rememberMe', JSON.stringify(value));
+    } catch (error) {
+        console.error('Error saving remember me preference:', error);
+    }
+};
+
+export const clearRememberMePreference = (): void => {
+    try {
+        localStorage.removeItem('rememberMe');
+    } catch (error) {
+        console.error('Error clearing remember me preference:', error);
+    }
+};

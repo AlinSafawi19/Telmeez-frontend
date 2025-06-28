@@ -1,22 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import signinsvg from '../assets/images/signin-illustration.svg';
 import logo from '../assets/images/logo.png';
-import { FaHome } from 'react-icons/fa';
+import { FaHome, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useNavigate, Link } from 'react-router-dom';
 import { translations } from '../translations';
 import type { Language } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { LANGUAGES, getLanguageDirection } from '../constants/languages';
+import { getRememberMePreference, setRememberMePreference } from '../utils/Functions';
 import '../Landing.css';
 import LoadingOverlay from '../components/LoadingOverlay';
 
 const SignIn: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [rememberMe, setRememberMe] = useState(false);
+    const [rememberMe, setRememberMe] = useState(() => {
+        // Load remember me preference from localStorage
+        return getRememberMePreference();
+    });
     const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
     const navigate = useNavigate();
     const { currentLanguage, setCurrentLanguage } = useLanguage();
@@ -87,10 +92,11 @@ const SignIn: React.FC = () => {
         // Attempt to sign in
         try {
             setIsLoading(true);
-            await signIn({ email, password });
+            await signIn({ email, password, rememberMe });
             
-            // If remember me is checked, the token is already stored in localStorage
-            // If not checked, we could implement session storage instead
+            // The remember me functionality is handled by the backend through cookie expiry times
+            // When rememberMe is true, cookies have longer expiry (7 days for access, 30 days for refresh)
+            // When rememberMe is false, cookies have shorter expiry (1 hour for access, 7 days for refresh)
             
             // Navigate to dashboard on success
             navigate('/dashboard');
@@ -285,6 +291,15 @@ const SignIn: React.FC = () => {
                                             setErrors(prev => ({ ...prev, general: undefined }));
                                         }
                                     }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            const passwordInput = document.getElementById('password') as HTMLInputElement;
+                                            if (passwordInput) {
+                                                passwordInput.focus();
+                                            }
+                                        }
+                                    }}
                                 />
                                 {errors.email && (
                                     <p className="mt-1 text-sm text-red-600">{errors.email}</p>
@@ -294,24 +309,37 @@ const SignIn: React.FC = () => {
                                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                                     {t.password}
                                 </label>
-                                <input
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    autoComplete="current-password"
-                                    className={`appearance-none relative block w-full px-3 py-3 border rounded-lg force-white-bg ${errors.password ? 'border-red-500' : 'border-gray-300'} placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-base`}
-                                    placeholder={t.password}
-                                    value={password}
-                                    onChange={(e) => {
-                                        setPassword(e.target.value);
-                                        if (errors.password) {
-                                            setErrors(prev => ({ ...prev, password: undefined }));
-                                        }
-                                        if (errors.general) {
-                                            setErrors(prev => ({ ...prev, general: undefined }));
-                                        }
-                                    }}
-                                />
+                                <div className="relative">
+                                    <input
+                                        id="password"
+                                        name="password"
+                                        type={showPassword ? 'text' : 'password'}
+                                        autoComplete="current-password"
+                                        className={`appearance-none relative block w-full px-3 py-3 border rounded-lg force-white-bg ${errors.password ? 'border-red-500' : 'border-gray-300'} placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-base`}
+                                        placeholder={t.password}
+                                        value={password}
+                                        onChange={(e) => {
+                                            setPassword(e.target.value);
+                                            if (errors.password) {
+                                                setErrors(prev => ({ ...prev, password: undefined }));
+                                            }
+                                            if (errors.general) {
+                                                setErrors(prev => ({ ...prev, general: undefined }));
+                                            }
+                                        }}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none border-none bg-transparent"
+                                    >
+                                        {showPassword ? (
+                                            <FaEye className="w-5 h-5" />
+                                        ) : (
+                                            <FaEyeSlash className="w-5 h-5" />
+                                        )}
+                                    </button>
+                                </div>
                                 {errors.password && (
                                     <p className="mt-1 text-sm text-red-600">{errors.password}</p>
                                 )}
@@ -326,7 +354,12 @@ const SignIn: React.FC = () => {
                                     type="checkbox"
                                     className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded force-white-bg"
                                     checked={rememberMe}
-                                    onChange={(e) => setRememberMe(e.target.checked)}
+                                    onChange={(e) => {
+                                        const checked = e.target.checked;
+                                        setRememberMe(checked);
+                                        // Save remember me preference to localStorage
+                                        setRememberMePreference(checked);
+                                    }}
                                 />
                                 <label htmlFor="remember-me" className={`${currentLanguage === 'ar' ? 'mr-2' : 'ml-2'} block text-sm text-gray-900`}>
                                     {t.remember_me}

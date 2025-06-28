@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import authService from '../services/authService';
 import type { UserProfile, SignInCredentials } from '../services/authService';
+import { clearRememberMePreference } from '../utils/Functions';
 
 interface AuthContextType {
   user: UserProfile | null;
@@ -69,6 +70,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.error('Sign out error:', error);
     } finally {
       setUser(null);
+      // Clear remember me preference when signing out
+      clearRememberMePreference();
     }
   };
 
