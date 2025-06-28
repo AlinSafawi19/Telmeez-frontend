@@ -6,6 +6,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { translations } from '../translations';
 import type { Language } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import { LANGUAGES, getLanguageDirection } from '../constants/languages';
 import '../Landing.css';
 import LoadingOverlay from '../components/LoadingOverlay';
@@ -16,11 +17,19 @@ const SignIn: React.FC = () => {
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
-    const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+    const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
     const navigate = useNavigate();
     const { currentLanguage, setCurrentLanguage } = useLanguage();
+    const { signIn, isAuthenticated } = useAuth();
     const t = translations[currentLanguage].header;
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // Redirect if already authenticated
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/dashboard');
+        }
+    }, [isAuthenticated, navigate]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -57,7 +66,7 @@ const SignIn: React.FC = () => {
         }
     }, [currentLanguage, t.signin_errors]);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         // Reset errors
@@ -73,6 +82,40 @@ const SignIn: React.FC = () => {
         if (!password) {
             setErrors(prev => ({ ...prev, password: t.signin_errors.password_required }));
             return;
+        }
+
+        // Attempt to sign in
+        try {
+            setIsLoading(true);
+            await signIn({ email, password });
+            
+            // If remember me is checked, the token is already stored in localStorage
+            // If not checked, we could implement session storage instead
+            
+            // Navigate to dashboard on success
+            navigate('/dashboard');
+        } catch (error: any) {
+            console.error('Sign in error:', error);
+            
+            // Handle specific error messages
+            if (error.message.includes('Invalid email or password')) {
+                setErrors(prev => ({ 
+                    ...prev, 
+                    general: t.signin_errors.invalid_credentials || 'Invalid email or password' 
+                }));
+            } else if (error.message.includes('Account is deactivated')) {
+                setErrors(prev => ({ 
+                    ...prev, 
+                    general: t.signin_errors.account_deactivated || 'Account is deactivated. Please contact support.' 
+                }));
+            } else {
+                setErrors(prev => ({ 
+                    ...prev, 
+                    general: t.signin_errors.general_error || 'An error occurred during sign in. Please try again.' 
+                }));
+            }
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -212,6 +255,13 @@ const SignIn: React.FC = () => {
                         </p>
                     </div>
 
+                    {/* General error message */}
+                    {errors.general && (
+                        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                            <p className="text-sm text-red-600">{errors.general}</p>
+                        </div>
+                    )}
+
                     <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
                         <div className="space-y-4">
                             <div>
@@ -230,6 +280,9 @@ const SignIn: React.FC = () => {
                                         setEmail(e.target.value);
                                         if (errors.email) {
                                             setErrors(prev => ({ ...prev, email: undefined }));
+                                        }
+                                        if (errors.general) {
+                                            setErrors(prev => ({ ...prev, general: undefined }));
                                         }
                                     }}
                                 />
@@ -253,6 +306,9 @@ const SignIn: React.FC = () => {
                                         setPassword(e.target.value);
                                         if (errors.password) {
                                             setErrors(prev => ({ ...prev, password: undefined }));
+                                        }
+                                        if (errors.general) {
+                                            setErrors(prev => ({ ...prev, general: undefined }));
                                         }
                                     }}
                                 />
@@ -291,9 +347,20 @@ const SignIn: React.FC = () => {
                         <div>
                             <button
                                 type="submit"
-                                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+                                disabled={isLoading}
+                                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {t.signin}
+                                {isLoading ? (
+                                    <div className="flex items-center">
+                                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        {t.signing_in || 'Signing in...'}
+                                    </div>
+                                ) : (
+                                    t.signin
+                                )}
                             </button>
                         </div>
                     </form>

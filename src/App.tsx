@@ -9,23 +9,26 @@ import Checkout from './pages/Checkout';
 import Dashboard from './pages/Dashboard';
 import Unsubscribe from './pages/Unsubscribe';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { AuthProvider } from './contexts/AuthContext';
 import Landing from './pages/Landing';
 
 const App: React.FC = () => {
   return (
     <LanguageProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Navigate to="/coming-soon" replace />} />
-          <Route path="/landing" element={<Landing />} />
-          <Route path="/coming-soon" element={<ComingSoon />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/unsubscribe" element={<Unsubscribe />} />
-        </Routes>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Navigate to="/coming-soon" replace />} />
+            <Route path="/landing" element={<Landing />} />
+            <Route path="/coming-soon" element={<ComingSoon />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/unsubscribe" element={<Unsubscribe />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </LanguageProvider>
   );
 };

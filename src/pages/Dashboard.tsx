@@ -4,6 +4,7 @@ import { translations } from '../translations';
 import type { Language } from '../translations';
 import { LANGUAGES, getLanguageDirection } from '../constants/languages';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import logo from "../assets/images/logo.png";
 import {
@@ -25,7 +26,10 @@ interface User {
     firstName: string;
     lastName: string;
     email: string;
-    role: 'superadmin' | 'admin' | 'teacher' | 'student' | 'parent';
+    role: {
+        _id: string;
+        role: string;
+    };
     institutionName: string;
     phone: string;
     avatar?: string;
@@ -82,11 +86,11 @@ const Dashboard: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { currentLanguage, setCurrentLanguage } = useLanguage();
+    const { user: authUser, isLoading: authLoading, signOut } = useAuth();
     const t = translations[currentLanguage];
     const isRTL = currentLanguage === 'ar';
 
-    // Get user and subscription data from navigation state
-    const userData = location.state?.user as User;
+    // Get subscription data from navigation state (if any)
     const subscriptionData = location.state?.subscription as Subscription;
 
     // Refs for language dropdown
@@ -95,7 +99,6 @@ const Dashboard: React.FC = () => {
     const profileDropdownRef = useRef<HTMLDivElement>(null);
 
     // State management
-    const [user, setUser] = useState<User | null>(userData || null);
     const [subscription, setSubscription] = useState<Subscription | null>(subscriptionData || null);
     const [isLoading, setIsLoading] = useState(true);
     const [isLanguageChanging, setIsLanguageChanging] = useState(false);
@@ -136,71 +139,45 @@ const Dashboard: React.FC = () => {
         setActiveDropdown(null);
     }, [currentLanguage]);
 
-    // Mock data for demonstration
+    // Handle authentication state
     useEffect(() => {
-        // Debug: Log the received user and subscription data
-        console.log('Dashboard: Received user data:', user);
-        console.log('Dashboard: Received subscription data:', subscription);
-
-        // Simulate loading
-        const timer = setTimeout(() => {
+        if (!authLoading) {
             setIsLoading(false);
-
-            // Set mock user data if not provided
-            if (!user) {
-                // handle demo data
-            } else {
-                // Handle user data from backend (convert id to _id if needed)
-                const processedUser = {
-                    ...user,
-                    _id: user._id,
-                    role: user.role,
-                    institutionName: user.institutionName,
-                    phone: user.phone,
-                    isActive: user.isActive !== undefined ? user.isActive : true,
-                    lastLogin: user.lastLogin || undefined,
-                    createdAt: user.createdAt ? new Date(user.createdAt) : new Date()
-                };
-                console.log('Dashboard: Processed user data:', processedUser);
-                setUser(processedUser);
-            }
-
-            // Set mock subscription data if not provided
-            if (!subscription) {
-                // handle demo data
-            } else {
-                // Handle subscription data from backend (convert id to _id if needed)
+            
+            // Process subscription data if available
+            if (subscriptionData) {
                 const processedSubscription = {
-                    ...subscription,
-                    _id: subscription._id,
-                    planId: subscription.planId,
-                    planName: subscription.planName,
-                    billingCycle: subscription.billingCycle,
-                    status: subscription.status,
-                    startDate: subscription.startDate,
-                    endDate: subscription.endDate,
-                    nextBillingDate: subscription.nextBillingDate,
-                    amount: subscription.amount,
-                    currency: subscription.currency
+                    ...subscriptionData,
+                    _id: subscriptionData._id,
+                    planId: subscriptionData.planId,
+                    planName: subscriptionData.planName,
+                    billingCycle: subscriptionData.billingCycle,
+                    status: subscriptionData.status,
+                    startDate: subscriptionData.startDate,
+                    endDate: subscriptionData.endDate,
+                    nextBillingDate: subscriptionData.nextBillingDate,
+                    amount: subscriptionData.amount,
+                    currency: subscriptionData.currency
                 };
                 setSubscription(processedSubscription);
             }
-        }, 1000);
+        }
+    }, [authLoading, subscriptionData]);
 
-        return () => clearTimeout(timer);
-    }, []); // Remove dependencies to prevent infinite re-renders
-
-    // Redirect if no user data
+    // Redirect if not authenticated
     useEffect(() => {
-        if (!user && !isLoading) {
+        if (!authLoading && !authUser) {
             navigate('/signin');
         }
-    }, [user, isLoading, navigate]);
+    }, [authUser, authLoading, navigate]);
 
-    const handleSignOut = () => {
-        // Clear user data and redirect to sign in
-        setUser(null);
-        navigate('/signin');
+    const handleSignOut = async () => {
+        try {
+            await signOut();
+            navigate('/signin');
+        } catch (error) {
+            console.error('Sign out failed:', error);
+        }
     };
 
     const handleLanguageChange = (langCode: Language) => {
@@ -226,7 +203,7 @@ const Dashboard: React.FC = () => {
         );
     }
 
-    if (!user) {
+    if (!authUser) {
         return null;
     }
 
@@ -273,7 +250,7 @@ const Dashboard: React.FC = () => {
                                             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                                             className={`text-lg font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent whitespace-nowrap ${isRTL ? 'text-right' : 'text-left'}`}
                                         >
-                                            {user.institutionName ? user.institutionName : 'Telmeez'}
+                                            {authUser.institutionName ? authUser.institutionName : 'Telmeez'}
                                         </motion.h1>
                                         <motion.p
                                             initial={{ opacity: 0, x: isRTL ? 10 : -10 }}
@@ -496,7 +473,7 @@ const Dashboard: React.FC = () => {
                             {/* User menu */}
                             <div className="relative group" ref={profileDropdownRef}>
                                 <button
-                                    key={`profile-button-${user._id}`}
+                                    key={`profile-button-${authUser._id}`}
                                     type="button"
                                     className={`flex items-center ${isRTL ? 'space-x-reverse-4' : 'space-x-2 sm:space-x-3'} p-2 rounded-lg hover:bg-gray-100 focus:outline-none transition-all duration-300 font-medium`}
                                     onClick={(e) => {
@@ -508,12 +485,12 @@ const Dashboard: React.FC = () => {
                                 >
                                     <div className={`w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center ${isRTL ? 'ml-4' : ''}`}>
                                         <span className="text-white font-medium text-sm">
-                                            {user.firstName.charAt(0)}{user.lastName.charAt(0)}
+                                            {authUser.firstName.charAt(0)}{authUser.lastName.charAt(0)}
                                         </span>
                                     </div>
                                     <div className={`hidden md:block text-left ${isRTL ? 'ml-4' : ''}`}>
-                                        <p className="text-sm font-medium text-gray-700">{user.firstName} {user.lastName}</p>
-                                        <p className="text-xs text-gray-500">{user.email}</p>
+                                        <p className="text-sm font-medium text-gray-700">{authUser.firstName} {authUser.lastName}</p>
+                                        <p className="text-xs text-gray-500">{authUser.email}</p>
                                     </div>
                                     <svg
                                         className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${activeDropdown === 'profile' ? 'rotate-180' : ''}`}
@@ -526,7 +503,7 @@ const Dashboard: React.FC = () => {
                                 </button>
 
                                 <div
-                                    key={`profile-dropdown-${user._id}`}
+                                    key={`profile-dropdown-${authUser._id}`}
                                     className={`absolute ${isRTL ? 'left-0' : 'right-0'} mt-2 w-56 bg-white rounded-lg shadow-lg py-2 transform transition-all duration-300 ease-in-out ${activeDropdown === 'profile' ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-1 invisible'} force-white-bg z-50`}
                                     role="menu"
                                     aria-orientation="vertical"
@@ -609,18 +586,10 @@ const Dashboard: React.FC = () => {
                         {/* Welcome Section */}
                         <div className="mb-6 sm:mb-8">
                             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                                {user.lastLogin ? (
-                                    <>{t.dashboard?.welcome_back}</>
-                                ) : (
-                                    <>{t.dashboard?.welcome?.replace('{institutionName}', user.institutionName || 'Telmeez').replace('{firstName}', user.firstName || 'User') || 'Welcome!'}</>
-                                )}
+                                <>{t.dashboard?.welcome?.replace('{institutionName}', authUser.institutionName || 'Telmeez').replace('{firstName}', authUser.firstName || 'User') || 'Welcome!'}</>
                             </h1>
                             <p className="text-gray-600 text-sm sm:text-base">
-                                {user.lastLogin ? (
-                                    <>{t.dashboard?.here_whats_happening?.replace('{institutionName}', user.institutionName || 'Telmeez') || 'Here\'s what\'s happening today.'}</>
-                                ) : (
-                                    <>{t.dashboard?.we_excited_to_have_you?.replace('{institutionName}', user.institutionName || 'Telmeez') || 'We\'re excited to have you!'}</>
-                                )}
+                                <>{t.dashboard?.we_excited_to_have_you?.replace('{institutionName}', authUser.institutionName || 'Telmeez') || 'We\'re excited to have you!'}</>
                             </p>
                         </div>
                     </div>

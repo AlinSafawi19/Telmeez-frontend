@@ -51,8 +51,12 @@ export const ar = {
         recover_password: "سنقوم بمساعدتك في استعادة كلمة المرور في أسرع وقت.",
         signin_errors: {
             email_required: "البريد الإلكتروني مطلوب",
-            password_required: "كلمة المرور مطلوبة"
-        }
+            password_required: "كلمة المرور مطلوبة",
+            invalid_credentials: "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+            account_deactivated: "الحساب معطل. يرجى الاتصال بالدعم.",
+            general_error: "حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى."
+        },
+        signing_in: "جاري تسجيل الدخول..."
     },
     about: {
         our_story: {

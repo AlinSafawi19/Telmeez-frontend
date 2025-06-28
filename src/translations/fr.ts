@@ -51,8 +51,12 @@ export const fr = {
         recover_password: "Nous vous aiderons à récupérer votre mot de passe en un rien de temps.",
         signin_errors: {
             email_required: "L'email est requis",
-            password_required: "Le mot de passe est requis"
-        }
+            password_required: "Le mot de passe est requis",
+            invalid_credentials: "Email ou mot de passe invalide",
+            account_deactivated: "Le compte est désactivé. Veuillez contacter le support.",
+            general_error: "Une erreur s'est produite lors de la connexion. Veuillez réessayer."
+        },
+        signing_in: "Connexion en cours..."
     },
     hero: {
         tag: "🚀 Plateforme Éducative Avancée ✨",

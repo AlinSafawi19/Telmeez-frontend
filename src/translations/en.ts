@@ -51,8 +51,12 @@ export const en = {
         recover_password: "We'll help you recover your password in no time.",
         signin_errors: {
             email_required: "Email is required",
-            password_required: "Password is required"
-        }
+            password_required: "Password is required",
+            invalid_credentials: "Invalid email or password",
+            account_deactivated: "Account is deactivated. Please contact support.",
+            general_error: "An error occurred during sign in. Please try again."
+        },
+        signing_in: "Signing in..."
     },
     hero: {
         tag: "🚀 Advanced Educational Platform ✨",
