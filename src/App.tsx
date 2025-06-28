@@ -7,6 +7,7 @@ import SignIn from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
 import Checkout from './pages/Checkout';
 import Dashboard from './pages/Dashboard';
+import Unsubscribe from './pages/Unsubscribe';
 import { LanguageProvider } from './contexts/LanguageContext';
 import Landing from './pages/Landing';
 
@@ -22,6 +23,7 @@ const App: React.FC = () => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/unsubscribe" element={<Unsubscribe />} />
         </Routes>
       </Router>
     </LanguageProvider>

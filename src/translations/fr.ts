@@ -207,15 +207,31 @@ export const fr = {
         subscribe_button: "S'abonner",
         unsubscribe_button: "Se désabonner",
         privacy_message: "Nous respectons votre vie privée. Vous pouvez vous",
-        unsubscribe_anytime: "à tout moment.",
+        unsubscribe_anytime: "désabonner à tout moment.",
         unsubscribe_title: "Se désabonner de la Newsletter",
         unsubscribe_placeholder: "Entrez votre adresse e-mail pour vous désabonner",
         subscribe_message: "Merci de vous être abonné. Vous êtes maintenant dans la boucle ! 🎉",
         unsubscribe_message: "Vous allez nous manquer ! Vous avez été désabonné avec succès. 👋",
         errors: {
             email_required: "Veuillez entrer votre adresse e-mail",
-            invalid_email: "Veuillez entrer une adresse e-mail valide"
-        }
+            invalid_email: "Veuillez entrer une adresse e-mail valide",
+            server_errors: {
+                email_required: "L'e-mail est requis",
+                invalid_email: "Veuillez entrer une adresse e-mail valide",
+                already_subscribed: "Vous faites déjà partie de notre famille newsletter ! 🎉",
+                already_unsubscribed: "Cet e-mail est déjà désabonné de notre newsletter",
+                email_not_found: "E-mail introuvable dans nos abonnements à la newsletter",
+                subscription_error: "Une erreur s'est produite lors de l'abonnement à la newsletter",
+                unsubscription_error: "Une erreur s'est produite lors du désabonnement de la newsletter",
+                network_error: "Erreur réseau. Veuillez réessayer.",
+                resubscribed: "Bon retour ! Nous sommes ravis de vous revoir dans notre famille newsletter ! 🎉",
+                subscribed: "Merci de rejoindre notre newsletter ! Bienvenue dans la famille Telmeez ! 🎉",
+                unsubscribed: "Vous allez nous manquer ! Vous avez été désabonné avec succès. 👋"
+            }
+        },
+        changed_your_mind: "Vous avez changé d'avis ? Vous pouvez toujours",
+        resubscribe: "vous abonner à nouveau",
+        back_to_home: "Retour à l'accueil"
     },
     cancel: "Annuler",
     footer: {

@@ -25,7 +25,7 @@ const Contact: React.FC = () => {
     ];
 
     return (
-        < div className="py-20 bg-gradient-to-r from-blue-600 to-blue-600 container mx-auto px-4 text-center" >
+        < div className="py-20 bg-gradient-to-r from-blue-600 to-blue-600 mx-auto px-4 text-center" >
             <h2 className="text-4xl font-bold text-white mb-4">{t.Title}</h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
                 {t.SubTitle}

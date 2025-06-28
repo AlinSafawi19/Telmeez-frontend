@@ -1,4 +1,4 @@
-import React from 'react';
+//import React from 'react';
 import type { JSX } from 'react';
 import {
     FaHome,
@@ -11,8 +11,7 @@ import {
     FaCalendarAlt,
     FaBook,
     FaFileAlt,
-    FaBell,
-    FaUserShield
+    FaBell
 } from 'react-icons/fa';
 
 export interface SidebarLink {

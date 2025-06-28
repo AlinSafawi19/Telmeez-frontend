@@ -223,15 +223,32 @@ export const en = {
         subscribe_button: "Subscribe",
         unsubscribe_button: "Unsubscribe",
         privacy_message: "We value your privacy. You can",
-        unsubscribe_anytime: "anytime.",
+        unsubscribe_anytime: "unsubscribe anytime.",
         unsubscribe_title: "Unsubscribe from Newsletter",
         unsubscribe_placeholder: "Enter your email address to unsubscribe",
         subscribe_message: "Thanks for subscribing. You're in the loop! 🎉",
         unsubscribe_message: "We'll miss you! You've been unsubscribed successfully. 👋",
         errors: {
             email_required: "Please enter your email address",
-            invalid_email: "Please enter a valid email address"
-        }
+            invalid_email: "Please enter a valid email address",
+            // Server error messages
+            server_errors: {
+                email_required: "Email is required",
+                invalid_email: "Please enter a valid email address",
+                already_subscribed: "You're already part of our newsletter family! 🎉",
+                already_unsubscribed: "This email is already unsubscribed from our newsletter",
+                email_not_found: "Email not found in our newsletter subscriptions",
+                subscription_error: "An error occurred while subscribing to the newsletter",
+                unsubscription_error: "An error occurred while unsubscribing from the newsletter",
+                network_error: "Network error. Please try again.",
+                resubscribed: "Welcome back! We're thrilled to have you rejoin our newsletter family! 🎉",
+                subscribed: "Thank you for joining our newsletter! Welcome to the Telmeez family! 🎉",
+                unsubscribed: "We'll miss you! You've been unsubscribed successfully. 👋"
+            }
+        },
+        changed_your_mind: "Changed your mind? You can always",
+        resubscribe: "resubscribe",
+        back_to_home: "Back to Home"
     },
     cancel: "Cancel",
     footer: {

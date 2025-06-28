@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import logo from '../assets/images/logo.png';
 import logo2 from '../assets/images/logo2.png';
@@ -22,6 +22,7 @@ import PioneersOffer from '../components/PioneersOffer';
 
 const Landing: React.FC = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -262,6 +263,27 @@ const Landing: React.FC = () => {
             setIsLoading(false);
         }, 1000);
     };
+
+    // Handle hash navigation on page load
+    useEffect(() => {
+        const hash = location.hash;
+        const state = location.state as { scrollTo?: string } | null;
+        
+        let sectionId: string | null = null;
+        
+        if (hash) {
+            sectionId = hash.substring(1); // Remove the # symbol
+        } else if (state?.scrollTo) {
+            sectionId = state.scrollTo;
+        }
+        
+        if (sectionId) {
+            // Add a small delay to ensure the page is fully loaded
+            setTimeout(() => {
+                scrollToSection(sectionId);
+            }, 500);
+        }
+    }, [location]);
 
     const renderNavigationItem = (item: { label: string; href: string }, hasDropdown = false, dropdownContent?: React.ReactNode, dropdownKey?: string) => {
         if (hasDropdown) {
