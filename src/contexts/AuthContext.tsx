@@ -37,10 +37,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
+        // Check if there are any auth cookies before making the request
+        const cookies = document.cookie.split(';');
+        const hasAuthCookies = cookies.some(cookie => 
+          cookie.trim().startsWith('accessToken=') || 
+          cookie.trim().startsWith('refreshToken=')
+        );
+
+        if (!hasAuthCookies) {
+          // No auth cookies, user is definitely not authenticated
+          console.log('No auth cookies found - user not authenticated');
+          setIsLoading(false);
+          return;
+        }
+
         const userProfile = await authService.getProfile();
         setUser(userProfile);
-      } catch (error) {
-        console.error('Failed to initialize auth:', error);
+      } catch (error: any) {
+        // Check if it's a 401 error (not authenticated) - this is expected
+        if (error.message && error.message.includes('Access token required')) {
+          // User is not authenticated, which is fine - no need to log error
+          console.log('User not authenticated - this is expected for new visitors');
+        } else {
+          // Log other unexpected errors
+          console.error('Failed to initialize auth:', error);
+        }
         // User is not authenticated, which is fine
       } finally {
         setIsLoading(false);

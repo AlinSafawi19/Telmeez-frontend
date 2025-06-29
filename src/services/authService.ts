@@ -180,11 +180,19 @@ class AuthService {
       const data = await response.json();
 
       if (!response.ok) {
+        // For 401 errors, throw a specific error that can be handled gracefully
+        if (response.status === 401) {
+          throw new Error('Access token required');
+        }
         throw new Error(data.message || 'Failed to get profile');
       }
 
       return data.data;
     } catch (error) {
+      // Don't log 401 errors as they are expected for unauthenticated users
+      if (error instanceof Error && error.message === 'Access token required') {
+        throw error; // Re-throw without logging
+      }
       console.error('Get profile error:', error);
       throw error;
     }
