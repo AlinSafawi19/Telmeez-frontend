@@ -74,7 +74,12 @@ class AuthService {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Sign in failed');
+        // Pass the full error response so frontend can extract error_code
+        throw new Error(JSON.stringify({
+          message: data.message || 'Sign in failed',
+          error_code: data.error_code,
+          status: response.status
+        }));
       }
 
       return data;
@@ -98,7 +103,12 @@ class AuthService {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to send password reset email');
+        // Pass the full error response so frontend can extract error_code
+        throw new Error(JSON.stringify({
+          message: data.message || 'Failed to send password reset email',
+          error_code: data.error_code,
+          status: response.status
+        }));
       }
 
       return data;

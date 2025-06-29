@@ -63,7 +63,17 @@ export const ar = {
             password_required: "كلمة المرور مطلوبة",
             invalid_credentials: "البريد الإلكتروني أو كلمة المرور غير صحيحة",
             account_deactivated: "الحساب معطل. يرجى الاتصال بالدعم.",
+            account_locked: "الحساب مؤقتاً مقفل بسبب محاولات فاشلة متعددة. يرجى المحاولة مرة أخرى لاحقاً.",
+            ip_locked: "محاولات فاشلة كثيرة من عنوان IP هذا. يرجى المحاولة مرة أخرى لاحقاً.",
+            rate_limit_exceeded: "محاولات تسجيل دخول كثيرة جداً، يرجى المحاولة مرة أخرى لاحقاً.",
             general_error: "حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى."
+        },
+        lockout_messages: {
+            time_remaining: "الوقت المتبقي",
+            minutes: "دقيقة",
+            minutes_plural: "دقائق",
+            progressive_lockout: "هذا هو قفل الحساب رقم {count}. تزداد المدة مع كل قفل للأمان.",
+            try_again_later: "يرجى المحاولة مرة أخرى لاحقاً."
         },
         forgot_password_errors: {
             email_required: "البريد الإلكتروني مطلوب",

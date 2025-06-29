@@ -71,7 +71,8 @@ const SignIn: React.FC = () => {
         if (errors.password) {
             setErrors(prev => ({ ...prev, password: t.signin_errors.password_required }));
         }
-        if (errors.errorCode) {
+        if (errors.errorCode && !errors.general) {
+            // Only set general error if it's not already set (for lockout errors)
             let errorMsg = t.signin_errors.general_error || 'An error occurred during sign in. Please try again.';
             switch (errors.errorCode) {
                 case 'EMAIL_REQUIRED':
@@ -87,7 +88,13 @@ const SignIn: React.FC = () => {
                     errorMsg = t.signin_errors.account_deactivated;
                     break;
                 case 'ACCOUNT_LOCKED':
-                    errorMsg = t.signin_errors.general_error;
+                    errorMsg = t.signin_errors.account_locked;
+                    break;
+                case 'IP_LOCKED':
+                    errorMsg = t.signin_errors.ip_locked;
+                    break;
+                case 'RATE_LIMIT_EXCEEDED':
+                    errorMsg = t.signin_errors.rate_limit_exceeded;
                     break;
                 case 'USER_ROLE_NOT_FOUND':
                     errorMsg = t.signin_errors.general_error;
@@ -96,6 +103,18 @@ const SignIn: React.FC = () => {
                     errorMsg = t.signin_errors.general_error;
             }
             setErrors(prev => ({ ...prev, general: errorMsg }));
+        }
+        
+        // Re-translate lockout messages when language changes
+        if (errors.errorCode && errors.general && 
+            (errors.errorCode === 'ACCOUNT_LOCKED' || errors.errorCode === 'IP_LOCKED' || errors.errorCode === 'RATE_LIMIT_EXCEEDED')) {
+            // Extract time from current message
+            const timeMatch = errors.general.match(/(\d+)\s*minutes?/i);
+            if (timeMatch) {
+                const timeValue = timeMatch[1];
+                const translatedMessage = translateLockoutMessage(`dummy message with ${timeValue} minutes`, errors.errorCode);
+                setErrors(prev => ({ ...prev, general: translatedMessage }));
+            }
         }
     }, [currentLanguage, t.signin_errors, errors.errorCode]);
 
@@ -131,6 +150,7 @@ const SignIn: React.FC = () => {
         } catch (error: any) {
             console.error('Sign in error:', error);
             let errorCode = 'INTERNAL_SERVER_ERROR';
+            let backendMessage = '';
             
             if (error && error.message) {
                 // Try to parse error_code from backend response
@@ -138,6 +158,7 @@ const SignIn: React.FC = () => {
                     const parsed = JSON.parse(error.message);
                     if (parsed && parsed.error_code) {
                         errorCode = parsed.error_code;
+                        backendMessage = parsed.message || '';
                     }
                 } catch {
                     // Fallback to string matching if not JSON
@@ -154,6 +175,15 @@ const SignIn: React.FC = () => {
                 general: '', // Will be set by useEffect
                 errorCode: errorCode 
             }));
+            
+            // For lockout errors, show the backend message directly (includes time)
+            if (errorCode === 'ACCOUNT_LOCKED' || errorCode === 'IP_LOCKED' || errorCode === 'RATE_LIMIT_EXCEEDED') {
+                const translatedMessage = translateLockoutMessage(backendMessage, errorCode);
+                setErrors(prev => ({ 
+                    ...prev, 
+                    general: translatedMessage || 'Account temporarily locked. Please try again later.'
+                }));
+            }
         } finally {
             setIsSigningIn(false);
         }
@@ -161,6 +191,37 @@ const SignIn: React.FC = () => {
 
     const handleCreateAccount = () => {
         navigate('/');
+    };
+
+    // Function to translate lockout messages while preserving time
+    const translateLockoutMessage = (backendMessage: string, errorCode: string): string => {
+        // Extract time from backend message
+        const timeMatch = backendMessage.match(/(\d+)\s*minutes?/i);
+        const timeValue = timeMatch ? timeMatch[1] : '';
+        
+        // Get translation based on error code
+        let translatedMessage = '';
+        switch (errorCode) {
+            case 'RATE_LIMIT_EXCEEDED':
+                translatedMessage = t.signin_errors.rate_limit_exceeded;
+                break;
+            case 'ACCOUNT_LOCKED':
+                translatedMessage = t.signin_errors.account_locked;
+                break;
+            case 'IP_LOCKED':
+                translatedMessage = t.signin_errors.ip_locked;
+                break;
+            default:
+                return backendMessage; // Fallback to original message
+        }
+        
+        // Replace "later" or similar with the actual time
+        if (timeValue) {
+            const timeText = timeValue === '1' ? t.lockout_messages.minutes : t.lockout_messages.minutes_plural;
+            return translatedMessage.replace(/later\.?/i, `in ${timeValue} ${timeText}.`);
+        }
+        
+        return translatedMessage;
     };
 
     return (

@@ -63,7 +63,17 @@ export const fr = {
             password_required: "Le mot de passe est requis",
             invalid_credentials: "Email ou mot de passe invalide",
             account_deactivated: "Le compte est désactivé. Veuillez contacter le support.",
+            account_locked: "Compte temporairement verrouillé en raison de tentatives échouées multiples. Veuillez réessayer plus tard.",
+            ip_locked: "Trop de tentatives échouées depuis cette adresse IP. Veuillez réessayer plus tard.",
+            rate_limit_exceeded: "Trop de tentatives de connexion, veuillez réessayer plus tard.",
             general_error: "Une erreur s'est produite lors de la connexion. Veuillez réessayer."
+        },
+        lockout_messages: {
+            time_remaining: "Temps restant",
+            minutes: "minute",
+            minutes_plural: "minutes",
+            progressive_lockout: "Ceci est votre {count} verrouillage. La durée augmente avec chaque verrouillage pour la sécurité.",
+            try_again_later: "Veuillez réessayer plus tard."
         },
         forgot_password_errors: {
             email_required: "L'email est requis",

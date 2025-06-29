@@ -63,7 +63,17 @@ export const en = {
             password_required: "Password is required",
             invalid_credentials: "Invalid email or password",
             account_deactivated: "Account is deactivated. Please contact support.",
+            account_locked: "Account temporarily locked due to multiple failed attempts. Please try again later.",
+            ip_locked: "Too many failed attempts from this IP address. Please try again later.",
+            rate_limit_exceeded: "Too many login attempts, please try again later.",
             general_error: "An error occurred during sign in. Please try again."
+        },
+        lockout_messages: {
+            time_remaining: "Time remaining",
+            minutes: "minute",
+            minutes_plural: "minutes",
+            progressive_lockout: "This is your {count} lockout. Duration increases with each lockout for security.",
+            try_again_later: "Please try again later."
         },
         forgot_password_errors: {
             email_required: "Email is required",
