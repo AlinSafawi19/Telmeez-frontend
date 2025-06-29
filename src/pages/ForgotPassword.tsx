@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { FaHome, FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaHome, FaEnvelope, FaEye, FaEyeSlash, FaKey } from 'react-icons/fa';
 import { translations } from '../translations';
 import type { Language } from '../translations';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -10,6 +10,7 @@ import logo from '../assets/images/logo.png';
 import forgetpasssvvg from '../assets/images/forgotpass-illustration.svg';
 import '../Landing.css';
 import LoadingOverlay from '../components/LoadingOverlay';
+import ButtonLoader from '../components/ButtonLoader';
 
 const ForgotPassword: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -21,12 +22,15 @@ const ForgotPassword: React.FC = () => {
     const [step, setStep] = useState<'email' | 'code' | 'password' | 'success'>('email');
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isVerifyingCode, setIsVerifyingCode] = useState(false);
+    const [isResettingPassword, setIsResettingPassword] = useState(false);
     const [errors, setErrors] = useState<{ 
         email?: string; 
         code?: string; 
         password?: string; 
         confirmPassword?: string;
         general?: string;
+        errorCode?: string;
     }>({});
     const navigate = useNavigate();
     const { currentLanguage, setCurrentLanguage } = useLanguage();
@@ -63,7 +67,36 @@ const ForgotPassword: React.FC = () => {
         if (errors.email) {
             setErrors(prev => ({ ...prev, email: t.header.signin_errors.email_required }));
         }
-    }, [currentLanguage, t.header.signin_errors]);
+        if (errors.errorCode) {
+            let errorMsg = t.header.forgot_password_errors.general_error || 'An error occurred. Please try again.';
+            switch (errors.errorCode) {
+                case 'EMAIL_REQUIRED':
+                    errorMsg = t.header.forgot_password_errors.email_required;
+                    break;
+                case 'CODE_REQUIRED':
+                    errorMsg = t.header.forgot_password_errors.code_required;
+                    break;
+                case 'PASSWORD_REQUIRED':
+                    errorMsg = t.header.forgot_password_errors.password_required;
+                    break;
+                case 'PASSWORD_TOO_SHORT':
+                    errorMsg = t.header.forgot_password_errors.password_too_short;
+                    break;
+                case 'INVALID_OR_EXPIRED_CODE':
+                    errorMsg = t.header.forgot_password_errors.invalid_or_expired_code;
+                    break;
+                case 'USER_NOT_FOUND':
+                    errorMsg = t.header.forgot_password_errors.user_not_found;
+                    break;
+                case 'EMAIL_SEND_FAILED':
+                    errorMsg = t.header.forgot_password_errors.email_send_failed;
+                    break;
+                default:
+                    errorMsg = t.header.forgot_password_errors.general_error;
+            }
+            setErrors(prev => ({ ...prev, general: errorMsg }));
+        }
+    }, [currentLanguage, t.header.signin_errors, t.header.forgot_password_errors, errors.errorCode]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -78,17 +111,37 @@ const ForgotPassword: React.FC = () => {
         }
 
         try {
-            setIsLoading(true);
+            setIsVerifyingCode(true);
             await authService.forgotPassword({ email });
             setStep('code');
         } catch (error: any) {
             console.error('Forgot password error:', error);
+            let errorCode = 'INTERNAL_SERVER_ERROR';
+            
+            if (error && error.message) {
+                // Try to parse error_code from backend response
+                try {
+                    const parsed = JSON.parse(error.message);
+                    if (parsed && parsed.error_code) {
+                        errorCode = parsed.error_code;
+                    }
+                } catch {
+                    // Fallback to string matching if not JSON
+                    if (error.message.includes('Email is required')) {
+                        errorCode = 'EMAIL_REQUIRED';
+                    } else if (error.message.includes('Failed to send')) {
+                        errorCode = 'EMAIL_SEND_FAILED';
+                    }
+                }
+            }
+            
             setErrors(prev => ({ 
                 ...prev, 
-                general: error.message || 'Failed to send password reset email' 
+                general: '', // Will be set by useEffect
+                errorCode: errorCode 
             }));
         } finally {
-            setIsLoading(false);
+            setIsVerifyingCode(false);
         }
     };
 
@@ -105,17 +158,39 @@ const ForgotPassword: React.FC = () => {
         }
 
         try {
-            setIsLoading(true);
+            setIsVerifyingCode(true);
             await authService.verifyResetCode({ email, code: verificationCode });
             setStep('password');
         } catch (error: any) {
             console.error('Verify code error:', error);
+            let errorCode = 'INTERNAL_SERVER_ERROR';
+            
+            if (error && error.message) {
+                // Try to parse error_code from backend response
+                try {
+                    const parsed = JSON.parse(error.message);
+                    if (parsed && parsed.error_code) {
+                        errorCode = parsed.error_code;
+                    }
+                } catch {
+                    // Fallback to string matching if not JSON
+                    if (error.message.includes('Email is required')) {
+                        errorCode = 'EMAIL_REQUIRED';
+                    } else if (error.message.includes('Verification code is required')) {
+                        errorCode = 'CODE_REQUIRED';
+                    } else if (error.message.includes('Invalid or expired')) {
+                        errorCode = 'INVALID_OR_EXPIRED_CODE';
+                    }
+                }
+            }
+            
             setErrors(prev => ({ 
                 ...prev, 
-                code: error.message || 'Invalid verification code' 
+                general: '', // Will be set by useEffect
+                errorCode: errorCode 
             }));
         } finally {
-            setIsLoading(false);
+            setIsVerifyingCode(false);
         }
     };
 
@@ -127,22 +202,22 @@ const ForgotPassword: React.FC = () => {
 
         // Validate password
         if (!newPassword) {
-            setErrors(prev => ({ ...prev, password: 'New password is required' }));
+            setErrors(prev => ({ ...prev, password: t.header.forgot_password_errors.password_required }));
             return;
         }
 
         if (newPassword.length < 8) {
-            setErrors(prev => ({ ...prev, password: 'Password must be at least 8 characters long' }));
+            setErrors(prev => ({ ...prev, password: t.header.forgot_password_errors.password_too_short }));
             return;
         }
 
         if (newPassword !== confirmPassword) {
-            setErrors(prev => ({ ...prev, confirmPassword: 'Passwords do not match' }));
+            setErrors(prev => ({ ...prev, confirmPassword: t.header.forgot_password_errors.passwords_dont_match }));
             return;
         }
 
         try {
-            setIsLoading(true);
+            setIsResettingPassword(true);
             await authService.resetPassword({ 
                 email, 
                 code: verificationCode, 
@@ -151,12 +226,40 @@ const ForgotPassword: React.FC = () => {
             setStep('success');
         } catch (error: any) {
             console.error('Reset password error:', error);
+            let errorCode = 'INTERNAL_SERVER_ERROR';
+            
+            if (error && error.message) {
+                // Try to parse error_code from backend response
+                try {
+                    const parsed = JSON.parse(error.message);
+                    if (parsed && parsed.error_code) {
+                        errorCode = parsed.error_code;
+                    }
+                } catch {
+                    // Fallback to string matching if not JSON
+                    if (error.message.includes('Email is required')) {
+                        errorCode = 'EMAIL_REQUIRED';
+                    } else if (error.message.includes('Verification code is required')) {
+                        errorCode = 'CODE_REQUIRED';
+                    } else if (error.message.includes('New password is required')) {
+                        errorCode = 'PASSWORD_REQUIRED';
+                    } else if (error.message.includes('at least 8 characters')) {
+                        errorCode = 'PASSWORD_TOO_SHORT';
+                    } else if (error.message.includes('Invalid or expired')) {
+                        errorCode = 'INVALID_OR_EXPIRED_CODE';
+                    } else if (error.message.includes('User not found')) {
+                        errorCode = 'USER_NOT_FOUND';
+                    }
+                }
+            }
+            
             setErrors(prev => ({ 
                 ...prev, 
-                general: error.message || 'Failed to reset password' 
+                general: '', // Will be set by useEffect
+                errorCode: errorCode 
             }));
         } finally {
-            setIsLoading(false);
+            setIsResettingPassword(false);
         }
     };
 
@@ -207,11 +310,11 @@ const ForgotPassword: React.FC = () => {
                         </div>
                         <button
                             onClick={() => navigate('/signin')}
-                            className="flex focus:outline-none items-center gap-1 px-3 py-2 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-lg hover:bg-gray-100 force-white-bg focus:outline-none"
+                            className="flex focus:outline-none items-center px-3 py-2 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-lg hover:bg-gray-100 force-white-bg focus:outline-none"
                             aria-label="Back to sign in"
                         >
                             <FaHome className="w-4 h-4" />
-                            <span className="text-sm font-medium hidden sm:inline">{t.header.back_to_signin}</span>
+                            <span className="text-sm font-medium hidden sm:inline rtl:mr-2 ltr:ml-2">{t.header.back_to_signin}</span>
                         </button>
                     </div>
                 </div>
@@ -264,11 +367,11 @@ const ForgotPassword: React.FC = () => {
                             </div>
                             <button
                                 onClick={() => navigate('/signin')}
-                                className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-full hover:bg-indigo-50 force-white-bg focus:outline-none"
+                                className="flex items-center px-4 py-2 text-gray-600 hover:text-indigo-600 transition-all duration-300 rounded-full hover:bg-indigo-50 force-white-bg focus:outline-none"
                                 aria-label="Back to sign in"
                             >
                                 <FaHome className="w-5 h-5" />
-                                <span className="text-sm font-medium">{t.header.back_to_signin}</span>
+                                <span className="text-sm font-medium rtl:mr-2 ltr:ml-2">{t.header.back_to_signin}</span>
                             </button>
                         </div>
                     </div>
@@ -290,7 +393,7 @@ const ForgotPassword: React.FC = () => {
                                         {t.header.email}
                                     </label>
                                     <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <div className="absolute inset-y-0 rtl:right-0 rtl:pr-3 ltr:left-0 ltr:pl-3 flex items-center pointer-events-none">
                                             <FaEnvelope className="h-5 w-5 text-gray-400" />
                                         </div>
                                         <input
@@ -298,8 +401,8 @@ const ForgotPassword: React.FC = () => {
                                             name="email"
                                             type="text"
                                             autoComplete="email"
-                                            className={`block w-full pl-10 pr-3 py-3 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 force-white-bg`}
-                                            placeholder="Enter your email address"
+                                            className={`block w-full rtl:pr-10 rtl:pl-3 ltr:pl-10 ltr:pr-3 py-3 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 force-white-bg`}
+                                            placeholder={t.header.forgot_password_email_placeholder}
                                             value={email}
                                             onChange={(e) => {
                                                 setEmail(e.target.value);
@@ -330,16 +433,16 @@ const ForgotPassword: React.FC = () => {
                                         {t.header.verification_code}
                                     </label>
                                     <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <FaEnvelope className="h-5 w-5 text-gray-400" />
+                                        <div className="absolute inset-y-0 rtl:right-0 rtl:pr-3 ltr:left-0 ltr:pl-3 flex items-center pointer-events-none">
+                                            <FaKey className="h-5 w-5 text-gray-400" />
                                         </div>
                                         <input
                                             id="verification-code"
                                             name="verification-code"
                                             type="text"
                                             autoComplete="one-time-code"
-                                            className={`block w-full pl-10 pr-3 py-3 border ${errors.code ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 force-white-bg`}
-                                            placeholder="Enter the verification code"
+                                            className={`block w-full rtl:pr-10 rtl:pl-3 ltr:pl-10 ltr:pr-3 py-3 border ${errors.code ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 force-white-bg`}
+                                            placeholder={t.header.verification_code_placeholder}
                                             value={verificationCode}
                                             onChange={(e) => {
                                                 setVerificationCode(e.target.value);
@@ -354,12 +457,13 @@ const ForgotPassword: React.FC = () => {
                                     )}
                                 </div>
 
-                                <button
+                                <ButtonLoader
                                     type="submit"
+                                    isLoading={isVerifyingCode}
                                     className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 transform hover:scale-[1.02]"
                                 >
                                     {t.header.verify_code}
-                                </button>
+                                </ButtonLoader>
                             </form>
                         )}
 
@@ -375,8 +479,8 @@ const ForgotPassword: React.FC = () => {
                                             name="new-password"
                                             type={showPassword ? "text" : "password"}
                                             autoComplete="new-password"
-                                            className={`block w-full pl-3 pr-10 py-3 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 force-white-bg`}
-                                            placeholder="Enter your new password"
+                                            className={`block w-full rtl:pr-3 rtl:pl-10 ltr:pl-3 ltr:pr-10 py-3 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 force-white-bg`}
+                                            placeholder={t.header.new_password_placeholder}
                                             value={newPassword}
                                             onChange={(e) => {
                                                 setNewPassword(e.target.value);
@@ -397,7 +501,7 @@ const ForgotPassword: React.FC = () => {
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none border-none bg-transparent"
+                                            className="absolute rtl:left-2 ltr:right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none border-none bg-transparent"
                                         >
                                             {showPassword ? (
                                                 <FaEye className="w-5 h-5" />
@@ -421,8 +525,8 @@ const ForgotPassword: React.FC = () => {
                                             name="confirm-password"
                                             type={showConfirmPassword ? "text" : "password"}
                                             autoComplete="new-password"
-                                            className={`block w-full pl-3 pr-10 py-3 border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 force-white-bg`}
-                                            placeholder="Confirm your new password"
+                                            className={`block w-full rtl:pr-3 rtl:pl-10 ltr:pl-3 ltr:pr-10 py-3 border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 force-white-bg`}
+                                            placeholder={t.header.confirm_password_placeholder}
                                             value={confirmPassword}
                                             onChange={(e) => {
                                                 setConfirmPassword(e.target.value);
@@ -434,7 +538,7 @@ const ForgotPassword: React.FC = () => {
                                         <button
                                             type="button"
                                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none border-none bg-transparent"
+                                            className="absolute rtl:left-2 ltr:right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none border-none bg-transparent"
                                         >
                                             {showConfirmPassword ? (
                                                 <FaEye className="w-5 h-5" />
@@ -448,12 +552,13 @@ const ForgotPassword: React.FC = () => {
                                     )}
                                 </div>
 
-                                <button
+                                <ButtonLoader
                                     type="submit"
+                                    isLoading={isResettingPassword}
                                     className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 transform hover:scale-[1.02]"
                                 >
                                     {t.header.reset_password}
-                                </button>
+                                </ButtonLoader>
                             </form>
                         )}
 
@@ -466,22 +571,22 @@ const ForgotPassword: React.FC = () => {
                                 </div>
                                 <div className="space-y-3">
                                     <h3 className="text-xl font-semibold text-green-800">
-                                        Password Reset Successful!
+                                        {t.header.password_reset_success}
                                     </h3>
                                     <p className="text-green-700 text-base">
-                                        Your password has been successfully updated. You can now sign in with your new password.
+                                        {t.header.password_reset_success_desc}
                                     </p>
                                 </div>
                                 <div className="pt-4">
-                                    <button
-                                        onClick={() => navigate('/signin')}
+                                <button
+                                    onClick={() => navigate('/signin')}
                                         className="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"
-                                    >
-                                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                >
+                                        <svg className="w-5 h-5 rtl:ml-2 ltr:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                                         </svg>
-                                        {t.header.back_to_signin}
-                                    </button>
+                                    {t.header.back_to_signin}
+                                </button>
                                 </div>
                             </div>
                         )}
