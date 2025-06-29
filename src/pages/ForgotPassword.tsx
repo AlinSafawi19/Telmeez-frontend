@@ -112,7 +112,7 @@ const ForgotPassword: React.FC = () => {
 
         try {
             setIsVerifyingCode(true);
-            await authService.forgotPassword({ email });
+            await authService.forgotPassword({ email, language: currentLanguage });
             setStep('code');
         } catch (error: any) {
             console.error('Forgot password error:', error);

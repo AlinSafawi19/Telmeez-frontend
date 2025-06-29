@@ -8,6 +8,7 @@ export interface SignInCredentials {
 
 export interface ForgotPasswordRequest {
   email: string;
+  language?: string;
 }
 
 export interface VerifyResetCodeRequest {
