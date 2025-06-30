@@ -999,6 +999,37 @@ export const fr = {
         welcome_new_user: "Nous sommes ravis de vous accueillir! Faisons-nous découvrir à {institutionName}.",
         here_whats_happening: "Voici ce qui se passe avec votre compte {institutionName} aujourd'hui.",
         we_excited_to_have_you: "Nous sommes ravis de vous accueillir! Faisons-nous découvrir à {institutionName}.",
-        here_whats_happening_new_user: "Voici ce qui se passe avec votre compte {institutionName} aujourd'hui."
+        here_whats_happening_new_user: "Voici ce qui se passe avec votre compte {institutionName} aujourd'hui.",
+        stats: {
+            title: "Statistiques du Compte",
+            subtitle: "Suivez vos limites d'utilisateurs et votre utilisation",
+            admins: "Administrateurs",
+            teachers: "Enseignants",
+            parents: "Parents",
+            students: "Étudiants",
+            used: "Utilisé",
+            available: "Disponible",
+            unlimited: "Illimité",
+            of: "sur",
+            usage: "Utilisation",
+            total: "Total",
+            remaining: "Restant",
+            loading: "Chargement des statistiques...",
+            error: "Échec du chargement des statistiques",
+            noSubscription: "Aucun abonnement actif trouvé",
+            systemStats: "Statistiques du Système",
+            userStats: "Statistiques Utilisateur",
+            totalAvailable: "Total Disponible",
+            acrossAllRoles: "Tous rôles confondus",
+            totalUsed: "Total Utilisé",
+            activeUsers: "Utilisateurs actifs",
+            userDistribution: "Distribution des Utilisateurs",
+            totalUsers: "Total des Utilisateurs",
+            usageComparison: "Comparaison d'Utilisation",
+            capacityUtilization: "Utilisation de la Capacité par Type d'Utilisateur",
+            usageTrends: "Tendances d'Utilisation",
+            last7Days: "Activité des Utilisateurs sur les 7 Derniers Jours",
+            users: "Utilisateurs"
+        }
     }
 };

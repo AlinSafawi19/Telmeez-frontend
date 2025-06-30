@@ -1,0 +1,9 @@
+.tooltip-entry {
+    font-size: 0.875rem;
+}
+
+.y-axis-label {
+    text-anchor: middle;
+    fill: #6B7280;
+    font-size: 12px;
+} 

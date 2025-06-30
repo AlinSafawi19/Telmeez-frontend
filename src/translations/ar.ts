@@ -995,6 +995,37 @@ export const ar = {
         welcome_new_user: "نحن سعداء بوجودك! لنبدأ بتجربتك في {institutionName}.",
         here_whats_happening: "هنا ما يحدث في حسابك {institutionName} اليوم.",
         we_excited_to_have_you: "نحن سعداء بوجودك! لنبدأ بتجربتك في {institutionName}.",
-        here_whats_happening_new_user: "هنا ما يحدث في حسابك {institutionName} اليوم."
+        here_whats_happening_new_user: "هنا ما يحدث في حسابك {institutionName} اليوم.",
+        stats: {
+            title: "إحصائيات الحساب",
+            subtitle: "تتبع حدود المستخدمين واستخدامك",
+            admins: "المشرفون",
+            teachers: "المعلمون",
+            parents: "الآباء",
+            students: "الطلاب",
+            used: "المستخدم",
+            available: "المتاح",
+            unlimited: "غير محدود",
+            of: "من",
+            usage: "الاستخدام",
+            total: "المجموع",
+            remaining: "المتبقي",
+            loading: "جاري تحميل الإحصائيات...",
+            error: "فشل في تحميل الإحصائيات",
+            noSubscription: "لم يتم العثور على اشتراك نشط",
+            systemStats: "إحصائيات النظام",
+            userStats: "إحصائيات المستخدم",
+            totalAvailable: "إجمالي المتاح",
+            acrossAllRoles: "عبر جميع الأدوار",
+            totalUsed: "إجمالي المستخدم",
+            activeUsers: "المستخدمون النشطون",
+            userDistribution: "توزيع المستخدمين",
+            totalUsers: "إجمالي المستخدمين",
+            usageComparison: "مقارنة الاستخدام",
+            capacityUtilization: "استخدام السعة بناءً على الأدوار",
+            usageTrends: "استخدام السعة بناءً على الأدوار",
+            last7Days: "المستخدمين النشطين في الأسبوع الماضي",
+            users: "المستخدمين"
+        }
     }
 }; 

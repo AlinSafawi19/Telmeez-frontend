@@ -20,6 +20,9 @@ import {
 } from 'react-icons/fa';
 import '../Landing.css';
 import LoadingOverlay from '../components/LoadingOverlay';
+import StatsCard from '../components/StatsCard';
+import StatsBarChart from '../components/StatsBarChart';
+import statsService, { type UserStats } from '../services/statsService';
 
 /*interface User {
     _id: string;
@@ -107,6 +110,9 @@ const Dashboard: React.FC = () => {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const [showSignOutConfirmation, setShowSignOutConfirmation] = useState(false);
+    const [stats, setStats] = useState<UserStats | null>(null);
+    const [statsLoading, setStatsLoading] = useState(false);
+    const [statsError, setStatsError] = useState<string | null>(null);
 
     // Close dropdowns when clicking outside
     useEffect(() => {
@@ -143,7 +149,7 @@ const Dashboard: React.FC = () => {
     useEffect(() => {
         if (!authLoading) {
             setIsLoading(false);
-            
+
             // Process subscription data if available
             if (subscriptionData) {
                 /*const processedSubscription = {
@@ -196,6 +202,24 @@ const Dashboard: React.FC = () => {
     const toggleSidebar = () => {
         setIsSidebarCollapsed(!isSidebarCollapsed);
     };
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                setStatsLoading(true);
+                setStatsError(null);
+                const statsData = await statsService.getUserStats();
+                setStats(statsData);
+            } catch (error) {
+                console.error('Error fetching stats:', error);
+                setStatsError(error instanceof Error ? error.message : 'Failed to load statistics');
+            } finally {
+                setStatsLoading(false);
+            }
+        };
+
+        fetchStats();
+    }, []);
 
     if (isLoading) {
         return (
@@ -583,7 +607,7 @@ const Dashboard: React.FC = () => {
                 {/* Main Dashboard Content */}
                 <main className="flex-1 overflow-y-auto p-4 sm:p-6">
                     <div className="max-w-7xl mx-auto">
-                        {/* Welcome Section */}
+                        {/* Welcome Section 
                         <div className="mb-6 sm:mb-8">
                             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                                 <>{t.dashboard?.welcome?.replace('{institutionName}', authUser.institutionName || 'Telmeez').replace('{firstName}', authUser.firstName || 'User') || 'Welcome!'}</>
@@ -591,6 +615,47 @@ const Dashboard: React.FC = () => {
                             <p className="text-gray-600 text-sm sm:text-base">
                                 <>{t.dashboard?.we_excited_to_have_you?.replace('{institutionName}', authUser.institutionName || 'Telmeez') || 'We\'re excited to have you!'}</>
                             </p>
+                        </div>*/}
+
+                        {/* Stats Section */}
+                        <div className="space-y-6">
+                            {/* Stats Cards */}
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                <div className="lg:col-span-2">
+                                    <StatsCard
+                                        stats={stats || {
+                                            maxAdmins: 0,
+                                            maxTeachers: 0,
+                                            maxParents: 0,
+                                            maxStudents: 0,
+                                            usedAdmins: 0,
+                                            usedTeachers: 0,
+                                            usedParents: 0,
+                                            usedStudents: 0
+                                        }}
+                                        isLoading={statsLoading}
+                                        error={statsError}
+                                        isRTL={isRTL}
+                                    />
+                                </div>
+                                <div className="lg:col-span-1">
+                                    <StatsBarChart
+                                        stats={stats || {
+                                            maxAdmins: 0,
+                                            maxTeachers: 0,
+                                            maxParents: 0,
+                                            maxStudents: 0,
+                                            usedAdmins: 0,
+                                            usedTeachers: 0,
+                                            usedParents: 0,
+                                            usedStudents: 0
+                                        }}
+                                        isLoading={statsLoading}
+                                        error={statsError}
+                                    />
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </main>

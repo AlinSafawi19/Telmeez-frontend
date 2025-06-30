@@ -1000,6 +1000,37 @@ export const en = {
         welcome_new_user: "We're excited to have you on board! Let's get you started with your {institutionName} experience.",
         here_whats_happening: "Here's what's happening with your {institutionName} account today.",
         we_excited_to_have_you: "We're excited to have you on board! Let's get you started with your {institutionName} experience.",
-        here_whats_happening_new_user: "Here's what's happening with your {institutionName} account today."
+        here_whats_happening_new_user: "Here's what's happening with your {institutionName} account today.",
+        stats: {
+            title: "Account Statistics",
+            subtitle: "Track your user limits and usage",
+            admins: "Admins",
+            teachers: "Teachers",
+            parents: "Parents",
+            students: "Students",
+            used: "Used",
+            available: "Available",
+            unlimited: "Unlimited",
+            of: "of",
+            usage: "Usage",
+            total: "Total",
+            remaining: "Remaining",
+            loading: "Loading statistics...",
+            error: "Failed to load statistics",
+            noSubscription: "No active subscription found",
+            systemStats: "System Statistics",
+            userStats: "User Statistics",
+            totalAvailable: "Total Available",
+            acrossAllRoles: "Across all roles",
+            totalUsed: "Total Used",
+            activeUsers: "Active users",
+            userDistribution: "User Distribution",
+            totalUsers: "Total Users",
+            usageComparison: "Usage Comparison",
+            capacityUtilization: "Capacity utilization by user type",
+            usageTrends: "Usage Trends",
+            last7Days: "User activity over the last 7 days",
+            users: "Users"
+        }
     }
 }; 
