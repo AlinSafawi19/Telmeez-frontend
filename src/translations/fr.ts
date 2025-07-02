@@ -1014,6 +1014,7 @@ export const fr = {
             usage: "Utilisation",
             total: "Total",
             remaining: "Restant",
+            near_limit: "Proche de la limite",
             loading: "Chargement des statistiques...",
             error: "Échec du chargement des statistiques",
             noSubscription: "Aucun abonnement actif trouvé",
@@ -1029,7 +1030,13 @@ export const fr = {
             capacityUtilization: "Utilisation de la Capacité par Type d'Utilisateur",
             usageTrends: "Tendances d'Utilisation",
             last7Days: "Activité des Utilisateurs sur les 7 Derniers Jours",
-            users: "Utilisateurs"
+            users: "Utilisateurs",
+            growthTrend: "Tendance de Croissance",
+            summary: "Résumé",
+            totalActiveUsers: "Total des Utilisateurs Actifs",
+            activeTeachers: "Enseignants Actifs",
+            activeStudents: "Étudiants Actifs",
+            usageEfficiency: "Efficacité d'Utilisation"
         }
     }
 };

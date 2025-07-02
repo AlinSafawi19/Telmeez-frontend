@@ -1015,6 +1015,7 @@ export const en = {
             usage: "Usage",
             total: "Total",
             remaining: "Remaining",
+            near_limit: "Near limit",
             loading: "Loading statistics...",
             error: "Failed to load statistics",
             noSubscription: "No active subscription found",
@@ -1030,7 +1031,13 @@ export const en = {
             capacityUtilization: "Capacity utilization by user type",
             usageTrends: "Usage Trends",
             last7Days: "User activity over the last 7 days",
-            users: "Users"
+            users: "Users",
+            growthTrend: "Growth Trend",
+            summary: "Summary",
+            totalActiveUsers: "Total Active Users",
+            activeTeachers: "Active Teachers",
+            activeStudents: "Active Students",
+            usageEfficiency: "Usage Efficiency"
         }
     }
 }; 

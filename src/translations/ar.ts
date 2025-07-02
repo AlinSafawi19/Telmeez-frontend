@@ -1010,6 +1010,7 @@ export const ar = {
             usage: "الاستخدام",
             total: "المجموع",
             remaining: "المتبقي",
+            near_limit: "قريب من الحد",
             loading: "جاري تحميل الإحصائيات...",
             error: "فشل في تحميل الإحصائيات",
             noSubscription: "لم يتم العثور على اشتراك نشط",
@@ -1025,7 +1026,13 @@ export const ar = {
             capacityUtilization: "استخدام السعة بناءً على الأدوار",
             usageTrends: "استخدام السعة بناءً على الأدوار",
             last7Days: "المستخدمين النشطين في الأسبوع الماضي",
-            users: "المستخدمين"
+            users: "المستخدمين",
+            growthTrend: "اتجاه النمو",
+            summary: "ملخص",
+            totalActiveUsers: "إجمالي المستخدمين النشطين",
+            activeTeachers: "المعلمون النشطون",
+            activeStudents: "الطلاب النشطون",
+            usageEfficiency: "كفاءة الاستخدام"
         }
     }
 }; 

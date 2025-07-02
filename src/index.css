@@ -293,14 +293,27 @@ button:focus-visible {
 
 /* Add this to the end of the file */
 .quantity-button {
-  padding: 0;
-  border: none;
-  background: none;
+  @apply w-8 h-8 rounded-full border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200;
 }
+
 .quantity-button:hover {
-  border: none;
+  @apply bg-gray-50;
 }
+
 .quantity-button:focus,
-.quantity-button:focus-visible {
-  outline: none;
+.quantity-button:active {
+  @apply ring-2 ring-blue-500 ring-offset-2;
+}
+
+/* Bounce animation delays for stats overview */
+.bounce-delay-0 {
+  animation-delay: 0s;
+}
+
+.bounce-delay-500 {
+  animation-delay: 0.5s;
+}
+
+.bounce-delay-1000 {
+  animation-delay: 1s;
 }

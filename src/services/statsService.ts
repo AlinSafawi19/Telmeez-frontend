@@ -11,11 +11,28 @@ export interface UserStats {
   usedStudents: number;
 }
 
+export interface HistoricalStats {
+  month: string;
+  totalUsers: number;
+  admins: number;
+  teachers: number;
+  parents: number;
+  students: number;
+}
+
 export interface StatsResponse {
   success: boolean;
   message: string;
   data: {
     stats: UserStats;
+  };
+}
+
+export interface HistoricalStatsResponse {
+  success: boolean;
+  message: string;
+  data: {
+    historicalStats: HistoricalStats[];
   };
 }
 
@@ -40,6 +57,30 @@ class StatsService {
       return data.data.stats;
     } catch (error) {
       console.error('Get user stats error:', error);
+      throw error;
+    }
+  }
+
+  // Get historical statistics
+  async getHistoricalStats(): Promise<HistoricalStats[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/stats/historical`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Include cookies
+      });
+
+      const data: HistoricalStatsResponse = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to get historical statistics');
+      }
+
+      return data.data.historicalStats;
+    } catch (error) {
+      console.error('Get historical stats error:', error);
       throw error;
     }
   }
