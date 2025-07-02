@@ -33,37 +33,105 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const isAuthenticated = !!user;
 
+  // Helper function to check if cookies exist
+  const hasAuthCookies = (): boolean => {
+    try {
+      const cookies = document.cookie.split(';');
+      return cookies.some(cookie => {
+        const [name] = cookie.trim().split('=');
+        return name === 'accessToken' || name === 'refreshToken';
+      });
+    } catch (error) {
+      console.error('Error checking cookies:', error);
+      return false;
+    }
+  };
+
+  // Helper function to check auth status from server
+  const checkServerAuthStatus = async (): Promise<boolean> => {
+    try {
+      const status = await authService.checkAuthStatus();
+      console.log('🔍 Server auth status:', status);
+      return status.hasAccessToken || status.hasRefreshToken;
+    } catch (error) {
+      console.log('❌ Failed to check server auth status:', error);
+      return false;
+    }
+  };
+
+  // Helper function to attempt token refresh
+  const attemptTokenRefresh = async (): Promise<boolean> => {
+    try {
+      await authService.refreshToken();
+      return true;
+    } catch (error) {
+      console.log('Token refresh failed:', error);
+      return false;
+    }
+  };
+
   // Initialize auth state on app load
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        // Check if there are any auth cookies before making the request
-        const cookies = document.cookie.split(';');
-        const hasAuthCookies = cookies.some(cookie => 
-          cookie.trim().startsWith('accessToken=') || 
-          cookie.trim().startsWith('refreshToken=')
-        );
-
-        if (!hasAuthCookies) {
-          // No auth cookies, user is definitely not authenticated
-          console.log('No auth cookies found - user not authenticated');
+        setIsLoading(true);
+        console.log('🔐 Initializing authentication...');
+        
+        // Check if there are any auth cookies
+        const hasCookies = hasAuthCookies();
+        console.log('🍪 Auth cookies found:', hasCookies);
+        
+        // Also check server-side auth status
+        const serverHasCookies = await checkServerAuthStatus();
+        console.log('🖥️ Server auth cookies found:', serverHasCookies);
+        
+        if (!hasCookies && !serverHasCookies) {
+          console.log('❌ No auth cookies found - user not authenticated');
           setIsLoading(false);
           return;
         }
 
-        const userProfile = await authService.getProfile();
-        setUser(userProfile);
-      } catch (error: any) {
-        // Check if it's a 401 error (not authenticated) - this is expected
-        if (error.message && error.message.includes('Access token required')) {
-          // User is not authenticated, which is fine - no need to log error
-          console.log('User not authenticated - this is expected for new visitors');
-        } else {
-          // Log other unexpected errors
-          console.error('Failed to initialize auth:', error);
+        // Try to get user profile
+        try {
+          console.log('👤 Attempting to get user profile...');
+          const userProfile = await authService.getProfile();
+          setUser(userProfile);
+          console.log('✅ User authenticated successfully:', userProfile.email);
+        } catch (error: any) {
+          // If it's a 401 error, try to refresh the token
+          if (error.message && error.message.includes('Access token required')) {
+            console.log('🔄 Access token expired, attempting refresh...');
+            const refreshSuccess = await attemptTokenRefresh();
+            
+            if (refreshSuccess) {
+              // Try to get profile again after refresh
+              try {
+                console.log('🔄 Token refreshed, getting profile again...');
+                const userProfile = await authService.getProfile();
+                setUser(userProfile);
+                console.log('✅ User authenticated after token refresh:', userProfile.email);
+              } catch (refreshError) {
+                console.log('❌ Failed to get profile after token refresh:', refreshError);
+                // Clear any invalid cookies
+                await authService.signOut();
+              }
+            } else {
+              console.log('❌ Token refresh failed, user not authenticated');
+              // Clear any invalid cookies
+              await authService.signOut();
+            }
+          } else {
+            console.error('❌ Failed to get profile:', error);
+            // Clear any invalid cookies
+            await authService.signOut();
+          }
         }
-        // User is not authenticated, which is fine
+      } catch (error) {
+        console.error('❌ Failed to initialize auth:', error);
+        // Clear any invalid cookies
+        await authService.signOut();
       } finally {
+        console.log('🏁 Authentication initialization complete');
         setIsLoading(false);
       }
     };
@@ -102,7 +170,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(userProfile);
     } catch (error) {
       console.error('Failed to refresh user:', error);
-      setUser(null);
+      // If refresh fails, try token refresh
+      const refreshSuccess = await attemptTokenRefresh();
+      if (!refreshSuccess) {
+        setUser(null);
+      } else {
+        // Try to get profile again after refresh
+        try {
+          const userProfile = await authService.getProfile();
+          setUser(userProfile);
+        } catch (refreshError) {
+          console.error('Failed to get profile after token refresh:', refreshError);
+          setUser(null);
+        }
+      }
     }
   };
 

@@ -16,6 +16,7 @@ import { Bar, Line } from 'react-chartjs-2';
 import type { UserStats, HistoricalStats } from '../services/statsService';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../translations';
+import LoadingOverlay from './LoadingOverlay';
 
 // Register Chart.js components
 ChartJS.register(
@@ -353,17 +354,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
 
   if (isLoading) {
     return (
-      <div className="space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[...Array(4)].map((_, index) => (
-            <div key={index} className="h-40 bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300 animate-pulse rounded-3xl"></div>
-          ))}
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="h-96 bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300 animate-pulse rounded-3xl"></div>
-          <div className="h-96 bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300 animate-pulse rounded-3xl"></div>
-        </div>
-      </div>
+      <LoadingOverlay isLoading={isLoading} />
     );
   }
 

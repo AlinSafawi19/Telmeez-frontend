@@ -177,6 +177,27 @@ const Dashboard: React.FC = () => {
         }
     }, [authUser, authLoading, navigate]);
 
+    // Add a more robust authentication check
+    useEffect(() => {
+        // Only redirect if we're sure the user is not authenticated
+        // and we're not in the loading state
+        if (!authLoading && !authUser && !isLoading) {
+            console.log('🚨 Dashboard: User not authenticated, redirecting to signin');
+            console.log('🔍 Dashboard Debug:', { authLoading, authUser, isLoading });
+            navigate('/signin');
+        }
+    }, [authUser, authLoading, isLoading, navigate]);
+
+    // Debug authentication state changes
+    useEffect(() => {
+        console.log('🔍 Dashboard Auth State:', {
+            authLoading,
+            authUser: authUser ? `${authUser.firstName} ${authUser.lastName}` : null,
+            isLoading,
+            isAuthenticated: !!authUser
+        });
+    }, [authLoading, authUser, isLoading]);
+
     const handleSignOut = async () => {
         try {
             await signOut();
@@ -228,9 +249,9 @@ const Dashboard: React.FC = () => {
         fetchStats();
     }, []);
 
-    if (isLoading) {
+    if (isLoading || authLoading) {
         return (
-            <LoadingOverlay isLoading={isLoading} />
+            <LoadingOverlay isLoading={isLoading || authLoading} />
         );
     }
 
@@ -339,7 +360,7 @@ const Dashboard: React.FC = () => {
                                 type='button'
                                 onClick={() => setActiveTab('overview')}
                                 className={`w-full flex items-center ${isRTL ? 'space-x-reverse-3' : 'space-x-3'} focus:outline-none border-none px-4 py-3.5 rounded-xl text-left transition-all duration-300 group relative overflow-hidden ${activeTab === 'overview'
-                                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25'
+                                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
                                     : 'text-gray-600 hover:bg-gradient-to-r hover:from-gray-50 hover:to-blue-50 hover:text-blue-700 hover:shadow-md'
                                     }`}
                                 whileHover={{ x: isRTL ? -4 : 4, scale: 1.02 }}

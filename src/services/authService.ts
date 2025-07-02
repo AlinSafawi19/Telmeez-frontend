@@ -199,6 +199,51 @@ class AuthService {
     }
   }
 
+  // Refresh access token
+  async refreshToken(): Promise<{ success: boolean; message: string }> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Include cookies
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to refresh token');
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Refresh token error:', error);
+      throw error;
+    }
+  }
+
+  // Check authentication status (for debugging)
+  async checkAuthStatus(): Promise<{ hasAccessToken: boolean; hasRefreshToken: boolean; cookies: any }> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/status`, {
+        method: 'GET',
+        credentials: 'include', // Include cookies
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to check auth status');
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Check auth status error:', error);
+      throw error;
+    }
+  }
+
   // Sign out user
   async signOut(): Promise<void> {
     try {
