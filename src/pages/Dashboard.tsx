@@ -16,7 +16,8 @@ import {
     FaBars,
     FaTimes,
     FaChevronLeft,
-    FaChevronRight
+    FaChevronRight,
+    FaCreditCard
 } from 'react-icons/fa';
 import '../Landing.css';
 import LoadingOverlay from '../components/LoadingOverlay';
@@ -582,6 +583,27 @@ const Dashboard: React.FC = () => {
                                     >
                                         <FaUserCog className={`w-4 h-4 ${isRTL ? 'ml-3' : 'mr-3'} text-gray-400`} />
                                         <span>{t.dashboard?.profileSettings}</span>
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        className={`flex items-center w-full text-left px-4 py-3 border-none text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none cursor-pointer rounded-none`}
+                                        role="menuitem"
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.backgroundColor = '#eff6ff';
+                                            e.currentTarget.style.color = '#2563eb';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.backgroundColor = '';
+                                            e.currentTarget.style.color = '';
+                                        }}
+                                        onClick={() => {
+                                            console.log('Profile Settings clicked');
+                                            setActiveDropdown(null);
+                                        }}
+                                    >
+                                        <FaCreditCard className={`w-4 h-4 ${isRTL ? 'ml-3' : 'mr-3'} text-gray-400`} />
+                                        <span>{t.dashboard?.billingSettings}</span>
                                     </button>
 
                                     <button

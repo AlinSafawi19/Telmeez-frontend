@@ -995,6 +995,7 @@ export const en = {
         education: "Empowering Education",
         profileSettings: "Profile Settings",
         accountSettings: "Account Settings",
+        billingSettings: "Billing & Subscription",
         welcome: "Welcome to Telmeez, {firstName}! 🎉",
         welcome_back: "Welcome back, {firstName}! 👋",
         welcome_new_user: "We're excited to have you on board! Let's get you started with your {institutionName} experience.",

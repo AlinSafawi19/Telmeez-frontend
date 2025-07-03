@@ -990,6 +990,7 @@ export const ar = {
         education: "تعزيز التعليم",
         profileSettings: "إعدادات الحساب",
         accountSettings: "إعدادات الحساب",
+        billingSettings: "إعدادات الفواتير",
         welcome: "مرحبا بك في {institutionName}, {firstName}! 🎉",
         welcome_back: "مرحبا بعودتك, {firstName}! 👋",
         welcome_new_user: "نحن سعداء بوجودك! لنبدأ بتجربتك في {institutionName}.",

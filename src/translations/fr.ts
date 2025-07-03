@@ -994,6 +994,7 @@ export const fr = {
         education: "Empowering Education",
         profileSettings: "Paramètres du Profil",
         accountSettings: "Paramètres du Compte",
+        billingSettings: "Facturation et Abonnement",
         welcome: "Bienvenue à {institutionName}, {firstName}! 🎉",
         welcome_back: "Bienvenue de retour, {firstName}! 👋",
         welcome_new_user: "Nous sommes ravis de vous accueillir! Faisons-nous découvrir à {institutionName}.",
