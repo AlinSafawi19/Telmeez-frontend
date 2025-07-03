@@ -1033,6 +1033,38 @@ export const ar = {
             activeTeachers: "المعلمون النشطون",
             activeStudents: "الطلاب النشطون",
             usageEfficiency: "كفاءة الاستخدام"
+        },
+        quickLinks: {
+            title: "روابط سريعة",
+            subtitle: "وصول سريع للميزات المستخدمة بكثرة",
+            noLinks: "لا توجد روابط سريعة متاحة لدورك",
+            users: "دعوة المشرفين",
+            calendar: "التقويم",
+            billing: "الفواتير والاشتراك",
+            noLinksDesc: "اتصل بالمدير للحصول على إذن للوصول إلى الميزات الأخرى"
+        },
+        recentActivity: {
+            title: "النشاط الأخير",
+            subtitle: "أحدث التحديثات والأنشطة",
+            userAdded: "تم إضافة مدير جديد",
+            userAddedDesc: "تم إضافة سارة جونسون كمديرة",
+            eventCreated: "تم إنشاء حدث",
+            eventCreatedDesc: "تم جدولة اجتماع الآباء والمعلمين للأسبوع القادم",
+            paymentProcessed: "تمت معالجة الدفع",
+            paymentProcessedDesc: "تم إكمال دفع الاشتراك الشهري بنجاح",
+            profileUpdated: "تم تحديث الملف الشخصي",
+            profileUpdatedDesc: "تم تحديث معلومات المؤسسة",
+            notificationSent: "تم إرسال الإشعار",
+            notificationSentDesc: "تم إرسال النشرة الإخبارية الأسبوعية لجميع الآباء",
+            viewAll: "عرض جميع الأنشطة",
+            justNow: "الآن",
+            minute: "دقيقة",
+            minutes: "دقائق",
+            hour: "ساعة",
+            hours: "ساعات",
+            day: "يوم",
+            days: "أيام",
+            ago: "منذ"
         }
     }
 }; 

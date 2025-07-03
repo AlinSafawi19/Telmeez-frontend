@@ -17,6 +17,14 @@ import type { UserStats, HistoricalStats } from '../services/statsService';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../translations';
 import LoadingOverlay from './LoadingOverlay';
+import {
+  FaUsers,
+  FaUserTie,
+  FaChalkboardTeacher,
+  FaUserGraduate,
+  FaChartBar,
+  FaChartLine
+} from 'react-icons/fa';
 
 // Register Chart.js components
 ChartJS.register(
@@ -68,19 +76,19 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
         label: t.dashboard?.stats?.used || 'Used',
         data: [stats.usedAdmins, stats.usedTeachers, stats.usedParents, stats.usedStudents],
         backgroundColor: [
-          'rgba(147, 51, 234, 0.8)',
-          'rgba(34, 197, 94, 0.8)',
-          'rgba(251, 146, 60, 0.8)',
+          'rgba(59, 130, 246, 0.8)',
+          'rgba(16, 185, 129, 0.8)',
+          'rgba(245, 158, 11, 0.8)',
           'rgba(239, 68, 68, 0.8)'
         ],
         borderColor: [
-          'rgba(147, 51, 234, 1)',
-          'rgba(34, 197, 94, 1)',
-          'rgba(251, 146, 60, 1)',
+          'rgba(59, 130, 246, 1)',
+          'rgba(16, 185, 129, 1)',
+          'rgba(245, 158, 11, 1)',
           'rgba(239, 68, 68, 1)'
         ],
-        borderWidth: 0,
-        borderRadius: 12,
+        borderWidth: 1,
+        borderRadius: 4,
         borderSkipped: false,
       },
       {
@@ -92,19 +100,19 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
           stats.maxStudents === 'unlimited' ? 0 : stats.maxStudents - stats.usedStudents
         ],
         backgroundColor: [
-          'rgba(147, 51, 234, 0.15)',
-          'rgba(34, 197, 94, 0.15)',
-          'rgba(251, 146, 60, 0.15)',
-          'rgba(239, 68, 68, 0.15)'
+          'rgba(59, 130, 246, 0.1)',
+          'rgba(16, 185, 129, 0.1)',
+          'rgba(245, 158, 11, 0.1)',
+          'rgba(239, 68, 68, 0.1)'
         ],
         borderColor: [
-          'rgba(147, 51, 234, 0.3)',
-          'rgba(34, 197, 94, 0.3)',
-          'rgba(251, 146, 60, 0.3)',
+          'rgba(59, 130, 246, 0.3)',
+          'rgba(16, 185, 129, 0.3)',
+          'rgba(245, 158, 11, 0.3)',
           'rgba(239, 68, 68, 0.3)'
         ],
-        borderWidth: 0,
-        borderRadius: 12,
+        borderWidth: 1,
+        borderRadius: 4,
         borderSkipped: false,
       }
     ]
@@ -117,72 +125,72 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
       {
         label: t.dashboard?.stats?.totalUsers || 'Total Users',
         data: historicalStats.map(item => item.totalUsers),
-        borderColor: 'rgba(168, 85, 247, 1)',
-        backgroundColor: 'rgba(168, 85, 247, 0.08)',
-        borderWidth: 4,
+        borderColor: 'rgba(59, 130, 246, 1)',
+        backgroundColor: 'rgba(59, 130, 246, 0.05)',
+        borderWidth: 3,
         fill: true,
-        tension: 0.6,
-        pointBackgroundColor: 'rgba(168, 85, 247, 1)',
-        pointBorderColor: '#f8fafc',
-        pointBorderWidth: 3,
-        pointRadius: 8,
-        pointHoverRadius: 12,
+        tension: 0.4,
+        pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+        pointBorderColor: '#ffffff',
+        pointBorderWidth: 2,
+        pointRadius: 6,
+        pointHoverRadius: 8,
       },
       {
         label: t.dashboard?.stats?.admins || 'Admins',
         data: historicalStats.map(item => item.admins),
-        borderColor: 'rgba(147, 51, 234, 1)',
-        backgroundColor: 'rgba(147, 51, 234, 0.05)',
+        borderColor: 'rgba(16, 185, 129, 1)',
+        backgroundColor: 'rgba(16, 185, 129, 0.05)',
         borderWidth: 2,
         fill: false,
         tension: 0.4,
-        pointBackgroundColor: 'rgba(147, 51, 234, 1)',
-        pointBorderColor: '#f8fafc',
+        pointBackgroundColor: 'rgba(16, 185, 129, 1)',
+        pointBorderColor: '#ffffff',
         pointBorderWidth: 2,
-        pointRadius: 6,
-        pointHoverRadius: 10,
+        pointRadius: 5,
+        pointHoverRadius: 7,
       },
       {
         label: t.dashboard?.stats?.teachers || 'Teachers',
         data: historicalStats.map(item => item.teachers),
-        borderColor: 'rgba(34, 197, 94, 1)',
-        backgroundColor: 'rgba(34, 197, 94, 0.05)',
+        borderColor: 'rgba(245, 158, 11, 1)',
+        backgroundColor: 'rgba(245, 158, 11, 0.05)',
         borderWidth: 2,
         fill: false,
         tension: 0.4,
-        pointBackgroundColor: 'rgba(34, 197, 94, 1)',
-        pointBorderColor: '#f8fafc',
+        pointBackgroundColor: 'rgba(245, 158, 11, 1)',
+        pointBorderColor: '#ffffff',
         pointBorderWidth: 2,
-        pointRadius: 6,
-        pointHoverRadius: 10,
+        pointRadius: 5,
+        pointHoverRadius: 7,
       },
       {
         label: t.dashboard?.stats?.parents || 'Parents',
         data: historicalStats.map(item => item.parents),
-        borderColor: 'rgba(251, 146, 60, 1)',
-        backgroundColor: 'rgba(251, 146, 60, 0.05)',
-        borderWidth: 2,
-        fill: false,
-        tension: 0.4,
-        pointBackgroundColor: 'rgba(251, 146, 60, 1)',
-        pointBorderColor: '#f8fafc',
-        pointBorderWidth: 2,
-        pointRadius: 6,
-        pointHoverRadius: 10,
-      },
-      {
-        label: t.dashboard?.stats?.students || 'Students',
-        data: historicalStats.map(item => item.students),
         borderColor: 'rgba(239, 68, 68, 1)',
         backgroundColor: 'rgba(239, 68, 68, 0.05)',
         borderWidth: 2,
         fill: false,
         tension: 0.4,
         pointBackgroundColor: 'rgba(239, 68, 68, 1)',
-        pointBorderColor: '#f8fafc',
+        pointBorderColor: '#ffffff',
         pointBorderWidth: 2,
-        pointRadius: 6,
-        pointHoverRadius: 10,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+      },
+      {
+        label: t.dashboard?.stats?.students || 'Students',
+        data: historicalStats.map(item => item.students),
+        borderColor: 'rgba(139, 92, 246, 1)',
+        backgroundColor: 'rgba(139, 92, 246, 0.05)',
+        borderWidth: 2,
+        fill: false,
+        tension: 0.4,
+        pointBackgroundColor: 'rgba(139, 92, 246, 1)',
+        pointBorderColor: '#ffffff',
+        pointBorderWidth: 2,
+        pointRadius: 5,
+        pointHoverRadius: 7,
       }
     ]
   };
@@ -195,29 +203,29 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
         position: 'top' as const,
         labels: {
           usePointStyle: true,
-          padding: 25,
+          padding: 20,
           font: {
-            size: 13,
-            weight: 600
+            size: 12,
+            weight: 500
           },
-          color: '#475569'
+          color: '#374151'
         }
       },
       tooltip: {
-        backgroundColor: 'rgba(15, 23, 42, 0.95)',
-        titleColor: '#f8fafc',
-        bodyColor: '#f8fafc',
-        borderColor: 'rgba(168, 85, 247, 0.3)',
-        borderWidth: 2,
-        cornerRadius: 16,
+        backgroundColor: 'rgba(17, 24, 39, 0.95)',
+        titleColor: '#f9fafb',
+        bodyColor: '#f9fafb',
+        borderColor: 'rgba(59, 130, 246, 0.2)',
+        borderWidth: 1,
+        cornerRadius: 8,
         displayColors: true,
-        padding: 16,
+        padding: 12,
         titleFont: {
-          size: 14,
+          size: 13,
           weight: 600
         },
         bodyFont: {
-          size: 13
+          size: 12
         }
       }
     },
@@ -228,23 +236,23 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
         },
         ticks: {
           font: {
-            size: 13,
-            weight: 600
+            size: 12,
+            weight: 500
           },
-          color: '#475569'
+          color: '#374151'
         }
       },
       y: {
         grid: {
-          color: 'rgba(148, 163, 184, 0.1)',
+          color: 'rgba(156, 163, 175, 0.1)',
           drawBorder: false,
         },
         ticks: {
           font: {
-            size: 13,
-            weight: 600
+            size: 12,
+            weight: 500
           },
-          color: '#475569'
+          color: '#374151'
         }
       }
     }
@@ -258,29 +266,29 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
         position: 'top' as const,
         labels: {
           usePointStyle: true,
-          padding: 25,
+          padding: 20,
           font: {
-            size: 13,
-            weight: 600
+            size: 12,
+            weight: 500
           },
-          color: '#475569'
+          color: '#374151'
         }
       },
       tooltip: {
-        backgroundColor: 'rgba(15, 23, 42, 0.95)',
-        titleColor: '#f8fafc',
-        bodyColor: '#f8fafc',
-        borderColor: 'rgba(168, 85, 247, 0.3)',
-        borderWidth: 2,
-        cornerRadius: 16,
+        backgroundColor: 'rgba(17, 24, 39, 0.95)',
+        titleColor: '#f9fafb',
+        bodyColor: '#f9fafb',
+        borderColor: 'rgba(59, 130, 246, 0.2)',
+        borderWidth: 1,
+        cornerRadius: 8,
         displayColors: true,
-        padding: 16,
+        padding: 12,
         titleFont: {
-          size: 14,
+          size: 13,
           weight: 600
         },
         bodyFont: {
-          size: 13
+          size: 12
         }
       }
     },
@@ -291,23 +299,23 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
         },
         ticks: {
           font: {
-            size: 13,
-            weight: 600
+            size: 12,
+            weight: 500
           },
-          color: '#475569'
+          color: '#374151'
         }
       },
       y: {
         grid: {
-          color: 'rgba(148, 163, 184, 0.1)',
+          color: 'rgba(156, 163, 175, 0.1)',
           drawBorder: false,
         },
         ticks: {
           font: {
-            size: 13,
-            weight: 600
+            size: 12,
+            weight: 500
           },
-          color: '#475569'
+          color: '#374151'
         }
       }
     }
@@ -318,39 +326,69 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
       title: t.dashboard?.stats?.admins || 'Admins',
       used: stats.usedAdmins,
       max: stats.maxAdmins,
-      gradient: 'from-violet-400 via-purple-500 to-fuchsia-500',
-      bgGradient: 'from-violet-50 via-purple-50 to-fuchsia-50',
-      icon: '👨‍💼',
-      accent: 'violet'
+      color: 'blue',
+      icon: FaUserTie
     },
     {
       title: t.dashboard?.stats?.teachers || 'Teachers',
       used: stats.usedTeachers,
       max: stats.maxTeachers,
-      gradient: 'from-emerald-400 via-green-500 to-teal-500',
-      bgGradient: 'from-emerald-50 via-green-50 to-teal-50',
-      icon: '👨‍🏫',
-      accent: 'emerald'
+      color: 'green',
+      icon: FaChalkboardTeacher
     },
     {
       title: t.dashboard?.stats?.parents || 'Parents',
       used: stats.usedParents,
       max: stats.maxParents,
-      gradient: 'from-orange-400 via-amber-500 to-yellow-500',
-      bgGradient: 'from-orange-50 via-amber-50 to-yellow-50',
-      icon: '👨‍👩‍👧‍👦',
-      accent: 'orange'
+      color: 'yellow',
+      icon: FaUsers
     },
     {
       title: t.dashboard?.stats?.students || 'Students',
       used: stats.usedStudents,
       max: stats.maxStudents,
-      gradient: 'from-rose-400 via-pink-500 to-red-500',
-      bgGradient: 'from-rose-50 via-pink-50 to-red-50',
-      icon: '👨‍🎓',
-      accent: 'rose'
+      color: 'red',
+      icon: FaUserGraduate
     }
   ];
+
+  const getColorClasses = (color: string) => {
+    const colors = {
+      blue: {
+        bg: 'bg-blue-50',
+        border: 'border-blue-200',
+        text: 'text-blue-700',
+        progress: 'bg-blue-600',
+        icon: 'text-blue-600',
+        iconBg: 'bg-blue-100'
+      },
+      green: {
+        bg: 'bg-green-50',
+        border: 'border-green-200',
+        text: 'text-green-700',
+        progress: 'bg-green-600',
+        icon: 'text-green-600',
+        iconBg: 'bg-green-100'
+      },
+      yellow: {
+        bg: 'bg-amber-50',
+        border: 'border-amber-200',
+        text: 'text-amber-700',
+        progress: 'bg-amber-600',
+        icon: 'text-amber-600',
+        iconBg: 'bg-amber-100'
+      },
+      red: {
+        bg: 'bg-red-50',
+        border: 'border-red-200',
+        text: 'text-red-700',
+        progress: 'bg-red-600',
+        icon: 'text-red-600',
+        iconBg: 'bg-red-100'
+      }
+    };
+    return colors[color as keyof typeof colors] || colors.blue;
+  };
 
   if (isLoading) {
     return (
@@ -361,43 +399,41 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
   if (error) {
     return (
       <div className="text-center py-16">
-        <div className="text-rose-500 text-xl font-semibold mb-3">
+        <div className="text-red-600 text-lg font-semibold mb-2">
           {t.dashboard?.stats?.error || 'Error loading statistics'}
         </div>
-        <div className="text-slate-600">{error}</div>
+        <div className="text-gray-600">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-10">
-      {/* Creative Stats Cards */}
+    <div className="space-y-8">
+      {/* Professional Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {statCards.map((card, index) => (
-          <motion.div
-            key={card.title}
-            initial={{ opacity: 0, y: 30, rotateX: -15 }}
-            animate={{ opacity: 1, y: 0, rotateX: 0 }}
-            transition={{ duration: 0.7, delay: index * 0.15, type: "spring", stiffness: 100 }}
-            className={`relative overflow-hidden bg-gradient-to-br ${card.bgGradient} rounded-3xl group cursor-pointer transform transition-all duration-500 hover:scale-105 hover:rotate-1`}
-          >
-            {/* Geometric Background Elements */}
-            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-transparent to-current opacity-10 rounded-full -mr-10 -mt-10"></div>
-            <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-transparent to-current opacity-10 rounded-full -ml-8 -mb-8"></div>
-
-            <div className="relative p-8">
-              <div className={`flex items-center ${isRTL ? 'space-x-reverse-4' : 'space-x-4'} mb-6`}>
-                <div className="text-3xl transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
-                  {card.icon}
+        {statCards.map((card, index) => {
+          const colors = getColorClasses(card.color);
+          const IconComponent = card.icon;
+          return (
+            <motion.div
+              key={card.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200"
+            >
+              <div className={`flex items-center ${isRTL ? 'space-x-reverse-4' : 'space-x-4'} mb-4`}>
+                <div className={`w-12 h-12 ${colors.iconBg} rounded-lg flex items-center justify-center`}>
+                  <IconComponent className={`w-6 h-6 ${colors.icon}`} />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-sm font-semibold text-slate-600 group-hover:text-slate-800 transition-colors duration-300 uppercase tracking-wide">
+                  <h3 className="text-sm font-medium text-gray-600 uppercase tracking-wide mb-1">
                     {card.title}
                   </h3>
-                  <div className="text-3xl font-black text-slate-900 group-hover:text-slate-800 transition-colors duration-300">
+                  <div className="text-2xl font-bold text-gray-900">
                     {formatNumber(card.used)}
                     {card.max !== 'unlimited' && (
-                      <span className="text-xl text-slate-500 font-normal ml-1">
+                      <span className="text-lg text-gray-500 font-normal ml-1">
                         /{formatNumber(card.max)}
                       </span>
                     )}
@@ -405,155 +441,78 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
                 </div>
               </div>
 
-              {/* Creative Progress Indicator */}
+              {/* Progress Bar */}
               {card.max !== 'unlimited' && (
-                <div className="relative mb-4">
-                  <div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
+                <div className="mb-3">
+                  <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${Math.min(getUsagePercentage(card.used, card.max), 100)}%` }}
-                      transition={{ duration: 1.5, delay: 0.5 + index * 0.1, ease: "easeOut" }}
-                      className={`h-full bg-gradient-to-r ${card.gradient} rounded-full relative overflow-hidden`}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-pulse"></div>
-                    </motion.div>
+                      transition={{ duration: 1, delay: 0.3 + index * 0.1 }}
+                      className={`h-full ${colors.progress} rounded-full`}
+                    />
                   </div>
                 </div>
               )}
 
-              <div className="text-sm text-slate-500 font-medium">
+              <div className="text-sm text-gray-500">
                 {card.max === 'unlimited' ? (
-                  <span className="text-emerald-600 font-bold">
+                  <span className={`font-medium ${colors.text}`}>
                     {t.dashboard?.stats?.unlimited || 'Unlimited'}
                   </span>
                 ) : (
-                  <span className="font-semibold">
+                  <span className="font-medium">
                     {getUsagePercentage(card.used, card.max).toFixed(1)}% {t.dashboard?.stats?.used || 'used'}
                   </span>
                 )}
               </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          );
+        })}
       </div>
 
-      {/* Creative Charts Section */}
+      {/* Professional Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Bar Chart */}
         <motion.div
-          initial={{ opacity: 0, x: -40, rotateY: -10 }}
-          animate={{ opacity: 1, x: 0, rotateY: 0 }}
-          transition={{ duration: 0.8, delay: 0.6, type: "spring", stiffness: 80 }}
-          className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 rounded-3xl transform transition-all duration-500 hover:scale-[1.02]"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="bg-white border border-gray-200 rounded-lg p-6"
         >
-          {/* Decorative Elements */}
-          <div className="absolute top-4 right-4 w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-500 opacity-20 rounded-2xl transform rotate-12"></div>
-          <div className="absolute bottom-4 left-4 w-8 h-8 bg-gradient-to-tr from-indigo-400 to-purple-500 opacity-20 rounded-xl transform -rotate-12"></div>
-
-          <div className="relative p-8">
-            <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center">
-              <span className="mr-3 text-2xl">📊</span>
+          <div className="flex items-center mb-6">
+            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+              <FaChartBar className="w-5 h-5 text-blue-600" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900">
               {t.dashboard?.stats?.usageComparison || 'Usage Comparison'}
             </h3>
-            <div className="h-80">
-              <Bar data={barChartData} options={barChartOptions} />
-            </div>
+          </div>
+          <div className="h-80">
+            <Bar data={barChartData} options={barChartOptions} />
           </div>
         </motion.div>
 
         {/* Line Chart */}
         <motion.div
-          initial={{ opacity: 0, x: 40, rotateY: 10 }}
-          animate={{ opacity: 1, x: 0, rotateY: 0 }}
-          transition={{ duration: 0.8, delay: 0.7, type: "spring", stiffness: 80 }}
-          className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 rounded-3xl transform transition-all duration-500 hover:scale-[1.02]"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="bg-white border border-gray-200 rounded-lg p-6"
         >
-          {/* Decorative Elements */}
-          <div className="absolute top-4 left-4 w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-500 opacity-20 rounded-2xl transform -rotate-12"></div>
-          <div className="absolute bottom-4 right-4 w-6 h-6 bg-gradient-to-tr from-pink-400 to-rose-500 opacity-20 rounded-xl transform rotate-12"></div>
-
-          <div className="relative p-8">
-            <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center">
-              <span className="mr-3 text-2xl">📈</span>
+          <div className="flex items-center mb-6">
+            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+              <FaChartLine className="w-5 h-5 text-green-600" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900">
               {t.dashboard?.stats?.growthTrend || 'Growth Trend'}
             </h3>
-            <div className="h-80">
-              <Line data={lineChartData} options={lineChartOptions} />
-            </div>
+          </div>
+          <div className="h-80">
+            <Line data={lineChartData} options={lineChartOptions} />
           </div>
         </motion.div>
       </div>
-
-      {/* Creative Summary Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 40, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.8, delay: 0.8, type: "spring", stiffness: 60 }}
-        className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-indigo-50 via-purple-50 to-violet-50 rounded-3xl transform transition-all duration-500 hover:scale-[1.01]"
-      >
-        {/* Animated Background Elements */}
-        <div className="absolute top-0 left-0 w-full h-full">
-          <div className="absolute top-8 left-8 w-16 h-16 bg-gradient-to-br from-indigo-400 to-purple-500 opacity-10 rounded-full animate-bounce bounce-delay-0"></div>
-          <div className="absolute top-16 right-12 w-12 h-12 bg-gradient-to-br from-purple-400 to-violet-500 opacity-10 rounded-full animate-bounce bounce-delay-500"></div>
-          <div className="absolute bottom-12 left-12 w-10 h-10 bg-gradient-to-br from-violet-400 to-indigo-500 opacity-10 rounded-full animate-bounce bounce-delay-1000"></div>
-        </div>
-
-        <div className="relative p-8">
-          <h3 className="text-xl font-bold text-slate-900 mb-8 flex items-center">
-            <span className="mr-3 text-2xl">🎯</span>
-            {t.dashboard?.stats?.summary || 'Summary'}
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <motion.div
-              className="text-center transform transition-all duration-300 hover:scale-110"
-              whileHover={{ y: -5 }}
-            >
-              <div className="text-4xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                {stats.usedAdmins + stats.usedTeachers + stats.usedParents + stats.usedStudents}
-              </div>
-              <div className="text-sm font-semibold text-slate-600 uppercase tracking-wide">
-                {t.dashboard?.stats?.totalActiveUsers || 'Total Active Users'}
-              </div>
-            </motion.div>
-            <motion.div
-              className="text-center transform transition-all duration-300 hover:scale-110"
-              whileHover={{ y: -5 }}
-            >
-              <div className="text-4xl font-black bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent mb-2">
-                {(() => {
-                  const totalUsed = stats.usedAdmins + stats.usedTeachers + stats.usedParents + stats.usedStudents;
-                  const totalMax = (stats.maxAdmins === 'unlimited' ? 0 : stats.maxAdmins) +
-                    (stats.maxTeachers === 'unlimited' ? 0 : stats.maxTeachers) +
-                    (stats.maxParents === 'unlimited' ? 0 : stats.maxParents) +
-                    (stats.maxStudents === 'unlimited' ? 0 : stats.maxStudents);
-                  return totalMax > 0 ? Math.round((totalUsed / totalMax) * 100) : 0;
-                })()}%
-              </div>
-              <div className="text-sm font-semibold text-slate-600 uppercase tracking-wide">
-                {t.dashboard?.stats?.capacityUtilization || 'Capacity Utilization'}
-              </div>
-            </motion.div>
-            <motion.div
-              className="text-center transform transition-all duration-300 hover:scale-110"
-              whileHover={{ y: -5 }}
-            >
-              <div className="text-4xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-                {(() => {
-                  const totalUsers = stats.usedAdmins + stats.usedTeachers + stats.usedParents + stats.usedStudents;
-                  const totalSeats = (stats.maxAdmins === 'unlimited' ? totalUsers : stats.maxAdmins) +
-                    (stats.maxTeachers === 'unlimited' ? totalUsers : stats.maxTeachers) +
-                    (stats.maxParents === 'unlimited' ? totalUsers : stats.maxParents) +
-                    (stats.maxStudents === 'unlimited' ? totalUsers : stats.maxStudents);
-                  return totalSeats > 0 ? Math.round((totalUsers / totalSeats) * 100) : 100;
-                })()}%
-              </div>
-              <div className="text-sm font-semibold text-slate-600 uppercase tracking-wide">
-                {t.dashboard?.stats?.usageEfficiency || 'Usage Efficiency'}
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </motion.div>
     </div>
   );
 };

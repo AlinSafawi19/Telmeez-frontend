@@ -21,6 +21,7 @@ import {
 import '../Landing.css';
 import LoadingOverlay from '../components/LoadingOverlay';
 import StatsOverview from '../components/StatsOverview';
+import QuickLinks from '../components/QuickLinks';
 import statsService, { type UserStats, type HistoricalStats } from '../services/statsService';
 
 /*interface User {
@@ -229,13 +230,13 @@ const Dashboard: React.FC = () => {
             try {
                 setStatsLoading(true);
                 setStatsError(null);
-                
+
                 // Fetch both current and historical stats in parallel
                 const [statsData, historicalData] = await Promise.all([
                     statsService.getUserStats(),
                     statsService.getHistoricalStats()
                 ]);
-                
+
                 setStats(statsData);
                 setHistoricalStats(historicalData);
             } catch (error) {
@@ -645,25 +646,40 @@ const Dashboard: React.FC = () => {
                             </p>
                         </div>
 
-                        {/* Stats Overview */}
-                        <div className="mb-8">
-                            <StatsOverview
-                                stats={stats || {
-                                    maxAdmins: 0,
-                                    maxTeachers: 0,
-                                    maxParents: 0,
-                                    maxStudents: 0,
-                                    usedAdmins: 0,
-                                    usedTeachers: 0,
-                                    usedParents: 0,
-                                    usedStudents: 0
-                                }}
-                                historicalStats={historicalStats}
-                                isLoading={statsLoading}
-                                error={statsError}
-                            />
-                        </div>
+                        {/* Stats Overview and Quick Links */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                            {/* Stats Overview - takes 2/3 of the space */}
+                            <div className="lg:col-span-2">
+                                <StatsOverview
+                                    stats={stats || {
+                                        maxAdmins: 0,
+                                        maxTeachers: 0,
+                                        maxParents: 0,
+                                        maxStudents: 0,
+                                        usedAdmins: 0,
+                                        usedTeachers: 0,
+                                        usedParents: 0,
+                                        usedStudents: 0
+                                    }}
+                                    historicalStats={historicalStats}
+                                    isLoading={statsLoading}
+                                    error={statsError}
+                                />
+                            </div>
 
+                            {/* Quick Links - takes 1/3 of the space */}
+                            <div className="lg:col-span-1">
+                                <QuickLinks
+                                    currentLanguage={currentLanguage}
+                                    userRole={authUser?.role?.role || 'admin'}
+                                    onLinkClick={(linkId) => {
+                                        console.log(`Quick link clicked: ${linkId}`);
+                                        // You can add navigation logic here
+                                        // For now, just log the click
+                                    }}
+                                />
+                            </div>
+                        </div>
 
                     </div>
                 </main>

@@ -1037,6 +1037,38 @@ export const fr = {
             activeTeachers: "Enseignants Actifs",
             activeStudents: "Étudiants Actifs",
             usageEfficiency: "Efficacité d'Utilisation"
+        },
+        quickLinks: {
+            title: "Liens Rapides",
+            subtitle: "Accès rapide aux fonctionnalités fréquemment utilisées",
+            noLinks: "Aucun lien rapide disponible pour votre rôle",
+            users: "Inviter des Administrateurs",
+            calendar: "Calendrier",
+            billing: "Facturation et Abonnement",
+            noLinksDesc: "Contactez votre administrateur pour accéder à plus de fonctionnalités"
+        },
+        recentActivity: {
+            title: "Activité Récente",
+            subtitle: "Dernières mises à jour et activités",
+            userAdded: "Nouvel Administrateur Ajouté",
+            userAddedDesc: "Sarah Johnson a été ajoutée comme administratrice",
+            eventCreated: "Événement Créé",
+            eventCreatedDesc: "Réunion parents-enseignants programmée pour la semaine prochaine",
+            paymentProcessed: "Paiement Traité",
+            paymentProcessedDesc: "Paiement d'abonnement mensuel complété avec succès",
+            profileUpdated: "Profil Mis à Jour",
+            profileUpdatedDesc: "Informations de l'institution mises à jour",
+            notificationSent: "Notification Envoyée",
+            notificationSentDesc: "Newsletter hebdomadaire envoyée à tous les parents",
+            viewAll: "Voir Toutes les Activités",
+            justNow: "À l'instant",
+            minute: "minute",
+            minutes: "minutes",
+            hour: "heure",
+            hours: "heures",
+            day: "jour",
+            days: "jours",
+            ago: "il y a"
         }
     }
 };

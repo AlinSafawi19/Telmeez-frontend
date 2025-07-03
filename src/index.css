@@ -317,3 +317,11 @@ button:focus-visible {
 .bounce-delay-1000 {
   animation-delay: 1s;
 }
+
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+
+.grid-cols-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
