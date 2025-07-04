@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { translations } from '../translations';
 import type { Language } from '../translations';
 import { LANGUAGES, getLanguageDirection } from '../constants/languages';
@@ -20,101 +20,56 @@ import {
     FaCreditCard
 } from 'react-icons/fa';
 import '../Landing.css';
-import LoadingOverlay from '../components/LoadingOverlay';
-import StatsOverview from '../components/StatsOverview';
-import QuickLinks from '../components/QuickLinks';
-import statsService, { type UserStats, type HistoricalStats } from '../services/statsService';
+import LoadingOverlay from './LoadingOverlay';
 
-/*interface User {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    role: {
-        _id: string;
-        role: string;
-    };
-    institutionName: string;
-    phone: string;
-    avatar?: string;
-    isActive: boolean;
-    lastLogin?: Date;
-    createdAt: Date;
-}*/
-
-interface Subscription {
-    _id: string;
-    planId: string;
-    planName: string;
-    billingCycle: 'monthly' | 'annual';
-    status: 'active' | 'cancelled' | 'expired' | 'trial';
-    startDate: Date;
-    endDate: Date;
-    nextBillingDate: Date;
-    amount: number;
-    currency: string;
+interface DashboardLayoutProps {
+    children: React.ReactNode;
+    activeTab?: string;
+    onTabChange?: (tab: string) => void;
+    showSidebar?: boolean;
+    onSidebarToggle?: (show: boolean) => void;
+    pageTitle?: string;
+    pageDescription?: string;
+    isLoading?: boolean;
 }
 
-/* Interfaces for backend data
-interface BackendUser {
-    id?: string;
-    _id?: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone?: string;
-    institutionName?: string;
-    role?: any;
-    isActive?: boolean;
-    createdAt?: string | Date;
-    lastLogin?: string | Date;
-}
-
-interface BackendSubscription {
-    id?: string;
-    _id?: string;
-    plan?: string;
-    planId?: string;
-    planName?: string;
-    billingCycle?: 'monthly' | 'annual';
-    status?: 'active' | 'cancelled' | 'expired' | 'trial';
-    startDate?: string | Date;
-    endDate?: string | Date;
-    nextBillingDate?: string | Date;
-    amount?: number;
-    totalAmount?: number;
-    currency?: string;
-} */
-
-const Dashboard: React.FC = () => {
-    const location = useLocation();
+const DashboardLayout: React.FC<DashboardLayoutProps> = ({
+    children,
+    activeTab = 'overview',
+    onTabChange,
+    showSidebar: externalShowSidebar,
+    onSidebarToggle,
+    pageTitle,
+    pageDescription,
+    isLoading = false
+}) => {
     const navigate = useNavigate();
     const { currentLanguage, setCurrentLanguage } = useLanguage();
     const { user: authUser, isLoading: authLoading, signOut } = useAuth();
     const t = translations[currentLanguage];
     const isRTL = currentLanguage === 'ar';
 
-    // Get subscription data from navigation state (if any)
-    const subscriptionData = location.state?.subscription as Subscription;
-
-    // Refs for language dropdown
+    // Refs for dropdowns
     const languageDropdownRef = useRef<HTMLDivElement>(null);
     const languageDropdownContainerRef = useRef<HTMLDivElement>(null);
     const profileDropdownRef = useRef<HTMLDivElement>(null);
 
     // State management
-    //const [subscription, setSubscription] = useState<Subscription | null>(subscriptionData || null);
-    const [isLoading, setIsLoading] = useState(true);
     const [isLanguageChanging, setIsLanguageChanging] = useState(false);
-    const [activeTab, setActiveTab] = useState('overview');
-    const [showSidebar, setShowSidebar] = useState(false);
+    const [internalShowSidebar, setInternalShowSidebar] = useState(false);
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const [showSignOutConfirmation, setShowSignOutConfirmation] = useState(false);
-    const [stats, setStats] = useState<UserStats | null>(null);
-    const [historicalStats, setHistoricalStats] = useState<HistoricalStats[]>([]);
-    const [statsLoading, setStatsLoading] = useState(false);
-    const [statsError, setStatsError] = useState<string | null>(null);
+
+    // Use external sidebar state if provided, otherwise use internal state
+    const showSidebar = externalShowSidebar !== undefined ? externalShowSidebar : internalShowSidebar;
+    const setShowSidebar = (show: boolean) => {
+        if (onSidebarToggle) {
+            onSidebarToggle(show);
+        } else {
+            setInternalShowSidebar(show);
+        }
+    };
 
     // Close dropdowns when clicking outside
     useEffect(() => {
@@ -147,58 +102,12 @@ const Dashboard: React.FC = () => {
         setActiveDropdown(null);
     }, [currentLanguage]);
 
-    // Handle authentication state
-    useEffect(() => {
-        if (!authLoading) {
-            setIsLoading(false);
-
-            // Process subscription data if available
-            if (subscriptionData) {
-                /*const processedSubscription = {
-                    ...subscriptionData,
-                    _id: subscriptionData._id,
-                    planId: subscriptionData.planId,
-                    planName: subscriptionData.planName,
-                    billingCycle: subscriptionData.billingCycle,
-                    status: subscriptionData.status,
-                    startDate: subscriptionData.startDate,
-                    endDate: subscriptionData.endDate,
-                    nextBillingDate: subscriptionData.nextBillingDate,
-                    amount: subscriptionData.amount,
-                    currency: subscriptionData.currency
-                };*/
-                //setSubscription(processedSubscription);
-            }
-        }
-    }, [authLoading, subscriptionData]);
-
     // Redirect if not authenticated
     useEffect(() => {
         if (!authLoading && !authUser) {
             navigate('/signin');
         }
     }, [authUser, authLoading, navigate]);
-
-    // Add a more robust authentication check
-    useEffect(() => {
-        // Only redirect if we're sure the user is not authenticated
-        // and we're not in the loading state
-        if (!authLoading && !authUser && !isLoading) {
-            console.log('🚨 Dashboard: User not authenticated, redirecting to signin');
-            console.log('🔍 Dashboard Debug:', { authLoading, authUser, isLoading });
-            navigate('/signin');
-        }
-    }, [authUser, authLoading, isLoading, navigate]);
-
-    // Debug authentication state changes
-    useEffect(() => {
-        console.log('🔍 Dashboard Auth State:', {
-            authLoading,
-            authUser: authUser ? `${authUser.firstName} ${authUser.lastName}` : null,
-            isLoading,
-            isAuthenticated: !!authUser
-        });
-    }, [authLoading, authUser, isLoading]);
 
     const handleSignOut = async () => {
         try {
@@ -226,30 +135,11 @@ const Dashboard: React.FC = () => {
         setIsSidebarCollapsed(!isSidebarCollapsed);
     };
 
-    useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                setStatsLoading(true);
-                setStatsError(null);
-
-                // Fetch both current and historical stats in parallel
-                const [statsData, historicalData] = await Promise.all([
-                    statsService.getUserStats(),
-                    statsService.getHistoricalStats()
-                ]);
-
-                setStats(statsData);
-                setHistoricalStats(historicalData);
-            } catch (error) {
-                console.error('Error fetching stats:', error);
-                setStatsError(error instanceof Error ? error.message : 'Failed to load statistics');
-            } finally {
-                setStatsLoading(false);
-            }
-        };
-
-        fetchStats();
-    }, []);
+    const handleTabChange = (tab: string) => {
+        if (onTabChange) {
+            onTabChange(tab);
+        }
+    };
 
     if (isLoading || authLoading) {
         return (
@@ -360,7 +250,7 @@ const Dashboard: React.FC = () => {
                         <nav className="px-3 space-y-1 py-6">
                             <motion.button
                                 type='button'
-                                onClick={() => setActiveTab('overview')}
+                                onClick={() => handleTabChange('overview')}
                                 className={`w-full flex items-center ${isRTL ? 'space-x-reverse-3' : 'space-x-3'} focus:outline-none border-none px-4 py-3.5 rounded-xl text-left transition-all duration-300 group relative overflow-hidden ${activeTab === 'overview'
                                     ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
                                     : 'text-gray-600 hover:bg-gradient-to-r hover:from-gray-50 hover:to-blue-50 hover:text-blue-700 hover:shadow-md'
@@ -566,7 +456,7 @@ const Dashboard: React.FC = () => {
                                     {/* Menu items */}
                                     <button
                                         type="button"
-                                        className={`flex items-center w-full text-left px-4 py-3 border-none text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none cursor-pointer rounded-none`}
+                                        className={`flex items-center w-full text-left text-sm px-4 py-3 border-none text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none cursor-pointer rounded-none`}
                                         role="menuitem"
                                         onMouseEnter={(e) => {
                                             e.currentTarget.style.backgroundColor = '#eff6ff';
@@ -587,7 +477,7 @@ const Dashboard: React.FC = () => {
 
                                     <button
                                         type="button"
-                                        className={`flex items-center w-full text-left px-4 py-3 border-none text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none cursor-pointer rounded-none`}
+                                        className={`flex items-center w-full text-left text-sm px-4 py-3 border-none text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none cursor-pointer rounded-none`}
                                         role="menuitem"
                                         onMouseEnter={(e) => {
                                             e.currentTarget.style.backgroundColor = '#eff6ff';
@@ -608,7 +498,7 @@ const Dashboard: React.FC = () => {
 
                                     <button
                                         type="button"
-                                        className={`flex items-center w-full text-left px-4 py-3 border-none text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none cursor-pointer rounded-none`}
+                                        className={`flex items-center w-full text-left text-sm px-4 py-3 border-none text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 focus:outline-none cursor-pointer rounded-none`}
                                         role="menuitem"
                                         onMouseEnter={(e) => {
                                             e.currentTarget.style.backgroundColor = '#eff6ff';
@@ -631,7 +521,7 @@ const Dashboard: React.FC = () => {
 
                                     <button
                                         type="button"
-                                        className={`flex items-center w-full text-left px-4 py-3 border-none text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors duration-200 focus:outline-none cursor-pointer rounded-none`}
+                                        className={`flex items-center w-full text-left text-sm px-4 py-3 border-none text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors duration-200 focus:outline-none cursor-pointer rounded-none`}
                                         role="menuitem"
                                         onMouseEnter={(e) => {
                                             e.currentTarget.style.backgroundColor = '#fef2f2';
@@ -655,54 +545,25 @@ const Dashboard: React.FC = () => {
                     </div>
                 </header>
 
-                {/* Main Dashboard Content */}
+                {/* Main Content */}
                 <main className="flex-1 overflow-y-auto p-4 sm:p-6">
                     <div className="max-w-7xl mx-auto">
-                        {/* Welcome Section */}
-                        <div className="mb-6 sm:mb-8">
-                            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                                {t.dashboard?.welcome?.replace('{institutionName}', authUser.institutionName || 'Telmeez').replace('{firstName}', authUser.firstName || 'User') || 'Welcome!'}
-                            </h1>
-                            <p className="text-gray-600 text-sm sm:text-base">
-                                {t.dashboard?.we_excited_to_have_you?.replace('{institutionName}', authUser.institutionName || 'Telmeez') || 'We\'re excited to have you!'}
-                            </p>
-                        </div>
-
-                        {/* Stats Overview and Quick Links */}
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                            {/* Stats Overview - takes 2/3 of the space */}
-                            <div className="lg:col-span-2">
-                                <StatsOverview
-                                    stats={stats || {
-                                        maxAdmins: 0,
-                                        maxTeachers: 0,
-                                        maxParents: 0,
-                                        maxStudents: 0,
-                                        usedAdmins: 0,
-                                        usedTeachers: 0,
-                                        usedParents: 0,
-                                        usedStudents: 0
-                                    }}
-                                    historicalStats={historicalStats}
-                                    isLoading={statsLoading}
-                                    error={statsError}
-                                />
+                        {/* Page Header */}
+                        {pageTitle && (
+                            <div className="mb-6 sm:mb-8">
+                                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                                    {pageTitle}
+                                </h1>
+                                {pageDescription && (
+                                    <p className="text-gray-600 text-sm sm:text-base">
+                                        {pageDescription}
+                                    </p>
+                                )}
                             </div>
+                        )}
 
-                            {/* Quick Links - takes 1/3 of the space */}
-                            <div className="lg:col-span-1">
-                                <QuickLinks
-                                    currentLanguage={currentLanguage}
-                                    userRole={authUser?.role?.role || 'admin'}
-                                    onLinkClick={(linkId) => {
-                                        console.log(`Quick link clicked: ${linkId}`);
-                                        // You can add navigation logic here
-                                        // For now, just log the click
-                                    }}
-                                />
-                            </div>
-                        </div>
-
+                        {/* Page Content */}
+                        {children}
                     </div>
                 </main>
             </div>
@@ -734,13 +595,13 @@ const Dashboard: React.FC = () => {
                                     <FaSignOutAlt className="w-6 h-6 text-red-600" />
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-semibold text-gray-900">Sign Out</h3>
-                                    <p className="text-sm text-gray-500">Are you sure you want to sign out?</p>
+                                    <h3 className="text-lg font-semibold text-gray-900">{t.dashboard?.signOutModal?.title}</h3>
+                                    <p className="text-sm text-gray-500">{t.dashboard?.signOutModal?.description}</p>
                                 </div>
                             </div>
 
                             <p className="text-gray-600 mb-6">
-                                You will be logged out of your account and redirected to the sign-in page. Any unsaved changes will be lost.
+                                {t.dashboard?.signOutModal?.message}
                             </p>
 
                             <div className={`flex ${isRTL ? 'space-x-reverse-3' : 'space-x-3'}`}>
@@ -749,7 +610,7 @@ const Dashboard: React.FC = () => {
                                     onClick={() => setShowSignOutConfirmation(false)}
                                     className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 border-none hover:bg-gray-200 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                                 >
-                                    Cancel
+                                    {t.dashboard?.signOutModal?.cancel}
                                 </button>
                                 <button
                                     type="button"
@@ -759,7 +620,7 @@ const Dashboard: React.FC = () => {
                                     }}
                                     className="flex-1 px-4 py-2 text-white bg-red-600 border-none hover:bg-red-700 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                                 >
-                                    Sign Out
+                                    {t.dashboard?.signOutModal?.confirm}
                                 </button>
                             </div>
                         </motion.div>
@@ -770,4 +631,4 @@ const Dashboard: React.FC = () => {
     );
 };
 
-export default Dashboard; 
+export default DashboardLayout; 

@@ -4,6 +4,7 @@ import {
     FaCog,
     FaCreditCard,
     FaArrowRight,
+    FaArrowLeft,
     FaUserPlus,
     FaCalendarCheck
 } from 'react-icons/fa';
@@ -33,24 +34,25 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
     onLinkClick
 }) => {
     const t = translations[currentLanguage];
+    const isRTL = currentLanguage === 'ar';
 
     const quickLinks: QuickLink[] = [
         {
             id: 'users',
             title: t.dashboard?.quickLinks?.users || 'Invite Admins',
-            description: 'Manage admin accounts and permissions for your institution',
+            description: t.dashboard?.quickLinks?.usersDesc || 'Manage admin accounts and permissions for your institution',
             icon: <FaUserPlus className="w-4 h-4" />
         },
         {
             id: 'calendar',
             title: t.dashboard?.quickLinks?.calendar || 'Calendar',
-            description: 'View and manage schedules, events, and academic calendar',
+            description: t.dashboard?.quickLinks?.calendarDesc || 'View and manage schedules, events, and academic calendar',
             icon: <FaCalendarCheck className="w-4 h-4" />
         },
         {
             id: 'billing',
             title: t.dashboard?.quickLinks?.billing || 'Billing & Subscription',
-            description: 'Manage your subscription, billing, and payment methods',
+            description: t.dashboard?.quickLinks?.billingDesc || 'Manage your subscription, billing, and payment methods',
             icon: <FaCreditCard className="w-4 h-4" />
         }
     ];
@@ -91,7 +93,7 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
     };
 
     return (
-        <div className="space-y-6">
+        <div className={`space-y-6 ${isRTL ? 'rtl' : 'ltr'}`}>
             {/* Quick Links Section */}
             <div>
                 <div className="space-y-3">
@@ -99,14 +101,15 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
                         <motion.button
                             key={link.id}
                             onClick={() => handleLinkClick(link)}
-                            className="
-                            group relative w-full p-5 rounded-xl border border-gray-200 bg-white 
-                            hover:ring hover:ring-blue-200 
-                            hover:shadow 
-                            transition-all duration-300 
-                            focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2
-                            text-left
-                        "
+                            className={`
+                                group relative w-full p-5 rounded-xl border border-gray-200 bg-white 
+                                hover:ring hover:ring-blue-200 
+                                hover:shadow 
+                                transition-all duration-300 
+                                focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2
+                                text-left
+                                ${isRTL ? 'text-right' : 'text-left'}
+                            `}
                             whileHover={{ y: -1 }}
                             whileTap={{ scale: 0.98 }}
                             initial={{ opacity: 0, y: 10 }}
@@ -116,22 +119,26 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
                                 delay: index * 0.05
                             }}
                         >
-                            <div className="flex items-center space-x-4">
+                            <div className={`flex items-center space-x-4 ${isRTL ? 'space-x-reverse' : ''}`}>
                                 <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
                                     <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
                                         {link.icon}
                                     </div>
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <h4 className="text-sm font-medium text-gray-900 mb-1">
+                                    <h4 className={`text-sm font-medium text-gray-900 mb-1 ${isRTL ? 'text-right' : 'text-left'}`}>
                                         {link.title}
                                     </h4>
-                                    <p className="text-xs text-gray-500 leading-normal">
+                                    <p className={`text-xs text-gray-500 leading-normal ${isRTL ? 'text-right' : 'text-left'}`}>
                                         {link.description}
                                     </p>
                                 </div>
                                 <div className="flex-shrink-0">
-                                    <FaArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors duration-300" />
+                                    {isRTL ? (
+                                        <FaArrowLeft className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors duration-300" />
+                                    ) : (
+                                        <FaArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors duration-300" />
+                                    )}
                                 </div>
                             </div>
                         </motion.button>
@@ -140,7 +147,7 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
 
                 {filteredLinks.length === 0 && (
                     <motion.div
-                        className="text-center py-8"
+                        className={`text-center py-8 ${isRTL ? 'text-right' : 'text-center'}`}
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5 }}
@@ -148,10 +155,10 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
                         <div className="text-gray-400 mb-3">
                             <FaCog className="w-8 h-8 mx-auto" />
                         </div>
-                        <p className="text-gray-600 text-sm mb-1 font-medium">
+                        <p className={`text-gray-600 text-sm mb-1 font-medium ${isRTL ? 'text-right' : 'text-center'}`}>
                             {t.dashboard?.quickLinks?.noLinks || 'No quick links available for your role'}
                         </p>
-                        <p className="text-gray-500 text-xs">
+                        <p className={`text-gray-500 text-xs ${isRTL ? 'text-right' : 'text-center'}`}>
                             {t.dashboard?.quickLinks?.noLinksDesc || 'Contact your administrator to get access to more features'}
                         </p>
                     </motion.div>

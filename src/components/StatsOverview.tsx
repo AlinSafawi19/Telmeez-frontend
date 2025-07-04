@@ -208,7 +208,8 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
             size: 12,
             weight: 500
           },
-          color: '#374151'
+          color: '#374151',
+          textDirection: isRTL ? 'rtl' : 'ltr'
         }
       },
       tooltip: {
@@ -226,7 +227,8 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
         },
         bodyFont: {
           size: 12
-        }
+        },
+        textDirection: isRTL ? 'rtl' : 'ltr'
       }
     },
     scales: {
@@ -239,7 +241,8 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
             size: 12,
             weight: 500
           },
-          color: '#374151'
+          color: '#374151',
+          textDirection: isRTL ? 'rtl' : 'ltr'
         }
       },
       y: {
@@ -252,7 +255,8 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
             size: 12,
             weight: 500
           },
-          color: '#374151'
+          color: '#374151',
+          textDirection: isRTL ? 'rtl' : 'ltr'
         }
       }
     }
@@ -271,7 +275,8 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
             size: 12,
             weight: 500
           },
-          color: '#374151'
+          color: '#374151',
+          textDirection: isRTL ? 'rtl' : 'ltr'
         }
       },
       tooltip: {
@@ -289,7 +294,8 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
         },
         bodyFont: {
           size: 12
-        }
+        },
+        textDirection: isRTL ? 'rtl' : 'ltr'
       }
     },
     scales: {
@@ -302,7 +308,8 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
             size: 12,
             weight: 500
           },
-          color: '#374151'
+          color: '#374151',
+          textDirection: isRTL ? 'rtl' : 'ltr'
         }
       },
       y: {
@@ -315,7 +322,8 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
             size: 12,
             weight: 500
           },
-          color: '#374151'
+          color: '#374151',
+          textDirection: isRTL ? 'rtl' : 'ltr'
         }
       }
     }
@@ -422,7 +430,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200"
             >
-              <div className={`flex items-center ${isRTL ? 'space-x-reverse-4' : 'space-x-4'} mb-4`}>
+              <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-4 mb-4`}>
                 <div className={`w-12 h-12 ${colors.iconBg} rounded-lg flex items-center justify-center`}>
                   <IconComponent className={`w-6 h-6 ${colors.icon}`} />
                 </div>
@@ -433,7 +441,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
                   <div className="text-2xl font-bold text-gray-900">
                     {formatNumber(card.used)}
                     {card.max !== 'unlimited' && (
-                      <span className="text-lg text-gray-500 font-normal ml-1">
+                      <span className={`text-lg text-gray-500 font-normal ${isRTL ? 'mr-1' : 'ml-1'}`}>
                         /{formatNumber(card.max)}
                       </span>
                     )}
@@ -481,7 +489,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
           className="bg-white border border-gray-200 rounded-lg p-6"
         >
           <div className="flex items-center mb-6">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+            <div className={`w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center ${isRTL ? 'ml-3' : 'mr-3'}`}>
               <FaChartBar className="w-5 h-5 text-blue-600" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900">
@@ -501,7 +509,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, historicalStats, i
           className="bg-white border border-gray-200 rounded-lg p-6"
         >
           <div className="flex items-center mb-6">
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+            <div className={`w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center ${isRTL ? 'ml-3' : 'mr-3'}`}>
               <FaChartLine className="w-5 h-5 text-green-600" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900">

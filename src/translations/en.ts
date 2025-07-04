@@ -1045,8 +1045,11 @@ export const en = {
             subtitle: "Quick access to frequently used features",
             noLinks: "No quick links available for your role",
             users: "Invite Admins",
+            usersDesc: "Manage admin accounts and permissions for your institution",
             calendar: "Calendar",
+            calendarDesc: "View and manage schedules, events, and academic calendar",
             billing: "Billing & Subscription",
+            billingDesc: "Manage your subscription, billing, and payment methods",
             noLinksDesc: "Contact your administrator to get access to more features"
         },
         recentActivity: {
@@ -1071,6 +1074,13 @@ export const en = {
             day: "day",
             days: "days",
             ago: "ago"
+        },
+        signOutModal: {
+            title: "Sign Out",
+            description: "Are you sure you want to sign out?",
+            confirm: "Confirm",
+            cancel: "Cancel",
+            message: "You will be logged out of your account and redirected to the sign-in page. Any unsaved changes will be lost."
         }
     }
 }; 

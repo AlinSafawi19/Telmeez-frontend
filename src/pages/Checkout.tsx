@@ -1315,7 +1315,7 @@ const Checkout: React.FC = () => {
 
             if (data.success) {
                 // Redirect to superadmin dashboard instead of success page
-                navigate('/dashboard', {
+                navigate('/overview', {
                     state: {
                         user: data.data.user,
                         subscription: data.data.subscription

@@ -6,7 +6,7 @@ import ComingSoon from "./pages/ComingSoon";
 import SignIn from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
 import Checkout from './pages/Checkout';
-import Dashboard from './pages/Dashboard';
+import Overview from './pages/Overview';
 import Unsubscribe from './pages/Unsubscribe';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { AuthProvider } from './contexts/AuthContext';
@@ -24,7 +24,7 @@ const App: React.FC = () => {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/overview" element={<Overview />} />
             <Route path="/unsubscribe" element={<Unsubscribe />} />
           </Routes>
         </Router>

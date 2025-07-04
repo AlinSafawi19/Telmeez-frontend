@@ -991,7 +991,7 @@ export const fr = {
     dashboard: {
         signout: "Se Déconnecter",
         overview: "Vue d'ensemble",
-        education: "Empowering Education",
+        education: "Renforcer l’éducation",
         profileSettings: "Paramètres du Profil",
         accountSettings: "Paramètres du Compte",
         billingSettings: "Facturation et Abonnement",
@@ -1044,8 +1044,11 @@ export const fr = {
             subtitle: "Accès rapide aux fonctionnalités fréquemment utilisées",
             noLinks: "Aucun lien rapide disponible pour votre rôle",
             users: "Inviter des Administrateurs",
+            usersDesc: "Gérer les comptes et les permissions des administrateurs de votre institution",
             calendar: "Calendrier",
+            calendarDesc: "Afficher et gérer les horaires, événements et calendrier académique",
             billing: "Facturation et Abonnement",
+            billingDesc: "Gérer vos abonnements, factures et méthodes de paiement",
             noLinksDesc: "Contactez votre administrateur pour accéder à plus de fonctionnalités"
         },
         recentActivity: {
@@ -1070,6 +1073,13 @@ export const fr = {
             day: "jour",
             days: "jours",
             ago: "il y a"
+        },
+        signOutModal: {
+            title: "Se Déconnecter",
+            description: "Êtes-vous sûr de vouloir vous déconnecter?",
+            confirm: "Confirmer",
+            cancel: "Annuler",
+            message: "Vous serez déconnecté de votre compte et redirigé vers la page de connexion. Toutes les modifications non enregistrées seront perdues."
         }
     }
 };

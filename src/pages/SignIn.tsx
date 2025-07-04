@@ -34,7 +34,7 @@ const SignIn: React.FC = () => {
     // Redirect if already authenticated
     useEffect(() => {
         if (isAuthenticated) {
-            navigate('/dashboard');
+            navigate('/overview');
         }
     }, [isAuthenticated, navigate]);
 
@@ -104,9 +104,9 @@ const SignIn: React.FC = () => {
             }
             setErrors(prev => ({ ...prev, general: errorMsg }));
         }
-        
+
         // Re-translate lockout messages when language changes
-        if (errors.errorCode && errors.general && 
+        if (errors.errorCode && errors.general &&
             (errors.errorCode === 'ACCOUNT_LOCKED' || errors.errorCode === 'IP_LOCKED' || errors.errorCode === 'RATE_LIMIT_EXCEEDED')) {
             // Extract time from current message
             const timeMatch = errors.general.match(/(\d+)\s*minutes?/i);
@@ -140,18 +140,18 @@ const SignIn: React.FC = () => {
         try {
             setIsSigningIn(true);
             await signIn({ email, password, rememberMe });
-            
+
             // The remember me functionality is handled by the backend through cookie expiry times
             // When rememberMe is true, cookies have longer expiry (7 days for access, 30 days for refresh)
             // When rememberMe is false, cookies have shorter expiry (1 hour for access, 7 days for refresh)
-            
+
             // Navigate to dashboard on success
-            navigate('/dashboard');
+            navigate('/overview');
         } catch (error: any) {
             console.error('Sign in error:', error);
             let errorCode = 'INTERNAL_SERVER_ERROR';
             let backendMessage = '';
-            
+
             if (error && error.message) {
                 // Try to parse error_code from backend response
                 try {
@@ -169,18 +169,18 @@ const SignIn: React.FC = () => {
                     }
                 }
             }
-            
-            setErrors(prev => ({ 
-                ...prev, 
+
+            setErrors(prev => ({
+                ...prev,
                 general: '', // Will be set by useEffect
-                errorCode: errorCode 
+                errorCode: errorCode
             }));
-            
+
             // For lockout errors, show the backend message directly (includes time)
             if (errorCode === 'ACCOUNT_LOCKED' || errorCode === 'IP_LOCKED' || errorCode === 'RATE_LIMIT_EXCEEDED') {
                 const translatedMessage = translateLockoutMessage(backendMessage, errorCode);
-                setErrors(prev => ({ 
-                    ...prev, 
+                setErrors(prev => ({
+                    ...prev,
                     general: translatedMessage || 'Account temporarily locked. Please try again later.'
                 }));
             }
@@ -198,7 +198,7 @@ const SignIn: React.FC = () => {
         // Extract time from backend message
         const timeMatch = backendMessage.match(/(\d+)\s*minutes?/i);
         const timeValue = timeMatch ? timeMatch[1] : '';
-        
+
         // Get translation based on error code
         let translatedMessage = '';
         switch (errorCode) {
@@ -214,13 +214,13 @@ const SignIn: React.FC = () => {
             default:
                 return backendMessage; // Fallback to original message
         }
-        
+
         // Replace "later" or similar with the actual time
         if (timeValue) {
             const timeText = timeValue === '1' ? t.lockout_messages.minutes : t.lockout_messages.minutes_plural;
             return translatedMessage.replace(/later\.?/i, `in ${timeValue} ${timeText}.`);
         }
-        
+
         return translatedMessage;
     };
 
