@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { translations } from '../translations';
 import type { Language } from '../translations';
 import { LANGUAGES, getLanguageDirection } from '../constants/languages';
@@ -35,7 +35,7 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     children,
-    activeTab = 'overview',
+    //activeTab = 'overview',
     onTabChange,
     showSidebar: externalShowSidebar,
     onSidebarToggle,
@@ -44,6 +44,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     isLoading = false
 }) => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { currentLanguage, setCurrentLanguage } = useLanguage();
     const { user: authUser, isLoading: authLoading, signOut } = useAuth();
     const t = translations[currentLanguage];
@@ -138,6 +139,16 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     const handleTabChange = (tab: string) => {
         if (onTabChange) {
             onTabChange(tab);
+        }
+
+        // Navigate to the appropriate route based on the tab
+        switch (tab) {
+            case 'overview':
+                navigate('/overview');
+                break;
+            default:
+                // For other tabs, you can add more cases here
+                break;
         }
     };
 
@@ -251,7 +262,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                             <motion.button
                                 type='button'
                                 onClick={() => handleTabChange('overview')}
-                                className={`w-full flex items-center ${isRTL ? 'space-x-reverse-3' : 'space-x-3'} focus:outline-none border-none px-4 py-3.5 rounded-xl text-left transition-all duration-300 group relative overflow-hidden ${activeTab === 'overview'
+                                className={`w-full flex items-center ${isRTL ? 'space-x-reverse-3' : 'space-x-3'} focus:outline-none border-none px-4 py-3.5 rounded-xl text-left transition-all duration-300 group relative overflow-hidden ${location.pathname === '/overview'
                                     ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
                                     : 'text-gray-600 hover:bg-gradient-to-r hover:from-gray-50 hover:to-blue-50 hover:text-blue-700 hover:shadow-md'
                                     }`}
@@ -259,13 +270,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                 whileTap={{ scale: 0.98 }}
                                 layout
                             >
-                                <div className={`relative z-20 ${activeTab === 'overview' ? 'text-white' : 'text-gray-500 group-hover:text-blue-600'} transition-colors duration-300 ${isRTL ? 'ml-4' : ''}`}>
+                                <div className={`relative z-20 ${location.pathname === '/overview' ? 'text-white' : 'text-gray-500 group-hover:text-blue-600'} transition-colors duration-300 ${isRTL ? 'ml-4' : ''}`}>
                                     <FaHome className="w-5 h-5" />
                                 </div>
                                 <AnimatePresence>
                                     {(!isSidebarCollapsed || window.innerWidth < 1024) && (
                                         <motion.span
-                                            className={`font-semibold text-sm relative z-20 ${activeTab === 'overview' ? 'text-white' : ''}`}
+                                            className={`font-semibold text-sm relative z-20 ${location.pathname === '/overview' ? 'text-white' : ''}`}
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
                                             exit={{ opacity: 0 }}
@@ -275,7 +286,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                         </motion.span>
                                     )}
                                 </AnimatePresence>
-                                {activeTab === 'overview' && (
+                                {location.pathname === '/overview' && (
                                     <motion.div
                                         layoutId="activeTab"
                                         className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl z-10"
@@ -488,7 +499,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                             e.currentTarget.style.color = '';
                                         }}
                                         onClick={() => {
-                                            console.log('Profile Settings clicked');
+                                            navigate('/subscription', { state: { subscription: authUser.subscriptions } });
                                             setActiveDropdown(null);
                                         }}
                                     >
@@ -548,8 +559,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 {/* Main Content */}
                 <main className="flex-1 overflow-y-auto p-4 sm:p-6">
                     <div className="max-w-7xl mx-auto">
-                        {/* Page Header */}
-                        {pageTitle && (
+                        {/* Page Header - Only show for /overview route */}
+                        {pageTitle && location.pathname === '/overview' && (
                             <div className="mb-6 sm:mb-8">
                                 <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                                     {pageTitle}

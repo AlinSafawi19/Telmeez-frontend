@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import {
     FaCog,
     FaCreditCard,
@@ -35,6 +36,7 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
 }) => {
     const t = translations[currentLanguage];
     const isRTL = currentLanguage === 'ar';
+    const navigate = useNavigate();
 
     const quickLinks: QuickLink[] = [
         {
@@ -90,6 +92,9 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
         }
         // You can add navigation logic here
         console.log(`Quick link clicked: ${link.id}`);
+        if (link.id === 'billing') {
+            navigate('/subscription');
+        }
     };
 
     return (
@@ -168,4 +173,4 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
     );
 };
 
-export default QuickLinks; 
+export default QuickLinks;

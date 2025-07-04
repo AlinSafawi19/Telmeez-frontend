@@ -7,6 +7,7 @@ import SignIn from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
 import Checkout from './pages/Checkout';
 import Overview from './pages/Overview';
+import Subscription from './pages/Subscription';
 import Unsubscribe from './pages/Unsubscribe';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { AuthProvider } from './contexts/AuthContext';
@@ -25,6 +26,7 @@ const App: React.FC = () => {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/overview" element={<Overview />} />
+            <Route path="/subscription" element={<Subscription />} />
             <Route path="/unsubscribe" element={<Unsubscribe />} />
           </Routes>
         </Router>

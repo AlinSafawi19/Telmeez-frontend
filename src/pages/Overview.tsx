@@ -22,7 +22,7 @@ interface Subscription {
     currency: string;
 }
 
-const Dashboard: React.FC = () => {
+const Overview: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { currentLanguage } = useLanguage();
@@ -168,4 +168,4 @@ const Dashboard: React.FC = () => {
     );
 };
 
-export default Dashboard; 
+export default Overview; 
